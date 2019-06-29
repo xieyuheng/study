@@ -6,7 +6,7 @@ A dependently-typed programming language
 - for interactive theorem proving
 - and practical verification tasks
 
-[examples (preview)](https://github.com/xieyuheng/cicadascript/tree/master/cicadascript)
+[examples (preview)](https://github.com/xieyuheng/cicadascript/tree/master/examples)
 
 ## Packages
 

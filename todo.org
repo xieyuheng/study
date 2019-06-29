@@ -1,8 +1,20 @@
+- how to handle `this` ?
+  - learn from DOT
 * fulfill
 - no type, just value
   and fulfilling relation between values
-  - union record pi are simple
+  - union, record, pi are simple
   - closure need special treatment
+    might require NbE
+- `x: type` is special
+- Exp
+  Constructor -- Value
+  Eliminator  -- Neutral
+- value v.s. full value
+  - value without union and x: type
+- nominal subtype relation
+  instead of structural subtype relation
+  - we do not need structural type union and intersection
 * game as type class
 - we can implement game as type class
   and view other type as game later

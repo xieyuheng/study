@@ -41,9 +41,14 @@ case class RecordGame extends Game[RecordValue, Path] {
 }
 
 Exp
-Type
 Constructor
 Eliminator
+
+Value
+
+Neutral
+
+Full
 
 m.define("cons_t", Record("cons_t", {
   "t": Type,

@@ -1,3 +1,18 @@
+* game semantics
+- type as game
+- two players: `verifier` and `falsifier`
+- object (including function) as winning strategy for `verifier`
+- just like a card game
+  - `falsifier` owns all the `record_t` game -- logic conjunction
+  - `verifier` owns all the `union_t` game -- logic disjunction
+  - function type is called `pi_t` (instead of `arrow_t`)
+    - in `args` of `pi_t` switch the ownership of cards between `verifier` and `falsifier`
+    - in `ret` of `pi_t` the ownership remain the same
+- a player's choice is a path to the target position
+  - choosing a choice means to resume a paused game
+- use normal-play winning rule
+  - normal-play is a rule of game,
+    which means the first player who used up his/her choices loss the game
 * three kinds of expression
 - expression
   value (top is constructor)

@@ -1,4 +1,9 @@
-* learn from scala macro system
+* fulfill
+- no type, just value
+  and fulfilling relation between values
+  - union record pi are simple
+  - closure need special treatment
+* learn from scala macro system -- for AST design
 * three kinds of expression
 - eval(exp: Exp) -> Value or Neutral
 - expression

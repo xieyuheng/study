@@ -1,0 +1,12 @@
+class absurd_t (
+  absurd: absurd_t
+)
+
+// we need recursive checker
+//   to make sure the follow function will not pass the check
+
+// indirect recursive must also be handled
+//   by inlining function calls
+
+absurd_proof () : absurd_t
+absurd_proof () = absurd_proof ()

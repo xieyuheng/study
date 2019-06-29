@@ -1,0 +1,27 @@
+// endofunctor of set_category
+
+class container_t (
+  fun_t : (type) -> type
+
+  map : (
+    a : type
+    b : type
+    (a) -> b
+    fun_t (a)
+  ) -> fun_t (b)
+)
+
+list_container : container_t
+list_container = container_c {
+  fun_t = list_t
+
+  map (a b) (fun list) = {
+    list case {
+      null_t => null_c (b)
+      cons_t => cons_c (b) (
+        fun (list.car)
+        map (a b) (fun list.cdr)
+      )
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 api-doc () {
     sbt doc
+    now switch xieyuheng
     now -n cicadascript target/scala-2.13/api/
 }
 

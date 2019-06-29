@@ -1,0 +1,15 @@
+# js
+dist
+lib
+node_modules
+
+# scala
+target
+
+# parcel
+.cache
+
+# emacs
+*~
+*#*
+.#*

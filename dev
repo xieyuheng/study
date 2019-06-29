@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+api-doc () {
+    sbt doc
+    now -n cicadascript target/scala-2.13/api/
+}
+
+main () {
+    for TASK in $@
+    do
+        $TASK
+    done
+}
+
+main $@

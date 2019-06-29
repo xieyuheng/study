@@ -16,3 +16,11 @@ m.define ("true_t", new record_builder_t ("true_t"))
 m.define ("false_t", new record_builder_t ("false_t"))
 
 export { m as bool }
+
+m.define("bool_t", Union("bool_t", List(
+  Ref("true_t"),
+  Ref("false_t"),
+)))
+
+m.define("true_t", Record("true_t"))
+m.define("false_t", Record("false_t"))

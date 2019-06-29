@@ -23,19 +23,19 @@ m.define ("vect_null_t", new record_builder_t ("vect_null_t", map => ({
   length: new ref_t ("zero_t"),
 })))
 
-// m.define ("vect_cons_t", new record_builder_t ("vect_cons_t", map => ({
-//   [implicit]: {
-//     n: new ref_t ("nat_t"),
-//   },
-//   t: new type_t (),
-//   length: m.game ("succ_t") .choices ({
-//     prev: new this_t (map, "n"),
-//   }),
-//   car: new this_t (map, "t"),
-//   cdr: m.game ("vect_t") .choices ({
-//     t: new this_t (map, "t"),
-//     length: new this_t (map, "n"),
-//   }),
-// })))
+m.define ("vect_cons_t", new record_builder_t ("vect_cons_t", map => ({
+  [implicit]: {
+    n: new ref_t ("nat_t"),
+  },
+  t: new type_t (),
+  length: m.game ("succ_t") .choices ({
+    prev: new this_t (map, "n"),
+  }),
+  car: new this_t (map, "t"),
+  cdr: m.game ("vect_t") .choices ({
+    t: new this_t (map, "t"),
+    length: new this_t (map, "n"),
+  }),
+})))
 
 export { m as vect }

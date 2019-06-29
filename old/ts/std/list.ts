@@ -17,12 +17,38 @@ m.define ("null_t", new record_builder_t ("null_t", _map => ({
   "t": new type_t (),
 })))
 
-// m.define ("cons_t", new record_builder_t ("cons_t", map => ({
-//   "t": new type_t (),
-//   "car": new this_t (map, "t"),
-//   "cdr": m.game ("list_t") .choices ({
-//     "t": new this_t (map, "t"),
-//   }),
-// })))
+m.define ("cons_t", new record_builder_t ("cons_t", map => ({
+  "t": new type_t (),
+  "car": new this_t (map, "t"),
+  "cdr": m.game ("list_t") .choices ({
+    "t": new this_t (map, "t"),
+  }),
+})))
 
 export { m as list }
+
+m.define("list_t", Union("list_t", List(
+  Ref("null_t"),
+  Ref("cons_t"),
+)))
+
+m.define("null_t", Record("null_t", {
+  "t": Type,
+}))
+
+case class RecordGame extends Game[RecordValue, Path] {
+
+}
+
+Exp
+Type
+Constructor
+Eliminator
+
+m.define("cons_t", Record("cons_t", {
+  "t": Type,
+  "car": Dot(This, "t"),
+  "cdr": Record("list_t", {
+    "t": Dot(This, "t"),
+  }),
+}))

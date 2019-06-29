@@ -15,6 +15,19 @@ class cons_t {
   cdr: list_t (t)
 }
 
+
+sealed trait list_t {
+  t: type
+}
+
+final class null_t extends list_t
+
+final class cons_t extends list_t {
+  car: t
+  cdr: list_t (t)
+}
+
+
 list_length: (
   [implicit]: { t: type }
   list: list_t (t)

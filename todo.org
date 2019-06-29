@@ -3,6 +3,11 @@
   and fulfilling relation between values
   - union record pi are simple
   - closure need special treatment
+* game as type class
+- we can implement game as type class
+  and view other type as game later
+- thus we can do not think about game semantics,
+  only to implement the fulfill type system first
 * learn from scala macro system -- for AST design
 * three kinds of expression
 - eval(exp: Exp) -> Value or Neutral

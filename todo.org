@@ -1,11 +1,22 @@
+- why there is no Value in the reference rules of check and infer ?
+  - or where is closure in the reference rules
 - how to handle `this` ?
   - learn from DOT
+  - try to use bindingMap and unification to handle `this`
 * fulfill
 - no type, just value
   and fulfilling relation between values
   - union, record, pi are simple
   - closure need special treatment
     might require NbE
+  - fulfilling relation for neutral value will be hard to handle
+    just like we need NbE
+    to handle equivalence relation for neutral value in pie
+    - we might use something like NbE
+      or design our own ways
+    - but when will neutral value occur?
+      only on apply ?
+      not on `.field` ?
 - `x: type` is special
 - Exp
   Constructor -- Value

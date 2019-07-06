@@ -1,5 +1,5 @@
 - why there is no Value in the reference rules of check and infer ?
-  - or where is closure in the reference rules
+  - or where is closure in the reference rules ?
 - how to handle `this` ?
   - learn from DOT
   - try to use bindingMap and unification to handle `this`

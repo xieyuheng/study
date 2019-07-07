@@ -5,6 +5,22 @@ trait Exp
 case class LogicVar(name: String) extends Exp
 
 /*
+ we can unify LogicVar with any Value
+ but we must also be able to unify fulfilling relation, such as
+
+ Value <: LogicVar
+ Lambda <: Pi
+ Record <: Union
+
+ how can we achieve this ?
+ we did this once by mapping between such objects.
+ 
+ we can use union find algorithem
+
+ this means each object must has it own unique id.
+ */
+
+/*
  t2 <- ctx.loopupLogicVar(name)
  ctx :- t2 <: t
  ---------------

@@ -7,8 +7,6 @@
   - try to use bindingMap and unification to handle `this`
 * examples
 - Monoid as Category
-- Group
-- groupCategory
 - PreOrder
   - thin category -- homSet(A, B).size <= 1
 - PartialOrder

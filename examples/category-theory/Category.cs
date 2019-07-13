@@ -6,7 +6,7 @@ class Category {
 
   id(a: Object): Morphism(a, a)
 
-  (|)(f: Morphism(a, b), g: Morphism(b, c)): Morphism(b, c)
+  compose[|](f: Morphism(a, b), g: Morphism(b, c)): Morphism(b, c)
 
   left_id(f: Morphism(a, b)): id(a) | f == f
   right_id(f: Morphism(a, b)): f | id(b) == f

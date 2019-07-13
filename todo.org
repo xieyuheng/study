@@ -1,6 +1,7 @@
 - why there is no Value in the reference rules of check and infer ?
   - or where is closure in the reference rules ?
   - minitt used Value
+- to remember cicada-rs' way of type logic programming
 - how to handle `this` ?
   - learn from DOT
   - try to use bindingMap and unification to handle `this`

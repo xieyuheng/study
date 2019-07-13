@@ -14,8 +14,8 @@ case class LogicVar(name: String) extends Exp
 
  how can we achieve this ?
  we did this once by mapping between such objects.
- 
- we can use union find algorithem
+
+ we can use union find algorithm
 
  this means each object must has it own unique id.
  */
@@ -40,7 +40,7 @@ case class Case(target: Exp, clauses: Map[String, Exp]) extends Exp
  instead of pattern matching)
 
  foreach name and body in clauses {
- | sub <- ctx.loopup(name)
+ | sub <- ctx.loopupValue(name)
  | ctx :- target :> sub
  | ctx.unify(target, sub) :- body <: t
  }

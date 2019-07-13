@@ -112,11 +112,6 @@
 - renew parsing-tech and cicada-rs
 - scanner/
 - parsing-tech/
-* [note] the way to cicada language
-- do not start from a "well designed" type theory
-- start from the way I want to do formalize
-- implement it and fix it by examples
-- form a type theory at the end
 * [note] game semantics
 - type as game
 - two players: `Verifier` and `Falsifier`

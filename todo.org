@@ -5,6 +5,17 @@
 - how to handle `this` ?
   - learn from DOT
   - try to use bindingMap and unification to handle `this`
+* examples
+- NaturalTransformation
+- groupCategory
+- PreOrder
+  - thin category -- homSet(A, B).size <= 1
+- PartialOrder
+  - no cycle
+- TotalOrder
+  - quick sort
+  - bubble sort
+  - merge sort
 * fulfill
 - no type, just value
   and fulfilling relation between values

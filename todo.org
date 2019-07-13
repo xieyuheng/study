@@ -6,7 +6,6 @@
   - learn from DOT
   - try to use bindingMap and unification to handle `this`
 * examples
-- NaturalTransformation
 - groupCategory
 - PreOrder
   - thin category -- homSet(A, B).size <= 1
@@ -18,6 +17,7 @@
   - merge sort
 * fulfill
 - no type, just value
+  partly fulfilled value as type
   and fulfilling relation between values
   - union, record, pi are simple
   - closure need special treatment

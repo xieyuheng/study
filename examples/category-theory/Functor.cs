@@ -5,11 +5,11 @@ class Functor {
   D: Category
 
   map(a: C.Object): D.Object
-  fmap(f: C.Arrow(a, b)): D.Arrow(map(a), map(b))
+  fmap(f: C.Morphism(a, b)): D.Morphism(map(a), map(b))
 
   fmap_respect_compose(
-    f: C.Arrow(a, b),
-    g: C.Arrow(b, c),
+    f: C.Morphism(a, b),
+    g: C.Morphism(b, c),
   ): fmap(f C.| g) == fmap(f) D.| fmap(g)
 
   fmap_respect_id(

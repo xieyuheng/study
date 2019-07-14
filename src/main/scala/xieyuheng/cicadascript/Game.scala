@@ -1,4 +1,4 @@
-package xieyuheng.cicadascript
+package xieyuheng.cicada
 
 /** Game semantics framework for logic and type system. */
 

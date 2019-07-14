@@ -1,5 +1,5 @@
 import org.scalatest._
-import xieyuheng.cicadascript._
+import xieyuheng.cicada._
 
 class CicadaScriptSpec extends FlatSpec with Matchers {
   "placeholder" should "pass" in {

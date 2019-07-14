@@ -1,91 +1,31 @@
-package xieyuheng.cicadascript
+package xieyuheng.cicada
 
-trait Exp
+sealed trait Exp
 
-case class LogicVar(name: String) extends Exp
+final case class Var(name: String) extends Exp
 
-/*
- we can unify LogicVar with any Value
- but we must also be able to unify fulfilling relation, such as
+final case class Union(name: String, map: Map[String, Exp], subNames: List[String]) extends Exp
+final case class Case(target: Exp, map: Map[String, Exp]) extends Exp
 
- Value <: LogicVar
- Lambda <: Pi
- Record <: Union
+final case class Record(name: String, map: Map[String, Exp]) extends Exp
+final case class Field(target: Exp, fieldName: String) extends Exp
 
- how can we achieve this ?
- we did this once by mapping between such objects.
+final case class Pi(args: Map[String, Exp], ret: Exp) extends Exp
+final case class Fn(args: Map[String, Exp], ret: Exp, body: Exp) extends Exp
+final case class Apply(target: Exp, args: Map[String, Exp]) extends Exp
 
- we can use union find algorithm
 
- this means each object must has it own unique id.
- */
+sealed trait Value
+sealed trait Neutral extends Value
 
-/*
- t2 <- ctx.loopupLogicVar(name)
- ctx :- t2 <: t
- ---------------
- ctx :- LogicVar(name) <: t
- */
+final case class VarNeutral(uuid: String, name: String) extends Neutral
 
-case class Union(name: String, map: Map[String, Exp], subNames: List[String]) extends Exp
-case class Case(target: Exp, clauses: Map[String, Exp]) extends Exp
+final case class UnionValue(name: String, map: Map[String, Value], subNames: List[String]) extends Value
+final case class CaseNeutral(target: Neutral, map: Map[String, Value]) extends Neutral
 
-/*
- target must be Union,
- and clauses.keys == target.subNames
+final case class RecordValue(name: String, map: Map[String, Value]) extends Value
+final case class FieldNeutral(target: Neutral, fieldName: String) extends Neutral
 
- this means we should generate a eliminator
- (like `fold`) for every Union
- (but we are using unification and `.field`
- instead of pattern matching)
-
- foreach name and body in clauses {
- | sub <- ctx.loopupValue(name)
- | ctx :- target :> sub
- | ctx.unify(target, sub) :- body <: t
- }
- --------------------
- ctx :- Case(target, clauses) <: t
- */
-
-case class Record(name: String, map: Map[String, Exp]) extends Exp
-case class Field(head: Exp, fieldName: String) extends Exp
-
-/*
- head can be Record or Union
-
- ctx :- head.map.get(fieldName) <: t
- ----------------
- ctx :- Field(head, fieldName) <: t
- */
-
-/*
- Record <: Union
-
- subNames contains name
- ctx :- map <: map2
- -------------------
- ctx :- Record(name, map) <: Union(name2, map2, subNames)
- */
-
-case class Pi(args: Map[String, Exp], ret: Exp) extends Exp
-case class Lambda(args: Map[String, Exp], ret: Exp, body: Exp) extends Exp
-case class Apply(fun: Exp, args: Map[String, Exp]) extends Exp
-
-/*
- fun can be Lambda or Pi
-
- ctx :- args <: fun.args
- ctx.unify(args, fun.args) :- fun.ret <: t
- --------------------
- ctx :- Apply(fun, args) <: t
- */
-
-/*
- Lambda <: Pi
-
- ctx :- args <: args2
- ctx :- ret <: ret2
- --------------------
- ctx :- Lambda(args, ret, body) <: Pi(args2, ret2)
- */
+final case class PiValue(args: Map[String, Value], ret: Value) extends Value
+final case class FnValue(args: Map[String, Value], ret: Value, body: Exp) extends Value
+final case class ApplyNeutral(target: Neutral, args: Map[String, Value]) extends Neutral

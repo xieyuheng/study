@@ -1,10 +1,71 @@
-- why there is no Value in the reference rules of check and infer ?
-  - or where is closure in the reference rules ?
-  - minitt used Value
+- propagator
+- lattices
+  - eval of a exp to value
+  - values are lattices, serves as denotational semantics of the language
 - to remember cicada-rs' way of type logic programming
 - how to handle `this` ?
   - learn from DOT
   - try to use bindingMap and unification to handle `this`
+* lattice
+
+- we can unify Var with any Value
+  but we must also be able to unify fulfilling relation, such as
+  - Value <: Var
+  - Fn <: Pi
+  - Record <: Union
+
+  how can we achieve this ?
+  we did this once by mapping between such objects.
+
+  t2 <- ctx.loopupVar(name)
+  ctx :- t2 <: t
+  ---------------
+  ctx :- Var(name) <: t
+
+- target must be Union,
+  and clauses.keys == target.subNames
+
+  this means we should generate a eliminator
+  (like `fold`) for every Union
+  (but we are using unification and `.field`
+  instead of pattern matching)
+
+  foreach name and body in clauses {
+    sub <- ctx.loopupValue(name)
+    ctx :- target :> sub
+    ctx.unify(target, sub) :- body <: t
+  }
+  --------------------
+  ctx :- Case(target, clauses) <: t
+
+- head can be Record or Union
+
+  ctx :- head.map.get(fieldName) <: t
+  ----------------
+  ctx :- Field(head, fieldName) <: t
+
+- Record <: Union
+
+  subNames contains name
+  ctx :- map <: map2
+  -------------------
+  ctx :- Record(name, map) <: Union(name2, map2, subNames)
+
+- Apply
+
+  fun can be Fn or Pi
+  ctx :- args <: fun.args
+  ctx.unify(args, fun.args) :- fun.ret <: t
+  --------------------
+  ctx :- Apply(fun, args) <: t
+
+- Fn <: Pi
+
+  ctx :- args <: args2
+  ctx :- ret <: ret2
+  --------------------
+  ctx :- Fn(args, ret, body) <: Pi(args2, ret2)
+
 * examples
 - PreOrder
   - thin category -- homSet(A, B).size <= 1
@@ -86,7 +147,7 @@
 - dot.ts -- new type of game, like deep ref_t for record_t
 - be sure about winning rule for players
 - predicates for `game_t`, such as `end_p` `loss_p` `win_p` -- for better tests
-* cicadascript
+* cicada
 - more examples from /old
 - semantics of game plays
 - example games about `nat_t` and `list_t` -- cicada/simple

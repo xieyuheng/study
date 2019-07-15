@@ -18,8 +18,7 @@ class Category {
   ): f | (g | h) == (f | g) | h
 
   Inverse(f: Morphism(a, b), g: Morphism(a, b)): Type =
-    (f | g == id(a),
-     g | f == id(b))
+    (f | g == id(a), g | f == id(b))
 
   class Isomorphism {
     iso: Morphism(a, b)

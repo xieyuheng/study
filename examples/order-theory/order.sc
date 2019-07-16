@@ -11,7 +11,7 @@ class PreOrder {
 // topological sort
 class PartialOrder <: PreOrder {
   Eqv[==](E, E): Type
-  anti_symmetric(a <= b, b <= a): a == b
+  antisymmetric(a <= b, b <= a): a == b
 }
 
 class EqvRelation <: PreOrder {

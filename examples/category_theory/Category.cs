@@ -1,4 +1,4 @@
-module category-theory
+module category_theory
 
 class Category {
   Object: Type

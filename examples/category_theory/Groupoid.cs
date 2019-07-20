@@ -1,4 +1,4 @@
-module category-theory
+module category_theory
 
 class Groupoid <: Category {
   inv(f: Arrow(a, b)): Arrow(b, a)

@@ -1,6 +1,6 @@
-module abstract-algebra
+module abstract_algebra
 
-import category-theory._
+import category_theory._
 
 class Group <: Monoid {
   inv(x: E): id * x == x

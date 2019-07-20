@@ -1,3 +1,5 @@
+module order_theory
+
 // thin category
 // homSet(A, B).size <= 1
 class PreOrder {

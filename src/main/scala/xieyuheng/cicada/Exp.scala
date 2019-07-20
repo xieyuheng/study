@@ -12,3 +12,15 @@ final case class Field(target: Exp, fieldName: String) extends Exp
 final case class Pi(args: ListMap[String, Exp], ret: Exp) extends Exp
 final case class Fn(args: ListMap[String, Exp], ret: Exp, body: Exp) extends Exp
 final case class Apply(target: Exp, args: ListMap[String, Exp]) extends Exp
+
+object Exp {
+  def eval(exp: Exp, env: Map[String, Value]): Either[ErrorMessage, Value] = {
+    exp match {
+      case _ => ???
+    }
+  }
+
+  def check(exp: Exp) = {
+    ???
+  }
+}

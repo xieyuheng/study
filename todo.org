@@ -18,7 +18,7 @@
   foreach name and body in clauses {
     sub <- ctx.loopupValue(name)
     ctx :- target :> sub
-    ctx.unify(target, sub) :- body <: t
+    ctx.fulfill(target, sub) :- body <: t
   }
   --------------------
   ctx :- Case(target, clauses) <: t
@@ -33,7 +33,7 @@
 
   fun can be Fn or Pi
   ctx :- args <: target.args
-  ctx.unify(args, target.args) :- target.ret <: t
+  ctx.fulfill(args, target.args) :- target.ret <: t
   --------------------
   ctx :- Apply(target, args) <: t
 

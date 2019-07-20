@@ -1,6 +1,6 @@
 package xieyuheng.cicada
 
 case class Ctx(
-  env: Map[String, Exp],
-  typeEnv: Map[String, Exp],
+  env: Map[String, Value],
+  typeEnv: Map[String, Value],
   uniEnv: Map[Value, Value])

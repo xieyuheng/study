@@ -4,17 +4,14 @@ import scala.annotation.tailrec
 import scala.collection.immutable.ListMap
 
 sealed trait Value
-final case class ValueType(uuid: String) extends Value
-final case class ValueUnion(name: String, map: ListMap[String, Value], subNames: List[String]) extends Value
-final case class ValueRecord(name: String, map: ListMap[String, Value]) extends Value
-final case class ValuePi(args: ListMap[String, Value], ret: Value) extends Value
-final case class ValueFn(args: ListMap[String, Value], ret: Value, body: Exp, env: Map[String, Value]) extends Value
+final case class TypeValue(uuid: String) extends Value
+final case class UnionValue(name: String, map: ListMap[String, Value], subNames: List[String]) extends Value
+final case class RecordValue(name: String, map: ListMap[String, Value]) extends Value
+final case class PiValue(args: ListMap[String, Value], ret: Value) extends Value
+final case class FnValue(args: ListMap[String, Value], ret: Value, body: Exp, env: Map[String, Value]) extends Value
+final case class NeutralValue(neutral: Neutral) extends Value
 
-object Fulfilling {
-  case class ErrorReport() {
-
-  }
-
+object Value {
   @tailrec
   def walk(x: Value, uniEnv: Map[Value, Value]): Value = {
     uniEnv.get(x) match {
@@ -23,26 +20,26 @@ object Fulfilling {
     }
   }
 
-  def fulfill(src: Value, tar: Value, ctx: Ctx): Either[ErrorReport, Ctx] = {
+  def fulfill(src: Value, tar: Value, ctx: Ctx): Either[ErrorMessage, Ctx] = {
     (walk(src, ctx.uniEnv), walk(tar, ctx.uniEnv)) match {
-      case (ValueType(uuid), ValueType(uuid2)) if uuid == uuid2 =>
+      case (TypeValue(uuid), TypeValue(uuid2)) if uuid == uuid2 =>
         Right(ctx)
-      case (value, t: ValueType) =>
+      case (value, t: TypeValue) =>
         Right(ctx.copy(uniEnv = ctx.uniEnv + (t -> value)))
-      case (fn: ValueFn, pi: ValuePi) =>
+      case (fn: FnValue, pi: PiValue) =>
         for {
           c1 <- fulfillMap(pi.args, fn.args, ctx)
           c2 <- fulfill(fn.ret, pi.ret, c1)
         } yield c2.copy(uniEnv = c2.uniEnv + (fn -> pi))
-      case (record: ValueRecord, union: ValueUnion) if union.subNames contains record.name =>
+      case (record: RecordValue, union: UnionValue) if union.subNames contains record.name =>
         for {
           c1 <- fulfillMap(record.map, union.map, ctx)
         } yield c1.copy(uniEnv = c1.uniEnv + (record -> union))
-      case (src: ValueUnion, tar: ValueUnion) if src.name == tar.name =>
+      case (src: UnionValue, tar: UnionValue) if src.name == tar.name =>
         fulfillMap(src.map, tar.map, ctx)
-      case (src: ValueRecord, tar: ValueRecord) if src.name == tar.name =>
+      case (src: RecordValue, tar: RecordValue) if src.name == tar.name =>
         fulfillMap(src.map, tar.map, ctx)
-      case (src: ValuePi, tar: ValuePi) =>
+      case (src: PiValue, tar: PiValue) =>
         for {
           c1 <- fulfillMap(tar.args, src.args, ctx)
           c2 <- fulfill(src.ret, tar.ret, c1)
@@ -50,7 +47,7 @@ object Fulfilling {
       case (src, tar) if src == tar =>
         Right(ctx)
       case _ =>
-        Left(ErrorReport())
+        Left(ErrorMessage())
     }
   }
 
@@ -58,14 +55,14 @@ object Fulfilling {
     srcMap: ListMap[String, Value],
     tarMap: ListMap[String, Value],
     ctx: Ctx,
-  ): Either[ErrorReport, Ctx] = {
-    val initResult: Either[ErrorReport, Ctx] = Right(ctx)
+  ): Either[ErrorMessage, Ctx] = {
+    val initResult: Either[ErrorMessage, Ctx] = Right(ctx)
     tarMap.foldLeft(initResult) { case (result, (name, tarValue)) =>
       for {
         c1 <- result
         c2 <- srcMap.get(name) match {
           case Some(srcValue) => fulfill(srcValue, tarValue, c1)
-          case None => Left(ErrorReport())
+          case None => Left(ErrorMessage())
         }
       } yield c2
     }

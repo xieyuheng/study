@@ -24,8 +24,7 @@ object Exp {
     ???
     // - target must be Union,
     //   and clauses.keys == target.subNames
-
-    //   this means we should generate a eliminator
+    // - this means we should generate a eliminator
     //   (like `fold`) for every Union
     //   (but we are using unification and `.field`
     //   instead of pattern matching)

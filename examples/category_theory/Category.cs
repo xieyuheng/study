@@ -17,6 +17,8 @@ class Category {
     h: Morphism(c, d),
   ): f | (g | h) == (f | g) | h
 
+  /** derived types: */
+
   Inverse(f: Morphism(a, b), g: Morphism(a, b)): Type =
     (f | g == id(a), g | f == id(b))
 

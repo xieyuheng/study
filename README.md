@@ -6,7 +6,9 @@ A dependently-typed programming language
 - for interactive theorem proving
 - and practical verification tasks
 
-[examples (preview)](https://github.com/xieyuheng/cicada/tree/master/examples)
+## Contains
+
+- [syntax preview](https://github.com/xieyuheng/cicada/tree/master/examples)
 
 ## Packages
 

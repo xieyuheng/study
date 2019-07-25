@@ -1,6 +1,6 @@
 module order_theory
 
-class TotalOrder <: PartialOrder {
+class TotalOrder extends PartialOrder {
   connex(a: E, b: E): Either[a <= b, b <= a]
 }
 

@@ -1,6 +1,6 @@
 module order_theory
 
-class PartialOrder <: PreOrder {
+class PartialOrder extends PreOrder {
   antisymmetric(a <= b, b <= a): a == b
 
   Cover[-<](a: E, b: E): Type =

@@ -12,9 +12,6 @@ A dependently-typed programming language
 
 - Install: `sbt publishLocal`
 - Dependency: `libraryDependencies += "xieyuheng" %% "cicada" % "0.0.1"`
-
-## Docs
-
 - [API Docs](https://cicada.xieyuheng.now.sh/xieyuheng/cicada/index.html)
 
 ## Community

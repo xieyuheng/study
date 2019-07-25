@@ -1,7 +1,7 @@
-union Vec {
+class Vec {
   A: Type
   length: Nat
-} :> [
+} unions {
   class NullVec {
     length: Zero()
   }
@@ -11,9 +11,10 @@ union Vec {
     head: A
     tail: Vec(A, n)
   }
-]
+}
 
-vec_append[++](ante: Vec(A, m), succ: Vec(A, n)): Vec(A, m + n) =
+@infix(++)
+vec_append(ante: Vec(A, m), succ: Vec(A, n)): Vec(A, m + n) =
   ante case {
     NullVec => succ
     ConsVec => ConsVec(

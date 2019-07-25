@@ -2,11 +2,11 @@ module order_theory
 
 class PreOrder {
   E: Type
-  Pre[<=](E, E): Type
+  @infix(<=) Pre(E, E): Type
   reflexive(a: E): a <= a
   transitive(a <= b, b <= c): a <= c
 
-  StrictPre[<](a: E, b: E): Type =
+  @infix(<) StrictPre(a: E, b: E): Type =
     (a <= b, a != b)
 }
 

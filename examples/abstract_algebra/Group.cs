@@ -7,7 +7,7 @@ class Group extends Monoid {
   left_inv(x: E): inv(x) * x == id
   right_inv(x: E): x * inv(x) == id
 
-  div[/](x: E, y: E): E = x * inv(y)
+  @infix(/) div(x: E, y: E): E = x * inv(y)
 }
 
 class GroupHom {
@@ -29,7 +29,7 @@ groupCategory = Categroy {
   Morphism = GroupHom
   id = idGroupHom
 
-  compose[|](f: GroupHom(G, H), g: GroupHom(H, K)) = GroupHom {
+  compose(f: GroupHom(G, H), g: GroupHom(H, K)) = GroupHom {
     G, K
     hom(x) = g.hom(f.hom(x))
     hom_respect_mul(x, y): g.hom(f.hom(x G.* y)) == g.hom(f.hom(x)) K.* g.hom(f.hom(y)) =

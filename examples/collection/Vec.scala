@@ -15,7 +15,7 @@ class Vec {
 
 @infix(++)
 vec_append(ante: Vec(A, m), succ: Vec(A, n)): Vec(A, m + n) =
-  ante case {
+  ante match {
     NullVec => succ
     ConsVec => ConsVec(
       head = ante.head,
@@ -23,7 +23,7 @@ vec_append(ante: Vec(A, m), succ: Vec(A, n)): Vec(A, m + n) =
   }
 
 vec_map(fun: A -> B, vec: Vec(A, n)): Vec(A, n) =
-  vec case {
+  vec match {
     NullVec => vec
     ConsVec => ConsVec(
       head = fun(vec.head),

@@ -1,4 +1,4 @@
-class Vec {
+union Vec {
   A: Type
   length: Nat
 } unions {

@@ -22,13 +22,13 @@ class Category {
   /** derived types: */
 
   class Monomorphism {
-    monic: a -> b
-    left_cancelable(f, g: b -> c, monic | f  == monic | g): f == g
+    mono: a -> b
+    right_cancelable(f, g: c -> a, f | mono == g | mono): f == g
   }
 
   class Epimorphism {
-    epic: a -> b
-    right_cancelable(f, g: c -> a, f | epic == g | epic): f == g
+    epi: a -> b
+    left_cancelable(f, g: b -> c, epi | f  == epi | g): f == g
   }
 
   Inverse(f: a -> b, g: a -> b): Type =

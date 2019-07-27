@@ -1,0 +1,3 @@
+module prelude
+
+class Unit {}

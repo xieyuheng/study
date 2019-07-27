@@ -1,0 +1,1 @@
+union Void {} unions {}

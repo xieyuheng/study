@@ -1,4 +1,3 @@
-- separate `Inverse` to `LeftInverse` and `RightInverse`
 - lattices
   - eval of a exp to value
   - values are lattices, serves as denotational semantics of the language

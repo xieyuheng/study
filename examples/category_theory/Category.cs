@@ -31,12 +31,16 @@ class Category {
     left_cancelable(f, g: b -> c, epi | f  == epi | g): f == g
   }
 
-  Inverse(f: a -> b, g: a -> b): Type =
-    (f | g == id(a), g | f == id(b))
+  LeftInverse(f: a -> b, g: a -> b): Type =
+    f | g == id(a)
+
+  RightInverse(f: a -> b, g: a -> b): Type =
+    g | f == id(b)
 
   class Isomorphism {
     iso: a -> b
     inv: b -> a
-    inverse: Inverse(iso, inv)
+    left_inverse: LeftInverse(iso, inv)
+    right_inverse: RightInverse(iso, inv)
   }
 }

@@ -15,7 +15,7 @@ extend Monoid {
 
     id(_: Unit): E = this.id
 
-    compose = mul
+    then = mul
 
     left_id = this.left_id
     right_id = this.left_id

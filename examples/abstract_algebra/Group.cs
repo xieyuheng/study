@@ -29,7 +29,7 @@ groupCategory = Categroy {
   Morphism = GroupHom
   id = idGroupHom
 
-  compose(f: GroupHom(G, H), g: GroupHom(H, K)) = GroupHom {
+  then(f: GroupHom(G, H), g: GroupHom(H, K)) = GroupHom {
     G, K
     hom(x) = g.hom(f.hom(x))
     hom_respect_mul(x, y): g.hom(f.hom(x G.* y)) == g.hom(f.hom(x)) K.* g.hom(f.hom(y)) =

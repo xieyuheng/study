@@ -1,6 +1,4 @@
 - separate `Inverse` to `LeftInverse` and `RightInverse`
-- note that Monomorphism and Epimorphism are not defined by Inverse
-  but are defined by cancelability
 - lattices
   - eval of a exp to value
   - values are lattices, serves as denotational semantics of the language

@@ -1,3 +1,7 @@
+- learn from the design of collection of scala
+- nat
+- bool
+- list
 - lattices
   - eval of a exp to value
   - values are lattices, serves as denotational semantics of the language

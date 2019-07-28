@@ -1,3 +1,5 @@
+module collection.vec
+
 union Vec {
   A: Type
   length: Nat

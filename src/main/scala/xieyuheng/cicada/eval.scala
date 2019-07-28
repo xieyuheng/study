@@ -5,45 +5,43 @@ import scala.collection.immutable.ListMap
 import java.util.UUID
 
 object eval {
-  def eval(exp: Exp, ctx: Ctx): Either[ErrorMsg, Value] = {
+  def eval(exp: Exp, env: Map[String, Def]): Either[ErrorMsg, Value] = {
     exp match {
       case Var(name) =>
-        ctx.declEnv.get(name) match {
+        env.get(name) match {
           case Some(DefineValue(name, value)) =>
             Right(value)
-          case Some(DefineClass(name, map)) =>
-            ???
+          case Some(DefineRecord(name, map)) =>
+            for {
+              result <- evalMapWithBind(map, env)
+              (map, bind) = result
+              id = UUID.randomUUID().toString
+            } yield RecordValue(id, name, map, bind)
           case Some(DefineUnion(name, map, subNames)) =>
-            ???
+            for {
+              result <- evalMapWithBind(map, env)
+              (map, bind) = result
+              id = UUID.randomUUID().toString
+            } yield UnionValue(id, name, map, subNames, bind)
           case None =>
             Right(NeutralValue(VarNeutral(name)))
         }
       case Type() =>
         Right(TypeValue(UUID.randomUUID().toString))
-      case Union(name, map, subNames) =>
-        for {
-          map <- evalMap(map, ctx)
-          id = UUID.randomUUID().toString
-        } yield ??? // UnionValue(id, name, map, subNames)
       case Case(target, map) =>
         ???
-      case Record(name, map) =>
-        for {
-          map <- evalMap(map, ctx)
-          id = UUID.randomUUID().toString
-        } yield ??? // RecordValue(id, name, map)
       case Field(target, fieldName) =>
         ???
       case Pi(args, ret) =>
         for {
-          args <- evalMap(args, ctx)
-          ret <- eval(ret, ctx)
+          args <- evalMap(args, env)
+          ret <- eval(ret, env)
         } yield PiValue(args, ret)
       case Fn(args, ret, body) =>
         for {
-          args <- evalMap(args, ctx)
-          ret <- eval(ret, ctx)
-        } yield FnValue(args, ret, body, ctx)
+          args <- evalMap(args, env)
+          ret <- eval(ret, env)
+        } yield FnValue(args, ret, body, env)
       case Apply(target, args) =>
         ???
     }
@@ -51,8 +49,16 @@ object eval {
 
   def evalMap(
     map: ListMap[String, Exp],
-    ctx: Ctx,
+    env: Map[String, Def],
   ): Either[ErrorMsg, ListMap[String, Value]] = {
+    val initResult: Either[ErrorMsg, ListMap[String, Value]] = Right(ListMap())
+    ???
+  }
+
+  def evalMapWithBind(
+    map: ListMap[String, Exp],
+    env: Map[String, Def],
+  ): Either[ErrorMsg, (ListMap[String, Value], Ctx.Bind)] = {
     val initResult: Either[ErrorMsg, ListMap[String, Value]] = Right(ListMap())
     ???
   }

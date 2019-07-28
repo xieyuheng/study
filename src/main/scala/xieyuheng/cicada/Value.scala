@@ -13,14 +13,14 @@ final case class UnionValue(
   name: String,
   map: ListMap[String, Value],
   subNames: List[String],
-  unifMap: Map[Value, Value],
+  bind: Ctx.Bind,
 ) extends Value
 
 final case class RecordValue(
   id: String,
   name: String,
   map: ListMap[String, Value],
-  unifMap: Map[Value, Value],
+  bind: Ctx.Bind,
 ) extends Value
 
 final case class PiValue(
@@ -32,7 +32,7 @@ final case class FnValue(
   args: ListMap[String, Value],
   ret: Value,
   body: Exp,
-  ctx: Ctx,
+  env: Map[String, Def],
 ) extends Value
 
 final case class NeutralValue(

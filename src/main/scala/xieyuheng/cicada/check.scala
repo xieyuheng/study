@@ -5,6 +5,7 @@ import scala.collection.immutable.ListMap
 object check {
   def check(exp: Exp, t: Value) = {
     ???
+
     // - target must be Union,
     //   and clauses.keys == target.subNames
     // - this means we should generate a eliminator
@@ -20,15 +21,20 @@ object check {
     //   --------------------
     //   ctx :- Case(target, clauses) <: t
 
+
     // - target can be Record or Union
 
     //   ctx :- target.map.get(fieldName) <: t
     //   ----------------
     //   ctx :- Field(target, fieldName) <: t
 
+
     // - Apply
 
-    //   fun can be Fn or Pi
+    //   target can be Fn or Pi
+
+    //   target can be Union or Record
+
     //   ctx :- args <: target.args
     //   ctx.fulfill(args, target.args) :- target.ret <: t
     //   --------------------

@@ -1,5 +1,7 @@
-- mergeUnifMap
-- eval and evalMap
+- eval
+- evalMap
+- evalMapWithBind
+- mergeBind
 - check
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

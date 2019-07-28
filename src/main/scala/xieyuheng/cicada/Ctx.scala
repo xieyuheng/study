@@ -1,5 +1,10 @@
 package xieyuheng.cicada
 
+object Ctx {
+  type Env = Map[String, Def]
+  type Bind = Map[Value, Value]
+}
+
 case class Ctx(
-  declEnv: Map[String, Decl],
-  unifMap: Map[Value, Value])
+  env: Ctx.Env,
+  bind: Ctx.Bind)

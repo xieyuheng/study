@@ -1,3 +1,8 @@
+- what is the difference between set, type and cat ?
+  - set: ==, member relation, subset relation
+  - type: ==, member relation
+  - cat: ==, |
+------
 - learn from the design of collection of scala
 - nat
 - bool

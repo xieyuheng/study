@@ -12,32 +12,36 @@ object fulfill {
     }
   }
 
-  def fulfill(src: Value, tar: Value, ctx: Ctx): Either[ErrorMsg, Ctx] = {
-    (walk(src, ctx.unifEnv), walk(tar, ctx.unifEnv)) match {
-      case (TypeValue(uuid), TypeValue(uuid2)) if uuid == uuid2 =>
-        Right(ctx)
+  def fulfill(
+    src: Value,
+    tar: Value,
+    unifEnv: Map[Value, Value],
+  ): Either[ErrorMsg, Map[Value, Value]] = {
+    (walk(src, unifEnv), walk(tar, unifEnv)) match {
+      case (TypeValue(id), TypeValue(id2)) if id == id2 =>
+        Right(unifEnv)
       case (value, t: TypeValue) =>
-        Right(ctx.copy(unifEnv = ctx.unifEnv + (t -> value)))
+        Right(unifEnv + (t -> value))
       case (fn: FnValue, pi: PiValue) =>
         for {
-          c1 <- fulfillMap(pi.args, fn.args, ctx)
-          c2 <- fulfill(fn.ret, pi.ret, c1)
-        } yield c2.copy(unifEnv = c2.unifEnv + (fn -> pi))
+          unifEnv1 <- fulfillMap(pi.args, fn.args, unifEnv)
+          unifEnv2 <- fulfill(fn.ret, pi.ret, unifEnv1)
+        } yield unifEnv2 + (fn -> pi)
       case (record: RecordValue, union: UnionValue) if union.subNames contains record.name =>
         for {
-          c1 <- fulfillMap(record.map, union.map, ctx)
-        } yield c1.copy(unifEnv = c1.unifEnv + (record -> union))
+          unifEnv1 <- fulfillMap(record.map, union.map, unifEnv)
+        } yield unifEnv1 + (record -> union)
       case (src: UnionValue, tar: UnionValue) if src.name == tar.name =>
-        fulfillMap(src.map, tar.map, ctx)
+        fulfillMap(src.map, tar.map, unifEnv)
       case (src: RecordValue, tar: RecordValue) if src.name == tar.name =>
-        fulfillMap(src.map, tar.map, ctx)
+        fulfillMap(src.map, tar.map, unifEnv)
       case (src: PiValue, tar: PiValue) =>
         for {
-          c1 <- fulfillMap(tar.args, src.args, ctx)
-          c2 <- fulfill(src.ret, tar.ret, c1)
-        } yield c2
+          unifEnv1 <- fulfillMap(tar.args, src.args, unifEnv)
+          unifEnv2 <- fulfill(src.ret, tar.ret, unifEnv1)
+        } yield unifEnv2
       case (src, tar) if src == tar =>
-        Right(ctx)
+        Right(unifEnv)
       case _ =>
         Left(ErrorMsg())
     }
@@ -46,17 +50,17 @@ object fulfill {
   def fulfillMap(
     srcMap: ListMap[String, Value],
     tarMap: ListMap[String, Value],
-    ctx: Ctx,
-  ): Either[ErrorMsg, Ctx] = {
-    val initResult: Either[ErrorMsg, Ctx] = Right(ctx)
+    unifEnv: Map[Value, Value],
+  ): Either[ErrorMsg, Map[Value, Value]] = {
+    val initResult: Either[ErrorMsg, Map[Value, Value]] = Right(Map())
     tarMap.foldLeft(initResult) { case (result, (name, tarValue)) =>
       for {
-        c1 <- result
-        c2 <- srcMap.get(name) match {
-          case Some(srcValue) => fulfill(srcValue, tarValue, c1)
+        unifEnv1 <- result
+        unifEnv2 <- srcMap.get(name) match {
+          case Some(srcValue) => fulfill(srcValue, tarValue, unifEnv1)
           case None => Left(ErrorMsg())
         }
-      } yield c2
+      } yield unifEnv2
     }
   }
 }

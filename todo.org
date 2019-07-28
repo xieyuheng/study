@@ -1,4 +1,6 @@
-- eval
+- use unifEnv instead of ctx in fulfill
+- RecordValue need unifEnv in it
+- eval and evalMap
 - check
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

@@ -35,14 +35,24 @@ object fulfill {
       case (record: RecordValue, union: UnionValue)
           if union.subNames contains record.name =>
         for {
-          unifMap1 <- fulfillMap(record.map, union.map, unifMap)
-        } yield unifMap1 + (record -> union)
+          unifMap1 <- mergeUnifMap(unifMap, record.unifMap)
+          unifMap2 <- mergeUnifMap(unifMap1, union.unifMap)
+          unifMap3 <- fulfillMap(record.map, union.map, unifMap2)
+        } yield unifMap3 + (record -> union)
       case (src: UnionValue, tar: UnionValue)
           if src.name == tar.name =>
-        fulfillMap(src.map, tar.map, unifMap)
+        for {
+          unifMap1 <- mergeUnifMap(unifMap, src.unifMap)
+          unifMap2 <- mergeUnifMap(unifMap1, tar.unifMap)
+          result <- fulfillMap(src.map, tar.map, unifMap2)
+        } yield result
       case (src: RecordValue, tar: RecordValue)
           if src.name == tar.name =>
-        fulfillMap(src.map, tar.map, unifMap)
+        for {
+          unifMap1 <- mergeUnifMap(unifMap, src.unifMap)
+          unifMap2 <- mergeUnifMap(unifMap1, tar.unifMap)
+          result <- fulfillMap(src.map, tar.map, unifMap2)
+        } yield result
       case (src: PiValue, tar: PiValue) =>
         for {
           unifMap1 <- fulfillMap(tar.args, src.args, unifMap)
@@ -72,4 +82,11 @@ object fulfill {
     }
   }
 
+  def mergeUnifMap(
+    unifMap1: Map[Value, Value],
+    unifMap2: Map[Value, Value],
+  ): Either[ErrorMsg, Map[Value, Value]] = {
+    // TODO
+    Right(unifMap1 ++ unifMap2)
+  }
 }

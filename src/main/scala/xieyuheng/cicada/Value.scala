@@ -13,12 +13,14 @@ final case class UnionValue(
   name: String,
   map: ListMap[String, Value],
   subNames: List[String],
+  unifMap: Map[Value, Value],
 ) extends Value
 
 final case class RecordValue(
   id: String,
   name: String,
   map: ListMap[String, Value],
+  unifMap: Map[Value, Value],
 ) extends Value
 
 final case class PiValue(

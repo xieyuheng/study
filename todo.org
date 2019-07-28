@@ -1,4 +1,4 @@
-- RecordValue & UnionValue need unifEnv in it
+- mergeUnifMap
 - eval and evalMap
 - check
 - what is the difference between set, type and cat ?

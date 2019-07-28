@@ -24,14 +24,14 @@ object eval {
         for {
           map <- evalMap(map, ctx)
           id = UUID.randomUUID().toString
-        } yield UnionValue(id, name, map, subNames)
+        } yield ??? // UnionValue(id, name, map, subNames)
       case Case(target, map) =>
         ???
       case Record(name, map) =>
         for {
           map <- evalMap(map, ctx)
           id = UUID.randomUUID().toString
-        } yield RecordValue(id, name, map)
+        } yield ??? // RecordValue(id, name, map)
       case Field(target, fieldName) =>
         ???
       case Pi(args, ret) =>

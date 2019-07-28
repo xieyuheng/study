@@ -1,3 +1,5 @@
+- eval
+- check
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation
   - type: ==, member relation
@@ -45,7 +47,6 @@
   only to implement the fulfill type system first
 * learn from scala macro system -- for AST design
 * three kinds of expression
-- eval(exp: Exp) -> Value or Neutral
 - expression
   value (top is constructor)
   normal form (might be neutral)

@@ -4,7 +4,6 @@ import scala.annotation.tailrec
 import scala.collection.immutable.ListMap
 
 object fulfill {
-
   @tailrec
   def walk(x: Value, unifEnv: Map[Value, Value]): Value = {
     unifEnv.get(x) match {
@@ -13,7 +12,7 @@ object fulfill {
     }
   }
 
-  def fulfill(src: Value, tar: Value, ctx: Ctx): Either[ErrorMessage, Ctx] = {
+  def fulfill(src: Value, tar: Value, ctx: Ctx): Either[ErrorMsg, Ctx] = {
     (walk(src, ctx.unifEnv), walk(tar, ctx.unifEnv)) match {
       case (TypeValue(uuid), TypeValue(uuid2)) if uuid == uuid2 =>
         Right(ctx)
@@ -40,7 +39,7 @@ object fulfill {
       case (src, tar) if src == tar =>
         Right(ctx)
       case _ =>
-        Left(ErrorMessage())
+        Left(ErrorMsg())
     }
   }
 
@@ -48,14 +47,14 @@ object fulfill {
     srcMap: ListMap[String, Value],
     tarMap: ListMap[String, Value],
     ctx: Ctx,
-  ): Either[ErrorMessage, Ctx] = {
-    val initResult: Either[ErrorMessage, Ctx] = Right(ctx)
+  ): Either[ErrorMsg, Ctx] = {
+    val initResult: Either[ErrorMsg, Ctx] = Right(ctx)
     tarMap.foldLeft(initResult) { case (result, (name, tarValue)) =>
       for {
         c1 <- result
         c2 <- srcMap.get(name) match {
           case Some(srcValue) => fulfill(srcValue, tarValue, c1)
-          case None => Left(ErrorMessage())
+          case None => Left(ErrorMsg())
         }
       } yield c2
     }

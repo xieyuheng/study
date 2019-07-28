@@ -3,8 +3,7 @@ package xieyuheng.cicada
 import scala.collection.immutable.ListMap
 
 object eval {
-
-  def eval(exp: Exp, env: Map[String, Value]): Either[ErrorMessage, Value] = {
+  def eval(exp: Exp, ctx: Ctx): Either[ErrorMsg, Value] = {
     exp match {
       case _ => ???
     }

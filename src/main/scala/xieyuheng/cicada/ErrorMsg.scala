@@ -1,5 +1,5 @@
 package xieyuheng.cicada
 
-case class ErrorMessage() {
+case class ErrorMsg() {
 
 }

@@ -21,17 +21,21 @@ object fulfill {
     bind: Ctx.Bind,
   ): Either[ErrorMsg, Ctx.Bind] = {
     (walk(src, bind), walk(tar, bind)) match {
+
       case (src, tar)
           if src == tar =>
         Right(bind)
+
       case (value, t: TypeValue) =>
         Right(bind + (t -> value))
+
       case (fn: FnValue, pi: PiValue) =>
         for {
           /** contravariant at args */
           bind1 <- fulfillMap(pi.args, fn.args, bind)
           bind2 <- fulfill(fn.ret, pi.ret, bind1)
         } yield bind2 + (fn -> pi)
+
       case (record: RecordValue, union: UnionValue)
           if union.subNames contains record.name =>
         for {
@@ -39,6 +43,7 @@ object fulfill {
           bind2 <- mergeBind(bind1, union.bind)
           bind3 <- fulfillMap(record.map, union.map, bind2)
         } yield bind3 + (record -> union)
+
       case (src: UnionValue, tar: UnionValue)
           if src.name == tar.name =>
         for {
@@ -46,6 +51,7 @@ object fulfill {
           bind2 <- mergeBind(bind1, tar.bind)
           result <- fulfillMap(src.map, tar.map, bind2)
         } yield result
+
       case (src: RecordValue, tar: RecordValue)
           if src.name == tar.name =>
         for {
@@ -53,11 +59,13 @@ object fulfill {
           bind2 <- mergeBind(bind1, tar.bind)
           result <- fulfillMap(src.map, tar.map, bind2)
         } yield result
+
       case (src: PiValue, tar: PiValue) =>
         for {
           bind1 <- fulfillMap(tar.args, src.args, bind)
           bind2 <- fulfill(src.ret, tar.ret, bind1)
         } yield bind2
+
       case _ =>
         Left(ErrorMsg(s"fail to fulfill src: ${src} into tar: ${tar}"))
     }

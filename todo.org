@@ -1,5 +1,4 @@
 - eval
-- evalMap
 - evalMapWithBind
 - mergeBind
 - check

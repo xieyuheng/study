@@ -3,7 +3,6 @@ package xieyuheng.cicada
 import scala.collection.immutable.ListMap
 
 object eval {
-
   def apply(exp: Exp, env: Env): Either[ErrorMsg, Value] = {
     exp match {
       case Var(name) => {
@@ -30,7 +29,23 @@ object eval {
       }
 
       case Case(target, map) => {
-        ???
+        for {
+          targetValue <- eval(target, env)
+          result <- targetValue match {
+            case record: RecordValue =>
+              map.get(record.name) match {
+                case Some(exp) => eval(exp, env)
+                case None => Left(ErrorMsg(s"no clause: ${record.name}, on case: ${map}"))
+              }
+            case NeutralValue(neutral) =>
+              for {
+                map <- evalMap(map, env)
+              } yield NeutralValue(CaseNeutral(neutral, map))
+            case _ =>
+              Left(ErrorMsg("targetValue of Field should be RecordValue or NeutralValue, " +
+                s"instead of: ${targetValue}"))
+          }
+        } yield result
       }
 
       case Field(target, fieldName) => {
@@ -44,14 +59,14 @@ object eval {
               }
             case record: RecordValue =>
               record.map.get(fieldName) match {
-                case Some(value) => Right(value)
+                case Some(value) => Right(util.deepWalk(value, record.bind))
                 case None => Left(ErrorMsg(s"no field: ${fieldName}, on record: ${record}"))
               }
             case NeutralValue(neutral) =>
               Right(NeutralValue(FieldNeutral(neutral, fieldName)))
             case _ =>
-              Left(ErrorMsg(
-                s"targetValue should be a UnionValue or RecordValue, instead of: ${targetValue}"))
+              Left(ErrorMsg("targetValue of Field should be UnionValue, RecordValue or NeutralValue, " +
+                s"instead of: ${targetValue}"))
           }
         } yield result
       }
@@ -71,7 +86,13 @@ object eval {
       }
 
       case Apply(target, args) => {
-        ???
+        for {
+          targetValue <- eval(target, env)
+          result <- targetValue match {
+            case _ =>
+              Left(ErrorMsg(""))
+          }
+        } yield result
       }
     }
   }
@@ -81,7 +102,12 @@ object eval {
     env: Env,
   ): Either[ErrorMsg, ListMap[String, Value]] = {
     val initResult: Either[ErrorMsg, ListMap[String, Value]] = Right(ListMap())
-    ???
+    map.foldLeft(initResult) { case (result, (name, exp)) =>
+      for {
+        map <- result
+        value <- eval(exp, env)
+      } yield map + (name -> value)
+    }
   }
 
   def evalMapToBind(

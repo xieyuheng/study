@@ -10,7 +10,6 @@ scalacOptions ++= Seq(
   "-feature",
   "-language:higherKinds",
   "-language:implicitConversions",
-  "-Ywarn-dead-code",
   "-Xfatal-warnings",
 )
 

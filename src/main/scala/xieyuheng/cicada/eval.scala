@@ -4,7 +4,7 @@ import scala.collection.immutable.ListMap
 
 object eval {
 
-  def eval(exp: Exp, env: Env): Either[ErrorMsg, Value] = {
+  def apply(exp: Exp, env: Env): Either[ErrorMsg, Value] = {
     exp match {
       case Var(name) => {
         env.get(name) match {

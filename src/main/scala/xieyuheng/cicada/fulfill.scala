@@ -13,11 +13,7 @@ object fulfill {
     }
   }
 
-  def fulfill(
-    src: Value,
-    tar: Value,
-    bind: Bind,
-  ): Either[ErrorMsg, Bind] = {
+  def withBind(src: Value, tar: Value, bind: Bind): Either[ErrorMsg, Bind] = {
     (walk(src, bind), walk(tar, bind)) match {
       case (src, tar) if src == tar => {
         Right(bind)
@@ -30,8 +26,8 @@ object fulfill {
       case (fn: FnValue, pi: PiValue) => {
         for {
           /** contravariant at args */
-          bind1 <- fulfillMap(pi.args, fn.args, bind)
-          bind2 <- fulfill(fn.ret, pi.ret, bind1)
+          bind1 <- withBindForMap(pi.args, fn.args, bind)
+          bind2 <- withBind(fn.ret, pi.ret, bind1)
         } yield bind2 + (fn -> pi)
       }
 
@@ -39,7 +35,7 @@ object fulfill {
         for {
           bind1 <- mergeBind(bind, record.bind)
           bind2 <- mergeBind(bind1, union.bind)
-          bind3 <- fulfillMap(record.map, union.map, bind2)
+          bind3 <- withBindForMap(record.map, union.map, bind2)
         } yield bind3 + (record -> union)
       }
 
@@ -47,7 +43,7 @@ object fulfill {
         for {
           bind1 <- mergeBind(bind, src.bind)
           bind2 <- mergeBind(bind1, tar.bind)
-          result <- fulfillMap(src.map, tar.map, bind2)
+          result <- withBindForMap(src.map, tar.map, bind2)
         } yield result
       }
 
@@ -55,14 +51,14 @@ object fulfill {
         for {
           bind1 <- mergeBind(bind, src.bind)
           bind2 <- mergeBind(bind1, tar.bind)
-          result <- fulfillMap(src.map, tar.map, bind2)
+          result <- withBindForMap(src.map, tar.map, bind2)
         } yield result
       }
 
       case (src: PiValue, tar: PiValue) => {
         for {
-          bind1 <- fulfillMap(tar.args, src.args, bind)
-          bind2 <- fulfill(src.ret, tar.ret, bind1)
+          bind1 <- withBindForMap(tar.args, src.args, bind)
+          bind2 <- withBind(src.ret, tar.ret, bind1)
         } yield bind2
       }
 
@@ -72,7 +68,7 @@ object fulfill {
     }
   }
 
-  def fulfillMap(
+  def withBindForMap(
     srcMap: ListMap[String, Value],
     tarMap: ListMap[String, Value],
     bind: Bind,
@@ -83,7 +79,7 @@ object fulfill {
         bind1 <- result
         bind2 <- srcMap.get(name) match {
           case Some(srcValue) =>
-            fulfill(srcValue, tarValue, bind1)
+            withBind(srcValue, tarValue, bind1)
           case None =>
             Left(ErrorMsg(s"srcMap does not have name: ${name}, tarValue: ${tarValue}"))
         }
@@ -97,5 +93,20 @@ object fulfill {
   ): Either[ErrorMsg, Bind] = {
     assert(bind1.keys.toSet.intersect(bind2.keys.toSet).isEmpty)
     Right(bind1 ++ bind2)
+  }
+
+
+  def apply(src: Value, tar: Value): Either[ErrorMsg, Value] = {
+    ???
+  }
+
+
+  type ValuePath = List[String]
+
+  def withPath(
+    src: Value, srcPath: ValuePath,
+    tar: Value, tarPath: ValuePath,
+  ): Either[ErrorMsg, Value] = {
+    ???
   }
 }

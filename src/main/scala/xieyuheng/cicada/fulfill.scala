@@ -1,26 +1,16 @@
 package xieyuheng.cicada
 
-import scala.annotation.tailrec
 import scala.collection.immutable.ListMap
 
 object fulfill {
-
-  @tailrec
-  def walk(x: Value, bind: Bind): Value = {
-    bind.get(x) match {
-      case Some(y) => walk(y, bind)
-      case None => x
-    }
-  }
-
   def apply(src: Value, tar: Value, bind: Bind): Either[ErrorMsg, Bind] = {
-    (walk(src, bind), walk(tar, bind)) match {
+    (util.walk(src, bind), util.walk(tar, bind)) match {
       case (src, tar) if src == tar => {
         Right(bind)
       }
 
-      case (value, t: TypeValue) => {
-        Right(bind + (t -> value))
+      case (value, t: LogicVar) => {
+        Right(bind + (t.id -> value))
       }
 
       case (fn: FnValue, pi: PiValue) => {
@@ -28,7 +18,7 @@ object fulfill {
           /** contravariant at args */
           bind1 <- forMap(pi.args, fn.args, bind)
           bind2 <- apply(fn.ret, pi.ret, bind1)
-        } yield bind2 + (fn -> pi)
+        } yield bind2 + (pi.id -> fn)
       }
 
       case (record: RecordValue, union: UnionValue) if union.subNames contains record.name => {
@@ -36,7 +26,7 @@ object fulfill {
           bind1 <- mergeBind(bind, record.bind)
           bind2 <- mergeBind(bind1, union.bind)
           bind3 <- forMap(record.map, union.map, bind2)
-        } yield bind3 + (record -> union)
+        } yield bind3 + (union.id -> record)
       }
 
       case (src: UnionValue, tar: UnionValue) if src.name == tar.name => {

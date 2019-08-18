@@ -14,7 +14,7 @@ object eval {
             for {
               result <- evalMapToBind(map, env)
               (map, bind) = result
-            } yield RecordValue(util.newId(), name, map, bind)
+            } yield RecordValue(name, map, bind)
           case Some(DefineUnion(name, map, subNames)) =>
             for {
               result <- evalMapToBind(map, env)
@@ -26,7 +26,7 @@ object eval {
       }
 
       case Type() => {
-        Right(TypeValue(util.newId()))
+        Right(LogicVar(util.newId()))
       }
 
       case Case(target, map) => {
@@ -39,7 +39,7 @@ object eval {
           result <- targetValue match {
             case union: UnionValue =>
               union.map.get(fieldName) match {
-                case Some(value) => Right(value)
+                case Some(value) => Right(util.deepWalk(value, union.bind))
                 case None => Left(ErrorMsg(s"no field: ${fieldName}, on union: ${union}"))
               }
             case record: RecordValue =>
@@ -60,7 +60,7 @@ object eval {
         for {
           args <- evalMap(args, env)
           ret <- eval(ret, env)
-        } yield PiValue(args, ret)
+        } yield PiValue(util.newId(), args, ret)
       }
 
       case Fn(args, ret, body) => {

@@ -4,12 +4,12 @@ import scala.collection.immutable.ListMap
 
 sealed trait Value
 
-final case class TypeValue(
-  id: String,
+final case class LogicVar(
+  id: Id,
 ) extends Value
 
 final case class UnionValue(
-  id: String,
+  id: Id,
   name: String,
   map: ListMap[String, Value],
   subNames: List[String],
@@ -17,13 +17,13 @@ final case class UnionValue(
 ) extends Value
 
 final case class RecordValue(
-  id: String,
   name: String,
   map: ListMap[String, Value],
   bind: Bind,
 ) extends Value
 
 final case class PiValue(
+  id: Id,
   args: ListMap[String, Value],
   ret: Value,
 ) extends Value

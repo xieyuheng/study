@@ -6,7 +6,7 @@ import scala.collection.immutable.ListMap
 object fulfill {
 
   @tailrec
-  def walk(x: Value, bind: Ctx.Bind): Value = {
+  def walk(x: Value, bind: Bind): Value = {
     bind.get(x) match {
       case Some(y) => walk(y, bind)
       case None => x
@@ -16,8 +16,8 @@ object fulfill {
   def fulfill(
     src: Value,
     tar: Value,
-    bind: Ctx.Bind,
-  ): Either[ErrorMsg, Ctx.Bind] = {
+    bind: Bind,
+  ): Either[ErrorMsg, Bind] = {
     (walk(src, bind), walk(tar, bind)) match {
       case (src, tar) if src == tar => {
         Right(bind)
@@ -75,9 +75,9 @@ object fulfill {
   def fulfillMap(
     srcMap: ListMap[String, Value],
     tarMap: ListMap[String, Value],
-    bind: Ctx.Bind,
-  ): Either[ErrorMsg, Ctx.Bind] = {
-    val initResult: Either[ErrorMsg, Ctx.Bind] = Right(Map())
+    bind: Bind,
+  ): Either[ErrorMsg, Bind] = {
+    val initResult: Either[ErrorMsg, Bind] = Right(Map())
     tarMap.foldLeft(initResult) { case (result, (name, tarValue)) =>
       for {
         bind1 <- result
@@ -92,9 +92,9 @@ object fulfill {
   }
 
   def mergeBind(
-    bind1: Ctx.Bind,
-    bind2: Ctx.Bind,
-  ): Either[ErrorMsg, Ctx.Bind] = {
+    bind1: Bind,
+    bind2: Bind,
+  ): Either[ErrorMsg, Bind] = {
     assert(bind1.keys.toSet.intersect(bind2.keys.toSet).isEmpty)
     Right(bind1 ++ bind2)
   }

@@ -4,7 +4,7 @@ import scala.collection.immutable.ListMap
 
 object eval {
 
-  def eval(exp: Exp, env: Ctx.Env): Either[ErrorMsg, Value] = {
+  def eval(exp: Exp, env: Env): Either[ErrorMsg, Value] = {
     exp match {
       case Var(name) => {
         env.get(name) match {
@@ -78,7 +78,7 @@ object eval {
 
   def evalMap(
     map: ListMap[String, Exp],
-    env: Ctx.Env,
+    env: Env,
   ): Either[ErrorMsg, ListMap[String, Value]] = {
     val initResult: Either[ErrorMsg, ListMap[String, Value]] = Right(ListMap())
     ???
@@ -86,8 +86,8 @@ object eval {
 
   def evalMapToBind(
     map: ListMap[String, Exp],
-    env: Ctx.Env,
-  ): Either[ErrorMsg, (ListMap[String, Value], Ctx.Bind)] = {
+    env: Env,
+  ): Either[ErrorMsg, (ListMap[String, Value], Bind)] = {
     val initResult: Either[ErrorMsg, ListMap[String, Value]] = Right(ListMap())
     ???
   }

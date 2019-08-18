@@ -1,9 +1,52 @@
-- we can not deepWalk a value because Union and Record has id
-  if we deepWalk a Record
-  we would need to generate a new id
 - we need to put id in Union and Record
   because structurally equivalent Record might not be the same Record
   - we need examples to justify this
+    a Succ(Nat) and a Succ(Nat) might be different
+    but if we use structural equivalence
+    they will be viewed as equivalent
+- we can not deepWalk a value because Union and Record has id
+  if we deepWalk a Record
+  we would need to generate a new id
+- it seems that the problem is about
+  the representation of record and union
+
+  record and union contain Bind
+  - is this enough ?
+    we need to consider nested record and union
+  - we consider how Record is used
+    a Record contains Bind
+    means a Record contains all the information
+    we need to do fulfill
+
+    a Record or an Union is self-contained
+
+    we consider the interface of Record
+    namely Field(target)
+    whenever we get a field of a Record or an Union
+    the only thing we need to ensure is that
+    the value we got is self-contained
+    be it a new RecordValue or a TypeValue
+
+  - but if we have two Record r1 and r2
+    if we fulfill r1.f1 and r2.f2
+    we will only get a new value
+
+    but we will not get the Bind, in which
+    r1 and r2 's fields f1 and f2 fulfill
+
+    fulfillWithBind(x: Value, y: Value, bind: Bind): Either[ErrorMsg, Bind]
+
+    fulfill(x: Value, y: Value): Either[ErrorMsg, Value]
+
+    fulfillWithPath(
+    v1: Value, p1: ValuePath,
+    v2: Value: p2: ValuePath,
+    ): Either[ErrorMsg, Value]
+
+  can we avoid a Bind in Ctx, and instead
+  just fulfill Value and Value to another Value
+
+  (fulfill is directed join)
 ------
 - eval
 - evalMap
@@ -49,7 +92,7 @@
   - value without union and x: type
 - nominal subtype relation
   instead of structural subtype relation
-  - we do not need structural type union and intersection
+  - thus we do not need structural type union and intersection
 * game as type class
 - we can implement game as type class
   and view other type as game later

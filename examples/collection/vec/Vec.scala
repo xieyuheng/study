@@ -5,10 +5,13 @@ union Vec {
   length: Nat
 } unions {
   class NullVec {
-    length: Zero()
+    length: Zero
   }
 
   class ConsVec {
+    // implicit: {
+    //   n: Nat
+    // }
     length: Succ(n)
     head: A
     tail: Vec(A, n)

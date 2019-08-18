@@ -1,3 +1,10 @@
+- we can not deepWalk a value because Union and Record has id
+  if we deepWalk a Record
+  we would need to generate a new id
+- we need to put id in Union and Record
+  because structurally equivalent Record might not be the same Record
+  - we need examples to justify this
+------
 - eval
 - evalMap
 - evalMapWithBind

@@ -3,6 +3,7 @@ package xieyuheng.cicada
 import scala.collection.immutable.ListMap
 
 object eval {
+
   def eval(exp: Exp, env: Ctx.Env): Either[ErrorMsg, Value] = {
     exp match {
       case Var(name) => {

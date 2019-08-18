@@ -4,6 +4,7 @@ import scala.annotation.tailrec
 import scala.collection.immutable.ListMap
 
 object fulfill {
+
   @tailrec
   def walk(x: Value, bind: Ctx.Bind): Value = {
     bind.get(x) match {
@@ -12,9 +13,11 @@ object fulfill {
     }
   }
 
-  def fulfill
-    (src: Value, tar: Value, bind: Ctx.Bind)
-      : Either[ErrorMsg, Ctx.Bind] = {
+  def fulfill(
+    src: Value,
+    tar: Value,
+    bind: Ctx.Bind,
+  ): Either[ErrorMsg, Ctx.Bind] = {
     (walk(src, bind), walk(tar, bind)) match {
       case (src, tar) if src == tar => {
         Right(bind)
@@ -69,11 +72,11 @@ object fulfill {
     }
   }
 
-  def fulfillMap
-    (srcMap: ListMap[String, Value],
-      tarMap: ListMap[String, Value],
-      bind: Ctx.Bind)
-      : Either[ErrorMsg, Ctx.Bind] = {
+  def fulfillMap(
+    srcMap: ListMap[String, Value],
+    tarMap: ListMap[String, Value],
+    bind: Ctx.Bind,
+  ): Either[ErrorMsg, Ctx.Bind] = {
     val initResult: Either[ErrorMsg, Ctx.Bind] = Right(Map())
     tarMap.foldLeft(initResult) { case (result, (name, tarValue)) =>
       for {
@@ -88,10 +91,10 @@ object fulfill {
     }
   }
 
-  def mergeBind
-    (bind1: Ctx.Bind,
-      bind2: Ctx.Bind)
-      : Either[ErrorMsg, Ctx.Bind] = {
+  def mergeBind(
+    bind1: Ctx.Bind,
+    bind2: Ctx.Bind,
+  ): Either[ErrorMsg, Ctx.Bind] = {
     assert(bind1.keys.toSet.intersect(bind2.keys.toSet).isEmpty)
     Right(bind1 ++ bind2)
   }

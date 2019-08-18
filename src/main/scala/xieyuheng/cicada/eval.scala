@@ -90,7 +90,7 @@ object eval {
           targetValue <- eval(target, env)
           result <- targetValue match {
             case _ =>
-              Left(ErrorMsg(""))
+              Left(ErrorMsg("TODO"))
           }
         } yield result
       }

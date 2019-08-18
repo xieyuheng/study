@@ -85,7 +85,7 @@ object eval {
         } yield FnValue(args, ret, body, env)
       }
 
-      case Apply(target, args) => {
+      case Ap(target, args) => {
         for {
           targetValue <- eval(target, env)
           result <- targetValue match {

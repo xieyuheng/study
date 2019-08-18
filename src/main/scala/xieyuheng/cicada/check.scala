@@ -29,7 +29,7 @@ object check {
     //   ctx :- Field(target, fieldName) <: t
 
 
-    // - Apply
+    // - Ap
 
     //   target can be Fn or Pi
 
@@ -38,6 +38,6 @@ object check {
     //   ctx :- args <: target.args
     //   ctx.fulfill(args, target.args) :- target.ret <: t
     //   --------------------
-    //   ctx :- Apply(target, args) <: t
+    //   ctx :- Ap(target, args) <: t
   }
 }

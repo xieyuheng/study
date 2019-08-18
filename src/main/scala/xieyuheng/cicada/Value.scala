@@ -32,7 +32,7 @@ final case class FnValue(
   args: ListMap[String, Value],
   ret: Value,
   body: Exp,
-  env: Map[String, Def],
+  env: Ctx.Env,
 ) extends Value
 
 final case class NeutralValue(

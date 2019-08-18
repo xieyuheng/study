@@ -1,5 +1,5 @@
-- eval
-- evalMapWithBind
+- eval for Apply
+- evalMapToBind
 - check
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

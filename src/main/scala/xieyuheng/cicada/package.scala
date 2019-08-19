@@ -5,9 +5,13 @@ package object cicada {
 
   type Env = Map[String, Def]
 
+  object Env {
+    def apply(): Bind = Map()
+  }
+
   type Bind = Map[Id, Value]
 
   object Bind {
-    def apply(): Bind = Map[Id, Value]()
+    def apply(): Bind = Map()
   }
 }

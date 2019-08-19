@@ -91,6 +91,7 @@ object eval {
     }
   }
 
+  /** like scheme (let) */
   def letMap(
     map: ListMap[String, Exp],
     env: Env,
@@ -104,11 +105,13 @@ object eval {
     }
   }
 
+  /** like scheme (let*) */
   def seqMap(
     map: ListMap[String, Exp],
     env: Env,
   ): Either[ErrorMsg, (ListMap[String, Value], Bind)] = {
     val initResult: Either[ErrorMsg, ListMap[String, Value]] = Right(ListMap())
+    var localEnv = Env()
     ???
   }
 }

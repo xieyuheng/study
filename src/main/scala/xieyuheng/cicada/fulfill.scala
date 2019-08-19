@@ -17,30 +17,30 @@ object fulfill {
         for {
           /** contravariant at args */
           bind1 <- forMap(pi.args, fn.args, bind)
-          bind2 <- apply(fn.ret, pi.ret, bind1)
+          bind2 <- fulfill(fn.ret, pi.ret, bind1)
         } yield bind2 + (pi.id -> fn)
       }
 
       case (record: RecordValue, union: UnionValue) if union.subNames contains record.name => {
         for {
-          bind1 <- mergeBind(bind, record.bind)
-          bind2 <- mergeBind(bind1, union.bind)
+          bind1 <- unifyBind(bind, record.bind)
+          bind2 <- unifyBind(bind1, union.bind)
           bind3 <- forMap(record.map, union.map, bind2)
         } yield bind3 + (union.id -> record)
       }
 
       case (src: UnionValue, tar: UnionValue) if src.name == tar.name => {
         for {
-          bind1 <- mergeBind(bind, src.bind)
-          bind2 <- mergeBind(bind1, tar.bind)
+          bind1 <- unifyBind(bind, src.bind)
+          bind2 <- unifyBind(bind1, tar.bind)
           result <- forMap(src.map, tar.map, bind2)
         } yield result
       }
 
       case (src: RecordValue, tar: RecordValue) if src.name == tar.name => {
         for {
-          bind1 <- mergeBind(bind, src.bind)
-          bind2 <- mergeBind(bind1, tar.bind)
+          bind1 <- unifyBind(bind, src.bind)
+          bind2 <- unifyBind(bind1, tar.bind)
           result <- forMap(src.map, tar.map, bind2)
         } yield result
       }
@@ -48,7 +48,7 @@ object fulfill {
       case (src: PiValue, tar: PiValue) => {
         for {
           bind1 <- forMap(tar.args, src.args, bind)
-          bind2 <- apply(src.ret, tar.ret, bind1)
+          bind2 <- fulfill(src.ret, tar.ret, bind1)
         } yield bind2
       }
 
@@ -63,13 +63,13 @@ object fulfill {
     tarMap: ListMap[String, Value],
     bind: Bind,
   ): Either[ErrorMsg, Bind] = {
-    val initResult: Either[ErrorMsg, Bind] = Right(Map())
+    val initResult: Either[ErrorMsg, Bind] = Right(Bind())
     tarMap.foldLeft(initResult) { case (result, (name, tarValue)) =>
       for {
         bind1 <- result
         bind2 <- srcMap.get(name) match {
           case Some(srcValue) =>
-            apply(srcValue, tarValue, bind1)
+            fulfill(srcValue, tarValue, bind1)
           case None =>
             Left(ErrorMsg(s"srcMap does not have name: ${name}, tarValue: ${tarValue}"))
         }
@@ -77,11 +77,27 @@ object fulfill {
     }
   }
 
-  def mergeBind(
+  def unifyBind(
     bind1: Bind,
     bind2: Bind,
   ): Either[ErrorMsg, Bind] = {
-    assert(bind1.keys.toSet.intersect(bind2.keys.toSet).isEmpty)
-    Right(bind1 ++ bind2)
+    val bind = bind1 ++ bind2.filterNot { case (id, _value) =>
+      bind1.keys.toSet.contains(id) }
+
+    val initResult: Either[ErrorMsg, Bind] = Right(bind)
+    bind2
+      .filter { case (id, _value) => bind1.keys.toSet.contains(id) }
+      .foldLeft(initResult) { case (result, (id, v)) =>
+        for {
+          b1 <- result
+          b2 <- b1.get(id) match {
+            case Some(v1) =>
+              fulfill(v, v1, b1)
+              // should be unify(v, v1, bind1)
+            case None =>
+              Left(ErrorMsg(s"unifyBind internal error, bind1: ${bind1}, bind2: ${bind2}"))
+          }
+        } yield b2
+      }
   }
 }

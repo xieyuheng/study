@@ -1,4 +1,5 @@
-- fix mergeBind
+- unify.scala
+- fix unifyBind -- in unify
 - fix seqMap
   - for scope like (let*)
   - note the use of both env and bind

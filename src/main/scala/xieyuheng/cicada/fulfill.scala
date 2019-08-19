@@ -27,8 +27,8 @@ object fulfill {
         union.subNames.contains(record.name)
       } => {
         for {
-          bind1 <- unifyBind(bind, record.bind)
-          bind2 <- unifyBind(bind1, union.bind)
+          bind1 <- forBind(bind, record.bind)
+          bind2 <- forBind(bind1, union.bind)
           bind3 <- forMap(record.map, union.map, bind2)
         } yield bind3 + (union.id -> record)
       }
@@ -37,8 +37,8 @@ object fulfill {
         src.name == tar.name
       } => {
         for {
-          bind1 <- unifyBind(bind, src.bind)
-          bind2 <- unifyBind(bind1, tar.bind)
+          bind1 <- forBind(bind, src.bind)
+          bind2 <- forBind(bind1, tar.bind)
           result <- forMap(src.map, tar.map, bind2)
         } yield result
       }
@@ -47,8 +47,8 @@ object fulfill {
         src.name == tar.name
       } => {
         for {
-          bind1 <- unifyBind(bind, src.bind)
-          bind2 <- unifyBind(bind1, tar.bind)
+          bind1 <- forBind(bind, src.bind)
+          bind2 <- forBind(bind1, tar.bind)
           result <- forMap(src.map, tar.map, bind2)
         } yield result
       }
@@ -85,7 +85,7 @@ object fulfill {
     }
   }
 
-  def unifyBind(
+  def forBind(
     bind1: Bind,
     bind2: Bind,
   ): Either[ErrorMsg, Bind] = {
@@ -101,10 +101,8 @@ object fulfill {
           b2 <- b1.get(id) match {
             case Some(v1) =>
               fulfill(v, v1, b1)
-              // TODO
-              // should be unify(v, v1, bind1)
             case None =>
-              Left(ErrorMsg(s"unifyBind internal error, bind1: ${bind1}, bind2: ${bind2}"))
+              Left(ErrorMsg(s"forBind internal error, bind1: ${bind1}, bind2: ${bind2}"))
           }
         } yield b2
       }

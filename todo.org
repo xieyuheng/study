@@ -1,11 +1,12 @@
 - unify.scala
-- fix unifyBind -- in unify
+- fix unify.forBind -- in unify
 - fix seqMap
   - for scope like (let*)
   - note the use of both env and bind
   - when override previous `let` in env
     we need to do a fulfill (or unify ?)
     and save the bind in the initBind of the record or union
+- test eval.scala
 - ap for Fn
   - [maybe] Fn not only need env, but also need bind
 - check

@@ -5,7 +5,9 @@ import scala.collection.immutable.ListMap
 object fulfill {
   def apply(src: Value, tar: Value, bind: Bind): Either[ErrorMsg, Bind] = {
     (util.walk(src, bind), util.walk(tar, bind)) match {
-      case (src, tar) if src == tar => {
+      case (src, tar) if {
+        src == tar
+      } => {
         Right(bind)
       }
 
@@ -21,7 +23,9 @@ object fulfill {
         } yield bind2 + (pi.id -> fn)
       }
 
-      case (record: RecordValue, union: UnionValue) if union.subNames contains record.name => {
+      case (record: RecordValue, union: UnionValue) if {
+        union.subNames.contains(record.name)
+      } => {
         for {
           bind1 <- unifyBind(bind, record.bind)
           bind2 <- unifyBind(bind1, union.bind)
@@ -29,7 +33,9 @@ object fulfill {
         } yield bind3 + (union.id -> record)
       }
 
-      case (src: UnionValue, tar: UnionValue) if src.name == tar.name => {
+      case (src: UnionValue, tar: UnionValue) if {
+        src.name == tar.name
+      } => {
         for {
           bind1 <- unifyBind(bind, src.bind)
           bind2 <- unifyBind(bind1, tar.bind)
@@ -37,7 +43,9 @@ object fulfill {
         } yield result
       }
 
-      case (src: RecordValue, tar: RecordValue) if src.name == tar.name => {
+      case (src: RecordValue, tar: RecordValue) if {
+        src.name == tar.name
+      } => {
         for {
           bind1 <- unifyBind(bind, src.bind)
           bind2 <- unifyBind(bind1, tar.bind)
@@ -93,6 +101,7 @@ object fulfill {
           b2 <- b1.get(id) match {
             case Some(v1) =>
               fulfill(v, v1, b1)
+              // TODO
               // should be unify(v, v1, bind1)
             case None =>
               Left(ErrorMsg(s"unifyBind internal error, bind1: ${bind1}, bind2: ${bind2}"))

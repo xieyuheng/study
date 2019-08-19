@@ -1,7 +1,5 @@
 package xieyuheng.cicada
 
-import scala.collection.immutable.ListMap
-
 sealed trait Value
 
 final case class LogicVar(
@@ -11,25 +9,25 @@ final case class LogicVar(
 final case class UnionValue(
   id: Id,
   name: String,
-  map: ListMap[String, Value],
+  map: MultiMap[String, Value],
   subNames: List[String],
   bind: Bind,
 ) extends Value
 
 final case class RecordValue(
   name: String,
-  map: ListMap[String, Value],
+  map: MultiMap[String, Value],
   bind: Bind,
 ) extends Value
 
 final case class PiValue(
   id: Id,
-  args: ListMap[String, Value],
+  args: MultiMap[String, Value],
   ret: Value,
 ) extends Value
 
 final case class FnValue(
-  args: ListMap[String, Value],
+  args: MultiMap[String, Value],
   ret: Value,
   body: Exp,
   env: Env,

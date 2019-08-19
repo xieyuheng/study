@@ -18,12 +18,24 @@ case class MultiMap[K, V](
   def merge(mmap: MultiMap[K, V]): MultiMap[K, V] =
     MultiMap(mmap.entries ++ entries)
 
-  def get(k: K): List[V] = {
+  def getList(k: K): List[V] = {
     valuesMap.get(k) match {
       case Some(values) => values
       case None => List()
     }
   }
+
+  def get(k: K): Option[V] = {
+    val values = getList(k)
+    if (values.isEmpty) {
+      None
+    } else {
+      Some(values.head)
+    }
+  }
+
+  def mapValues[A](f: V => A): MultiMap[K, A] =
+    MultiMap(entries.map { case (k, v) => (k, f(v)) })
 }
 
 object MultiMap {

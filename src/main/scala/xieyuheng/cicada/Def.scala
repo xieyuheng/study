@@ -1,7 +1,5 @@
 package xieyuheng.cicada
 
-import scala.collection.immutable.ListMap
-
 sealed trait Def
 
 final case class DefineValue(
@@ -11,11 +9,11 @@ final case class DefineValue(
 
 final case class DefineRecord(
   name: String,
-  map: ListMap[String, Exp],
+  map: MultiMap[String, Exp],
 ) extends Def
 
 final case class DefineUnion(
   name: String,
-  map: ListMap[String, Exp],
+  map: MultiMap[String, Exp],
   subNames: List[String],
 ) extends Def

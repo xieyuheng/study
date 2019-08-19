@@ -1,11 +1,9 @@
 package xieyuheng.cicada
 
-import scala.collection.immutable.ListMap
-
 object exe {
   def apply(
     target: Value,
-    args: ListMap[String, Value],
+    args: MultiMap[String, Value],
   ): Either[ErrorMsg, Value] = {
     target match {
       case t: LogicVar =>

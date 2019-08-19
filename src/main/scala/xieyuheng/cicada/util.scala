@@ -1,7 +1,6 @@
 package xieyuheng.cicada
 
 import scala.annotation.tailrec
-import scala.collection.immutable.ListMap
 
 object util {
   def newId(): Id = {
@@ -59,7 +58,7 @@ object util {
     }
   }
 
-  def deepWalkForMap(map: ListMap[String, Value], bind: Bind): ListMap[String, Value] = {
-    ListMap.from(map.view.mapValues(deepWalk(_, bind)))
+  def deepWalkForMap(map: MultiMap[String, Value], bind: Bind): MultiMap[String, Value] = {
+    map.mapValues(deepWalk(_, bind))
   }
 }

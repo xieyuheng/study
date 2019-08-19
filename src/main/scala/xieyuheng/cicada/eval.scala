@@ -1,7 +1,5 @@
 package xieyuheng.cicada
 
-import scala.collection.immutable.ListMap
-
 object eval {
   def apply(exp: Exp, env: Env): Either[ErrorMsg, Value] = {
     exp match {
@@ -93,24 +91,24 @@ object eval {
 
   /** like scheme (let) */
   def letMap(
-    map: ListMap[String, Exp],
+    map: MultiMap[String, Exp],
     env: Env,
-  ): Either[ErrorMsg, ListMap[String, Value]] = {
-    val initResult: Either[ErrorMsg, ListMap[String, Value]] = Right(ListMap())
-    map.foldLeft(initResult) { case (result, (name, exp)) =>
+  ): Either[ErrorMsg, MultiMap[String, Value]] = {
+    val initResult: Either[ErrorMsg, MultiMap[String, Value]] = Right(MultiMap())
+    map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
       for {
         map <- result
         value <- eval(exp, env)
-      } yield map + (name -> value)
+      } yield map.update(name -> value)
     }
   }
 
   /** like scheme (let*) */
   def seqMap(
-    map: ListMap[String, Exp],
+    map: MultiMap[String, Exp],
     env: Env,
-  ): Either[ErrorMsg, (ListMap[String, Value], Bind)] = {
-    val initResult: Either[ErrorMsg, ListMap[String, Value]] = Right(ListMap())
+  ): Either[ErrorMsg, (MultiMap[String, Value], Bind)] = {
+    val initResult: Either[ErrorMsg, MultiMap[String, Value]] = Right(MultiMap())
     var localEnv = Env()
     ???
   }

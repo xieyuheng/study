@@ -1,7 +1,5 @@
 package xieyuheng.cicada
 
-import scala.collection.immutable.ListMap
-
 object check {
   def check(exp: Exp, t: Value) = {
     ???

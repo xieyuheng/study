@@ -1,7 +1,5 @@
 package xieyuheng.cicada
 
-import scala.collection.immutable.ListMap
-
 object fulfill {
   def apply(src: Value, tar: Value, bind: Bind): Either[ErrorMsg, Bind] = {
     (util.walk(src, bind), util.walk(tar, bind)) match {
@@ -67,12 +65,12 @@ object fulfill {
   }
 
   def forMap(
-    srcMap: ListMap[String, Value],
-    tarMap: ListMap[String, Value],
+    srcMap: MultiMap[String, Value],
+    tarMap: MultiMap[String, Value],
     bind: Bind,
   ): Either[ErrorMsg, Bind] = {
     val initResult: Either[ErrorMsg, Bind] = Right(Bind())
-    tarMap.foldLeft(initResult) { case (result, (name, tarValue)) =>
+    tarMap.entries.foldLeft(initResult) { case (result, (name, tarValue)) =>
       for {
         bind1 <- result
         bind2 <- srcMap.get(name) match {

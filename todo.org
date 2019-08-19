@@ -1,5 +1,10 @@
-- test eval.scala
-- ap for Fn
+- class Env
+- Env.define
+- Env.defineUnion
+- Env.defineRecord
+- class Bind
+- test eval
+- exe for Fn
   - [maybe] Fn not only need env, but also need bind
 - check
 - what is the difference between set, type and cat ?

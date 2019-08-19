@@ -120,10 +120,31 @@ object eval {
     val initResult: Either[ErrorMsg, (MultiMap[String, Value], Bind)] =
       Right((MultiMap(), Bind()))
 
-    map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
-      result.flatMap { case (valueMap, bind) =>
-        Right((???, ???))
+    def updateEnv(valueMap: MultiMap[String, Value], env: Env): Env = {
+      valueMap.entries.foldLeft(env) { case (env, (name, value)) =>
+        env + (name -> DefineValue(name, value))
       }
+    }
+
+    def updateBind(
+      valueMap: MultiMap[String, Value],
+      bind: Bind,
+      name: String,
+      value: Value,
+    ): Either[ErrorMsg, Bind] = {
+      valueMap.get(name) match {
+        case Some(oldValue) => fulfill(oldValue, value, bind)
+        case None => Right(bind)
+      }
+    }
+
+    map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
+      for {
+        valueMapAndbind <- result
+        (valueMap, bind) = valueMapAndbind
+        value <- eval(exp, updateEnv(valueMap, env))
+        newBind <- updateBind(valueMap, bind, name, value)
+      } yield ((valueMap.update(name -> value), newBind))
     }
   }
 }

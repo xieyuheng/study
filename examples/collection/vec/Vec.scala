@@ -18,6 +18,35 @@ union Vec {
   }
 }
 
+class ConsVec {
+  // from union
+  A: Type
+  length: Nat
+  // implicit
+  n: Nat
+
+  length: Succ(n)
+  head: A
+  tail: Vec(A, n)
+}
+
+RecordValue(
+  name = "ConsVec",
+  map = ListMap(
+    "A" -> LogicVar("#A"),
+    "length" -> UnionValue(name = "Nat"),
+    "n" -> UnionValue(name = "Nat"),
+
+    "length" -> ???,
+    "head" -> LogicVar("#A"),
+    "tail" -> UnionValue(name = "Nat")),
+  bind = Map())
+
+Bind (
+  LogicVar("A") -> ,
+
+)
+
 @infix(++)
 vec_append(ante: Vec(A, m), succ: Vec(A, n)): Vec(A, m + n) =
   ante case {

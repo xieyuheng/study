@@ -1,5 +1,11 @@
-- eval for Apply
-- evalMapToBind
+- fix mergeBind
+- fix seqMap
+  - for scope like (let*)
+  - note the use of both env and bind
+  - when override previous `let` in env
+    we need to do a fulfill (or unify ?)
+    and save the bind in the initBind of the record or union
+- ap for Fn
 - check
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

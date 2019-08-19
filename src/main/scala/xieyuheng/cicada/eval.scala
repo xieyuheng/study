@@ -10,15 +10,11 @@ object eval {
           case Some(DefineValue(name, value)) =>
             Right(value)
           case Some(DefineRecord(name, map)) =>
-            for {
-              result <- evalMapToBind(map, env)
-              (map, bind) = result
-            } yield RecordValue(name, map, bind)
+            seqMap(map, env).flatMap { case (map, bind) =>
+              Right(RecordValue(name, map, bind)) }
           case Some(DefineUnion(name, map, subNames)) =>
-            for {
-              result <- evalMapToBind(map, env)
-              (map, bind) = result
-            } yield UnionValue(util.newId(), name, map, subNames, bind)
+            seqMap(map, env).flatMap { case (map, bind) =>
+              Right(UnionValue(util.newId(), name, map, subNames, bind)) }
           case None =>
             Right(NeutralValue(VarNeutral(name)))
         }
@@ -39,7 +35,7 @@ object eval {
               }
             case NeutralValue(neutral) =>
               for {
-                map <- evalMap(map, env)
+                map <- letMap(map, env)
               } yield NeutralValue(CaseNeutral(neutral, map))
             case _ =>
               Left(ErrorMsg("targetValue of Field should be RecordValue or NeutralValue, " +
@@ -73,31 +69,29 @@ object eval {
 
       case Pi(args, ret) => {
         for {
-          args <- evalMap(args, env)
+          args <- letMap(args, env)
           ret <- eval(ret, env)
         } yield PiValue(util.newId(), args, ret)
       }
 
       case Fn(args, ret, body) => {
         for {
-          args <- evalMap(args, env)
+          args <- letMap(args, env)
           ret <- eval(ret, env)
         } yield FnValue(args, ret, body, env)
       }
 
       case Ap(target, args) => {
-        for {
-          targetValue <- eval(target, env)
-          result <- targetValue match {
-            case _ =>
-              Left(ErrorMsg("TODO"))
+        eval(target, env).flatMap { targetValue =>
+          letMap(args, env).flatMap { argsValue =>
+            ap(targetValue, argsValue)
           }
-        } yield result
+        }
       }
     }
   }
 
-  def evalMap(
+  def letMap(
     map: ListMap[String, Exp],
     env: Env,
   ): Either[ErrorMsg, ListMap[String, Value]] = {
@@ -110,7 +104,7 @@ object eval {
     }
   }
 
-  def evalMapToBind(
+  def seqMap(
     map: ListMap[String, Exp],
     env: Env,
   ): Either[ErrorMsg, (ListMap[String, Value], Bind)] = {

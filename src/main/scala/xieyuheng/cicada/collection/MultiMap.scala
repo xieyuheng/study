@@ -5,7 +5,7 @@ case class MultiMap[K, V](
 ) {
   var valuesMap: Map[K, List[V]] = Map()
 
-  entries.reverse.foreach { case (k, v) =>
+  entries.foreach { case (k, v) =>
     valuesMap = valuesMap.updatedWith(k) {
       case Some(values) => Some(v :: values)
       case None => Some(List(v))
@@ -13,10 +13,10 @@ case class MultiMap[K, V](
   }
 
   def update(kv: (K, V)): MultiMap[K, V] =
-    MultiMap(kv :: entries)
+    MultiMap(entries ++ List(kv))
 
-  def merge(mmap: MultiMap[K, V]): MultiMap[K, V] =
-    MultiMap(mmap.entries ++ entries)
+  def merge(map: MultiMap[K, V]): MultiMap[K, V] =
+    MultiMap(entries ++ map.entries)
 
   def getList(k: K): List[V] = {
     valuesMap.get(k) match {

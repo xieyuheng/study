@@ -94,12 +94,21 @@ object eval {
     map: MultiMap[String, Exp],
     env: Env,
   ): Either[ErrorMsg, MultiMap[String, Value]] = {
-    val initResult: Either[ErrorMsg, MultiMap[String, Value]] = Right(MultiMap())
+    val initResult: Either[ErrorMsg, MultiMap[String, Value]] =
+      Right(MultiMap())
+
+    def updateValueMap(
+      map: MultiMap[String, Value],
+      name: String,
+      exp: Exp,
+    ): Either[ErrorMsg, MultiMap[String, Value]] = {
+      eval(exp, env).flatMap { value =>
+        Right(map.update(name -> value))
+      }
+    }
+
     map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
-      for {
-        map <- result
-        value <- eval(exp, env)
-      } yield map.update(name -> value)
+      result.flatMap { valueMap => updateValueMap(valueMap, name, exp) }
     }
   }
 
@@ -108,8 +117,13 @@ object eval {
     map: MultiMap[String, Exp],
     env: Env,
   ): Either[ErrorMsg, (MultiMap[String, Value], Bind)] = {
-    val initResult: Either[ErrorMsg, MultiMap[String, Value]] = Right(MultiMap())
-    var localEnv = Env()
-    ???
+    val initResult: Either[ErrorMsg, (MultiMap[String, Value], Bind)] =
+      Right((MultiMap(), Bind()))
+
+    map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
+      result.flatMap { case (valueMap, bind) =>
+        Right((???, ???))
+      }
+    }
   }
 }

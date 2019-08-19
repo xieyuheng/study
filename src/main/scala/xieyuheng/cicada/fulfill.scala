@@ -69,17 +69,24 @@ object fulfill {
     tarMap: MultiMap[String, Value],
     bind: Bind,
   ): Either[ErrorMsg, Bind] = {
-    val initResult: Either[ErrorMsg, Bind] = Right(Bind())
+    val initResult: Either[ErrorMsg, Bind] =
+      Right(Bind())
+
+    def updateBind(
+      bind: Bind,
+      name: String,
+      tarValue: Value,
+    ): Either[ErrorMsg, Bind] = {
+      srcMap.get(name) match {
+        case Some(srcValue) =>
+          fulfill(srcValue, tarValue, bind)
+        case None =>
+          Left(ErrorMsg(s"srcMap does not have name: ${name}, tarValue: ${tarValue}"))
+      }
+    }
+
     tarMap.entries.foldLeft(initResult) { case (result, (name, tarValue)) =>
-      for {
-        bind1 <- result
-        bind2 <- srcMap.get(name) match {
-          case Some(srcValue) =>
-            fulfill(srcValue, tarValue, bind1)
-          case None =>
-            Left(ErrorMsg(s"srcMap does not have name: ${name}, tarValue: ${tarValue}"))
-        }
-      } yield bind2
+      result.flatMap { bind => updateBind(bind, name, tarValue) }
     }
   }
 
@@ -87,22 +94,25 @@ object fulfill {
     bind1: Bind,
     bind2: Bind,
   ): Either[ErrorMsg, Bind] = {
-    val bind = bind1 ++ bind2.filterNot { case (id, _value) =>
+    val initBind = bind1 ++ bind2.filterNot { case (id, _value) =>
       bind1.keys.toSet.contains(id) }
 
-    val initResult: Either[ErrorMsg, Bind] = Right(bind)
+    val initResult: Either[ErrorMsg, Bind] =
+      Right(initBind)
+
+    def updateBind(bind: Bind, id: Id, v: Value): Either[ErrorMsg, Bind] = {
+      bind.get(id) match {
+        case Some(v1) =>
+          fulfill(v, v1, bind)
+        case None =>
+          Left(ErrorMsg(s"forBind internal error, bind1: ${bind1}, bind2: ${bind2}"))
+      }
+    }
+
     bind2
       .filter { case (id, _value) => bind1.keys.toSet.contains(id) }
       .foldLeft(initResult) { case (result, (id, v)) =>
-        for {
-          b1 <- result
-          b2 <- b1.get(id) match {
-            case Some(v1) =>
-              fulfill(v, v1, b1)
-            case None =>
-              Left(ErrorMsg(s"forBind internal error, bind1: ${bind1}, bind2: ${bind2}"))
-          }
-        } yield b2
+        result.flatMap { bind => updateBind(bind, id, v) }
       }
   }
 }

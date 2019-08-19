@@ -1,11 +1,12 @@
-- class Env
+- case class Env
 - Env.define
 - Env.defineUnion
 - Env.defineRecord
-- class Bind
 - test eval
 - exe for Fn
   - [maybe] Fn not only need env, but also need bind
+- case class Bind
+- case class Id
 - check
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

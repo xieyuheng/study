@@ -84,7 +84,7 @@ object eval {
       case Ap(target, args) => {
         eval(target, env).flatMap { targetValue =>
           letMap(args, env).flatMap { argsValue =>
-            ap(targetValue, argsValue)
+            exe(targetValue, argsValue)
           }
         }
       }

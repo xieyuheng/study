@@ -1,3 +1,4 @@
+- use MultiMap
 - fix seqMap
 
   - for scope like scheme (let*)

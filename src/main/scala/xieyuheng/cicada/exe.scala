@@ -2,7 +2,7 @@ package xieyuheng.cicada
 
 import scala.collection.immutable.ListMap
 
-object ap {
+object exe {
   def apply(
     target: Value,
     args: ListMap[String, Value],

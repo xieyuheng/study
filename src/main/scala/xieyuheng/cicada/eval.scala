@@ -120,7 +120,7 @@ object eval {
     val initResult: Either[ErrorMsg, (MultiMap[String, Value], Bind)] =
       Right((MultiMap(), Bind()))
 
-    def updateEnv(valueMap: MultiMap[String, Value], env: Env): Env = {
+    def extendEnv(valueMap: MultiMap[String, Value], env: Env): Env = {
       valueMap.entries.foldLeft(env) { case (env, (name, value)) =>
         env + (name -> DefineValue(name, value))
       }
@@ -142,7 +142,7 @@ object eval {
       for {
         valueMapAndbind <- result
         (valueMap, bind) = valueMapAndbind
-        value <- eval(exp, updateEnv(valueMap, env))
+        value <- eval(exp, extendEnv(valueMap, env))
         newBind <- updateBind(valueMap, bind, name, value)
       } yield ((valueMap.update(name -> value), newBind))
     }

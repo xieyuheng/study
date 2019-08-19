@@ -133,7 +133,7 @@ object eval {
       value: Value,
     ): Either[ErrorMsg, Bind] = {
       valueMap.get(name) match {
-        case Some(oldValue) => fulfill(oldValue, value, bind)
+        case Some(oldValue) => fulfill(value, oldValue, bind)
         case None => Right(bind)
       }
     }

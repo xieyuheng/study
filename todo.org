@@ -6,6 +6,7 @@
     we need to do a fulfill (or unify ?)
     and save the bind in the initBind of the record or union
 - ap for Fn
+  - [maybe] Fn not only need env, but also need bind
 - check
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

@@ -51,8 +51,4 @@ class PrettySpec extends FlatSpec with Matchers {
     println(s"nestedFn: ${nestedFn}")
     println(s"------")
   }
-
-  it can "make Value pretty" in {
-
-  }
 }

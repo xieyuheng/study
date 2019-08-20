@@ -35,23 +35,23 @@ class evalSpec extends FlatSpec with Matchers {
     .defineRecord("Zero", MultiMap())
     .defineRecord("Succ", MultiMap("prev" -> Var("Nat")))
 
-//   it should "eval NatModule" in {
-//     val module = NatModule
+  //   it should "eval NatModule" in {
+  //     val module = NatModule
 
-//     for {
-//       nat <- eval(Var("Nat"), module)
-//       zero <- eval(Var("Zero"), module)
-//       succ <- eval(Var("Succ"), module)
-//       one <- eval(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), module)
-//       z1 <- eval(Field(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), "prev"), module)
-//     } {
-//       println(s"${Pretty.fromValue(nat, 0)}")
-//       println(s"${Pretty.fromValue(zero, 0)}")
-//       println(s"${Pretty.fromValue(succ, 0)}")
-//       println(s"one -- ${Pretty.fromValue(one, 0)}")
-//       println(s"z1 -- ${Pretty.fromValue(z1, 0)}")
-//     }
-//   }
+  //     for {
+  //       nat <- eval(Var("Nat"), module)
+  //       zero <- eval(Var("Zero"), module)
+  //       succ <- eval(Var("Succ"), module)
+  //       one <- eval(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), module)
+  //       z1 <- eval(Field(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), "prev"), module)
+  //     } {
+  //       println(s"${Pretty.fromValue(nat, 0)}")
+  //       println(s"${Pretty.fromValue(zero, 0)}")
+  //       println(s"${Pretty.fromValue(succ, 0)}")
+  //       println(s"one -- ${Pretty.fromValue(one, 0)}")
+  //       println(s"z1 -- ${Pretty.fromValue(z1, 0)}")
+  //     }
+  //   }
 
   val ListModule = Env()
     .defineUnion("List", MultiMap("A" -> Type()), List("Null", "Cons"))
@@ -102,28 +102,4 @@ class evalSpec extends FlatSpec with Matchers {
         "tail" -> Var("Null"))),
       module)
   }
-
-//   "unify" should "not make bind weaker" in {
-//     val bind = Map(
-//       "2bda84b0-dd85-43c9-a94c-c00df82c9f9f" ->
-//         UnionValue(
-//           "fa21c03d-9b7d-48ba-9bf9-9d0bfe088eba",
-//           "Nat",
-//           MultiMap(List()),
-//           List("Zero", "Succ"),
-//           Map()))
-
-//     val srcValue = RecordValue("Zero", MultiMap(List()), Map())
-
-//     val tarValue = LogicVar("2bda84b0-dd85-43c9-a94c-c00df82c9f9f")
-
-//     println(s"before -- ${bind}")
-//     println(s"--------- ${srcValue} unify ${tarValue}")
-//     println(s"after --- ${unify(srcValue, tarValue, bind)}")
-//     println()
-
-//     println(s"util.walk(srcValue, bind) -- ${util.walk(srcValue, bind)}")
-//     println(s"util.walk(tarValue, bind) -- ${util.walk(tarValue, bind)}")
-
-//   }
 }

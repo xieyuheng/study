@@ -116,7 +116,6 @@ object Pretty {
         s"union ${name} {\n${mapString}} unions {\n  ${subNamesString}}"
       case RecordValue(name, map, bind) =>
         val mapString = maybeNewline(fromValueMap(map, bind, 1))
-        // s"record ${name} {\n${mapString}} bind {\n${bind}\n}"
         s"record ${name} {\n${mapString}}"
       case PiValue(id, args, ret) =>
         val bind = Bind()

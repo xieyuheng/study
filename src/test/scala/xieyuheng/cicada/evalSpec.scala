@@ -29,4 +29,25 @@ class evalSpec extends FlatSpec with Matchers {
       assert(y == LogicVar("#y"))
     }
   }
+
+  val nat = Env()
+    .defineUnion("Nat", MultiMap(), List("Zero", "Succ"))
+    .defineRecord("Zero", MultiMap())
+    .defineRecord("Succ", MultiMap("prev" -> Var("Nat")))
+
+  it should "eval nat" in {
+    for {
+      n <- eval(Var("Nat"), nat)
+      z <- eval(Var("Zero"), nat)
+      s <- eval(Var("Succ"), nat)
+      one <- eval(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), nat)
+      z1 <- eval(Field(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), "prev"), nat)
+    } {
+      println(s"n: ${n}")
+      println(s"z: ${z}")
+      println(s"s: ${s}")
+      println(s"one: ${one}")
+      println(s"z1: ${z1}")
+    }
+  }
 }

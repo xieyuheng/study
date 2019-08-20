@@ -43,4 +43,10 @@ case class MultiMap[K, V](
 object MultiMap {
   def fromList[K, V](entries: List[(K, V)]): MultiMap[K, V] =
     new MultiMap(entries)
+
+  def apply[K, V](entries: List[(K, V)]): MultiMap[K, V] =
+    new MultiMap(entries)
+
+  def apply[K, V](entries: (K, V)*): MultiMap[K, V] =
+    new MultiMap(entries.toList)
 }

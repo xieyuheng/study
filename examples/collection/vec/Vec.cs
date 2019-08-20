@@ -5,29 +5,22 @@ union Vec {
   length: Nat
 } unions {
   class NullVec {
+    A: Type
+    length: Nat
+
     length: Zero
   }
 
   class ConsVec {
-    // implicit: {
-    //   n: Nat
-    // }
+    A: Type
+    length: Nat
+
+    n: Nat
+
     length: Succ(n)
     head: A
     tail: Vec(A, n)
   }
-}
-
-class ConsVec {
-  // from union
-  A: Type
-  length: Nat
-  // implicit
-  n: Nat
-
-  length: Succ(n)
-  head: A
-  tail: Vec(A, n)
 }
 
 RecordValue(

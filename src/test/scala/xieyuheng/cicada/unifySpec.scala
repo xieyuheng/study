@@ -16,7 +16,7 @@ class unifySpec extends FlatSpec with Matchers {
 
     val tarValue = TypeVar("2bda84b0-dd85-43c9-a94c-c00df82c9f9f")
 
-    unify(srcValue, tarValue, bind) match {
+    unify(srcValue, tarValue, bind, Env()) match {
       case Right(newBind) =>
         assert(bind.toSet.subsetOf(newBind.toSet))
       case Left(errorMsg) =>

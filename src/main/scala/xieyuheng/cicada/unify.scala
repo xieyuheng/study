@@ -1,7 +1,7 @@
 package xieyuheng.cicada
 
 object unify {
-  def apply(src: Value, tar: Value, bind: Bind): Either[ErrorMsg, Bind] = {
+  def apply(src: Value, tar: Value, bind: Bind, env: Env): Either[ErrorMsg, Bind] = {
     (util.walk(src, bind), util.walk(tar, bind)) match {
       case (src, tar) if {
         src == tar
@@ -20,16 +20,16 @@ object unify {
       case (fn: FnValue, pi: PiValue) => {
         for {
           /** contravariant at args */
-          bind1 <- forMap(pi.args, fn.args, bind)
-          bind2 <- unify(fn.ret, pi.ret, bind1)
+          bind1 <- forMap(pi.args, fn.args, bind, env)
+          bind2 <- unify(fn.ret, pi.ret, bind1, env)
         } yield bind2 + (pi.id -> fn)
       }
 
       case (pi: PiValue, fn: FnValue) => {
         for {
           /** contravariant at args */
-          bind1 <- forMap(pi.args, fn.args, bind)
-          bind2 <- unify(fn.ret, pi.ret, bind1)
+          bind1 <- forMap(pi.args, fn.args, bind, env)
+          bind2 <- unify(fn.ret, pi.ret, bind1, env)
         } yield bind2 + (pi.id -> fn)
       }
 
@@ -37,9 +37,9 @@ object unify {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind1 <- forBind(memberType.bind, bind)
-          bind2 <- forBind(sumType.bind, bind1)
-          bind3 <- forMap(memberType.map, sumType.map, bind2)
+          bind1 <- forBind(memberType.bind, bind, env)
+          bind2 <- forBind(sumType.bind, bind1, env)
+          bind3 <- forMap(memberType.map, sumType.map, bind2, env)
         } yield bind3 + (sumType.id -> memberType)
       }
 
@@ -47,9 +47,9 @@ object unify {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind1 <- forBind(memberType.bind, bind)
-          bind2 <- forBind(sumType.bind, bind1)
-          bind3 <- forMap(memberType.map, sumType.map, bind2)
+          bind1 <- forBind(memberType.bind, bind, env)
+          bind2 <- forBind(sumType.bind, bind1, env)
+          bind3 <- forMap(memberType.map, sumType.map, bind2, env)
         } yield bind3 + (sumType.id -> memberType)
       }
 
@@ -57,9 +57,9 @@ object unify {
         src.name == tar.name
       } => {
         for {
-          bind1 <- forBind(src.bind, bind)
-          bind2 <- forBind(tar.bind, bind1)
-          result <- forMap(src.map, tar.map, bind2)
+          bind1 <- forBind(src.bind, bind, env)
+          bind2 <- forBind(tar.bind, bind1, env)
+          result <- forMap(src.map, tar.map, bind2, env)
         } yield result
       }
 
@@ -67,16 +67,16 @@ object unify {
         src.name == tar.name
       } => {
         for {
-          bind1 <- forBind(src.bind, bind)
-          bind2 <- forBind(tar.bind, bind1)
-          result <- forMap(src.map, tar.map, bind2)
+          bind1 <- forBind(src.bind, bind, env)
+          bind2 <- forBind(tar.bind, bind1, env)
+          result <- forMap(src.map, tar.map, bind2, env)
         } yield result
       }
 
       case (src: PiValue, tar: PiValue) => {
         for {
-          bind1 <- forMap(tar.args, src.args, bind)
-          bind2 <- unify(src.ret, tar.ret, bind1)
+          bind1 <- forMap(tar.args, src.args, bind, env)
+          bind2 <- unify(src.ret, tar.ret, bind1, env)
         } yield bind2
       }
 
@@ -94,6 +94,7 @@ object unify {
     srcMap: MultiMap[String, Value],
     tarMap: MultiMap[String, Value],
     bind: Bind,
+    env: Env,
   ): Either[ErrorMsg, Bind] = {
     val initResult: Either[ErrorMsg, Bind] =
       Right(bind)
@@ -105,7 +106,7 @@ object unify {
     ): Either[ErrorMsg, Bind] = {
       srcMap.get(name) match {
         case Some(srcValue) =>
-          unify(srcValue, tarValue, bind)
+          unify(srcValue, tarValue, bind, env)
         case None =>
           Left(ErrorMsg(s"srcMap does not have name: ${name}, tarValue: ${tarValue}"))
       }
@@ -119,6 +120,7 @@ object unify {
   def forBind(
     bind1: Bind,
     bind2: Bind,
+    env: Env,
   ): Either[ErrorMsg, Bind] = {
     val initBind = bind1 ++ bind2.filterNot { case (id, _value) =>
       bind1.keys.toSet.contains(id) }
@@ -131,7 +133,7 @@ object unify {
     def updateBind(bind: Bind, id: Id, v: Value): Either[ErrorMsg, Bind] = {
       bind.get(id) match {
         case Some(v1) =>
-          unify(v1, v, bind)
+          unify(v1, v, bind, env)
         case None =>
           Left(ErrorMsg(s"forBind internal error, bind1: ${bind1}, bind2: ${bind2}"))
       }

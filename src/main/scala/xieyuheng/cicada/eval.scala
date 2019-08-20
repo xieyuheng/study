@@ -82,7 +82,7 @@ object eval {
       case Ap(target, args) => {
         eval(target, env).flatMap { targetValue =>
           letMap(args, env).flatMap { argsValue =>
-            exe(targetValue, argsValue)
+            exe(targetValue, argsValue, env)
           }
         }
       }
@@ -127,7 +127,7 @@ object eval {
       value: Value,
     ): Either[ErrorMsg, Bind] = {
       valueMap.get(name) match {
-        case Some(oldValue) => unify(value, oldValue, bind)
+        case Some(oldValue) => unify(value, oldValue, bind, env)
         case None => Right(bind)
       }
     }

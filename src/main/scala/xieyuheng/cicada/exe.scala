@@ -4,6 +4,7 @@ object exe {
   def apply(
     target: Value,
     args: MultiMap[String, Value],
+    env: Env,
   ): Either[ErrorMsg, Value] = {
     target match {
       case t: TypeVar =>
@@ -11,12 +12,12 @@ object exe {
 
       case sumType: SumTypeValue =>
         for {
-          newBind <- unify.forMap(args, sumType.map, sumType.bind)
+          newBind <- unify.forMap(args, sumType.map, sumType.bind, env)
         } yield sumType.copy(bind = newBind)
 
       case memberType: MemberTypeValue =>
         for {
-          newBind <- unify.forMap(args, memberType.map, memberType.bind)
+          newBind <- unify.forMap(args, memberType.map, memberType.bind, env)
         } yield memberType.copy(bind = newBind)
 
       case pi: PiValue =>
@@ -24,10 +25,10 @@ object exe {
 
       case fn: FnValue =>
         for {
-          bind <- unify.forMap(args, fn.args, Bind())
+          bind <- unify.forMap(args, fn.args, Bind(), env)
           newArgs = util.deepWalkForMap(fn.args, bind)
           value <- eval(fn.body, fn.env.extendByValueMap(newArgs))
-          bind <- unify(value, fn.ret, bind)
+          bind <- unify(value, fn.ret, bind, env)
           newValue = util.deepWalk(value, bind)
         } yield newValue
 

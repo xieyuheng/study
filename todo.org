@@ -1,5 +1,4 @@
-- value.toString -- for testing
-
+- Pretty.fromValue -- for testing
 - exe for Fn
   - [maybe] Fn not only need env, but also need bind
 - case class Bind

@@ -88,13 +88,13 @@ class evalSpec extends FlatSpec with Matchers {
         module)
 
     } {
-//       println(s"List: ${list}")
-//       println(s"Null: ${null$}")
-//       println(s"Cons: ${cons}")
+      // println(s"List: ${list}")
+      // println(s"Null: ${null$}")
+      // println(s"Cons: ${cons}")
 
-//       println(s"Nat: ${nat}")
-//       println(s"Zero: ${zero}")
-//       println(s"Succ: ${succ}")
+      // println(s"Nat: ${nat}")
+      // println(s"Zero: ${zero}")
+      // println(s"Succ: ${succ}")
 
       println(s"threeZeros: ${threeZeros}")
     }

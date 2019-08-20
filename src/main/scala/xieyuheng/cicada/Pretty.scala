@@ -30,8 +30,7 @@ object Pretty {
     delimiter: String,
   ): String = {
     val block = map.entries
-      .map { case (name, exp) =>
-        s"${name}: ${fromExp(exp, 0)}" }
+      .map { case (name, exp) => s"${name}: ${fromExp(exp, 0)}" }
       .mkString(delimiter)
 
     addIndentToBlock(block, level)
@@ -70,10 +69,12 @@ object Pretty {
 
   def fromValueMapWithDelimiter(
     map: MultiMap[String, Value],
+    bind: Bind,
     level: Int,
     delimiter: String,
   ): String = {
-    val block = map.entries
+    val block = util.deepWalkForMap(map, bind)
+      .entries
       .map { case (name, value) =>
         s"${name}: ${fromValue(value, 0)}" }
       .mkString(delimiter)
@@ -81,25 +82,25 @@ object Pretty {
     addIndentToBlock(block, level)
   }
 
-  def fromValueMap(map: MultiMap[String, Value], level: Int): String = {
-    fromValueMapWithDelimiter(map, level, "\n")
+  def fromValueMap(map: MultiMap[String, Value], bind: Bind, level: Int): String = {
+    fromValueMapWithDelimiter(map, bind, level, "\n")
   }
 
-  def fromValueArgs(map: MultiMap[String, Value], level: Int): String = {
-    fromValueMapWithDelimiter(map, level, ", ")
+  def fromValueArgs(map: MultiMap[String, Value], bind: Bind, level: Int): String = {
+    fromValueMapWithDelimiter(map, bind, level, ", ")
   }
 
-  def fromNeutral(neutral: Neutral, level: Int): String = {
+  def fromNeutral(neutral: Neutral, bind: Bind, level: Int): String = {
     val block = neutral match {
       case VarNeutral(name) =>
         name
       case CaseNeutral(target, map) =>
-        val mapString = maybeNewline(fromValueMap(map, 1))
-        s"${fromNeutral(target, 0)} case {\n${mapString}}"
+        val mapString = maybeNewline(fromValueMap(map, bind, 1))
+        s"${fromNeutral(target, bind, 0)} case {\n${mapString}}"
       case FieldNeutral(target, fieldName) =>
-        s"${fromNeutral(target, 0)}.${fieldName}"
+        s"${fromNeutral(target, bind, 0)}.${fieldName}"
       case ApNeutral(target, args) =>
-        s"${fromNeutral(target, 0)}(${fromValueArgs(args, 0)})"
+        s"${fromNeutral(target, bind, 0)}(${fromValueArgs(args, bind, 0)})"
     }
 
     addIndentToBlock(block, level)
@@ -111,18 +112,22 @@ object Pretty {
         s"#${id}"
       case UnionValue(id, name, map, subNames, bind) =>
         val subNamesString = maybeNewline(subNames.mkString(", "))
-        val mapString = maybeNewline(fromValueMap(map, 1))
+        val mapString = maybeNewline(fromValueMap(map, bind, 1))
         s"union ${name} {\n${mapString}} unions {\n  ${subNamesString}}"
       case RecordValue(name, map, bind) =>
-        val mapString = maybeNewline(fromValueMap(map, 1))
+        val mapString = maybeNewline(fromValueMap(map, bind, 1))
+        // s"record ${name} {\n${mapString}} bind {\n${bind}\n}"
         s"record ${name} {\n${mapString}}"
       case PiValue(id, args, ret) =>
-        s"(${fromValueArgs(args, 0)}): ${fromValue(ret, 0)}"
+        val bind = Bind()
+        s"(${fromValueArgs(args, bind, 0)}): ${fromValue(ret, 0)}"
       case FnValue(args, ret, body, env) =>
+        val bind = Bind()
         val bodyString = maybeNewline(fromExp(body, 1))
-        s"(${fromValueArgs(args, 0)}): ${fromValue(ret, 0)} = {\n${bodyString}}"
+        s"(${fromValueArgs(args, bind, 0)}): ${fromValue(ret, 0)} = {\n${bodyString}}"
       case NeutralValue(neutral) =>
-        val neutralString = maybeNewline(fromNeutral(neutral, 1))
+        val bind = Bind()
+        val neutralString = maybeNewline(fromNeutral(neutral, bind, 1))
         s"Neutral {\n${neutralString}}"
     }
 

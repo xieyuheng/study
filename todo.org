@@ -1,3 +1,4 @@
+- deepWalk in Pretty.fromValue
 - exe for Fn
   - [maybe] Fn not only need env, but also need bind
 - case class Bind

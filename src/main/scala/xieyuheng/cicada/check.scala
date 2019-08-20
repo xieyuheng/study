@@ -14,7 +14,7 @@ object check {
     //   foreach name and body in clauses {
     //     sub <- ctx.loopupValue(name)
     //     ctx :- target :> sub
-    //     ctx.fulfill(target, sub) :- body <: t
+    //     ctx.unify(target, sub) :- body <: t
     //   }
     //   --------------------
     //   ctx :- Case(target, clauses) <: t
@@ -34,7 +34,7 @@ object check {
     //   target can be Union or Record
 
     //   ctx :- args <: target.args
-    //   ctx.fulfill(args, target.args) :- target.ret <: t
+    //   ctx.unify(args, target.args) :- target.ret <: t
     //   --------------------
     //   ctx :- Ap(target, args) <: t
   }

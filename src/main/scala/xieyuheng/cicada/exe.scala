@@ -9,11 +9,13 @@ object exe {
       case t: LogicVar =>
         Left(ErrorMsg(s"can not apply a LogicVar: ${t}"))
       case union: UnionValue =>
-        fulfill.forMap(args, union.map, union.bind).flatMap { newBind =>
-          Right(union.copy(bind = newBind)) }
+        for {
+          newBind <- unify.forMap(args, union.map, union.bind)
+        } yield union.copy(bind = newBind)
       case record: RecordValue =>
-        fulfill.forMap(args, record.map, record.bind).flatMap { newBind =>
-          Right(record.copy(bind = newBind)) }
+        for {
+          newBind <- unify.forMap(args, record.map, record.bind)
+        } yield record.copy(bind = newBind)
       case pi: PiValue =>
         Left(ErrorMsg(s"can not apply a PiValue: ${pi}"))
       case fn: FnValue =>

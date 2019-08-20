@@ -22,6 +22,12 @@ object eval {
         Right(TypeOfType(util.newId()))
       }
 
+      case OfType(t) => {
+        for {
+          t <- eval(t, env)
+        } yield ValueOfType(util.newId(), t)
+      }
+
       case Case(target, map) => {
         for {
           targetValue <- eval(target, env)

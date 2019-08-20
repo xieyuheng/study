@@ -6,6 +6,11 @@ final case class TypeOfType(
   id: Id,
 ) extends Value
 
+final case class ValueOfType(
+  id: Id,
+  t: Value,
+) extends Value
+
 final case class SumTypeValue(
   id: Id,
   name: String,

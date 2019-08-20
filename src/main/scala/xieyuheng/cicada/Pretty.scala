@@ -50,6 +50,8 @@ object Pretty {
         name
       case Type() =>
         "Type"
+      case OfType(t) =>
+        s"of_type(${fromExp(t, 0)})"
       case Case(target, map) =>
         val mapString = maybeNewline(fromExpMap(map, 1))
         s"${fromExp(target, 0)} case {\n${mapString}}"
@@ -109,7 +111,9 @@ object Pretty {
   def fromValue(value: Value, level: Int): String = {
     val block = value match {
       case TypeOfType(id) =>
-        s"#${id}"
+        s"type(#${id})"
+      case ValueOfType(id, t) =>
+        s"of_type(#${id}, ${fromValue(t, 0)})"
       case SumTypeValue(id, name, map, memberNames, bind) =>
         val memberNamesString = maybeNewline(memberNames.mkString(", "))
         val mapString = maybeNewline(fromValueMap(map, bind, 1))

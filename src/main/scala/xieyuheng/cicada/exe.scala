@@ -10,6 +10,9 @@ object exe {
       case t: TypeOfType =>
         Left(ErrorMsg(s"can not apply a TypeOfType: ${t}"))
 
+      case t: ValueOfType =>
+        Left(ErrorMsg(s"can not apply a ValueOfType: ${t}"))
+
       case sumType: SumTypeValue =>
         for {
           newBind <- unify.forMap(args, sumType.map, sumType.bind, env)

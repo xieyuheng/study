@@ -1,5 +1,4 @@
-- TypedVar
-- fix TypeVar
+- OfType and ValueOfType
 - zeroAndOne
 - append
 - exe for Fn

@@ -17,6 +17,13 @@ object util {
           case None => x
         }
       }
+      case t: ValueOfType => {
+        val id = t.id
+        bind.get(id) match {
+          case Some(y) => walk(y, bind)
+          case None => x
+        }
+      }
       case sumType: SumTypeValue => {
         val id = sumType.id
         bind.get(id) match {
@@ -37,7 +44,8 @@ object util {
 
   def deepWalk(x: Value, bind: Bind): Value = {
     walk(x, bind) match {
-      case t: TypeOfType => walk(t, bind)
+      case t: TypeOfType => t
+      case t: ValueOfType => t
       case memberType: MemberTypeValue =>
         // TODO prune the bind
         memberType.copy(map = deepWalkForMap(memberType.map, bind))

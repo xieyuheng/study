@@ -17,9 +17,10 @@ class evalSpec extends FlatSpec with Matchers {
   }
 
   it should "eval defined Var to value" in {
-    val env = Env() +
-    ("x" -> DefineValue("x", LogicVar("#x"))) +
-    ("y" -> DefineValue("y", LogicVar("#y")))
+    val env = Env()
+      .extend("x" -> DefineValue("x", LogicVar("#x")))
+      .extend("y" -> DefineValue("y", LogicVar("#y")))
+
     for {
       x <- eval(Var("x"), env)
       y <- eval(Var("y"), env)

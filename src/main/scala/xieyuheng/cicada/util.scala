@@ -10,7 +10,7 @@ object util {
   @tailrec
   def walk(x: Value, bind: Bind): Value = {
     x match {
-      case t: LogicVar => {
+      case t: TypeVar => {
         val id = t.id
         bind.get(id) match {
           case Some(y) => walk(y, bind)
@@ -37,7 +37,7 @@ object util {
 
   def deepWalk(x: Value, bind: Bind): Value = {
     walk(x, bind) match {
-      case t: LogicVar => walk(t, bind)
+      case t: TypeVar => walk(t, bind)
       case record: RecordValue =>
         // TODO prune the bind
         record.copy(map = deepWalkForMap(record.map, bind))

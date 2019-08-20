@@ -14,7 +14,7 @@ class unifySpec extends FlatSpec with Matchers {
 
     val srcValue = RecordValue("Zero", MultiMap(List()), Map())
 
-    val tarValue = LogicVar("2bda84b0-dd85-43c9-a94c-c00df82c9f9f")
+    val tarValue = TypeVar("2bda84b0-dd85-43c9-a94c-c00df82c9f9f")
 
     unify(srcValue, tarValue, bind) match {
       case Right(newBind) =>

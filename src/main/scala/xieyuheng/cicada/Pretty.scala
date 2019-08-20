@@ -56,10 +56,10 @@ object Pretty {
       case Field(target, fieldName) =>
         s"${fromExp(target, 0)}.${fieldName}"
       case Pi(args, ret) =>
-        s"(${fromExpArgs(args, 0)}): ${fromExp(ret, 0)}"
+        s"pi (${fromExpArgs(args, 0)}): ${fromExp(ret, 0)}"
       case Fn(args, ret, body) =>
         val bodyString = maybeNewline(fromExp(body, 1))
-        s"(${fromExpArgs(args, 0)}): ${fromExp(ret, 0)} = {\n${bodyString}}"
+        s"fn (${fromExpArgs(args, 0)}): ${fromExp(ret, 0)} = {\n${bodyString}}"
       case Ap(target, args) =>
         s"${fromExp(target, 0)}(${fromExpArgs(args, 0)})"
     }
@@ -108,7 +108,7 @@ object Pretty {
 
   def fromValue(value: Value, level: Int): String = {
     val block = value match {
-      case LogicVar(id) =>
+      case TypeVar(id) =>
         s"#${id}"
       case UnionValue(id, name, map, subNames, bind) =>
         val subNamesString = maybeNewline(subNames.mkString(", "))
@@ -116,14 +116,14 @@ object Pretty {
         s"union ${name} {\n${mapString}} unions {\n  ${subNamesString}}"
       case RecordValue(name, map, bind) =>
         val mapString = maybeNewline(fromValueMap(map, bind, 1))
-        s"record ${name} {\n${mapString}}"
+        s"class ${name} {\n${mapString}}"
       case PiValue(id, args, ret) =>
         val bind = Bind()
-        s"(${fromValueArgs(args, bind, 0)}): ${fromValue(ret, 0)}"
+        s"pi (${fromValueArgs(args, bind, 0)}): ${fromValue(ret, 0)}"
       case FnValue(args, ret, body, env) =>
         val bind = Bind()
         val bodyString = maybeNewline(fromExp(body, 1))
-        s"(${fromValueArgs(args, bind, 0)}): ${fromValue(ret, 0)} = {\n${bodyString}}"
+        s"fn (${fromValueArgs(args, bind, 0)}): ${fromValue(ret, 0)} = {\n${bodyString}}"
       case NeutralValue(neutral) =>
         val bind = Bind()
         val neutralString = maybeNewline(fromNeutral(neutral, bind, 1))

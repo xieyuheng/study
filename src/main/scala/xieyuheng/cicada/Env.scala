@@ -13,11 +13,30 @@ case class Env(val defMap: Map[String, Def] = Map()) {
     Env(defMap + kv)
   }
 
+  def extendByValueMap(valueMap: MultiMap[String, Value]): Env = {
+    valueMap.entries.foldLeft(this) { case (env, (name, value)) =>
+      env.extend(name -> DefineValue(name, value))
+    }
+  }
+
   def defineValue(
     name: String,
     value: Value,
   ): Env = {
     extend(name -> DefineValue(name, value))
+  }
+
+  def define(
+    name: String,
+    exp: Exp,
+  ): Env = {
+    eval(exp, this) match {
+      case Right(value) =>
+        extend(name -> DefineValue(name, value))
+      case Left(errorMsg) =>
+        println(errorMsg)
+        this
+    }
   }
 
   def defineClass(

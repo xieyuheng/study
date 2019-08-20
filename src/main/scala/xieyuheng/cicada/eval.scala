@@ -19,7 +19,7 @@ object eval {
       }
 
       case Type() => {
-        Right(LogicVar(util.newId()))
+        Right(TypeVar(util.newId()))
       }
 
       case Case(target, map) => {
@@ -120,12 +120,6 @@ object eval {
     val initResult: Either[ErrorMsg, (MultiMap[String, Value], Bind)] =
       Right((MultiMap(), Bind()))
 
-    def extendEnv(valueMap: MultiMap[String, Value], env: Env): Env = {
-      valueMap.entries.foldLeft(env) { case (env, (name, value)) =>
-        env.extend(name -> DefineValue(name, value))
-      }
-    }
-
     def updateBind(
       valueMap: MultiMap[String, Value],
       bind: Bind,
@@ -142,7 +136,7 @@ object eval {
       for {
         valueMapAndbind <- result
         (valueMap, bind) = valueMapAndbind
-        value <- eval(exp, extendEnv(valueMap, env))
+        value <- eval(exp, env.extendByValueMap(valueMap))
         newBind <- updateBind(valueMap, bind, name, value)
       } yield ((valueMap.update(name -> value), newBind))
     }

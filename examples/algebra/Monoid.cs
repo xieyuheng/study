@@ -1,7 +1,5 @@
 module algebra
 
-import algebra._
-
 class Monoid extends Semigroup {
   id: E
   left_id(x: E): id * x == x

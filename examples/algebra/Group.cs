@@ -1,7 +1,5 @@
 module algebra
 
-import algebra._
-
 class Group extends Monoid {
   inv(x: E): id * x == x
   left_inv(x: E): inv(x) * x == id
@@ -10,7 +8,7 @@ class Group extends Monoid {
   @infix(/) div(x: E, y: E): E = x * inv(y)
 }
 
-class GROUP_HOM {
+class GroupHom {
   G: Group
   H: Group
 
@@ -18,16 +16,16 @@ class GROUP_HOM {
   hom_respect_mul(x: G.E, y: G.E): hom(x G.* y) == hom(x) H.* hom(y)
 }
 
-idGroupHom(G: Group) = GroupHom {
+id_group_hom(G: Group) = GroupHom {
   G, G
   hom(x) = x
   hom_respect_mul(x, y) = same(x G.* y)
 }
 
-groupCategory = Categroy {
+group_category = Categroy {
   Object = Group
   Morphism = GroupHom
-  id = idGroupHom
+  id = id_group_hom
 
   then(f: GroupHom(G, H), g: GroupHom(H, K)) = GroupHom {
     G, K
@@ -36,9 +34,9 @@ groupCategory = Categroy {
       same(g.hom(f.hom(x* y) H.* f.hom(y)))
   }
 
-  left_id(f: GroupHom(G, H)): idGroupHom(G) | f == f =
+  left_id(f: GroupHom(G, H)): id_group_hom(G) | f == f =
     same(f)
-  right_id(f: GroupHom(G, H)): f | idGroupHom(H) == f =
+  right_id(f: GroupHom(G, H)): f | id_group_hom(H) == f =
     same(f)
 
   associative(

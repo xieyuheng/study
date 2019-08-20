@@ -2,7 +2,8 @@ module algebra
 
 class Category {
   Object: Type
-  Morphism[->](Object, Object): Type
+
+  @infix(->) Morphism(Object, Object): Type
 
   id(a: Object): a -> a
 

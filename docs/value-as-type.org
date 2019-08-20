@@ -1,0 +1,29 @@
+- can not define List of zero and one
+  because the A of Cons(A: Type, head: A, tail: List(A))
+  will be unified to Zero
+  which will make tail: List(Zero)
+- information about level must be maintained
+  to control unification
+  - in the case of algebraic datatype
+    not all information should be unified
+------
+- no type, just value
+  partly fulfilled value as type
+  and fulfilling relation between values
+  - union, record, pi are simple
+  - closure need special treatment
+    might require NbE
+  - fulfilling relation for neutral value will be hard to handle
+    just like we need NbE
+    to handle equivalence relation for neutral value in pie
+    - we might use something like NbE
+      or design our own ways
+- `x: type` is special
+- Exp
+  Constructor -- Value
+  Eliminator  -- Neutral
+- value v.s. full value
+  - value without union and x: type
+- nominal subtype relation
+  instead of structural subtype relation
+  - thus we do not need structural type union and intersection

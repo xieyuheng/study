@@ -4,7 +4,7 @@ A dependently-typed programming language
 
 ## Contains
 
-- [syntax preview](https://github.com/xieyuheng/cicada/tree/master/examples)
+- [syntax preview](https://github.com/xieyuheng/cicada/tree/master/docs/examples)
 
 ## Packages
 

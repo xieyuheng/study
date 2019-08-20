@@ -28,18 +28,18 @@ object util {
     }
   }
 
+  // TODO prune the bind
   def deepWalk(x: Value, bind: Bind): Value = {
     walk(x, bind) match {
-      case t: TypeOfType => t
-      case t: ValueOfType => t
+      case t: TypeOfType =>
+        t
+      case t: ValueOfType =>
+        t.copy(t = deepWalk(t.t, bind))
       case memberType: MemberTypeValue =>
-        // TODO prune the bind
         memberType.copy(map = deepWalkForMap(memberType.map, bind))
       case sumType: SumTypeValue =>
-        // TODO prune the bind
         sumType.copy(map = deepWalkForMap(sumType.map, bind))
       case pi: PiValue =>
-        // TODO prune the bind
         pi.copy(
           args = deepWalkForMap(pi.args, bind),
           ret = deepWalk(pi.ret, bind))

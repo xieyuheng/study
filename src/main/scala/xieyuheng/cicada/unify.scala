@@ -41,6 +41,18 @@ object unify {
         Right(bind + (t.id -> pi))
       }
 
+      case (value, ValueOfType(id, t)) => {
+        for {
+          bind <- unify(value, t, bind, env)
+        } yield bind + (id -> value)
+      }
+
+      case (ValueOfType(id, t), value) => {
+        for {
+          bind <- unify(value, t, bind, env)
+        } yield bind + (id -> value)
+      }
+
       case (fn: FnValue, pi: PiValue) => {
         for {
           /** contravariant at args */

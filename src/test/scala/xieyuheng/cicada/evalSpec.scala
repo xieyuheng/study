@@ -59,8 +59,8 @@ class evalSpec extends FlatSpec with Matchers {
     .defineMemberType("Null", MultiMap("A" -> Type()), "List")
     .defineMemberType("Cons", MultiMap(
       "A" -> Type(),
-      "head" -> Var("A"),
-      "tail" -> Ap(Var("List"), MultiMap("A" -> Var("A"))),
+      "head" -> OfType(Var("A")),
+      "tail" -> OfType(Ap(Var("List"), MultiMap("A" -> Var("A")))),
     ), "List")
     .define("append",
       Fn(
@@ -106,30 +106,30 @@ class evalSpec extends FlatSpec with Matchers {
 
     val one = Ap(Var("Succ"), MultiMap("prev" -> zero))
 
-//     val zeroAndOne =
+    val zeroAndOne =
+      Ap(Var("Cons"), MultiMap(
+        "A" -> Var("Nat"),
+        "head" -> zero,
+        "tail" -> Ap(Var("Cons"), MultiMap(
+          "A" -> Var("Nat"),
+          "head" -> one,
+          "tail" -> Var("Null")))))
+
+    pp(zeroAndOne, module)
+
+//     pp(
 //       Ap(Var("Cons"), MultiMap(
 //         "A" -> Var("Nat"),
-//         "head" -> zero,
-//         "tail" -> Ap(Var("Cons"), MultiMap(
-//           "A" -> Var("Nat"),
-//           "head" -> one,
-//           "tail" -> Var("Null")))))
+//         "head" -> Var("Zero"),
+//         "tail" -> Var("Null"))),
+//       module)
 
-//     pp(zeroAndOne, module)
-
-    pp(
-      Ap(Var("Cons"), MultiMap(
-        "A" -> Var("Nat"),
-        "head" -> Var("Zero"),
-        "tail" -> Var("Null"))),
-      module)
-
-    pp(
-      Ap(Var("Cons"), MultiMap(
-        "A" -> Var("Nat"),
-        "head" -> Var("Zero"),
-        "tail" -> Ap(Var("Null"), MultiMap("A" -> Var("Nat"))))),
-      module)
+//     pp(
+//       Ap(Var("Cons"), MultiMap(
+//         "A" -> Var("Nat"),
+//         "head" -> Var("Zero"),
+//         "tail" -> Ap(Var("Null"), MultiMap("A" -> Var("Nat"))))),
+//       module)
 
 //     pp(Ap(Var("append"), MultiMap(
 //       "ante" -> threeZeros,

@@ -1,4 +1,5 @@
-- test eval
+- value.toString -- for testing
+
 - exe for Fn
   - [maybe] Fn not only need env, but also need bind
 - case class Bind

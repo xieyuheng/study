@@ -41,8 +41,8 @@ class evalSpec extends FlatSpec with Matchers {
 
   val NatModule = Env()
     .defineSumType("Nat", MultiMap(), List("Zero", "Succ"))
-    .defineMemberType("Zero", MultiMap())
-    .defineMemberType("Succ", MultiMap("prev" -> Var("Nat")))
+    .defineMemberType("Zero", MultiMap(), "Nat")
+    .defineMemberType("Succ", MultiMap("prev" -> Var("Nat")), "Nat")
 
   it should "eval NatModule" in {
     val module = NatModule
@@ -56,12 +56,12 @@ class evalSpec extends FlatSpec with Matchers {
 
   val ListModule = Env()
     .defineSumType("List", MultiMap("A" -> Type()), List("Null", "Cons"))
-    .defineMemberType("Null", MultiMap("A" -> Type()))
+    .defineMemberType("Null", MultiMap("A" -> Type()), "List")
     .defineMemberType("Cons", MultiMap(
       "A" -> Type(),
       "head" -> Var("A"),
       "tail" -> Ap(Var("List"), MultiMap("A" -> Var("A"))),
-    ))
+    ), "List")
     .define("append",
       Fn(
         args = MultiMap(

@@ -7,9 +7,9 @@ object eval {
         env.get(name) match {
           case Some(DefineValue(name, value)) =>
             Right(value)
-          case Some(DefineMemberType(name, map)) =>
+          case Some(DefineMemberType(name, map, superName)) =>
             seqMap(map, env).flatMap { case (map, bind) =>
-              Right(MemberTypeValue(name, map, bind)) }
+              Right(MemberTypeValue(name, map, superName, bind)) }
           case Some(DefineSumType(name, map, memberNames)) =>
             seqMap(map, env).flatMap { case (map, bind) =>
               Right(SumTypeValue(util.newId(), name, map, memberNames, bind)) }

@@ -10,6 +10,7 @@ final case class DefineValue(
 final case class DefineMemberType(
   name: String,
   map: MultiMap[String, Exp],
+  superName: String,
 ) extends Def
 
 final case class DefineSumType(

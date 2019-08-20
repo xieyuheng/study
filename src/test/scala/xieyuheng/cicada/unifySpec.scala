@@ -12,7 +12,7 @@ class unifySpec extends FlatSpec with Matchers {
           List("Zero", "Succ"),
           Map()))
 
-    val srcValue = MemberTypeValue("Zero", MultiMap(List()), Map())
+    val srcValue = MemberTypeValue("Zero", MultiMap(List()), "List", Map())
 
     val tarValue = TypeVar("2bda84b0-dd85-43c9-a94c-c00df82c9f9f")
 

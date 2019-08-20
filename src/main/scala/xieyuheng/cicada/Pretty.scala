@@ -113,10 +113,10 @@ object Pretty {
       case SumTypeValue(id, name, map, memberNames, bind) =>
         val memberNamesString = maybeNewline(memberNames.mkString(", "))
         val mapString = maybeNewline(fromValueMap(map, bind, 1))
-        s"sumType ${name} {\n${mapString}} sumTypes {\n  ${memberNamesString}}"
-      case MemberTypeValue(name, map, bind) =>
+        s"${name} {\n${mapString}}"
+      case MemberTypeValue(name, map, superName, bind) =>
         val mapString = maybeNewline(fromValueMap(map, bind, 1))
-        s"class ${name} {\n${mapString}}"
+        s"${name} {\n${mapString}}"
       case PiValue(id, args, ret) =>
         val bind = Bind()
         s"pi (${fromValueArgs(args, bind, 0)}): ${fromValue(ret, 0)}"

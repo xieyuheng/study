@@ -42,8 +42,9 @@ case class Env(val defMap: Map[String, Def] = Map()) {
   def defineMemberType(
     name: String,
     map: MultiMap[String, Exp],
+    superName: String,
   ): Env = {
-    extend(name -> DefineMemberType(name, map))
+    extend(name -> DefineMemberType(name, map, superName))
   }
 
   def defineSumType(

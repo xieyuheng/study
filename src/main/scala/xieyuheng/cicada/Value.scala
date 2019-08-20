@@ -17,6 +17,7 @@ final case class SumTypeValue(
 final case class MemberTypeValue(
   name: String,
   map: MultiMap[String, Value],
+  superName: String,
   bind: Bind,
 ) extends Value
 

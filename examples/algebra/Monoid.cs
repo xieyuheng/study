@@ -1,6 +1,6 @@
-module abstract_algebra
+module algebra
 
-import category_theory._
+import algebra._
 
 class Monoid extends Semigroup {
   id: E
@@ -9,7 +9,7 @@ class Monoid extends Semigroup {
 }
 
 extend Monoid {
-  asCategory = Category {
+  as_category = Category {
     Object = Unit
     Morphism(_: Unit, _: Unit) = E
 

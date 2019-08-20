@@ -1,3 +1,4 @@
+- typeOf
 - fix TypeVar
 - zeroAndOne
 - append

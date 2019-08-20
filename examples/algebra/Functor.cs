@@ -1,4 +1,4 @@
-module category_theory
+module algebra
 
 class Functor {
   C: Category

@@ -1,4 +1,4 @@
-module abstract_algebra
+module algebra
 
 class Semigroup {
   E: Type

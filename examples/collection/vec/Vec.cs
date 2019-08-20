@@ -23,22 +23,33 @@ union Vec {
   }
 }
 
-RecordValue(
-  name = "ConsVec",
-  map = ListMap(
-    "A" -> LogicVar("#A"),
-    "length" -> UnionValue(name = "Nat"),
-    "n" -> UnionValue(name = "Nat"),
+Vec {
+  A: Type
+  length: Nat
+} {
+  NullVec {
+    A: Type
+    length: Nat
 
-    "length" -> ???,
-    "head" -> LogicVar("#A"),
-    "tail" -> UnionValue(name = "Nat")),
-  bind = Map())
+    length: Zero
+  }
 
-Bind (
-  LogicVar("A") -> ,
+  ConsVec {
+    A: Type
+    length: Nat
 
-)
+    n: Nat
+
+    length: Succ(n)
+    head: A
+    tail: Vec(A, n)
+  }
+}
+
+type Vec(A: Type, length: Nat) {
+  NullVec(length: Zero)
+  ConsVec(n: Nat, length: Succ(n), head: A, tail: Vec(A, n))
+}
 
 @infix(++)
 vec_append(ante: Vec(A, m), succ: Vec(A, n)): Vec(A, m + n) =

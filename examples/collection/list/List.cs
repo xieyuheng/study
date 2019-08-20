@@ -13,3 +13,8 @@ union List {
     tail: List(A)
   }
 }
+
+type List(A: Type) {
+  Null
+  Cons(head: A, tail: List(A))
+}

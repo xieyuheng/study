@@ -1,4 +1,4 @@
-module order_theory
+module order
 
 class JoinSemilattice extends PartialOrder {
   // TODO

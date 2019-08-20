@@ -1,6 +1,6 @@
-module abstract_algebra
+module algebra
 
-import category_theory._
+import algebra._
 
 class Group extends Monoid {
   inv(x: E): id * x == x
@@ -10,7 +10,7 @@ class Group extends Monoid {
   @infix(/) div(x: E, y: E): E = x * inv(y)
 }
 
-class GroupHom {
+class GROUP_HOM {
   G: Group
   H: Group
 

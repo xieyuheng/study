@@ -1,4 +1,4 @@
-module order_theory
+module order
 
 class PartialOrder extends PreOrder {
   antisymmetric(a <= b, b <= a): a == b

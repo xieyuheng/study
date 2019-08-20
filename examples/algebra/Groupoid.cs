@@ -1,4 +1,4 @@
-module category_theory
+module algebra
 
 class Groupoid extends Category {
   inv(f: a -> b): b -> a

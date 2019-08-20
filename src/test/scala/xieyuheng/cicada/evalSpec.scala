@@ -41,8 +41,8 @@ class evalSpec extends FlatSpec with Matchers {
 
   val NatModule = Env()
     .defineUnion("Nat", MultiMap(), List("Zero", "Succ"))
-    .defineClass("Zero", MultiMap())
-    .defineClass("Succ", MultiMap("prev" -> Var("Nat")))
+    .defineRecord("Zero", MultiMap())
+    .defineRecord("Succ", MultiMap("prev" -> Var("Nat")))
 
   it should "eval NatModule" in {
     val module = NatModule
@@ -56,8 +56,8 @@ class evalSpec extends FlatSpec with Matchers {
 
   val ListModule = Env()
     .defineUnion("List", MultiMap("A" -> Type()), List("Null", "Cons"))
-    .defineClass("Null", MultiMap("A" -> Type()))
-    .defineClass("Cons", MultiMap(
+    .defineRecord("Null", MultiMap("A" -> Type()))
+    .defineRecord("Cons", MultiMap(
       "A" -> Type(),
       "head" -> Var("A"),
       "tail" -> Ap(Var("List"), MultiMap("A" -> Var("A"))),

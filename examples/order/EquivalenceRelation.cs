@@ -1,4 +1,4 @@
-module order_theory
+module order
 
 class EquivalenceRelation extends PreOrder {
   @infix(~) Equivalence(a: E, b: E): Type =

@@ -38,6 +38,8 @@ case class MultiMap[K, V](
     MultiMap(entries.map { case (k, v) => (k, f(v)) })
 
   def contains(k: K): Boolean = valuesMap.contains(k)
+
+  def isEmpty: Boolean = entries.isEmpty
 }
 
 object MultiMap {

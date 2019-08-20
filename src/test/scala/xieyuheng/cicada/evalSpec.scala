@@ -45,11 +45,11 @@ class evalSpec extends FlatSpec with Matchers {
       one <- eval(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), module)
       z1 <- eval(Field(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), "prev"), module)
     } {
-      println(s"Nat: ${nat}")
-      println(s"Zero: ${zero}")
-      println(s"Succ: ${succ}")
-      println(s"one: ${one}")
-      println(s"z1: ${z1}")
+      println(s"${Pretty.fromValue(nat, 0)}")
+      println(s"${Pretty.fromValue(zero, 0)}")
+      println(s"${Pretty.fromValue(succ, 0)}")
+      println(s"one -- ${Pretty.fromValue(one, 0)}")
+      println(s"z1 -- ${Pretty.fromValue(z1, 0)}")
     }
   }
 
@@ -88,15 +88,7 @@ class evalSpec extends FlatSpec with Matchers {
         module)
 
     } {
-      // println(s"List: ${list}")
-      // println(s"Null: ${null$}")
-      // println(s"Cons: ${cons}")
-
-      // println(s"Nat: ${nat}")
-      // println(s"Zero: ${zero}")
-      // println(s"Succ: ${succ}")
-
-      println(s"threeZeros: ${threeZeros}")
+      println(s"threeZeros:\n${Pretty.fromValue(threeZeros, 0)}")
     }
   }
 }

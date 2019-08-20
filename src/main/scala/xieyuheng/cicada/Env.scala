@@ -20,7 +20,7 @@ case class Env(val defMap: Map[String, Def] = Map()) {
     extend(name -> DefineValue(name, value))
   }
 
-  def defineRecord(
+  def defineClass(
     name: String,
     map: MultiMap[String, Exp],
   ): Env = {

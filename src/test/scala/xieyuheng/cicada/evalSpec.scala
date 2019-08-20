@@ -30,38 +30,6 @@ class evalSpec extends FlatSpec with Matchers {
     }
   }
 
-  val NatModule = Env()
-    .defineUnion("Nat", MultiMap(), List("Zero", "Succ"))
-    .defineRecord("Zero", MultiMap())
-    .defineRecord("Succ", MultiMap("prev" -> Var("Nat")))
-
-  //   it should "eval NatModule" in {
-  //     val module = NatModule
-
-  //     for {
-  //       nat <- eval(Var("Nat"), module)
-  //       zero <- eval(Var("Zero"), module)
-  //       succ <- eval(Var("Succ"), module)
-  //       one <- eval(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), module)
-  //       z1 <- eval(Field(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), "prev"), module)
-  //     } {
-  //       println(s"${Pretty.fromValue(nat, 0)}")
-  //       println(s"${Pretty.fromValue(zero, 0)}")
-  //       println(s"${Pretty.fromValue(succ, 0)}")
-  //       println(s"one -- ${Pretty.fromValue(one, 0)}")
-  //       println(s"z1 -- ${Pretty.fromValue(z1, 0)}")
-  //     }
-  //   }
-
-  val ListModule = Env()
-    .defineUnion("List", MultiMap("A" -> Type()), List("Null", "Cons"))
-    .defineRecord("Null", MultiMap("A" -> Type()))
-    .defineRecord("Cons", MultiMap(
-      "A" -> Type(),
-      "head" -> Var("A"),
-      "tail" -> Ap(Var("List"), MultiMap("A" -> Var("A"))),
-    ))
-
   def pp(exp: Exp, env: Env): Unit = {
     eval(exp, env) match {
       case Right(value) =>
@@ -70,6 +38,30 @@ class evalSpec extends FlatSpec with Matchers {
         println(s"?> ${errorMsg}")
     }
   }
+
+  val NatModule = Env()
+    .defineUnion("Nat", MultiMap(), List("Zero", "Succ"))
+    .defineClass("Zero", MultiMap())
+    .defineClass("Succ", MultiMap("prev" -> Var("Nat")))
+
+  it should "eval NatModule" in {
+    val module = NatModule
+
+    pp(Var("Nat"), module)
+    pp(Var("Zero"), module)
+    pp(Var("Succ"), module)
+    pp(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), module)
+    pp(Field(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), "prev"), module)
+  }
+
+  val ListModule = Env()
+    .defineUnion("List", MultiMap("A" -> Type()), List("Null", "Cons"))
+    .defineClass("Null", MultiMap("A" -> Type()))
+    .defineClass("Cons", MultiMap(
+      "A" -> Type(),
+      "head" -> Var("A"),
+      "tail" -> Ap(Var("List"), MultiMap("A" -> Var("A"))),
+    ))
 
   it should "eval ListModule" in {
     val module = ListModule.importAll(NatModule)
@@ -100,6 +92,13 @@ class evalSpec extends FlatSpec with Matchers {
         "A" -> Var("Nat"),
         "head" -> Var("Zero"),
         "tail" -> Var("Null"))),
+      module)
+
+    pp(
+      Ap(Var("Cons"), MultiMap(
+        "A" -> Var("Nat"),
+        "head" -> Var("Zero"),
+        "tail" -> Ap(Var("Null"), MultiMap("A" -> Var("Nat"))))),
       module)
   }
 }

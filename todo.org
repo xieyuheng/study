@@ -7,7 +7,7 @@
   - set: ==, member relation, subset relation
   - type: ==, member relation
   - cat: ==, |
-* serde
+* serde -- lang-server
 - compile to js with runtime type information
   - this means keep Value serde-able
     - Value includes FnValue which contains Exp

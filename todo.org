@@ -1,5 +1,3 @@
-- Union -> SumType
-- Record -> MemberType
 - typeOf
 - fix TypeVar
 - zeroAndOne

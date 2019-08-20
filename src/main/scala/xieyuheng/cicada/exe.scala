@@ -9,15 +9,15 @@ object exe {
       case t: TypeVar =>
         Left(ErrorMsg(s"can not apply a TypeVar: ${t}"))
 
-      case union: UnionValue =>
+      case sumType: SumTypeValue =>
         for {
-          newBind <- unify.forMap(args, union.map, union.bind)
-        } yield union.copy(bind = newBind)
+          newBind <- unify.forMap(args, sumType.map, sumType.bind)
+        } yield sumType.copy(bind = newBind)
 
-      case record: RecordValue =>
+      case memberType: MemberTypeValue =>
         for {
-          newBind <- unify.forMap(args, record.map, record.bind)
-        } yield record.copy(bind = newBind)
+          newBind <- unify.forMap(args, memberType.map, memberType.bind)
+        } yield memberType.copy(bind = newBind)
 
       case pi: PiValue =>
         Left(ErrorMsg(s"can not apply a PiValue: ${pi}"))

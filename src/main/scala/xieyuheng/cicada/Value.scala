@@ -6,7 +6,7 @@ final case class TypeVar(
   id: Id,
 ) extends Value
 
-final case class UnionValue(
+final case class SumTypeValue(
   id: Id,
   name: String,
   map: MultiMap[String, Value],
@@ -14,7 +14,7 @@ final case class UnionValue(
   bind: Bind,
 ) extends Value
 
-final case class RecordValue(
+final case class MemberTypeValue(
   name: String,
   map: MultiMap[String, Value],
   bind: Bind,

@@ -4,10 +4,10 @@ object check {
   def check(exp: Exp, t: Value) = {
     ???
 
-    // - target must be Union,
+    // - target must be SumType,
     //   and clauses.keys == target.memberNames
     // - this means we should generate a eliminator
-    //   (like `fold`) for every Union
+    //   (like `fold`) for every SumType
     //   (but we are using unification and `.field`
     //   instead of pattern matching)
 
@@ -20,7 +20,7 @@ object check {
     //   ctx :- Case(target, clauses) <: t
 
 
-    // - target can be Record or Union
+    // - target can be MemberType or SumType
 
     //   ctx :- target.map.get(fieldName) <: t
     //   ----------------
@@ -31,7 +31,7 @@ object check {
 
     //   target can be Fn or Pi
 
-    //   target can be Union or Record
+    //   target can be SumType or MemberType
 
     //   ctx :- args <: target.args
     //   ctx.unify(args, target.args) :- target.ret <: t

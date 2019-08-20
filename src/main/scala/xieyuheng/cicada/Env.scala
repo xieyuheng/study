@@ -39,19 +39,19 @@ case class Env(val defMap: Map[String, Def] = Map()) {
     }
   }
 
-  def defineRecord(
+  def defineMemberType(
     name: String,
     map: MultiMap[String, Exp],
   ): Env = {
-    extend(name -> DefineRecord(name, map))
+    extend(name -> DefineMemberType(name, map))
   }
 
-  def defineUnion(
+  def defineSumType(
     name: String,
     map: MultiMap[String, Exp],
     memberNames: List[String],
   ): Env = {
-    extend(name -> DefineUnion(name, map, memberNames))
+    extend(name -> DefineSumType(name, map, memberNames))
   }
 
   def importAll(that: Env): Env = {

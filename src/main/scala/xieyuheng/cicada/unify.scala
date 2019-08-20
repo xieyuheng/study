@@ -33,27 +33,27 @@ object unify {
         } yield bind2 + (pi.id -> fn)
       }
 
-      case (record: RecordValue, union: UnionValue) if {
-        union.memberNames.contains(record.name)
+      case (memberType: MemberTypeValue, sumType: SumTypeValue) if {
+        sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind1 <- forBind(record.bind, bind)
-          bind2 <- forBind(union.bind, bind1)
-          bind3 <- forMap(record.map, union.map, bind2)
-        } yield bind3 + (union.id -> record)
+          bind1 <- forBind(memberType.bind, bind)
+          bind2 <- forBind(sumType.bind, bind1)
+          bind3 <- forMap(memberType.map, sumType.map, bind2)
+        } yield bind3 + (sumType.id -> memberType)
       }
 
-      case (union: UnionValue, record: RecordValue) if {
-        union.memberNames.contains(record.name)
+      case (sumType: SumTypeValue, memberType: MemberTypeValue) if {
+        sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind1 <- forBind(record.bind, bind)
-          bind2 <- forBind(union.bind, bind1)
-          bind3 <- forMap(record.map, union.map, bind2)
-        } yield bind3 + (union.id -> record)
+          bind1 <- forBind(memberType.bind, bind)
+          bind2 <- forBind(sumType.bind, bind1)
+          bind3 <- forMap(memberType.map, sumType.map, bind2)
+        } yield bind3 + (sumType.id -> memberType)
       }
 
-      case (src: UnionValue, tar: UnionValue) if {
+      case (src: SumTypeValue, tar: SumTypeValue) if {
         src.name == tar.name
       } => {
         for {
@@ -63,7 +63,7 @@ object unify {
         } yield result
       }
 
-      case (src: RecordValue, tar: RecordValue) if {
+      case (src: MemberTypeValue, tar: MemberTypeValue) if {
         src.name == tar.name
       } => {
         for {

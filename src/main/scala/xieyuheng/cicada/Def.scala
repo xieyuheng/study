@@ -7,12 +7,12 @@ final case class DefineValue(
   value: Value,
 ) extends Def
 
-final case class DefineRecord(
+final case class DefineMemberType(
   name: String,
   map: MultiMap[String, Exp],
 ) extends Def
 
-final case class DefineUnion(
+final case class DefineSumType(
   name: String,
   map: MultiMap[String, Exp],
   memberNames: List[String],

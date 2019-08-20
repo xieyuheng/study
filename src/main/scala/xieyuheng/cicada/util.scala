@@ -17,8 +17,8 @@ object util {
           case None => x
         }
       }
-      case union: UnionValue => {
-        val id = union.id
+      case sumType: SumTypeValue => {
+        val id = sumType.id
         bind.get(id) match {
           case Some(y) => walk(y, bind)
           case None => x
@@ -38,12 +38,12 @@ object util {
   def deepWalk(x: Value, bind: Bind): Value = {
     walk(x, bind) match {
       case t: TypeVar => walk(t, bind)
-      case record: RecordValue =>
+      case memberType: MemberTypeValue =>
         // TODO prune the bind
-        record.copy(map = deepWalkForMap(record.map, bind))
-      case union: UnionValue =>
+        memberType.copy(map = deepWalkForMap(memberType.map, bind))
+      case sumType: SumTypeValue =>
         // TODO prune the bind
-        union.copy(map = deepWalkForMap(union.map, bind))
+        sumType.copy(map = deepWalkForMap(sumType.map, bind))
       case pi: PiValue =>
         // TODO prune the bind
         pi.copy(

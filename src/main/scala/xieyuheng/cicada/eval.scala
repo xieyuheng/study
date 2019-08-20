@@ -7,12 +7,12 @@ object eval {
         env.get(name) match {
           case Some(DefineValue(name, value)) =>
             Right(value)
-          case Some(DefineRecord(name, map)) =>
+          case Some(DefineMemberType(name, map)) =>
             seqMap(map, env).flatMap { case (map, bind) =>
-              Right(RecordValue(name, map, bind)) }
-          case Some(DefineUnion(name, map, memberNames)) =>
+              Right(MemberTypeValue(name, map, bind)) }
+          case Some(DefineSumType(name, map, memberNames)) =>
             seqMap(map, env).flatMap { case (map, bind) =>
-              Right(UnionValue(util.newId(), name, map, memberNames, bind)) }
+              Right(SumTypeValue(util.newId(), name, map, memberNames, bind)) }
           case None =>
             Right(NeutralValue(VarNeutral(name)))
         }
@@ -26,17 +26,17 @@ object eval {
         for {
           targetValue <- eval(target, env)
           result <- targetValue match {
-            case record: RecordValue =>
-              map.get(record.name) match {
+            case memberType: MemberTypeValue =>
+              map.get(memberType.name) match {
                 case Some(exp) => eval(exp, env)
-                case None => Left(ErrorMsg(s"no clause: ${record.name}, on case: ${map}"))
+                case None => Left(ErrorMsg(s"no clause: ${memberType.name}, on case: ${map}"))
               }
             case NeutralValue(neutral) =>
               for {
                 map <- letMap(map, env)
               } yield NeutralValue(CaseNeutral(neutral, map))
             case _ =>
-              Left(ErrorMsg("targetValue of Field should be RecordValue or NeutralValue, " +
+              Left(ErrorMsg("targetValue of Field should be MemberTypeValue or NeutralValue, " +
                 s"instead of: ${targetValue}"))
           }
         } yield result
@@ -46,20 +46,20 @@ object eval {
         for {
           targetValue <- eval(target, env)
           result <- targetValue match {
-            case union: UnionValue =>
-              union.map.get(fieldName) match {
-                case Some(value) => Right(util.deepWalk(value, union.bind))
-                case None => Left(ErrorMsg(s"no field: ${fieldName}, on union: ${union}"))
+            case sumType: SumTypeValue =>
+              sumType.map.get(fieldName) match {
+                case Some(value) => Right(util.deepWalk(value, sumType.bind))
+                case None => Left(ErrorMsg(s"no field: ${fieldName}, on sumType: ${sumType}"))
               }
-            case record: RecordValue =>
-              record.map.get(fieldName) match {
-                case Some(value) => Right(util.deepWalk(value, record.bind))
-                case None => Left(ErrorMsg(s"no field: ${fieldName}, on record: ${record}"))
+            case memberType: MemberTypeValue =>
+              memberType.map.get(fieldName) match {
+                case Some(value) => Right(util.deepWalk(value, memberType.bind))
+                case None => Left(ErrorMsg(s"no field: ${fieldName}, on memberType: ${memberType}"))
               }
             case NeutralValue(neutral) =>
               Right(NeutralValue(FieldNeutral(neutral, fieldName)))
             case _ =>
-              Left(ErrorMsg("targetValue of Field should be UnionValue, RecordValue or NeutralValue, " +
+              Left(ErrorMsg("targetValue of Field should be SumTypeValue, MemberTypeValue or NeutralValue, " +
                 s"instead of: ${targetValue}"))
           }
         } yield result

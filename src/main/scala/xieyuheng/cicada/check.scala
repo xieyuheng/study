@@ -5,7 +5,7 @@ object check {
     ???
 
     // - target must be Union,
-    //   and clauses.keys == target.subNames
+    //   and clauses.keys == target.memberNames
     // - this means we should generate a eliminator
     //   (like `fold`) for every Union
     //   (but we are using unification and `.field`

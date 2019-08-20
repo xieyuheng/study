@@ -110,10 +110,10 @@ object Pretty {
     val block = value match {
       case TypeVar(id) =>
         s"#${id}"
-      case UnionValue(id, name, map, subNames, bind) =>
-        val subNamesString = maybeNewline(subNames.mkString(", "))
+      case UnionValue(id, name, map, memberNames, bind) =>
+        val memberNamesString = maybeNewline(memberNames.mkString(", "))
         val mapString = maybeNewline(fromValueMap(map, bind, 1))
-        s"union ${name} {\n${mapString}} unions {\n  ${subNamesString}}"
+        s"union ${name} {\n${mapString}} unions {\n  ${memberNamesString}}"
       case RecordValue(name, map, bind) =>
         val mapString = maybeNewline(fromValueMap(map, bind, 1))
         s"class ${name} {\n${mapString}}"

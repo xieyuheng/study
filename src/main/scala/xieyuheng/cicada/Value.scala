@@ -10,7 +10,7 @@ final case class UnionValue(
   id: Id,
   name: String,
   map: MultiMap[String, Value],
-  subNames: List[String],
+  memberNames: List[String],
   bind: Bind,
 ) extends Value
 

@@ -34,7 +34,7 @@ object unify {
       }
 
       case (record: RecordValue, union: UnionValue) if {
-        union.subNames.contains(record.name)
+        union.memberNames.contains(record.name)
       } => {
         for {
           bind1 <- forBind(record.bind, bind)
@@ -44,7 +44,7 @@ object unify {
       }
 
       case (union: UnionValue, record: RecordValue) if {
-        union.subNames.contains(record.name)
+        union.memberNames.contains(record.name)
       } => {
         for {
           bind1 <- forBind(record.bind, bind)

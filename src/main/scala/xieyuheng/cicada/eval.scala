@@ -10,9 +10,9 @@ object eval {
           case Some(DefineRecord(name, map)) =>
             seqMap(map, env).flatMap { case (map, bind) =>
               Right(RecordValue(name, map, bind)) }
-          case Some(DefineUnion(name, map, subNames)) =>
+          case Some(DefineUnion(name, map, memberNames)) =>
             seqMap(map, env).flatMap { case (map, bind) =>
-              Right(UnionValue(util.newId(), name, map, subNames, bind)) }
+              Right(UnionValue(util.newId(), name, map, memberNames, bind)) }
           case None =>
             Right(NeutralValue(VarNeutral(name)))
         }

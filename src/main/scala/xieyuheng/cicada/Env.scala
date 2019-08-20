@@ -49,9 +49,9 @@ case class Env(val defMap: Map[String, Def] = Map()) {
   def defineUnion(
     name: String,
     map: MultiMap[String, Exp],
-    subNames: List[String],
+    memberNames: List[String],
   ): Env = {
-    extend(name -> DefineUnion(name, map, subNames))
+    extend(name -> DefineUnion(name, map, memberNames))
   }
 
   def importAll(that: Env): Env = {

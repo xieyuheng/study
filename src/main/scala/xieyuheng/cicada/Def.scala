@@ -15,5 +15,5 @@ final case class DefineRecord(
 final case class DefineUnion(
   name: String,
   map: MultiMap[String, Exp],
-  subNames: List[String],
+  memberNames: List[String],
 ) extends Def

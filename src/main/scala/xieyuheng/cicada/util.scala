@@ -24,20 +24,6 @@ object util {
           case None => x
         }
       }
-      case sumType: SumTypeValue => {
-        val id = sumType.id
-        bind.get(id) match {
-          case Some(y) => walk(y, bind)
-          case None => x
-        }
-      }
-      case pi: PiValue => {
-        val id = pi.id
-        bind.get(id) match {
-          case Some(y) => walk(y, bind)
-          case None => x
-        }
-      }
       case _ => x
     }
   }

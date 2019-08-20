@@ -46,7 +46,7 @@ object unify {
           /** contravariant at args */
           bind <- forMap(pi.args, fn.args, bind, env)
           bind <- unify(fn.ret, pi.ret, bind, env)
-        } yield bind + (pi.id -> fn)
+        } yield bind
       }
 
       case (pi: PiValue, fn: FnValue) => {
@@ -54,7 +54,7 @@ object unify {
           /** contravariant at args */
           bind <- forMap(pi.args, fn.args, bind, env)
           bind <- unify(fn.ret, pi.ret, bind, env)
-        } yield bind + (pi.id -> fn)
+        } yield bind
       }
 
       case (memberType: MemberTypeValue, sumType: SumTypeValue) if {
@@ -64,7 +64,7 @@ object unify {
           bind <- forBind(memberType.bind, bind, env)
           bind <- forBind(sumType.bind, bind, env)
           bind <- forMap(memberType.map, sumType.map, bind, env)
-        } yield bind + (sumType.id -> memberType)
+        } yield bind
       }
 
       case (sumType: SumTypeValue, memberType: MemberTypeValue) if {
@@ -74,7 +74,7 @@ object unify {
           bind <- forBind(memberType.bind, bind, env)
           bind <- forBind(sumType.bind, bind, env)
           bind <- forMap(memberType.map, sumType.map, bind, env)
-        } yield bind + (sumType.id -> memberType)
+        } yield bind
       }
 
       case (src: SumTypeValue, tar: SumTypeValue) if {
@@ -83,8 +83,8 @@ object unify {
         for {
           bind <- forBind(src.bind, bind, env)
           bind <- forBind(tar.bind, bind, env)
-          result <- forMap(src.map, tar.map, bind, env)
-        } yield result
+          bind <- forMap(src.map, tar.map, bind, env)
+        } yield bind
       }
 
       case (src: MemberTypeValue, tar: MemberTypeValue) if {
@@ -93,8 +93,8 @@ object unify {
         for {
           bind <- forBind(src.bind, bind, env)
           bind <- forBind(tar.bind, bind, env)
-          result <- forMap(src.map, tar.map, bind, env)
-        } yield result
+          bind <- forMap(src.map, tar.map, bind, env)
+        } yield bind
       }
 
       case (src: PiValue, tar: PiValue) => {

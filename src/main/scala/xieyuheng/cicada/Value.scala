@@ -12,7 +12,6 @@ final case class ValueOfType(
 ) extends Value
 
 final case class SumTypeValue(
-  id: Id,
   name: String,
   map: MultiMap[String, Value],
   memberNames: List[String],
@@ -27,7 +26,6 @@ final case class MemberTypeValue(
 ) extends Value
 
 final case class PiValue(
-  id: Id,
   args: MultiMap[String, Value],
   ret: Value,
 ) extends Value

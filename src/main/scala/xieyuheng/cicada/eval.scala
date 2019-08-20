@@ -12,7 +12,7 @@ object eval {
               Right(MemberTypeValue(name, map, superName, bind)) }
           case Some(DefineSumType(name, map, memberNames)) =>
             seqMap(map, env).flatMap { case (map, bind) =>
-              Right(SumTypeValue(util.newId(), name, map, memberNames, bind)) }
+              Right(SumTypeValue(name, map, memberNames, bind)) }
           case None =>
             Right(NeutralValue(VarNeutral(name)))
         }
@@ -75,7 +75,7 @@ object eval {
         for {
           args <- letMap(args, env)
           ret <- eval(ret, env)
-        } yield PiValue(util.newId(), args, ret)
+        } yield PiValue(args, ret)
       }
 
       case Fn(args, ret, body) => {

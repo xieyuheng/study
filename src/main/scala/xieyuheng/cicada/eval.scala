@@ -122,7 +122,7 @@ object eval {
 
     def extendEnv(valueMap: MultiMap[String, Value], env: Env): Env = {
       valueMap.entries.foldLeft(env) { case (env, (name, value)) =>
-        env + (name -> DefineValue(name, value))
+        env.extend(name -> DefineValue(name, value))
       }
     }
 

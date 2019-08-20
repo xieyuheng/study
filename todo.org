@@ -1,4 +1,3 @@
-- case class Env
 - Env.define
 - Env.defineUnion
 - Env.defineRecord

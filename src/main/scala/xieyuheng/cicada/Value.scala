@@ -2,7 +2,7 @@ package xieyuheng.cicada
 
 sealed trait Value
 
-final case class TypeVar(
+final case class TypeOfType(
   id: Id,
 ) extends Value
 

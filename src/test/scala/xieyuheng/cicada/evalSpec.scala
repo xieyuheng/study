@@ -2,7 +2,7 @@ import org.scalatest._
 import xieyuheng.cicada._
 
 class evalSpec extends FlatSpec with Matchers {
-  "eval" should "eval Type to TypeVar" in {
+  "eval" should "eval Type to TypeOfType" in {
     val env = Env()
     for {
       t <- eval(Type(), env)
@@ -18,15 +18,15 @@ class evalSpec extends FlatSpec with Matchers {
 
   it should "eval defined Var to value" in {
     val env = Env()
-      .defineValue("x", TypeVar("#x"))
-      .defineValue("y", TypeVar("#y"))
+      .defineValue("x", TypeOfType("#x"))
+      .defineValue("y", TypeOfType("#y"))
 
     for {
       x <- eval(Var("x"), env)
       y <- eval(Var("y"), env)
     } {
-      assert(x == TypeVar("#x"))
-      assert(y == TypeVar("#y"))
+      assert(x == TypeOfType("#x"))
+      assert(y == TypeOfType("#y"))
     }
   }
 

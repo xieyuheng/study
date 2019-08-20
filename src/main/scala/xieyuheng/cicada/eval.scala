@@ -19,7 +19,7 @@ object eval {
       }
 
       case Type() => {
-        Right(TypeVar(util.newId()))
+        Right(TypeOfType(util.newId()))
       }
 
       case Case(target, map) => {

@@ -9,12 +9,36 @@ object unify {
         Right(bind)
       }
 
-      case (value, t: TypeVar) => {
-        Right(bind + (t.id -> value))
+      case (t1: TypeOfType, t2: TypeOfType) => {
+        Right(bind + (t1.id -> t2))
       }
 
-      case (t: TypeVar, value) => {
-        Right(bind + (t.id -> value))
+      case (sumType: SumTypeValue, t: TypeOfType) => {
+        Right(bind + (t.id -> sumType))
+      }
+
+      case (t: TypeOfType, sumType: SumTypeValue) => {
+        Right(bind + (t.id -> sumType))
+      }
+
+      case (memberType: MemberTypeValue, t: TypeOfType) => {
+        for {
+          sumType <- eval(Var(memberType.superName), env)
+        } yield bind + (t.id -> sumType)
+      }
+
+      case (t: TypeOfType, memberType: MemberTypeValue) => {
+        for {
+          sumType <- eval(Var(memberType.superName), env)
+        } yield bind + (t.id -> sumType)
+      }
+
+      case (pi: PiValue, t: TypeOfType) => {
+        Right(bind + (t.id -> pi))
+      }
+
+      case (t: TypeOfType, pi: PiValue) => {
+        Right(bind + (t.id -> pi))
       }
 
       case (fn: FnValue, pi: PiValue) => {

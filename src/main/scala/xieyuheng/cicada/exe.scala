@@ -7,8 +7,8 @@ object exe {
     env: Env,
   ): Either[ErrorMsg, Value] = {
     target match {
-      case t: TypeVar =>
-        Left(ErrorMsg(s"can not apply a TypeVar: ${t}"))
+      case t: TypeOfType =>
+        Left(ErrorMsg(s"can not apply a TypeOfType: ${t}"))
 
       case sumType: SumTypeValue =>
         for {

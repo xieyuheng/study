@@ -108,7 +108,7 @@ object Pretty {
 
   def fromValue(value: Value, level: Int): String = {
     val block = value match {
-      case TypeVar(id) =>
+      case TypeOfType(id) =>
         s"#${id}"
       case SumTypeValue(id, name, map, memberNames, bind) =>
         val memberNamesString = maybeNewline(memberNames.mkString(", "))

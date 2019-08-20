@@ -1,4 +1,4 @@
-- typeOf
+- TypedVar
 - fix TypeVar
 - zeroAndOne
 - append

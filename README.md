@@ -1,10 +1,6 @@
 # cicada
 
 A dependently-typed programming language
-- with fulfilling type system
-- based on game semantics
-- for interactive theorem proving
-- and practical verification tasks
 
 ## Contains
 

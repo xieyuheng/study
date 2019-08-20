@@ -39,7 +39,7 @@ case class Env(val defMap: Map[String, Def] = Map()) {
     }
   }
 
-  def defMemberType(
+  private def defMemberType(
     name: String,
     map: MultiMap[String, Exp],
     superName: String,
@@ -47,12 +47,23 @@ case class Env(val defMap: Map[String, Def] = Map()) {
     extend(name -> DefineMemberType(name, map, superName))
   }
 
-  def defSumType(
+  private def defSumType(
     name: String,
     map: MultiMap[String, Exp],
     memberNames: List[String],
   ): Env = {
     extend(name -> DefineSumType(name, map, memberNames))
+  }
+
+  def defType(
+    superName: String,
+    map: MultiMap[String, Exp],
+    members: Map[String, MultiMap[String, Exp]],
+  ): Env = {
+    val initEnv = defSumType(superName, map, members.keys.toList)
+    members.foldLeft(initEnv) { case (env, (name, map)) =>
+      env.defMemberType(name, map, superName)
+    }
   }
 
   def defFn(

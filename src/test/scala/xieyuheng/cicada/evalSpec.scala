@@ -40,9 +40,9 @@ class evalSpec extends FlatSpec with Matchers {
   }
 
   val NatModule = Env()
-    .defSumType("Nat", MultiMap(), List("Zero", "Succ"))
-    .defMemberType("Zero", MultiMap(), "Nat")
-    .defMemberType("Succ", MultiMap("prev" -> Var("Nat")), "Nat")
+    .defType("Nat", MultiMap(), Map(
+      "Zero" -> MultiMap(),
+      "Succ" -> MultiMap("prev" -> Var("Nat"))))
 
   it should "eval NatModule" in {
     val module = NatModule
@@ -55,12 +55,12 @@ class evalSpec extends FlatSpec with Matchers {
   }
 
   val ListModule = Env()
-    .defSumType("List", MultiMap("A" -> Type()), List("Null", "Cons"))
-    .defMemberType("Null", MultiMap("A" -> Type()), "List")
-    .defMemberType("Cons", MultiMap(
-      "A" -> Type(),
-      "head" -> OfType(Var("A")),
-      "tail" -> OfType(Ap(Var("List"), MultiMap("A" -> Var("A"))))), "List")
+    .defType("List", MultiMap("A" -> Type()), Map(
+      "Null" -> MultiMap("A" -> Type()),
+      "Cons" -> MultiMap(
+        "A" -> Type(),
+        "head" -> OfType(Var("A")),
+        "tail" -> OfType(Ap(Var("List"), MultiMap("A" -> Var("A")))))))
     .defExp("cdr", Fn(
       args = MultiMap(
         "list" -> OfType(Var("List"))),
@@ -145,7 +145,7 @@ class evalSpec extends FlatSpec with Matchers {
 
     pp(Ap(Var("append"), MultiMap(
       "ante" -> threeZeros,
-      "succ" -> threeZeros)
-    ), module)
+      "succ" -> threeZeros)),
+      module)
   }
 }

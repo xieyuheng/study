@@ -20,46 +20,46 @@ object unify {
       case (fn: FnValue, pi: PiValue) => {
         for {
           /** contravariant at args */
-          bind1 <- forMap(pi.args, fn.args, bind, env)
-          bind2 <- unify(fn.ret, pi.ret, bind1, env)
-        } yield bind2 + (pi.id -> fn)
+          bind <- forMap(pi.args, fn.args, bind, env)
+          bind <- unify(fn.ret, pi.ret, bind, env)
+        } yield bind + (pi.id -> fn)
       }
 
       case (pi: PiValue, fn: FnValue) => {
         for {
           /** contravariant at args */
-          bind1 <- forMap(pi.args, fn.args, bind, env)
-          bind2 <- unify(fn.ret, pi.ret, bind1, env)
-        } yield bind2 + (pi.id -> fn)
+          bind <- forMap(pi.args, fn.args, bind, env)
+          bind <- unify(fn.ret, pi.ret, bind, env)
+        } yield bind + (pi.id -> fn)
       }
 
       case (memberType: MemberTypeValue, sumType: SumTypeValue) if {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind1 <- forBind(memberType.bind, bind, env)
-          bind2 <- forBind(sumType.bind, bind1, env)
-          bind3 <- forMap(memberType.map, sumType.map, bind2, env)
-        } yield bind3 + (sumType.id -> memberType)
+          bind <- forBind(memberType.bind, bind, env)
+          bind <- forBind(sumType.bind, bind, env)
+          bind <- forMap(memberType.map, sumType.map, bind, env)
+        } yield bind + (sumType.id -> memberType)
       }
 
       case (sumType: SumTypeValue, memberType: MemberTypeValue) if {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind1 <- forBind(memberType.bind, bind, env)
-          bind2 <- forBind(sumType.bind, bind1, env)
-          bind3 <- forMap(memberType.map, sumType.map, bind2, env)
-        } yield bind3 + (sumType.id -> memberType)
+          bind <- forBind(memberType.bind, bind, env)
+          bind <- forBind(sumType.bind, bind, env)
+          bind <- forMap(memberType.map, sumType.map, bind, env)
+        } yield bind + (sumType.id -> memberType)
       }
 
       case (src: SumTypeValue, tar: SumTypeValue) if {
         src.name == tar.name
       } => {
         for {
-          bind1 <- forBind(src.bind, bind, env)
-          bind2 <- forBind(tar.bind, bind1, env)
-          result <- forMap(src.map, tar.map, bind2, env)
+          bind <- forBind(src.bind, bind, env)
+          bind <- forBind(tar.bind, bind, env)
+          result <- forMap(src.map, tar.map, bind, env)
         } yield result
       }
 
@@ -67,17 +67,17 @@ object unify {
         src.name == tar.name
       } => {
         for {
-          bind1 <- forBind(src.bind, bind, env)
-          bind2 <- forBind(tar.bind, bind1, env)
-          result <- forMap(src.map, tar.map, bind2, env)
+          bind <- forBind(src.bind, bind, env)
+          bind <- forBind(tar.bind, bind, env)
+          result <- forMap(src.map, tar.map, bind, env)
         } yield result
       }
 
       case (src: PiValue, tar: PiValue) => {
         for {
-          bind1 <- forMap(tar.args, src.args, bind, env)
-          bind2 <- unify(src.ret, tar.ret, bind1, env)
-        } yield bind2
+          bind <- forMap(tar.args, src.args, bind, env)
+          bind <- unify(src.ret, tar.ret, bind, env)
+        } yield bind
       }
 
       case _ => {

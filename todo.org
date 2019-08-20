@@ -1,7 +1,17 @@
-- dependence in the eval of args and ret
 - case class Bind
 - case class Id
+- dependence in the eval of args and ret
+- VecModule
+- pre -- subtype relation
+  - not just subtype relation
+    because a value pre its type
 - check
+- syntax -- for testing only
+  - ap
+  - Mp
+  - dot
+  - string as Var
+  - [maybe] the -- for OfType
 * set, type, cat
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

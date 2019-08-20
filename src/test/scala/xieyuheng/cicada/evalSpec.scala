@@ -80,6 +80,20 @@ class evalSpec extends FlatSpec with Matchers {
             "ante" -> Field(Var("ante"), "tail"),
             "succ" -> Var("succ"))))))))
 
+  // .defFn("append",
+  //   args = $(
+  //     "ante" -> OfType("List"),
+  //     "succ" -> OfType("List")),
+  //   ret = OfType("List"),
+  //   body = Case("ante", $(
+  //     "Null" -> "succ",
+  //     "Cons" -> Ap("Cons", $(
+  //       "A" -> ("ante" dot "A"),
+  //       "head" -> ("ante" dot "head"),
+  //       "tail" -> Ap("append", $(
+  //         "ante" -> ("ante" dot "tail"),
+  //         "succ" -> "succ")))))))
+
   it should "eval ListModule" in {
     val module = ListModule.importAll(NatModule)
 

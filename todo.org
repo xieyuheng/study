@@ -1,4 +1,3 @@
-- OfType and ValueOfType
 - zeroAndOne
 - append
 - exe for Fn

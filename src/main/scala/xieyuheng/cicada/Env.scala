@@ -19,14 +19,14 @@ case class Env(val defMap: Map[String, Def] = Map()) {
     }
   }
 
-  def defineValue(
+  def defValue(
     name: String,
     value: Value,
   ): Env = {
     extend(name -> DefineValue(name, value))
   }
 
-  def define(
+  def defExp(
     name: String,
     exp: Exp,
   ): Env = {
@@ -39,7 +39,7 @@ case class Env(val defMap: Map[String, Def] = Map()) {
     }
   }
 
-  def defineMemberType(
+  def defMemberType(
     name: String,
     map: MultiMap[String, Exp],
     superName: String,
@@ -47,12 +47,21 @@ case class Env(val defMap: Map[String, Def] = Map()) {
     extend(name -> DefineMemberType(name, map, superName))
   }
 
-  def defineSumType(
+  def defSumType(
     name: String,
     map: MultiMap[String, Exp],
     memberNames: List[String],
   ): Env = {
     extend(name -> DefineSumType(name, map, memberNames))
+  }
+
+  def defFn(
+    name: String,
+    args: MultiMap[String, Exp],
+    ret: Exp,
+    body: Exp,
+  ): Env = {
+    extend(name -> DefineFn(name, args, ret, body))
   }
 
   def importAll(that: Env): Env = {

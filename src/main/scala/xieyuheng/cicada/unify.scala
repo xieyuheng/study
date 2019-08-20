@@ -117,11 +117,14 @@ object unify {
       }
 
       case _ => {
+        val bindString = bind
+          .view.mapValues { value => Pretty.fromValue(value, 0) }
+          .mkString("\n")
         Left(ErrorMsg(
           "fail to unify\n" ++
-            s"src: ${util.walk(src, bind)}\n" ++
-            s"tar: ${util.walk(tar, bind)}\n" ++
-            s"bind: ${bind}\n"))
+            s"src: ${Pretty.fromValue(util.walk(src, bind), 0)}\n" ++
+            s"tar: ${Pretty.fromValue(util.walk(tar, bind), 0)}\n" ++
+            s"bind: ${bindString}\n"))
       }
     }
   }

@@ -131,7 +131,7 @@ object Pretty {
       case NeutralValue(neutral) =>
         val bind = Bind()
         val neutralString = maybeNewline(fromNeutral(neutral, bind, 1))
-        s"Neutral {\n${neutralString}}"
+        s"neutral {\n${neutralString}}"
     }
 
     addIndentToBlock(block, level)

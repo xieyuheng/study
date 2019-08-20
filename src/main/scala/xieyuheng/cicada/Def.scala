@@ -18,3 +18,10 @@ final case class DefineSumType(
   map: MultiMap[String, Exp],
   memberNames: List[String],
 ) extends Def
+
+final case class DefineFn(
+  name: String,
+  args: MultiMap[String, Exp],
+  ret: Exp,
+  body: Exp,
+) extends Def

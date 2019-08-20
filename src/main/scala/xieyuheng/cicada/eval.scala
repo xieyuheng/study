@@ -13,6 +13,8 @@ object eval {
           case Some(DefineSumType(name, map, memberNames)) =>
             seqMap(map, env).flatMap { case (map, bind) =>
               Right(SumTypeValue(name, map, memberNames, bind)) }
+          case Some(DefineFn(name, args, ret, body)) =>
+            eval(Fn(args, ret, body), env)
           case None =>
             Right(NeutralValue(VarNeutral(name)))
         }

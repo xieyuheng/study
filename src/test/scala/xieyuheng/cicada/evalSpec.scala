@@ -18,8 +18,8 @@ class evalSpec extends FlatSpec with Matchers {
 
   it should "eval defined Var to value" in {
     val env = Env()
-      .defineValue("x", TypeOfType("#x"))
-      .defineValue("y", TypeOfType("#y"))
+      .defValue("x", TypeOfType("#x"))
+      .defValue("y", TypeOfType("#y"))
 
     for {
       x <- eval(Var("x"), env)
@@ -40,9 +40,9 @@ class evalSpec extends FlatSpec with Matchers {
   }
 
   val NatModule = Env()
-    .defineSumType("Nat", MultiMap(), List("Zero", "Succ"))
-    .defineMemberType("Zero", MultiMap(), "Nat")
-    .defineMemberType("Succ", MultiMap("prev" -> Var("Nat")), "Nat")
+    .defSumType("Nat", MultiMap(), List("Zero", "Succ"))
+    .defMemberType("Zero", MultiMap(), "Nat")
+    .defMemberType("Succ", MultiMap("prev" -> Var("Nat")), "Nat")
 
   it should "eval NatModule" in {
     val module = NatModule
@@ -55,27 +55,30 @@ class evalSpec extends FlatSpec with Matchers {
   }
 
   val ListModule = Env()
-    .defineSumType("List", MultiMap("A" -> Type()), List("Null", "Cons"))
-    .defineMemberType("Null", MultiMap("A" -> Type()), "List")
-    .defineMemberType("Cons", MultiMap(
+    .defSumType("List", MultiMap("A" -> Type()), List("Null", "Cons"))
+    .defMemberType("Null", MultiMap("A" -> Type()), "List")
+    .defMemberType("Cons", MultiMap(
       "A" -> Type(),
       "head" -> OfType(Var("A")),
-      "tail" -> OfType(Ap(Var("List"), MultiMap("A" -> Var("A")))),
-    ), "List")
-    .define("append",
-      Fn(
-        args = MultiMap(
-          "ante" -> Var("List"),
-          "succ" -> Var("List")),
-        ret = Var("List"),
-        body = Case(Var("ante"), MultiMap(
-          "Null" -> Var("succ"),
-          "Cons" -> Ap(Var("Cons"), MultiMap(
-            "A" -> Field(Var("ante"), "A"),
-            "head" -> Field(Var("ante"), "head"),
-            "tail" -> Ap(Var("append"), MultiMap(
-              "ante" -> Field(Var("ante"), "tail"),
-              "succ" -> Var("succ")))))))))
+      "tail" -> OfType(Ap(Var("List"), MultiMap("A" -> Var("A"))))), "List")
+    .defExp("cdr", Fn(
+      args = MultiMap(
+        "list" -> OfType(Var("List"))),
+      ret = OfType(Var("List")),
+      body = Field(Var("list"), "tail")))
+    .defFn("append",
+      args = MultiMap(
+        "ante" -> OfType(Var("List")),
+        "succ" -> OfType(Var("List"))),
+      ret = OfType(Var("List")),
+      body = Case(Var("ante"), MultiMap(
+        "Null" -> Var("succ"),
+        "Cons" -> Ap(Var("Cons"), MultiMap(
+          "A" -> Field(Var("ante"), "A"),
+          "head" -> Field(Var("ante"), "head"),
+          "tail" -> Ap(Var("append"), MultiMap(
+            "ante" -> Field(Var("ante"), "tail"),
+            "succ" -> Var("succ"))))))))
 
   it should "eval ListModule" in {
     val module = ListModule.importAll(NatModule)
@@ -117,23 +120,32 @@ class evalSpec extends FlatSpec with Matchers {
 
     pp(zeroAndOne, module)
 
-//     pp(
-//       Ap(Var("Cons"), MultiMap(
-//         "A" -> Var("Nat"),
-//         "head" -> Var("Zero"),
-//         "tail" -> Var("Null"))),
-//       module)
+    pp(
+      Ap(Var("Cons"), MultiMap(
+        "A" -> Var("Nat"),
+        "head" -> Var("Zero"),
+        "tail" -> Var("Null"))),
+      module)
 
-//     pp(
-//       Ap(Var("Cons"), MultiMap(
-//         "A" -> Var("Nat"),
-//         "head" -> Var("Zero"),
-//         "tail" -> Ap(Var("Null"), MultiMap("A" -> Var("Nat"))))),
-//       module)
+    pp(
+      Ap(Var("Cons"), MultiMap(
+        "A" -> Var("Nat"),
+        "head" -> Var("Zero"),
+        "tail" -> Ap(Var("Null"), MultiMap("A" -> Var("Nat"))))),
+      module)
 
-//     pp(Ap(Var("append"), MultiMap(
-//       "ante" -> threeZeros,
-//       "succ" -> threeZeros)
-//     ), module)
+    val twoZeros = Ap(Var("cdr"), MultiMap(
+      "list" -> threeZeros))
+
+    val oneZero = Ap(Var("cdr"), MultiMap(
+      "list" -> twoZeros))
+
+    pp(twoZeros, module)
+    pp(oneZero, module)
+
+    pp(Ap(Var("append"), MultiMap(
+      "ante" -> threeZeros,
+      "succ" -> threeZeros)
+    ), module)
   }
 }

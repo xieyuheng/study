@@ -1,4 +1,5 @@
-- append
+- defType
+- dependence in the eval of args and ret
 - exe for Fn
   - [maybe] Fn not only need env, but also need bind
 - case class Bind

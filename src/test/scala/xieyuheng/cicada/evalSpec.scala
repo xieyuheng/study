@@ -103,7 +103,7 @@ class evalSpec extends FlatSpec with Matchers {
     ep(twoZeros)
     ep(oneZero)
 
-    ep("aepend" ap $(
+    ep("list_append" ap $(
       "ante" -> threeZeros,
       "succ" -> threeZeros))
   }

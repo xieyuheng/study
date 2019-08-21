@@ -27,7 +27,7 @@ object prelude {
     ret = The("List"),
     body = "list" dot "tail"))
 
-  .defFn("append",
+  .defFn("list_append",
     args = $(
       "ante" -> The("List"),
       "succ" -> The("List")),
@@ -37,7 +37,7 @@ object prelude {
       "Cons" -> ("Cons" ap $(
         "A" -> ("ante" dot "A"),
         "head" -> ("ante" dot "head"),
-        "tail" -> ("append" ap $(
+        "tail" -> ("list_append" ap $(
           "ante" -> ("ante" dot "tail"),
           "succ" -> "succ")))))))
 

@@ -1,4 +1,3 @@
-- list_append
 - .defType merge sumType fields to memberType
 - vec_append
 - handle implicit args by losing unify.forMap

@@ -3,7 +3,7 @@ package xieyuheng.cicada
 import xieyuheng.cicada.pretty._
 
 case class Env(map: Map[String, Def] = Map())
-  (implicit x: Int = 1) {
+  (implicit config: EnvConfig = EnvConfig.default) {
   def get(name: String): Option[Def] = {
     map.get(name)
   }
@@ -83,9 +83,12 @@ case class Env(map: Map[String, Def] = Map())
       env.get(name) match {
         case Some(oldDef) =>
           if (newDef != oldDef) {
-            println("[warn]")
-            println(s"- redefining:\n${addIndentToBlock(prettyDef(newDef), 1)}")
-            println(s"- old definition:\n${addIndentToBlock(prettyDef(oldDef), 1)}")
+            if (config.get("on_redefinition") == Some("warn")) {
+              println("[warn]")
+              println(s"- redefining:\n${addIndentToBlock(prettyDef(newDef), 1)}")
+              println(s"- old definition:\n${addIndentToBlock(prettyDef(oldDef), 1)}")
+            }
+
           }
         case None => {}
       }

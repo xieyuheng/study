@@ -1,7 +1,3 @@
-- fix importAll
-  be able to config eval
-  - for example
-    on_redefinition = warn
 - list_length
 - vec_append
 - .defType merge sumType fields to memberType

@@ -1,8 +1,10 @@
 organization := "xieyuheng"
 name := "cicada"
 version := "0.0.1"
-// scalaVersion := "2.13.0"
 scalaVersion := "2.12.9"
+
+micrositeGithubOwner := "xieyuheng"
+micrositeGithubRepo := "cicada"
 
 scalacOptions ++= Seq(
   "-opt:l:method",
@@ -23,7 +25,6 @@ libraryDependencies ++= Seq(
 
 enablePlugins(JavaAppPackaging)
 enablePlugins(TutPlugin)
-enablePlugins(MicrositesPlugin)
 
 resolvers += Resolver.sonatypeRepo("releases")
 addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")

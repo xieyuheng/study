@@ -15,9 +15,8 @@ object prelude {
 
   .defType("list_t", $("A" -> Type()),
     members = $(
-      "null_t" -> $("A" -> Type()),
+      "null_t" -> $(),
       "cons_t" -> $(
-        "A" -> Type(),
         "head" -> The("A"),
         "tail" -> The("list_t" ap $("A" -> "A")))))
 
@@ -45,19 +44,13 @@ object prelude {
 
   .importAll(nat)
 
-  .importAll(nat)
-
   .defType("vec_t", $(
     "A" -> Type(),
     "length" -> The("nat_t")),
     members = $(
       "null_vec_t" -> $(
-        "A" -> Type(),
-        "length" -> The("nat_t"),
         "length" -> "zero_t"),
       "cons_vec_t" -> $(
-        "A" -> Type(),
-        "length" -> The("nat_t"),
         "n" -> The("nat_t"),
         "length" -> ("succ_t" ap $("prev" -> "n")),
         "head" -> The("A"),

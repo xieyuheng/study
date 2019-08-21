@@ -70,9 +70,8 @@ object pretty {
     delimiter: String,
   ): String = {
     walk.deepOnMap(map, bind)
-      .entries
-      .map { case (name, value) =>
-        s"${name}: ${prettyValue(value)}" }
+      .entriesInScope
+      .map { case (name, value) => s"${name}: ${prettyValue(value)}" }
       .mkString(delimiter)
   }
 

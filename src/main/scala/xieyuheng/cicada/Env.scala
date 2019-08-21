@@ -65,7 +65,7 @@ case class Env(map: Map[String, Def] = Map())
   ): Env = {
     val initEnv = defSumType(name, fields, members.keys.toList)
     members.entries.foldLeft(initEnv) { case (env, (memberName, map)) =>
-      env.defMemberType(memberName, map, name)
+      env.defMemberType(memberName, fields.merge(map), name)
     }
   }
 
@@ -88,7 +88,6 @@ case class Env(map: Map[String, Def] = Map())
               println(s"- redefining:\n${addIndentToBlock(prettyDef(newDef), 1)}")
               println(s"- old definition:\n${addIndentToBlock(prettyDef(oldDef), 1)}")
             }
-
           }
         case None => {}
       }

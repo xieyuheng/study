@@ -14,6 +14,10 @@ case class MultiMap[K, V](
     }
   }
 
+  def entriesInScope: List[(K, V)] = {
+    entries.toMap.toList
+  }
+
   def update(kv: (K, V)): MultiMap[K, V] =
     MultiMap(entries ++ List(kv))
 

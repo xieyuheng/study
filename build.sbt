@@ -1,7 +1,7 @@
 organization := "xieyuheng"
 name := "cicada"
 version := "0.0.1"
-scalaVersion := "2.12.9"
+scalaVersion := "2.13.0"
 
 scalacOptions ++= Seq(
   "-opt:l:method",

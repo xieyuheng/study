@@ -1,6 +1,7 @@
 package xieyuheng.cicada
 
-case class Env(map: Map[String, Def] = Map()) {
+case class Env(map: Map[String, Def] = Map())
+  (implicit x: Int = 1) {
   def get(name: String): Option[Def] = {
     map.get(name)
   }
@@ -81,8 +82,8 @@ case class Env(map: Map[String, Def] = Map()) {
         case Some(oldDef) =>
           if (newDef != oldDef) {
             println("[warn]")
-            println(s"- redefining:\n${Pretty.Def(newDef, 1)}")
-            println(s"- old definition:\n${Pretty.Def(oldDef, 1)}")
+            println(s"- redefining:\n${Pretty.addIndentToBlock(Pretty.Def(newDef), 1)}")
+            println(s"- old definition:\n${Pretty.addIndentToBlock(Pretty.Def(oldDef), 1)}")
           }
         case None => {}
       }

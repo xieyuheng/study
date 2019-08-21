@@ -4,7 +4,7 @@ import xieyuheng.cicada._
 class PrettySpec extends FlatSpec with Matchers {
   "Pretty" can "make Exp pretty" in {
 
-    val t = Pretty.Exp(Type(), 0)
+    val t = Pretty.Exp(Type())
 
     val threeZeros = Pretty.Exp(
       Ap(Var("cons_t"), MultiMap(
@@ -16,8 +16,7 @@ class PrettySpec extends FlatSpec with Matchers {
           "tail" -> Ap(Var("cons_t"), MultiMap(
             "A" -> Var("nat_t"),
             "head" -> Var("zero_t"),
-            "tail" -> Var("null_t"))))))),
-      0)
+            "tail" -> Var("null_t"))))))))
 
     val fn = Pretty.Exp(
       Fn(
@@ -25,8 +24,7 @@ class PrettySpec extends FlatSpec with Matchers {
           "x" -> Var("nat_t"),
           "y" -> Var("nat_t")),
         ret = Var("nat_t"),
-        body = Var("zero_t")),
-      0)
+        body = Var("zero_t")))
 
     val nestedFn = Pretty.Exp(
       Fn(
@@ -41,8 +39,7 @@ class PrettySpec extends FlatSpec with Matchers {
           "x" -> Var("nat_t"),
           "y" -> Var("nat_t")),
           Var("nat_t"),
-          Var("zero_t"))),
-      0)
+          Var("zero_t"))))
 
     println(s"------")
     println(s"t: ${t}")

@@ -118,12 +118,12 @@ object unify {
 
       case _ => {
         val bindString = bind
-          .map.view.mapValues { value => Pretty.Value(value, 0) }
+          .map.view.mapValues { value => Pretty.Value(value) }
           .mkString("\n")
         Left(ErrorMsg(
           "fail to unify\n" ++
-            s"src: ${Pretty.Value(walk(src, bind), 0)}\n" ++
-            s"tar: ${Pretty.Value(walk(tar, bind), 0)}\n" ++
+            s"src: ${Pretty.Value(walk(src, bind))}\n" ++
+            s"tar: ${Pretty.Value(walk(tar, bind))}\n" ++
             s"bind: ${bindString}\n"))
       }
     }

@@ -1,3 +1,3 @@
 module order
 
-class Lattic extends JoinSemilattice with MeetSemilattice
+class lattic_t extends join_semilattice_t with meet_semilattice_t

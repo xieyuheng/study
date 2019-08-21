@@ -1,23 +1,27 @@
 module collection.vec
 
-type vec_t(A: type_t, length: Nat) {
-  null_vec_t(length: Zero)
-  cons_vec_t(n: Nat, length: Succ(n), head: A, tail: Vec(A, n))
+import * from datatype.nat
+
+type vec_t(A: type_t, length: nat_t) {
+  null_vec_t(length: zero_t)
+  cons_vec_t(n: nat_t, length: succ_t(n), head: A, tail: vec_t(A, n))
 }
 
 @infix(++)
-vec_append(ante: Vec(A, m), succ: Vec(A, n)): Vec(A, m + n) =
+vec_append(ante: vec_t(A, m), succ: vec_t(A, n)): vec_t(A, m + n) = {
   ante case {
-    NullVec => succ
-    ConsVec => ConsVec(
+    null_vec_t => succ
+    cons_vec_t => cons_vec_t(
       head = ante.head,
       tail = ante.tail ++ succ)
   }
+}
 
-vec_map(fun: A -> B, vec: Vec(A, n)): Vec(A, n) =
+vec_map(fun: A -> B, vec: vec_t(A, n)): vec_t(A, n) = {
   vec case {
-    NullVec => vec
-    ConsVec => ConsVec(
+    null_vec_t => vec
+    cons_vec_t => cons_vec_t(
       head = fun(vec.head),
       tail = vec_map(fun, vec.tail))
   }
+}

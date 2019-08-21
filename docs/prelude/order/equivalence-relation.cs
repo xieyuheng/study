@@ -1,7 +1,7 @@
 module order
 
-class EquivalenceRelation extends PreOrder {
-  @infix(~) Equivalence(a: E, b: E): type_t =
+class equivalence_relation_t extends pre_order_t {
+  @infix(~) equivalence_t(a: E, b: E): type_t =
     a <= b
 
   symmetric(a ~ b): b ~ a

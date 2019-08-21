@@ -1,14 +1,14 @@
 module order
 
-class PreOrder {
+class pre_order_t {
   E: type_t
-  @infix(<=) Pre(E, E): type_t
+  @infix(<=) pre_t(E, E): type_t
   reflexive(a: E): a <= a
   transitive(a <= b, b <= c): a <= c
 
-  @infix(<) StrictPre(a: E, b: E): type_t =
+  @infix(<) strict_pre_t(a: E, b: E): type_t =
     (a <= b, a != b)
 }
 
 // thin category
-// homSet(A, B).size <= 1
+// hom_set(A, B).size <= 1

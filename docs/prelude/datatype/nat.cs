@@ -1,35 +1,37 @@
-module prelude
+module datatype
 
-union Nat {} unions {
-  class Zero {}
-  class Succ {
-    prev: Nat
+type nat_t {
+  zero_t
+  succ_t(prev: nat_t)
+}
+
+add(x: nat_t, y: nat_t): nat_t = {
+  x case {
+    zero_t => y
+    succ_t => succ_t(add(x.prev, y))
   }
 }
 
-add(x: Nat, y: Nat): Nat =
+mul(x: nat_t, y: nat_t): nat_t = {
   x case {
-    Zero => y
-    Succ => Succ(add(x.prev, y))
+    zero_t => zero_t
+    succ_t => add(y, mul(x.prev, y))
   }
+}
 
-mul(x: Nat, y: Nat): Nat =
+factorial(x: nat_t): nat_t = {
   x case {
-    Zero => Zero
-    Succ => add(y, mul(x.prev, y))
+    zero_t => succ_t(zero_t)
+    succ_t => mul(x, factorial(x.prev))
   }
+}
 
-factorial(x: Nat): Nat =
+even_p(x: nat_t): bool_t = {
   x case {
-    Zero => Succ(Zero)
-    Succ => mul(x, factorial(x.prev))
-  }
-
-even_p(x: Nat): Bool =
-  x case {
-    Zero => True
-    Succ => x case {
-      Zero => False
-      Succ => even_p(x.prev.prev)
+    zero_t => true_t
+    succ_t => x case {
+      zero_t => false_t
+      succ_t => even_p(x.prev.prev)
     }
   }
+}

@@ -1,3 +1,3 @@
-module prelude
+module datatype
 
-class Unit {}
+class unit_t {}

@@ -1,3 +1,3 @@
-module prelude
+module datatype
 
-union Void {} unions {}
+type void_t() {}

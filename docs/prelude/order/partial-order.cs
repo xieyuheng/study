@@ -1,9 +1,9 @@
 module order
 
-class PartialOrder extends PreOrder {
+class partial_order_t extends pre_order_t {
   antisymmetric(a <= b, b <= a): a == b
 
-  @infix(-<) Cover(a: E, b: E): type_t =
+  @infix(-<) cover_t(a: E, b: E): type_t =
     (a < b, (x: E, a <= x < b) => x == a)
 }
 

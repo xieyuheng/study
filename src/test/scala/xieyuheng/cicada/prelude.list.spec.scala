@@ -3,49 +3,8 @@ import org.scalatest._
 import xieyuheng.cicada._
 import xieyuheng.cicada.dsl._
 
-class evalSpec extends FlatSpec with Matchers {
-  "eval" should "eval Type to TypeOfType" in {
-    val env = Env()
-    for {
-      t <- eval(Type(), env)
-    } println(t)
-  }
-
-  it should "eval undefined Var to NeutralValue" in {
-    val env = Env()
-    for {
-      neu <- eval(Var("x"), env)
-    } assert(neu == NeutralValue(VarNeutral("x")))
-  }
-
-  it should "eval defined Var to value" in {
-    val xId = Id("x")
-    val yId = Id("y")
-
-    val env = Env()
-      .defValue("x", TypeOfType(xId))
-      .defValue("y", TypeOfType(yId))
-
-    for {
-      x <- eval("x", env)
-      y <- eval("y", env)
-    } {
-      assert(x == TypeOfType(xId))
-      assert(y == TypeOfType(yId))
-    }
-  }
-
-  it should "eval prelude.nat" in {
-    implicit val module = prelude.nat
-
-    ep("nat_t")
-    ep("zero_t")
-    ep("succ_t")
-    ep("succ_t" ap $("prev" -> "zero_t"))
-    ep("succ_t" ap $("prev" -> "zero_t") dot "prev")
-  }
-
-  it should "eval prelude.list" in {
+class preludeListSpec extends FlatSpec with Matchers {
+  "prelude.list" should "work" in {
     implicit val module = prelude.list.importAll(prelude.nat)
 
     ep("list_t")
@@ -107,13 +66,5 @@ class evalSpec extends FlatSpec with Matchers {
     ep("list_append" ap $(
       "ante" -> threeZeros,
       "succ" -> threeZeros))
-  }
-
-  it should "eval prelude.vec" in {
-    implicit val module = prelude.vec
-
-    ep("vec_t")
-    ep("null_vec_t")
-    ep("cons_vec_t")
   }
 }

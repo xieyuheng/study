@@ -2,14 +2,15 @@
 
 A dependently-typed programming language
 
-## Contains
+## Contributing
 
-- [syntax preview](https://github.com/xieyuheng/cicada/tree/master/docs/examples)
-
-## Packages
-
+- Compile: `sbt compile`
+- Run all tests: `sbt test`
 - Install: `sbt publishLocal`
 - Dependency: `libraryDependencies += "xieyuheng" %% "cicada" % "0.0.1"`
+
+## Docs
+
 - [API Docs](https://cicada.xieyuheng.now.sh/xieyuheng/cicada/index.html)
 
 ## Community
@@ -19,11 +20,6 @@ A dependently-typed programming language
 - [Code of Conduct](CODE-OF-CONDUCT.md)
 - CI -- [travis-ci](https://travis-ci.org/xieyuheng/cicada)
 - IRC -- [#cicada-language](https://kiwiirc.com/nextclient/irc.freenode.net/#cicada-language)
-
-## Contributing
-
-- Compile: `sbt compile`
-- Run all tests: `sbt test`
 
 ## License
 

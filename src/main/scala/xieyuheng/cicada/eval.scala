@@ -8,10 +8,10 @@ object eval {
           case Some(DefineValue(name, value)) =>
             Right(value)
           case Some(DefineMemberType(name, map, superName)) =>
-            seqMap(map, env).flatMap { case (map, bind) =>
+            eval.yieldBind(map, env).flatMap { case (map, bind) =>
               Right(MemberTypeValue(name, map, superName, bind)) }
           case Some(DefineSumType(name, map, memberNames)) =>
-            seqMap(map, env).flatMap { case (map, bind) =>
+            eval.yieldBind(map, env).flatMap { case (map, bind) =>
               Right(SumTypeValue(name, map, memberNames, bind)) }
           case Some(DefineFn(name, args, ret, body)) =>
             eval(Fn(args, ret, body), env)
@@ -41,7 +41,7 @@ object eval {
               }
             case NeutralValue(neutral) =>
               for {
-                map <- letMap(map, env)
+                map <- eval.yieldEnv(map, env)
               } yield NeutralValue(CaseNeutral(neutral, map))
             case _ =>
               Left(ErrorMsg("targetValue of Field should be MemberTypeValue or NeutralValue, " +
@@ -75,21 +75,21 @@ object eval {
 
       case Pi(args, ret) => {
         for {
-          args <- letMap(args, env)
+          args <- eval.yieldEnv(args, env)
           ret <- eval(ret, env)
         } yield PiValue(args, ret)
       }
 
       case Fn(args, ret, body) => {
         for {
-          args <- letMap(args, env)
+          args <- eval.yieldEnv(args, env)
           ret <- eval(ret, env)
         } yield FnValue(args, ret, body, env)
       }
 
       case Ap(target, args) => {
         eval(target, env).flatMap { targetValue =>
-          letMap(args, env).flatMap { argsValue =>
+          eval.yieldEnv(args, env).flatMap { argsValue =>
             exe(targetValue, argsValue, env)
           }
         }
@@ -97,8 +97,7 @@ object eval {
     }
   }
 
-  /** like scheme (let) */
-  def letMap(
+  def yieldEnv(
     map: MultiMap[String, Exp],
     env: Env,
   ): Either[ErrorMsg, MultiMap[String, Value]] = {
@@ -120,8 +119,7 @@ object eval {
     }
   }
 
-  /** like scheme (let*) */
-  def seqMap(
+  def yieldBind(
     map: MultiMap[String, Exp],
     env: Env,
   ): Either[ErrorMsg, (MultiMap[String, Value], Bind)] = {

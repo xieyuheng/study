@@ -56,7 +56,7 @@ object unify {
       case (fn: FnValue, pi: PiValue) => {
         for {
           /** contravariant at args */
-          bind <- forMap(pi.args, fn.args, bind, env)
+          bind <- onMap(pi.args, fn.args, bind, env)
           bind <- unify(fn.ret, pi.ret, bind, env)
         } yield bind
       }
@@ -64,7 +64,7 @@ object unify {
       case (pi: PiValue, fn: FnValue) => {
         for {
           /** contravariant at args */
-          bind <- forMap(pi.args, fn.args, bind, env)
+          bind <- onMap(pi.args, fn.args, bind, env)
           bind <- unify(fn.ret, pi.ret, bind, env)
         } yield bind
       }
@@ -73,9 +73,9 @@ object unify {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind <- forBind(memberType.bind, bind, env)
-          bind <- forBind(sumType.bind, bind, env)
-          bind <- forMap(memberType.map, sumType.map, bind, env)
+          bind <- onBind(memberType.bind, bind, env)
+          bind <- onBind(sumType.bind, bind, env)
+          bind <- onMap(memberType.map, sumType.map, bind, env)
         } yield bind
       }
 
@@ -83,9 +83,9 @@ object unify {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind <- forBind(memberType.bind, bind, env)
-          bind <- forBind(sumType.bind, bind, env)
-          bind <- forMap(memberType.map, sumType.map, bind, env)
+          bind <- onBind(memberType.bind, bind, env)
+          bind <- onBind(sumType.bind, bind, env)
+          bind <- onMap(memberType.map, sumType.map, bind, env)
         } yield bind
       }
 
@@ -93,9 +93,9 @@ object unify {
         src.name == tar.name
       } => {
         for {
-          bind <- forBind(src.bind, bind, env)
-          bind <- forBind(tar.bind, bind, env)
-          bind <- forMap(src.map, tar.map, bind, env)
+          bind <- onBind(src.bind, bind, env)
+          bind <- onBind(tar.bind, bind, env)
+          bind <- onMap(src.map, tar.map, bind, env)
         } yield bind
       }
 
@@ -103,15 +103,15 @@ object unify {
         src.name == tar.name
       } => {
         for {
-          bind <- forBind(src.bind, bind, env)
-          bind <- forBind(tar.bind, bind, env)
-          bind <- forMap(src.map, tar.map, bind, env)
+          bind <- onBind(src.bind, bind, env)
+          bind <- onBind(tar.bind, bind, env)
+          bind <- onMap(src.map, tar.map, bind, env)
         } yield bind
       }
 
       case (src: PiValue, tar: PiValue) => {
         for {
-          bind <- forMap(tar.args, src.args, bind, env)
+          bind <- onMap(tar.args, src.args, bind, env)
           bind <- unify(src.ret, tar.ret, bind, env)
         } yield bind
       }
@@ -129,7 +129,7 @@ object unify {
     }
   }
 
-  def forMap(
+  def onMap(
     srcMap: MultiMap[String, Value],
     tarMap: MultiMap[String, Value],
     bind: Bind,
@@ -156,7 +156,7 @@ object unify {
     }
   }
 
-  def forBind(
+  def onBind(
     bind1: Bind,
     bind2: Bind,
     env: Env,
@@ -175,7 +175,7 @@ object unify {
         case Some(v1) =>
           unify(v1, v, bind, env)
         case None =>
-          Left(ErrorMsg(s"forBind internal error, bind1: ${bind1}, bind2: ${bind2}"))
+          Left(ErrorMsg(s"onBind internal error, bind1: ${bind1}, bind2: ${bind2}"))
       }
     }
 

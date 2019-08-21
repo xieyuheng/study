@@ -1,6 +1,5 @@
 - list_length
 - vec_append
-- handle implicit args by losing unify.forMap
 - pre -- subtype relation
   - not just subtype relation
     because a value pre its type

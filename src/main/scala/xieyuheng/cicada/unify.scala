@@ -146,7 +146,7 @@ object unify {
         case Some(srcValue) =>
           unify(srcValue, tarValue, bind, env)
         case None =>
-          Left(ErrorMsg(s"srcMap does not have name: ${name}, tarValue: ${tarValue}"))
+          Right(bind)
       }
     }
 

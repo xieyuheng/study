@@ -51,7 +51,7 @@ object Pretty {
       case Type() =>
         "Type"
       case The(t) =>
-        s"of_type(${fromExp(t, 0)})"
+        s"the(${fromExp(t, 0)})"
       case Case(target, map) =>
         val mapString = maybeNewline(fromExpMap(map, 1))
         s"${fromExp(target, 0)} case {\n${mapString}}"
@@ -113,7 +113,7 @@ object Pretty {
       case TypeOfType(id) =>
         s"type(${id})"
       case ValueOfType(id, t) =>
-        s"of_type(${id}, ${fromValue(t, 0)})"
+        s"the(${id}, ${fromValue(t, 0)})"
       case SumTypeValue(name, map, memberNames, bind) =>
         val memberNamesString = maybeNewline(memberNames.mkString(", "))
         val mapString = maybeNewline(fromValueMap(map, bind, 1))

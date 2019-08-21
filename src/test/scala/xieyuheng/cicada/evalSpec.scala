@@ -37,62 +37,62 @@ class evalSpec extends FlatSpec with Matchers {
   it should "eval prelude.nat" in {
     implicit val module = prelude.nat
 
-    ep("Nat")
-    ep("Zero")
-    ep("Succ")
-    ep("Succ" ap $("prev" -> "Zero"))
-    ep("Succ" ap $("prev" -> "Zero") dot "prev")
+    ep("nat_t")
+    ep("zero_t")
+    ep("succ_t")
+    ep("succ_t" ap $("prev" -> "zero_t"))
+    ep("succ_t" ap $("prev" -> "zero_t") dot "prev")
   }
 
   it should "eval prelude.list" in {
     implicit val module = prelude.list.importAll(prelude.nat)
 
-    ep("List")
-    ep("Null")
-    ep("Cons")
+    ep("list_t")
+    ep("null_t")
+    ep("cons_t")
 
-    ep("Nat")
-    ep("Zero")
-    ep("Succ")
+    ep("nat_t")
+    ep("zero_t")
+    ep("succ_t")
 
-    val zero: Exp = "Zero"
+    val zero: Exp = "zero_t"
 
     val threeZeros =
-      "Cons" ap $(
-        "A" -> "Nat",
+      "cons_t" ap $(
+        "A" -> "nat_t",
         "head" -> zero,
-        "tail" -> ("Cons" ap $(
-          "A" -> "Nat",
+        "tail" -> ("cons_t" ap $(
+          "A" -> "nat_t",
           "head" -> zero,
-          "tail" -> ("Cons" ap $(
-            "A" -> "Nat",
+          "tail" -> ("cons_t" ap $(
+            "A" -> "nat_t",
             "head" -> zero,
-            "tail" -> "Null")))))
+            "tail" -> "null_t")))))
 
     ep(threeZeros)
 
-    val one = "Succ" ap $("prev" -> zero)
+    val one = "succ_t" ap $("prev" -> zero)
 
     val zeroAndOne =
-      "Cons" ap $(
-        "A" -> "Nat",
+      "cons_t" ap $(
+        "A" -> "nat_t",
         "head" -> zero,
-        "tail" -> ("Cons" ap $(
-          "A" -> "Nat",
+        "tail" -> ("cons_t" ap $(
+          "A" -> "nat_t",
           "head" -> one,
-          "tail" -> "Null")))
+          "tail" -> "null_t")))
 
     ep(zeroAndOne)
 
-    ep("Cons" ap $(
-      "A" -> "Nat",
-      "head" -> "Zero",
-      "tail" -> "Null"))
+    ep("cons_t" ap $(
+      "A" -> "nat_t",
+      "head" -> "zero_t",
+      "tail" -> "null_t"))
 
-    ep("Cons" ap $(
-      "A" -> "Nat",
-      "head" -> "Zero",
-      "tail" -> ("Null" ap $("A" -> "Nat"))))
+    ep("cons_t" ap $(
+      "A" -> "nat_t",
+      "head" -> "zero_t",
+      "tail" -> ("null_t" ap $("A" -> "nat_t"))))
 
     val twoZeros = "cdr" ap $(
       "list" -> threeZeros)
@@ -111,8 +111,8 @@ class evalSpec extends FlatSpec with Matchers {
   it should "eval prelude.vec" in {
     implicit val module = prelude.vec
 
-    ep("Vec")
-    ep("NullVec")
-    ep("ConsVec")
+    ep("vec_t")
+    ep("null_vec_t")
+    ep("cons_vec_t")
   }
 }

@@ -85,37 +85,37 @@ object examples extends App {
   val Nat = LetRec("Nat",
     Universe,
     Sum(
-      "zero" -> Trivial,
-      "succ" -> "Nat"))
+      "Zero" -> Trivial,
+      "Succ" -> "Nat"))
 
   val List = LetRec("List",
     Universe -: Universe,
     Fn("A", Sum(
-      "nil" -> Trivial,
-      "cons" -> "A" * ("List" $ "A"))))
+      "Nil" -> Trivial,
+      "Cons" -> "A" * ("List" $ "A"))))
 
   val natrec = LetRec("natrec",
     Pi("C", "Nat" -: Universe,
-      ("C" $ Data("zero", Sole)) -:
-        Pi("n", "Nat", ("C" $ "n") -: ("C" $ Data("succ", "n"))) -:
+      ("C" $ Data("Zero", Sole)) -:
+        Pi("n", "Nat", ("C" $ "n") -: ("C" $ Data("Succ", "n"))) -:
         Pi("n", "Nat", ("C" $ "n"))),
     Fn("C", Fn("a", Fn("g", Case(
-      "zero" -> Fn("_", "a"),
-      "succ" -> Fn("prev", "g" $ "prev" $ ("natrec" $ "C" $ "a" $ "g" $ "prev")))))))
+      "Zero" -> Fn("_", "a"),
+      "Succ" -> Fn("prev", "g" $ "prev" $ ("natrec" $ "C" $ "a" $ "g" $ "prev")))))))
 
   val add = LetRec("add",
     "Nat" -: "Nat" -: "Nat",
     Fn("x", Case(
-      "zero" -> Fn("_", "x"),
-      "succ" -> Fn("prev", Data("succ", "add" $ "x" $ "prev")))))
+      "Zero" -> Fn("_", "x"),
+      "Succ" -> Fn("prev", Data("Succ", "add" $ "x" $ "prev")))))
 
   val eqNat = LetRec("eqNat",
     "Nat" -: "Nat" -: "Bool",
     Case(
-      "zero" -> Fn("_", Case(
-        "zero" -> Fn("_", Data("true", Sole)),
-        "succ" -> Fn("_", Data("false", Sole)))),
-      "succ" -> Fn("x", Case(
-        "zero" -> Fn("_", Data("false", Sole)),
-        "succ" -> Fn("y", "eqNat" $ "x" $ "y")))))
+      "Zero" -> Fn("_", Case(
+        "Zero" -> Fn("_", Data("true", Sole)),
+        "Succ" -> Fn("_", Data("false", Sole)))),
+      "Succ" -> Fn("x", Case(
+        "Zero" -> Fn("_", Data("false", Sole)),
+        "Succ" -> Fn("y", "eqNat" $ "x" $ "y")))))
 }

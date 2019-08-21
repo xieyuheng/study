@@ -6,12 +6,12 @@ class unifySpec extends FlatSpec with Matchers {
     val id = Id()
     val bind = Bind(Map(
       id -> SumTypeValue(
-        "Nat",
+        "nat_t",
         MultiMap(List()),
-        List("Zero", "Succ"),
+        List("zero_t", "succ_t"),
         Bind())))
 
-    val srcValue = MemberTypeValue("Zero", MultiMap(List()), "List", Bind())
+    val srcValue = MemberTypeValue("zero_t", MultiMap(List()), "list_t", Bind())
 
     val tarValue = TypeOfType(id)
 

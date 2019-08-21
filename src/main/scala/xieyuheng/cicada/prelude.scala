@@ -6,35 +6,35 @@ object prelude {
 
   val nat = Env()
 
-  .defType("Nat", $(),
+  .defType("nat_t", $(),
     members = $(
-      "Zero" -> $(),
-      "Succ" -> $("prev" -> "Nat")))
+      "zero_t" -> $(),
+      "succ_t" -> $("prev" -> "nat_t")))
 
   val list = Env()
 
-  .defType("List", $("A" -> Type()),
+  .defType("list_t", $("A" -> Type()),
     members = $(
-      "Null" -> $("A" -> Type()),
-      "Cons" -> $(
+      "null_t" -> $("A" -> Type()),
+      "cons_t" -> $(
         "A" -> Type(),
         "head" -> The("A"),
-        "tail" -> The("List" ap $("A" -> "A")))))
+        "tail" -> The("list_t" ap $("A" -> "A")))))
 
   .defExp("cdr", Fn(
     args = $(
-      "list" -> The("List")),
-    ret = The("List"),
+      "list" -> The("list_t")),
+    ret = The("list_t"),
     body = "list" dot "tail"))
 
   .defFn("list_append",
     args = $(
-      "ante" -> The("List"),
-      "succ" -> The("List")),
-    ret = The("List"),
+      "ante" -> The("list_t"),
+      "succ" -> The("list_t")),
+    ret = The("list_t"),
     body = Case("ante", $(
-      "Null" -> "succ",
-      "Cons" -> ("Cons" ap $(
+      "null_t" -> "succ",
+      "cons_t" -> ("cons_t" ap $(
         "A" -> ("ante" dot "A"),
         "head" -> ("ante" dot "head"),
         "tail" -> ("list_append" ap $(
@@ -45,20 +45,20 @@ object prelude {
 
   .importAll(nat)
 
-  .defType("Vec", $(
+  .defType("vec_t", $(
     "A" -> Type(),
-    "length" -> The("Nat")),
+    "length" -> The("nat_t")),
     members = $(
-      "NullVec" -> $(
+      "null_vec_t" -> $(
         "A" -> Type(),
-        "length" -> The("Nat"),
-        "length" -> "Zero"),
-      "ConsVec" -> $(
+        "length" -> The("nat_t"),
+        "length" -> "zero_t"),
+      "cons_vec_t" -> $(
         "A" -> Type(),
-        "length" -> The("Nat"),
-        "n" -> The("Nat"),
-        "length" -> ("Succ" ap $("prev" -> "n")),
+        "length" -> The("nat_t"),
+        "n" -> The("nat_t"),
+        "length" -> ("succ_t" ap $("prev" -> "n")),
         "head" -> The("A"),
-        "tail" -> The("Vec" ap $("A" -> "A", "length" -> "n")))))
+        "tail" -> The("vec_t" ap $("A" -> "A", "length" -> "n")))))
 
 }

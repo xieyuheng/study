@@ -7,41 +7,41 @@ class PrettySpec extends FlatSpec with Matchers {
     val t = Pretty.fromExp(Type(), 0)
 
     val threeZeros = Pretty.fromExp(
-      Ap(Var("Cons"), MultiMap(
-        "A" -> Var("Nat"),
-        "head" -> Var("Zero"),
-        "tail" -> Ap(Var("Cons"), MultiMap(
-          "A" -> Var("Nat"),
-          "head" -> Var("Zero"),
-          "tail" -> Ap(Var("Cons"), MultiMap(
-            "A" -> Var("Nat"),
-            "head" -> Var("Zero"),
-            "tail" -> Var("Null"))))))),
+      Ap(Var("cons_t"), MultiMap(
+        "A" -> Var("nat_t"),
+        "head" -> Var("zero_t"),
+        "tail" -> Ap(Var("cons_t"), MultiMap(
+          "A" -> Var("nat_t"),
+          "head" -> Var("zero_t"),
+          "tail" -> Ap(Var("cons_t"), MultiMap(
+            "A" -> Var("nat_t"),
+            "head" -> Var("zero_t"),
+            "tail" -> Var("null_t"))))))),
       0)
 
     val fn = Pretty.fromExp(
       Fn(
         args = MultiMap(
-          "x" -> Var("Nat"),
-          "y" -> Var("Nat")),
-        ret = Var("Nat"),
-        body = Var("Zero")),
+          "x" -> Var("nat_t"),
+          "y" -> Var("nat_t")),
+        ret = Var("nat_t"),
+        body = Var("zero_t")),
       0)
 
     val nestedFn = Pretty.fromExp(
       Fn(
         args = MultiMap(
-          "x" -> Var("Nat"),
-          "y" -> Var("Nat")),
+          "x" -> Var("nat_t"),
+          "y" -> Var("nat_t")),
         ret = Pi(MultiMap(
-          "x" -> Var("Nat"),
-          "y" -> Var("Nat")),
-          Var("Nat")),
+          "x" -> Var("nat_t"),
+          "y" -> Var("nat_t")),
+          Var("nat_t")),
         body = Fn(MultiMap(
-          "x" -> Var("Nat"),
-          "y" -> Var("Nat")),
-          Var("Nat"),
-          Var("Zero"))),
+          "x" -> Var("nat_t"),
+          "y" -> Var("nat_t")),
+          Var("nat_t"),
+          Var("zero_t"))),
       0)
 
     println(s"------")

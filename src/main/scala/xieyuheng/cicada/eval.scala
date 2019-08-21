@@ -56,12 +56,12 @@ object eval {
           result <- targetValue match {
             case sumType: SumTypeValue =>
               sumType.map.get(fieldName) match {
-                case Some(value) => Right(util.deepWalk(value, sumType.bind))
+                case Some(value) => Right(walk.deep(value, sumType.bind))
                 case None => Left(ErrorMsg(s"no field: ${fieldName}, on sumType: ${sumType}"))
               }
             case memberType: MemberTypeValue =>
               memberType.map.get(fieldName) match {
-                case Some(value) => Right(util.deepWalk(value, memberType.bind))
+                case Some(value) => Right(walk.deep(value, memberType.bind))
                 case None => Left(ErrorMsg(s"no field: ${fieldName}, on memberType: ${memberType}"))
               }
             case NeutralValue(neutral) =>
@@ -88,11 +88,11 @@ object eval {
       }
 
       case Ap(target, args) => {
-        eval(target, env).flatMap { targetValue =>
-          eval.yieldEnv(args, env).flatMap { argsValue =>
-            exe(targetValue, argsValue, env)
-          }
-        }
+        for {
+          targetValue <- eval(target, env)
+          argsValue <- eval.yieldEnv(args, env)
+          value <- exe(targetValue, argsValue, env)
+        } yield value
       }
     }
   }

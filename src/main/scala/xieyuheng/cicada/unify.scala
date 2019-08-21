@@ -2,7 +2,7 @@ package xieyuheng.cicada
 
 object unify {
   def apply(src: Value, tar: Value, bind: Bind, env: Env): Either[ErrorMsg, Bind] = {
-    (util.walk(src, bind), util.walk(tar, bind)) match {
+    (walk(src, bind), walk(tar, bind)) match {
       case (src, tar) if {
         src == tar
       } => {
@@ -122,8 +122,8 @@ object unify {
           .mkString("\n")
         Left(ErrorMsg(
           "fail to unify\n" ++
-            s"src: ${Pretty.fromValue(util.walk(src, bind), 0)}\n" ++
-            s"tar: ${Pretty.fromValue(util.walk(tar, bind), 0)}\n" ++
+            s"src: ${Pretty.fromValue(walk(src, bind), 0)}\n" ++
+            s"tar: ${Pretty.fromValue(walk(tar, bind), 0)}\n" ++
             s"bind: ${bindString}\n"))
       }
     }

@@ -29,10 +29,10 @@ object exe {
       case fn: FnValue =>
         for {
           bind <- unify.onMap(args, fn.args, Bind(), env)
-          newArgs = util.deepWalkForMap(fn.args, bind)
+          newArgs = walk.deepOnMap(fn.args, bind)
           value <- eval(fn.body, fn.env.extendByValueMap(newArgs))
           bind <- unify(value, fn.ret, bind, env)
-          newValue = util.deepWalk(value, bind)
+          newValue = walk.deep(value, bind)
         } yield newValue
 
       case neu: NeutralValue =>

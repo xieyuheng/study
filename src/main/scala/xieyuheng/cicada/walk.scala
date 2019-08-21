@@ -2,9 +2,9 @@ package xieyuheng.cicada
 
 import scala.annotation.tailrec
 
-object util {
+object walk {
   @tailrec
-  def walk(x: Value, bind: Bind): Value = {
+  def apply(x: Value, bind: Bind): Value = {
     x match {
       case t: TypeOfType => {
         val id = t.id
@@ -25,30 +25,30 @@ object util {
   }
 
   // TODO prune the bind
-  def deepWalk(x: Value, bind: Bind): Value = {
+  def deep(x: Value, bind: Bind): Value = {
     walk(x, bind) match {
       case t: TypeOfType =>
         t
       case t: ValueOfType =>
-        t.copy(t = deepWalk(t.t, bind))
+        t.copy(t = deep(t.t, bind))
       case memberType: MemberTypeValue =>
-        memberType.copy(map = deepWalkForMap(memberType.map, bind))
+        memberType.copy(map = deepOnMap(memberType.map, bind))
       case sumType: SumTypeValue =>
-        sumType.copy(map = deepWalkForMap(sumType.map, bind))
+        sumType.copy(map = deepOnMap(sumType.map, bind))
       case pi: PiValue =>
         pi.copy(
-          args = deepWalkForMap(pi.args, bind),
-          ret = deepWalk(pi.ret, bind))
+          args = deepOnMap(pi.args, bind),
+          ret = deep(pi.ret, bind))
       case fn: FnValue =>
         fn.copy(
-          args = deepWalkForMap(fn.args, bind),
-          ret = deepWalk(fn.ret, bind))
+          args = deepOnMap(fn.args, bind),
+          ret = deep(fn.ret, bind))
       case neu: NeutralValue =>
         neu
     }
   }
 
-  def deepWalkForMap(map: MultiMap[String, Value], bind: Bind): MultiMap[String, Value] = {
-    map.mapValues(deepWalk(_, bind))
+  def deepOnMap(map: MultiMap[String, Value], bind: Bind): MultiMap[String, Value] = {
+    map.mapValues(deep(_, bind))
   }
 }

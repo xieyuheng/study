@@ -75,7 +75,7 @@ object Pretty {
     level: Int,
     delimiter: String,
   ): String = {
-    val block = util.deepWalkForMap(map, bind)
+    val block = walk.deepOnMap(map, bind)
       .entries
       .map { case (name, value) =>
         s"${name}: ${fromValue(value, 0)}" }

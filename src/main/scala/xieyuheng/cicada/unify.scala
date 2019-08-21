@@ -1,5 +1,7 @@
 package xieyuheng.cicada
 
+import xieyuheng.cicada.pretty._
+
 object unify {
   def apply(src: Value, tar: Value, bind: Bind, env: Env): Either[ErrorMsg, Bind] = {
     (walk(src, bind), walk(tar, bind)) match {
@@ -117,14 +119,11 @@ object unify {
       }
 
       case _ => {
-        val bindString = bind
-          .map.view.mapValues { value => Pretty.Value(value) }
-          .mkString("\n")
         Left(ErrorMsg(
           "fail to unify\n" ++
-            s"src: ${Pretty.Value(walk(src, bind))}\n" ++
-            s"tar: ${Pretty.Value(walk(tar, bind))}\n" ++
-            s"bind: ${bindString}\n"))
+            s"src: ${prettyValue(walk(src, bind))}\n" ++
+            s"tar: ${prettyValue(walk(tar, bind))}\n" ++
+            s"bind: ${prettyBind(bind)}\n"))
       }
     }
   }

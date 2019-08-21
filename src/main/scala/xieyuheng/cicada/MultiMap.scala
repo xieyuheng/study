@@ -6,9 +6,11 @@ case class MultiMap[K, V](
   var valuesMap: Map[K, List[V]] = Map()
 
   entries.foreach { case (k, v) =>
-    valuesMap = valuesMap.updatedWith(k) {
-      case Some(values) => Some(v :: values)
-      case None => Some(List(v))
+    valuesMap = valuesMap.get(k) match {
+      case Some(values) =>
+        valuesMap + (k -> (v :: values))
+      case None =>
+        valuesMap + (k -> List(v))
     }
   }
 

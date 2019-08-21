@@ -1,12 +1,13 @@
 import org.scalatest._
 import xieyuheng.cicada._
+import xieyuheng.cicada.pretty._
 
-class PrettySpec extends FlatSpec with Matchers {
-  "Pretty" can "make Exp pretty" in {
+class prettySpec extends FlatSpec with Matchers {
+  "pretty" can "make Exp pretty" in {
 
-    val t = Pretty.Exp(Type())
+    val t = prettyExp(Type())
 
-    val threeZeros = Pretty.Exp(
+    val threeZeros = prettyExp(
       Ap(Var("cons_t"), MultiMap(
         "A" -> Var("nat_t"),
         "head" -> Var("zero_t"),
@@ -18,7 +19,7 @@ class PrettySpec extends FlatSpec with Matchers {
             "head" -> Var("zero_t"),
             "tail" -> Var("null_t"))))))))
 
-    val fn = Pretty.Exp(
+    val fn = prettyExp(
       Fn(
         args = MultiMap(
           "x" -> Var("nat_t"),
@@ -26,7 +27,7 @@ class PrettySpec extends FlatSpec with Matchers {
         ret = Var("nat_t"),
         body = Var("zero_t")))
 
-    val nestedFn = Pretty.Exp(
+    val nestedFn = prettyExp(
       Fn(
         args = MultiMap(
           "x" -> Var("nat_t"),

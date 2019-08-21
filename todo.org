@@ -1,16 +1,10 @@
-- dependence in the eval of args and ret
 - VecModule
+- dependence in the eval of args and ret
+- handle implicit args by losing unify.forMap
 - pre -- subtype relation
   - not just subtype relation
     because a value pre its type
 - check
-- syntax -- for testing only
-  - ap
-  - Mp
-  - dot
-  - string as Var
-  - [maybe] The -- for OfType
-- handle implicit args by losing unify.forMap
 - MemberTypeValue can be used as type
 * set, type, cat
 - what is the difference between set, type and cat ?

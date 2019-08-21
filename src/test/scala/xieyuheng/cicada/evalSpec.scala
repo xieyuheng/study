@@ -1,5 +1,6 @@
 import org.scalatest._
 import xieyuheng.cicada._
+import xieyuheng.cicada.dsl._
 
 class evalSpec extends FlatSpec with Matchers {
   "eval" should "eval Type to TypeOfType" in {
@@ -57,44 +58,30 @@ class evalSpec extends FlatSpec with Matchers {
   }
 
   val ListModule = Env()
-    .defType("List", MultiMap("A" -> Type()), Map(
-      "Null" -> MultiMap("A" -> Type()),
-      "Cons" -> MultiMap(
+    .defType("List", $("A" -> Type()), Map(
+      "Null" -> $("A" -> Type()),
+      "Cons" -> $(
         "A" -> Type(),
-        "head" -> OfType(Var("A")),
-        "tail" -> OfType(Ap(Var("List"), MultiMap("A" -> Var("A")))))))
+        "head" -> The("A"),
+        "tail" -> The(("List" ap $("A" -> "A"))))))
     .defExp("cdr", Fn(
-      args = MultiMap(
-        "list" -> OfType(Var("List"))),
-      ret = OfType(Var("List")),
-      body = Field(Var("list"), "tail")))
+      args = $(
+        "list" -> The("List")),
+      ret = The("List"),
+      body = "list" dot "tail"))
     .defFn("append",
-      args = MultiMap(
-        "ante" -> OfType(Var("List")),
-        "succ" -> OfType(Var("List"))),
-      ret = OfType(Var("List")),
-      body = Case(Var("ante"), MultiMap(
-        "Null" -> Var("succ"),
-        "Cons" -> Ap(Var("Cons"), MultiMap(
-          "A" -> Field(Var("ante"), "A"),
-          "head" -> Field(Var("ante"), "head"),
-          "tail" -> Ap(Var("append"), MultiMap(
-            "ante" -> Field(Var("ante"), "tail"),
-            "succ" -> Var("succ"))))))))
-
-  // .defFn("append",
-  //   args = Mp(
-  //     "ante" -> OfType("List"),
-  //     "succ" -> OfType("List")),
-  //   ret = OfType("List"),
-  //   body = Case("ante", Mp(
-  //     "Null" -> "succ",
-  //     "Cons" -> Ap("Cons", Mp(
-  //       "A" -> ("ante" dot "A"),
-  //       "head" -> ("ante" dot "head"),
-  //       "tail" -> Ap("append", Mp(
-  //         "ante" -> ("ante" dot "tail"),
-  //         "succ" -> "succ")))))))
+      args = $(
+        "ante" -> The("List"),
+        "succ" -> The("List")),
+      ret = The("List"),
+      body = Case("ante", $(
+        "Null" -> "succ",
+        "Cons" -> ("Cons" ap $(
+          "A" -> ("ante" dot "A"),
+          "head" -> ("ante" dot "head"),
+          "tail" -> ("append" ap $(
+            "ante" -> ("ante" dot "tail"),
+            "succ" -> "succ")))))))
 
   it should "eval ListModule" in {
     val module = ListModule.importAll(NatModule)
@@ -110,58 +97,56 @@ class evalSpec extends FlatSpec with Matchers {
     val zero = Var("Zero")
 
     val threeZeros =
-      Ap(Var("Cons"), MultiMap(
-        "A" -> Var("Nat"),
+      "Cons" ap $(
+        "A" -> "Nat",
         "head" -> zero,
-        "tail" -> Ap(Var("Cons"), MultiMap(
-          "A" -> Var("Nat"),
+        "tail" -> ("Cons" ap $(
+          "A" -> "Nat",
           "head" -> zero,
-          "tail" -> Ap(Var("Cons"), MultiMap(
-            "A" -> Var("Nat"),
+          "tail" -> ("Cons" ap $(
+            "A" -> "Nat",
             "head" -> zero,
-            "tail" -> Var("Null")))))))
+            "tail" -> "Null")))))
 
     pp(threeZeros, module)
 
-    val one = Ap(Var("Succ"), MultiMap("prev" -> zero))
+    val one = "Succ" ap $("prev" -> zero)
 
     val zeroAndOne =
-      Ap(Var("Cons"), MultiMap(
-        "A" -> Var("Nat"),
+      "Cons" ap $(
+        "A" -> "Nat",
         "head" -> zero,
-        "tail" -> Ap(Var("Cons"), MultiMap(
-          "A" -> Var("Nat"),
+        "tail" -> ("Cons" ap $(
+          "A" -> "Nat",
           "head" -> one,
-          "tail" -> Var("Null")))))
+          "tail" -> "Null")))
 
     pp(zeroAndOne, module)
 
-    pp(
-      Ap(Var("Cons"), MultiMap(
-        "A" -> Var("Nat"),
-        "head" -> Var("Zero"),
-        "tail" -> Var("Null"))),
+    pp("Cons" ap $(
+      "A" -> "Nat",
+      "head" -> "Zero",
+      "tail" -> "Null"),
       module)
 
-    pp(
-      Ap(Var("Cons"), MultiMap(
-        "A" -> Var("Nat"),
-        "head" -> Var("Zero"),
-        "tail" -> Ap(Var("Null"), MultiMap("A" -> Var("Nat"))))),
+    pp("Cons" ap $(
+        "A" -> "Nat",
+        "head" -> "Zero",
+        "tail" -> ("Null" ap $("A" -> "Nat"))),
       module)
 
-    val twoZeros = Ap(Var("cdr"), MultiMap(
-      "list" -> threeZeros))
+    val twoZeros = "cdr" ap $(
+      "list" -> threeZeros)
 
-    val oneZero = Ap(Var("cdr"), MultiMap(
-      "list" -> twoZeros))
+    val oneZero = "cdr" ap $(
+      "list" -> twoZeros)
 
     pp(twoZeros, module)
     pp(oneZero, module)
 
-    pp(Ap(Var("append"), MultiMap(
+    pp("append" ap $(
       "ante" -> threeZeros,
-      "succ" -> threeZeros)),
+      "succ" -> threeZeros),
       module)
   }
 }

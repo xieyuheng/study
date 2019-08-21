@@ -24,7 +24,7 @@ object eval {
         Right(TypeOfType(Id()))
       }
 
-      case OfType(t) => {
+      case The(t) => {
         for {
           t <- eval(t, env)
         } yield ValueOfType(Id(), t)

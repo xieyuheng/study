@@ -50,7 +50,7 @@ object Pretty {
         name
       case Type() =>
         "Type"
-      case OfType(t) =>
+      case The(t) =>
         s"of_type(${fromExp(t, 0)})"
       case Case(target, map) =>
         val mapString = maybeNewline(fromExpMap(map, 1))

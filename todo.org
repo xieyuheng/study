@@ -10,7 +10,7 @@
   - not just subtype relation
     because a value pre its type
 - check
-- MemberTypeValue can be used as type
+- [test] MemberTypeValue can be used as type, just by using `The`
 * set, type, cat
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

@@ -1,4 +1,4 @@
-- VecModule
+- .defType merge sumType fields to memberType
 - dependence in the eval of args and ret
 - handle implicit args by losing unify.forMap
 - pre -- subtype relation

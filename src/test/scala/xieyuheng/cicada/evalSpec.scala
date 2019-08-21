@@ -43,18 +43,18 @@ class evalSpec extends FlatSpec with Matchers {
   }
 
   val NatModule = Env()
-    .defType("Nat", MultiMap(), Map(
-      "Zero" -> MultiMap(),
-      "Succ" -> MultiMap("prev" -> Var("Nat"))))
+    .defType("Nat", $(), Map(
+      "Zero" -> $(),
+      "Succ" -> $("prev" -> "Nat")))
 
   it should "eval NatModule" in {
     val module = NatModule
 
-    pp(Var("Nat"), module)
-    pp(Var("Zero"), module)
-    pp(Var("Succ"), module)
-    pp(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), module)
-    pp(Field(Ap(Var("Succ"), MultiMap("prev" -> Var("Zero"))), "prev"), module)
+    pp("Nat", module)
+    pp("Zero", module)
+    pp("Succ", module)
+    pp("Succ" ap $("prev" -> "Zero"), module)
+    pp("Succ" ap $("prev" -> "Zero") dot "prev", module)
   }
 
   val ListModule = Env()
@@ -63,7 +63,7 @@ class evalSpec extends FlatSpec with Matchers {
       "Cons" -> $(
         "A" -> Type(),
         "head" -> The("A"),
-        "tail" -> The(("List" ap $("A" -> "A"))))))
+        "tail" -> The("List" ap $("A" -> "A")))))
     .defExp("cdr", Fn(
       args = $(
         "list" -> The("List")),
@@ -149,4 +149,21 @@ class evalSpec extends FlatSpec with Matchers {
       "succ" -> threeZeros),
       module)
   }
+
+  val VecModule = Env().importAll(NatModule)
+    .defType("Vec", $(
+      "A" -> Type(),
+      "length" -> The("Nat")),
+      Map(
+        "NullVec" -> $(
+          "A" -> Type(),
+          "length" -> The("Nat"),
+          "length" -> "Zero"),
+        "ConsVec" -> $(
+          "A" -> Type(),
+          "length" -> The("Nat"),
+          "n" -> The("Nat"),
+          "length" -> ("Succ" ap $("prev" -> "n")),
+          "head" -> The("A"),
+          "tail" -> The("Vec" ap $("A" -> "A", "length" -> "n")))))
 }

@@ -16,3 +16,8 @@ scalacOptions ++= Seq(
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.8" % "test",
 )
+
+enablePlugins(JavaAppPackaging)
+resolvers += Resolver.sonatypeRepo("releases")
+addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
+addCompilerPlugin("org.typelevel" % "kind-projector" % "0.10.3" cross CrossVersion.binary)

@@ -1,4 +1,3 @@
-- case class Bind
 - dependence in the eval of args and ret
 - VecModule
 - pre -- subtype relation

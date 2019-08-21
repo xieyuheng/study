@@ -1,8 +1,8 @@
 package xieyuheng.cicada
 
-case class Env(val defMap: Map[String, Def] = Map()) {
+case class Env(map: Map[String, Def] = Map()) {
   def get(name: String): Option[Def] = {
-    defMap.get(name)
+    map.get(name)
   }
 
   def contains(name: String): Boolean = {
@@ -10,7 +10,7 @@ case class Env(val defMap: Map[String, Def] = Map()) {
   }
 
   def extend(kv: (String, Def)): Env = {
-    Env(defMap + kv)
+    Env(map + kv)
   }
 
   def extendByValueMap(valueMap: MultiMap[String, Value]): Env = {
@@ -76,7 +76,7 @@ case class Env(val defMap: Map[String, Def] = Map()) {
   }
 
   def importAll(that: Env): Env = {
-    that.defMap.foldLeft(this) { case (env, (name, value)) =>
+    that.map.foldLeft(this) { case (env, (name, value)) =>
       env.get(name) match {
         case Some(oldValue) =>
           println(s"- [WARN] re-defining name: ${name} to: ${value}")
@@ -84,14 +84,6 @@ case class Env(val defMap: Map[String, Def] = Map()) {
         case None => {}
       }
       env.extend(name -> value)
-    }
-  }
-}
-
-object Env {
-  def merge(seq: Seq[Env]): Env = {
-    seq.foldLeft(Env()) { case (env, e) =>
-      env.importAll(e)
     }
   }
 }

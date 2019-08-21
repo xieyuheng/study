@@ -10,47 +10,47 @@ object unify {
       }
 
       case (t1: TypeOfType, t2: TypeOfType) => {
-        Right(bind + (t1.id -> t2))
+        Right(bind.extend(t1.id -> t2))
       }
 
       case (sumType: SumTypeValue, t: TypeOfType) => {
-        Right(bind + (t.id -> sumType))
+        Right(bind.extend(t.id -> sumType))
       }
 
       case (t: TypeOfType, sumType: SumTypeValue) => {
-        Right(bind + (t.id -> sumType))
+        Right(bind.extend(t.id -> sumType))
       }
 
       case (memberType: MemberTypeValue, t: TypeOfType) => {
         for {
           sumType <- eval(Var(memberType.superName), env)
-        } yield bind + (t.id -> sumType)
+        } yield bind.extend(t.id -> sumType)
       }
 
       case (t: TypeOfType, memberType: MemberTypeValue) => {
         for {
           sumType <- eval(Var(memberType.superName), env)
-        } yield bind + (t.id -> sumType)
+        } yield bind.extend(t.id -> sumType)
       }
 
       case (pi: PiValue, t: TypeOfType) => {
-        Right(bind + (t.id -> pi))
+        Right(bind.extend(t.id -> pi))
       }
 
       case (t: TypeOfType, pi: PiValue) => {
-        Right(bind + (t.id -> pi))
+        Right(bind.extend(t.id -> pi))
       }
 
       case (value, ValueOfType(id, t)) => {
         for {
           bind <- unify(value, t, bind, env)
-        } yield bind + (id -> value)
+        } yield bind.extend(id -> value)
       }
 
       case (ValueOfType(id, t), value) => {
         for {
           bind <- unify(value, t, bind, env)
-        } yield bind + (id -> value)
+        } yield bind.extend(id -> value)
       }
 
       case (fn: FnValue, pi: PiValue) => {
@@ -118,7 +118,7 @@ object unify {
 
       case _ => {
         val bindString = bind
-          .view.mapValues { value => Pretty.fromValue(value, 0) }
+          .map.view.mapValues { value => Pretty.fromValue(value, 0) }
           .mkString("\n")
         Left(ErrorMsg(
           "fail to unify\n" ++
@@ -161,8 +161,9 @@ object unify {
     bind2: Bind,
     env: Env,
   ): Either[ErrorMsg, Bind] = {
-    val initBind = bind1 ++ bind2.filterNot { case (id, _value) =>
-      bind1.keys.toSet.contains(id) }
+    val missingInBind1 = bind2.filterNot { case (id, _value) => bind1.keys.toSet.contains(id) }
+
+    val initBind = bind1.extendByBind(missingInBind1)
 
     assert(initBind.size >= bind1.size)
 
@@ -180,7 +181,7 @@ object unify {
 
     bind2
       .filter { case (id, _value) => bind1.keys.toSet.contains(id) }
-      .foldLeft(initResult) { case (result, (id, v)) =>
+      .map.foldLeft(initResult) { case (result, (id, v)) =>
         result.flatMap { bind => updateBind(bind, id, v) }
       }
   }

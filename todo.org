@@ -12,6 +12,8 @@
   - dot
   - string as Var
   - [maybe] the -- for OfType
+- handle implicit args by losing unify.forMap
+- MemberTypeValue can be used as type
 * set, type, cat
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

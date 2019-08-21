@@ -3,10 +3,6 @@ package xieyuheng.cicada
 import scala.annotation.tailrec
 
 object util {
-  def newId(): Id = {
-    java.util.UUID.randomUUID().toString
-  }
-
   @tailrec
   def walk(x: Value, bind: Bind): Value = {
     x match {

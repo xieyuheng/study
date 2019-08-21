@@ -1,5 +1,4 @@
 - case class Bind
-- case class Id
 - dependence in the eval of args and ret
 - VecModule
 - pre -- subtype relation
@@ -11,7 +10,7 @@
   - Mp
   - dot
   - string as Var
-  - [maybe] the -- for OfType
+  - [maybe] The -- for OfType
 - handle implicit args by losing unify.forMap
 - MemberTypeValue can be used as type
 * set, type, cat

@@ -17,16 +17,18 @@ class evalSpec extends FlatSpec with Matchers {
   }
 
   it should "eval defined Var to value" in {
+    val xId = Id("x")
+    val yId = Id("y")
     val env = Env()
-      .defValue("x", TypeOfType("#x"))
-      .defValue("y", TypeOfType("#y"))
+      .defValue("x", TypeOfType(xId))
+      .defValue("y", TypeOfType(yId))
 
     for {
       x <- eval(Var("x"), env)
       y <- eval(Var("y"), env)
     } {
-      assert(x == TypeOfType("#x"))
-      assert(y == TypeOfType("#y"))
+      assert(x == TypeOfType(xId))
+      assert(y == TypeOfType(yId))
     }
   }
 
@@ -81,16 +83,16 @@ class evalSpec extends FlatSpec with Matchers {
             "succ" -> Var("succ"))))))))
 
   // .defFn("append",
-  //   args = $(
+  //   args = Mp(
   //     "ante" -> OfType("List"),
   //     "succ" -> OfType("List")),
   //   ret = OfType("List"),
-  //   body = Case("ante", $(
+  //   body = Case("ante", Mp(
   //     "Null" -> "succ",
-  //     "Cons" -> Ap("Cons", $(
+  //     "Cons" -> Ap("Cons", Mp(
   //       "A" -> ("ante" dot "A"),
   //       "head" -> ("ante" dot "head"),
-  //       "tail" -> Ap("append", $(
+  //       "tail" -> Ap("append", Mp(
   //         "ante" -> ("ante" dot "tail"),
   //         "succ" -> "succ")))))))
 

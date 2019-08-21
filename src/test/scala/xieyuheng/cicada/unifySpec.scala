@@ -3,17 +3,17 @@ import xieyuheng.cicada._
 
 class unifySpec extends FlatSpec with Matchers {
   "unify" should "not make bind weaker" in {
+    val id = Id()
     val bind = Map(
-      "2bda84b0-dd85-43c9-a94c-c00df82c9f9f" ->
-        SumTypeValue(
-          "Nat",
-          MultiMap(List()),
-          List("Zero", "Succ"),
-          Map()))
+      id -> SumTypeValue(
+        "Nat",
+        MultiMap(List()),
+        List("Zero", "Succ"),
+        Map()))
 
     val srcValue = MemberTypeValue("Zero", MultiMap(List()), "List", Map())
 
-    val tarValue = TypeOfType("2bda84b0-dd85-43c9-a94c-c00df82c9f9f")
+    val tarValue = TypeOfType(id)
 
     unify(srcValue, tarValue, bind, Env()) match {
       case Right(newBind) =>

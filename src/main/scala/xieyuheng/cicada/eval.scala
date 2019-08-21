@@ -21,13 +21,13 @@ object eval {
       }
 
       case Type() => {
-        Right(TypeOfType(util.newId()))
+        Right(TypeOfType(Id("type")))
       }
 
       case OfType(t) => {
         for {
           t <- eval(t, env)
-        } yield ValueOfType(util.newId(), t)
+        } yield ValueOfType(Id("of_type"), t)
       }
 
       case Case(target, map) => {

@@ -20,7 +20,7 @@ object Pretty {
     if (string.trim.isEmpty) {
       ""
     } else {
-      string ++ "\n"
+      "\n" ++ string ++ "\n"
     }
   }
 
@@ -54,14 +54,14 @@ object Pretty {
         s"the(${Pretty.Exp(t, 0)})"
       case Case(target, map) =>
         val mapString = maybeNewline(Pretty.ExpMap(map, 1))
-        s"${Pretty.Exp(target, 0)} case {\n${mapString}}"
+        s"${Pretty.Exp(target, 0)} case {${mapString}}"
       case Field(target, fieldName) =>
         s"${Pretty.Exp(target, 0)}.${fieldName}"
       case Pi(args, ret) =>
         s"pi (${Pretty.ExpArgs(args, 0)}): ${Pretty.Exp(ret, 0)}"
       case Fn(args, ret, body) =>
         val bodyString = maybeNewline(Pretty.Exp(body, 1))
-        s"fn (${Pretty.ExpArgs(args, 0)}): ${Pretty.Exp(ret, 0)} = {\n${bodyString}}"
+        s"fn (${Pretty.ExpArgs(args, 0)}): ${Pretty.Exp(ret, 0)} = {${bodyString}}"
       case Ap(target, args) =>
         s"${Pretty.Exp(target, 0)}(${Pretty.ExpArgs(args, 0)})"
     }
@@ -98,7 +98,7 @@ object Pretty {
         name
       case CaseNeutral(target, map) =>
         val mapString = maybeNewline(Pretty.ValueMap(map, bind, 1))
-        s"${Pretty.Neutral(target, bind, 0)} case {\n${mapString}}"
+        s"${Pretty.Neutral(target, bind, 0)} case {${mapString}}"
       case FieldNeutral(target, fieldName) =>
         s"${Pretty.Neutral(target, bind, 0)}.${fieldName}"
       case ApNeutral(target, args) =>
@@ -117,21 +117,45 @@ object Pretty {
       case SumTypeValue(name, map, memberNames, bind) =>
         val memberNamesString = maybeNewline(memberNames.mkString(", "))
         val mapString = maybeNewline(Pretty.ValueMap(map, bind, 1))
-        s"${name} {\n${mapString}}"
+        s"${name} {${mapString}}"
       case MemberTypeValue(name, map, superName, bind) =>
         val mapString = maybeNewline(Pretty.ValueMap(map, bind, 1))
-        s"${name} {\n${mapString}}"
+        s"${name} {${mapString}}"
       case PiValue(args, ret) =>
         val bind = Bind()
         s"pi (${Pretty.ValueArgs(args, bind, 0)}): ${Pretty.Value(ret, 0)}"
       case FnValue(args, ret, body, env) =>
         val bind = Bind()
         val bodyString = maybeNewline(Pretty.Exp(body, 1))
-        s"fn (${Pretty.ValueArgs(args, bind, 0)}): ${Pretty.Value(ret, 0)} = {\n${bodyString}}"
+        s"fn (${Pretty.ValueArgs(args, bind, 0)}): ${Pretty.Value(ret, 0)} = {${bodyString}}"
       case NeutralValue(neutral) =>
         val bind = Bind()
         val neutralString = maybeNewline(Pretty.Neutral(neutral, bind, 1))
-        s"neutral {\n${neutralString}}"
+        s"neutral {${neutralString}}"
+    }
+
+    addIndentToBlock(block, level)
+  }
+
+  def Def(definition: Def, level: Int): String = {
+    val block = definition match {
+      case DefineValue(name, value) =>
+        s"define_value ${name} = ${Pretty.Value(value, 0)}"
+
+      case DefineMemberType(name, map, superName) =>
+        val mapString = maybeNewline(Pretty.ExpMap(map, 1))
+        s"define_member_type ${name} <: ${superName} {${mapString}}"
+
+      case DefineSumType(name, map, memberNames) =>
+        val mapString = maybeNewline(Pretty.ExpMap(map, 1))
+        val memberNamesString = memberNames.mkString(", ")
+        s"define_sum_type ${name} :> { ${memberNamesString} } {${mapString}}"
+
+      case DefineFn(name, args, ret, body) =>
+        val argsString = Pretty.ExpArgs(args, 0)
+        val retString = Pretty.Exp(ret, 0)
+        val bodyString = maybeNewline(Pretty.Exp(body, 1))
+        s"define_fn ${name}(${argsString}): ${retString} = {${bodyString}}"
     }
 
     addIndentToBlock(block, level)

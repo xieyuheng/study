@@ -45,6 +45,8 @@ object prelude {
 
   .importAll(nat)
 
+  .importAll(nat)
+
   .defType("vec_t", $(
     "A" -> Type(),
     "length" -> The("nat_t")),

@@ -1,4 +1,3 @@
-- Pretty.Def
 - fix importAll
   be able to config eval
   - for example

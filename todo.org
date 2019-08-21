@@ -1,22 +1,25 @@
+- nat toInt for testing
 - list_length
+- list_map
+- vec_length
+- vec_map
 - vec_append
 - pre -- subtype relation
   - not just subtype relation
     because a value pre its type
 - check
 - [test] MemberTypeValue can be used as type, just by using `The`
+- value.toJson
+- compile to js with runtime type information
+  - this means keep Value serde-able
+    - Value includes FnValue which contains Exp
+      this Exp is also serde-able
+* syntax
+- renew parsing-tech
+- lexing/
+- parsing/
 * set, type, cat
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation
   - type: ==, member relation
   - cat: ==, |
-* serde -- lang-server
-- compile to js with runtime type information
-  - this means keep Value serde-able
-    - Value includes FnValue which contains Exp
-      this Exp is also serde-able
-  - { type: { field: <type> }, field: <value> }
-* syntax
-- renew parsing-tech
-- lexing/
-- parsing/

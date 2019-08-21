@@ -33,7 +33,7 @@ class evalSpec extends FlatSpec with Matchers {
     }
   }
 
-  def pp(exp: Exp, env: Env): Unit = {
+  def pp(exp: Exp)(implicit env: Env): Unit = {
     eval(exp, env) match {
       case Right(value) =>
         println(s"=> ${Pretty.fromValue(value, 0)}")
@@ -43,27 +43,29 @@ class evalSpec extends FlatSpec with Matchers {
   }
 
   val NatModule = Env()
-    .defType("Nat", $(), Map(
-      "Zero" -> $(),
-      "Succ" -> $("prev" -> "Nat")))
+    .defType("Nat", $(),
+      members = $(
+        "Zero" -> $(),
+        "Succ" -> $("prev" -> "Nat")))
 
   it should "eval NatModule" in {
-    val module = NatModule
+    implicit val module = NatModule
 
-    pp("Nat", module)
-    pp("Zero", module)
-    pp("Succ", module)
-    pp("Succ" ap $("prev" -> "Zero"), module)
-    pp("Succ" ap $("prev" -> "Zero") dot "prev", module)
+    pp("Nat")
+    pp("Zero")
+    pp("Succ")
+    pp("Succ" ap $("prev" -> "Zero"))
+    pp("Succ" ap $("prev" -> "Zero") dot "prev")
   }
 
   val ListModule = Env()
-    .defType("List", $("A" -> Type()), Map(
-      "Null" -> $("A" -> Type()),
-      "Cons" -> $(
-        "A" -> Type(),
-        "head" -> The("A"),
-        "tail" -> The("List" ap $("A" -> "A")))))
+    .defType("List", $("A" -> Type()),
+      members = $(
+        "Null" -> $("A" -> Type()),
+        "Cons" -> $(
+          "A" -> Type(),
+          "head" -> The("A"),
+          "tail" -> The("List" ap $("A" -> "A")))))
     .defExp("cdr", Fn(
       args = $(
         "list" -> The("List")),
@@ -84,15 +86,15 @@ class evalSpec extends FlatSpec with Matchers {
             "succ" -> "succ")))))))
 
   it should "eval ListModule" in {
-    val module = ListModule.importAll(NatModule)
+    implicit val module = ListModule.importAll(NatModule)
 
-    pp(Var("List"), module)
-    pp(Var("Null"), module)
-    pp(Var("Cons"), module)
+    pp(Var("List"))
+    pp(Var("Null"))
+    pp(Var("Cons"))
 
-    pp(Var("Nat"), module)
-    pp(Var("Zero"), module)
-    pp(Var("Succ"), module)
+    pp(Var("Nat"))
+    pp(Var("Zero"))
+    pp(Var("Succ"))
 
     val zero = Var("Zero")
 
@@ -108,7 +110,7 @@ class evalSpec extends FlatSpec with Matchers {
             "head" -> zero,
             "tail" -> "Null")))))
 
-    pp(threeZeros, module)
+    pp(threeZeros)
 
     val one = "Succ" ap $("prev" -> zero)
 
@@ -121,19 +123,17 @@ class evalSpec extends FlatSpec with Matchers {
           "head" -> one,
           "tail" -> "Null")))
 
-    pp(zeroAndOne, module)
+    pp(zeroAndOne)
 
     pp("Cons" ap $(
       "A" -> "Nat",
       "head" -> "Zero",
-      "tail" -> "Null"),
-      module)
+      "tail" -> "Null"))
 
     pp("Cons" ap $(
-        "A" -> "Nat",
-        "head" -> "Zero",
-        "tail" -> ("Null" ap $("A" -> "Nat"))),
-      module)
+      "A" -> "Nat",
+      "head" -> "Zero",
+      "tail" -> ("Null" ap $("A" -> "Nat"))))
 
     val twoZeros = "cdr" ap $(
       "list" -> threeZeros)
@@ -141,20 +141,19 @@ class evalSpec extends FlatSpec with Matchers {
     val oneZero = "cdr" ap $(
       "list" -> twoZeros)
 
-    pp(twoZeros, module)
-    pp(oneZero, module)
+    pp(twoZeros)
+    pp(oneZero)
 
     pp("append" ap $(
       "ante" -> threeZeros,
-      "succ" -> threeZeros),
-      module)
+      "succ" -> threeZeros))
   }
 
   val VecModule = Env().importAll(NatModule)
     .defType("Vec", $(
       "A" -> Type(),
       "length" -> The("Nat")),
-      Map(
+      members = $(
         "NullVec" -> $(
           "A" -> Type(),
           "length" -> The("Nat"),
@@ -166,4 +165,12 @@ class evalSpec extends FlatSpec with Matchers {
           "length" -> ("Succ" ap $("prev" -> "n")),
           "head" -> The("A"),
           "tail" -> The("Vec" ap $("A" -> "A", "length" -> "n")))))
+
+  it should "eval VecModule" in {
+    implicit val module = VecModule
+
+    pp("Vec")
+    pp("NullVec")
+    pp("ConsVec")
+  }
 }

@@ -34,6 +34,8 @@ case class MultiMap[K, V](
     }
   }
 
+  def keys = valuesMap.keys
+
   def mapValues[A](f: V => A): MultiMap[K, A] =
     MultiMap(entries.map { case (k, v) => (k, f(v)) })
 

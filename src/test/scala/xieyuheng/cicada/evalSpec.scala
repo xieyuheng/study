@@ -34,35 +34,26 @@ class evalSpec extends FlatSpec with Matchers {
     }
   }
 
-  def repl(exp: Exp)(implicit env: Env): Unit = {
-    eval(exp, env) match {
-      case Right(value) =>
-        println(s"=> ${Pretty.fromValue(value, 0)}")
-      case Left(errorMsg) =>
-        println(s"?> ${errorMsg}")
-    }
-  }
-
   it should "eval prelude.nat" in {
     implicit val module = prelude.nat
 
-    repl("Nat")
-    repl("Zero")
-    repl("Succ")
-    repl("Succ" ap $("prev" -> "Zero"))
-    repl("Succ" ap $("prev" -> "Zero") dot "prev")
+    ep("Nat")
+    ep("Zero")
+    ep("Succ")
+    ep("Succ" ap $("prev" -> "Zero"))
+    ep("Succ" ap $("prev" -> "Zero") dot "prev")
   }
 
   it should "eval prelude.list" in {
     implicit val module = prelude.list.importAll(prelude.nat)
 
-    repl("List")
-    repl("Null")
-    repl("Cons")
+    ep("List")
+    ep("Null")
+    ep("Cons")
 
-    repl("Nat")
-    repl("Zero")
-    repl("Succ")
+    ep("Nat")
+    ep("Zero")
+    ep("Succ")
 
     val zero: Exp = "Zero"
 
@@ -78,7 +69,7 @@ class evalSpec extends FlatSpec with Matchers {
             "head" -> zero,
             "tail" -> "Null")))))
 
-    repl(threeZeros)
+    ep(threeZeros)
 
     val one = "Succ" ap $("prev" -> zero)
 
@@ -91,14 +82,14 @@ class evalSpec extends FlatSpec with Matchers {
           "head" -> one,
           "tail" -> "Null")))
 
-    repl(zeroAndOne)
+    ep(zeroAndOne)
 
-    repl("Cons" ap $(
+    ep("Cons" ap $(
       "A" -> "Nat",
       "head" -> "Zero",
       "tail" -> "Null"))
 
-    repl("Cons" ap $(
+    ep("Cons" ap $(
       "A" -> "Nat",
       "head" -> "Zero",
       "tail" -> ("Null" ap $("A" -> "Nat"))))
@@ -109,10 +100,10 @@ class evalSpec extends FlatSpec with Matchers {
     val oneZero = "cdr" ap $(
       "list" -> twoZeros)
 
-    repl(twoZeros)
-    repl(oneZero)
+    ep(twoZeros)
+    ep(oneZero)
 
-    repl("areplend" ap $(
+    ep("aepend" ap $(
       "ante" -> threeZeros,
       "succ" -> threeZeros))
   }
@@ -120,8 +111,8 @@ class evalSpec extends FlatSpec with Matchers {
   it should "eval prelude.vec" in {
     implicit val module = prelude.vec
 
-    repl("Vec")
-    repl("NullVec")
-    repl("ConsVec")
+    ep("Vec")
+    ep("NullVec")
+    ep("ConsVec")
   }
 }

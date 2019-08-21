@@ -1,5 +1,7 @@
+- list_append
 - .defType merge sumType fields to memberType
 - dependence in the eval of args and ret
+- vec_append
 - handle implicit args by losing unify.forMap
 - pre -- subtype relation
   - not just subtype relation

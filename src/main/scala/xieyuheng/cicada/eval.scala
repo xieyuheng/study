@@ -41,7 +41,7 @@ object eval {
               }
             case NeutralValue(neutral) =>
               for {
-                map <- eval.yieldEnv(map, env)
+                map <- eval.onMap(map, env)
               } yield NeutralValue(CaseNeutral(neutral, map))
             case _ =>
               Left(ErrorMsg("targetValue of Field should be MemberTypeValue or NeutralValue, " +
@@ -75,14 +75,14 @@ object eval {
 
       case Pi(args, ret) => {
         for {
-          args <- eval.yieldEnv(args, env)
+          (args, env) <- eval.yieldEnv(args, env)
           ret <- eval(ret, env)
         } yield PiValue(args, ret)
       }
 
       case Fn(args, ret, body) => {
         for {
-          args <- eval.yieldEnv(args, env)
+          (args, env) <- eval.yieldEnv(args, env)
           ret <- eval(ret, env)
         } yield FnValue(args, ret, body, env)
       }
@@ -90,14 +90,14 @@ object eval {
       case Ap(target, args) => {
         for {
           targetValue <- eval(target, env)
-          argsValue <- eval.yieldEnv(args, env)
+          argsValue <- eval.onMap(args, env)
           value <- exe(targetValue, argsValue, env)
         } yield value
       }
     }
   }
 
-  def yieldEnv(
+  def onMap(
     map: MultiMap[String, Exp],
     env: Env,
   ): Either[ErrorMsg, MultiMap[String, Value]] = {
@@ -109,13 +109,55 @@ object eval {
       name: String,
       exp: Exp,
     ): Either[ErrorMsg, MultiMap[String, Value]] = {
-      eval(exp, env).flatMap { value =>
-        Right(map.update(name -> value))
-      }
+      for {
+        value <- eval(exp, env)
+      } yield map.update(name -> value)
     }
 
     map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
-      result.flatMap { valueMap => updateValueMap(valueMap, name, exp) }
+      result.flatMap { case (valueMap) => updateValueMap(valueMap, name, exp) }
+    }
+  }
+
+  /**
+    * to use pattern match on Either[ErrorMsg, A]
+    * in for block
+    */
+  implicit class EitherWithFilter[A](self: Either[ErrorMsg, A]) {
+    def withFilter(p: A => Boolean): Either[ErrorMsg, A] =
+      self match {
+        case Right(value) => {
+          if (p(value)) {
+            Right(value)
+          } else {
+            Left(ErrorMsg(s"filtered out: ${value}, by ${p}"))
+          }
+        }
+        case Left(error) =>
+          Left(error)
+      }
+  }
+
+  def yieldEnv(
+    map: MultiMap[String, Exp],
+    env: Env,
+  ): Either[ErrorMsg, (MultiMap[String, Value], Env)] = {
+    val initResult: Either[ErrorMsg, (MultiMap[String, Value], Env)] =
+      Right(MultiMap(), env)
+
+    def updateValueMap(
+      map: MultiMap[String, Value],
+      name: String,
+      exp: Exp,
+      env: Env,
+    ): Either[ErrorMsg, (MultiMap[String, Value], Env)] = {
+      for {
+        value <- eval(exp, env)
+      } yield (map.update(name -> value), env.defValue(name, value))
+    }
+
+    map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
+      result.flatMap { case (valueMap, env) => updateValueMap(valueMap, name, exp, env) }
     }
   }
 

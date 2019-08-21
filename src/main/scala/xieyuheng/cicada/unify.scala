@@ -56,7 +56,7 @@ object unify {
       case (fn: FnValue, pi: PiValue) => {
         for {
           /** contravariant at args */
-          bind <- onMap(pi.args, fn.args, bind, env)
+          bind <- unify.onMap(pi.args, fn.args, bind, env)
           bind <- unify(fn.ret, pi.ret, bind, env)
         } yield bind
       }
@@ -64,7 +64,7 @@ object unify {
       case (pi: PiValue, fn: FnValue) => {
         for {
           /** contravariant at args */
-          bind <- onMap(pi.args, fn.args, bind, env)
+          bind <- unify.onMap(pi.args, fn.args, bind, env)
           bind <- unify(fn.ret, pi.ret, bind, env)
         } yield bind
       }
@@ -73,9 +73,9 @@ object unify {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind <- onBind(memberType.bind, bind, env)
-          bind <- onBind(sumType.bind, bind, env)
-          bind <- onMap(memberType.map, sumType.map, bind, env)
+          bind <- unify.onBind(memberType.bind, bind, env)
+          bind <- unify.onBind(sumType.bind, bind, env)
+          bind <- unify.onMap(memberType.map, sumType.map, bind, env)
         } yield bind
       }
 
@@ -83,9 +83,9 @@ object unify {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
-          bind <- onBind(memberType.bind, bind, env)
-          bind <- onBind(sumType.bind, bind, env)
-          bind <- onMap(memberType.map, sumType.map, bind, env)
+          bind <- unify.onBind(memberType.bind, bind, env)
+          bind <- unify.onBind(sumType.bind, bind, env)
+          bind <- unify.onMap(memberType.map, sumType.map, bind, env)
         } yield bind
       }
 
@@ -93,9 +93,9 @@ object unify {
         src.name == tar.name
       } => {
         for {
-          bind <- onBind(src.bind, bind, env)
-          bind <- onBind(tar.bind, bind, env)
-          bind <- onMap(src.map, tar.map, bind, env)
+          bind <- unify.onBind(src.bind, bind, env)
+          bind <- unify.onBind(tar.bind, bind, env)
+          bind <- unify.onMap(src.map, tar.map, bind, env)
         } yield bind
       }
 
@@ -103,15 +103,15 @@ object unify {
         src.name == tar.name
       } => {
         for {
-          bind <- onBind(src.bind, bind, env)
-          bind <- onBind(tar.bind, bind, env)
-          bind <- onMap(src.map, tar.map, bind, env)
+          bind <- unify.onBind(src.bind, bind, env)
+          bind <- unify.onBind(tar.bind, bind, env)
+          bind <- unify.onMap(src.map, tar.map, bind, env)
         } yield bind
       }
 
       case (src: PiValue, tar: PiValue) => {
         for {
-          bind <- onMap(tar.args, src.args, bind, env)
+          bind <- unify.onMap(tar.args, src.args, bind, env)
           bind <- unify(src.ret, tar.ret, bind, env)
         } yield bind
       }

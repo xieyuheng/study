@@ -79,9 +79,9 @@ case class Env(map: Map[String, Def] = Map()) {
     that.map.foldLeft(this) { case (env, (name, newDef)) =>
       env.get(name) match {
         case Some(oldDef) =>
-          println(s"- [WARN] re-defining: ${newDef}")
+          println(s"- [warn] redefining: ${newDef}")
           println(s"  old definition: ${oldDef}")
-          // println(s"- [WARN] re-defining: ${Pretty.Def(newDef, 0)}")
+          // println(s"- [warn] redefining: ${Pretty.Def(newDef, 0)}")
           // println(s"  old definition: ${Pretty.Def(oldDef, 0)}")
         case None => {}
       }

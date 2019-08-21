@@ -20,20 +20,21 @@ class evalSpec extends FlatSpec with Matchers {
   it should "eval defined Var to value" in {
     val xId = Id("x")
     val yId = Id("y")
+
     val env = Env()
       .defValue("x", TypeOfType(xId))
       .defValue("y", TypeOfType(yId))
 
     for {
-      x <- eval(Var("x"), env)
-      y <- eval(Var("y"), env)
+      x <- eval("x", env)
+      y <- eval("y", env)
     } {
       assert(x == TypeOfType(xId))
       assert(y == TypeOfType(yId))
     }
   }
 
-  def pp(exp: Exp)(implicit env: Env): Unit = {
+  def repl(exp: Exp)(implicit env: Env): Unit = {
     eval(exp, env) match {
       case Right(value) =>
         println(s"=> ${Pretty.fromValue(value, 0)}")
@@ -42,61 +43,28 @@ class evalSpec extends FlatSpec with Matchers {
     }
   }
 
-  val NatModule = Env()
-    .defType("Nat", $(),
-      members = $(
-        "Zero" -> $(),
-        "Succ" -> $("prev" -> "Nat")))
+  it should "eval prelude.nat" in {
+    implicit val module = prelude.nat
 
-  it should "eval NatModule" in {
-    implicit val module = NatModule
-
-    pp("Nat")
-    pp("Zero")
-    pp("Succ")
-    pp("Succ" ap $("prev" -> "Zero"))
-    pp("Succ" ap $("prev" -> "Zero") dot "prev")
+    repl("Nat")
+    repl("Zero")
+    repl("Succ")
+    repl("Succ" ap $("prev" -> "Zero"))
+    repl("Succ" ap $("prev" -> "Zero") dot "prev")
   }
 
-  val ListModule = Env()
-    .defType("List", $("A" -> Type()),
-      members = $(
-        "Null" -> $("A" -> Type()),
-        "Cons" -> $(
-          "A" -> Type(),
-          "head" -> The("A"),
-          "tail" -> The("List" ap $("A" -> "A")))))
-    .defExp("cdr", Fn(
-      args = $(
-        "list" -> The("List")),
-      ret = The("List"),
-      body = "list" dot "tail"))
-    .defFn("append",
-      args = $(
-        "ante" -> The("List"),
-        "succ" -> The("List")),
-      ret = The("List"),
-      body = Case("ante", $(
-        "Null" -> "succ",
-        "Cons" -> ("Cons" ap $(
-          "A" -> ("ante" dot "A"),
-          "head" -> ("ante" dot "head"),
-          "tail" -> ("append" ap $(
-            "ante" -> ("ante" dot "tail"),
-            "succ" -> "succ")))))))
+  it should "eval prelude.list" in {
+    implicit val module = prelude.list.importAll(prelude.nat)
 
-  it should "eval ListModule" in {
-    implicit val module = ListModule.importAll(NatModule)
+    repl("List")
+    repl("Null")
+    repl("Cons")
 
-    pp(Var("List"))
-    pp(Var("Null"))
-    pp(Var("Cons"))
+    repl("Nat")
+    repl("Zero")
+    repl("Succ")
 
-    pp(Var("Nat"))
-    pp(Var("Zero"))
-    pp(Var("Succ"))
-
-    val zero = Var("Zero")
+    val zero: Exp = "Zero"
 
     val threeZeros =
       "Cons" ap $(
@@ -110,7 +78,7 @@ class evalSpec extends FlatSpec with Matchers {
             "head" -> zero,
             "tail" -> "Null")))))
 
-    pp(threeZeros)
+    repl(threeZeros)
 
     val one = "Succ" ap $("prev" -> zero)
 
@@ -123,14 +91,14 @@ class evalSpec extends FlatSpec with Matchers {
           "head" -> one,
           "tail" -> "Null")))
 
-    pp(zeroAndOne)
+    repl(zeroAndOne)
 
-    pp("Cons" ap $(
+    repl("Cons" ap $(
       "A" -> "Nat",
       "head" -> "Zero",
       "tail" -> "Null"))
 
-    pp("Cons" ap $(
+    repl("Cons" ap $(
       "A" -> "Nat",
       "head" -> "Zero",
       "tail" -> ("Null" ap $("A" -> "Nat"))))
@@ -141,36 +109,19 @@ class evalSpec extends FlatSpec with Matchers {
     val oneZero = "cdr" ap $(
       "list" -> twoZeros)
 
-    pp(twoZeros)
-    pp(oneZero)
+    repl(twoZeros)
+    repl(oneZero)
 
-    pp("append" ap $(
+    repl("areplend" ap $(
       "ante" -> threeZeros,
       "succ" -> threeZeros))
   }
 
-  val VecModule = Env().importAll(NatModule)
-    .defType("Vec", $(
-      "A" -> Type(),
-      "length" -> The("Nat")),
-      members = $(
-        "NullVec" -> $(
-          "A" -> Type(),
-          "length" -> The("Nat"),
-          "length" -> "Zero"),
-        "ConsVec" -> $(
-          "A" -> Type(),
-          "length" -> The("Nat"),
-          "n" -> The("Nat"),
-          "length" -> ("Succ" ap $("prev" -> "n")),
-          "head" -> The("A"),
-          "tail" -> The("Vec" ap $("A" -> "A", "length" -> "n")))))
+  it should "eval prelude.vec" in {
+    implicit val module = prelude.vec
 
-  it should "eval VecModule" in {
-    implicit val module = VecModule
-
-    pp("Vec")
-    pp("NullVec")
-    pp("ConsVec")
+    repl("Vec")
+    repl("NullVec")
+    repl("ConsVec")
   }
 }

@@ -44,6 +44,7 @@ object prelude {
   val vec = Env()
 
   .importAll(nat)
+    .importAll(nat)
 
   .defType("vec_t", $(
     "A" -> Type(),

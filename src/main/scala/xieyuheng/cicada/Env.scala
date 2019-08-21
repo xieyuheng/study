@@ -76,14 +76,16 @@ case class Env(map: Map[String, Def] = Map()) {
   }
 
   def importAll(that: Env): Env = {
-    that.map.foldLeft(this) { case (env, (name, value)) =>
+    that.map.foldLeft(this) { case (env, (name, newDef)) =>
       env.get(name) match {
-        case Some(oldValue) =>
-          println(s"- [WARN] re-defining name: ${name} to: ${value}")
-          println(s"  old value: ${oldValue}")
+        case Some(oldDef) =>
+          println(s"- [WARN] re-defining: ${newDef}")
+          println(s"  old definition: ${oldDef}")
+          // println(s"- [WARN] re-defining: ${Pretty.Def(newDef, 0)}")
+          // println(s"  old definition: ${Pretty.Def(oldDef, 0)}")
         case None => {}
       }
-      env.extend(name -> value)
+      env.extend(name -> newDef)
     }
   }
 }

@@ -1,11 +1,11 @@
 module algebra
 
-class Category {
-  Object: type_t
+class category_t {
+  object_t: type_t
 
-  @infix(->) Morphism(Object, Object): type_t
+  @infix(->) morphism_t(object_t, object_t): type_t
 
-  id(a: Object): a -> a
+  id(a: object_t): a -> a
 
   @infix(|) then(f: a -> b, g: b -> c): b -> c
 
@@ -22,26 +22,26 @@ class Category {
 
   /** derived types: */
 
-  class Monomorphism {
+  class monomorphism_t {
     mono: a -> b
     right_cancelable(f, g: c -> a, f | mono == g | mono): f == g
   }
 
-  class Epimorphism {
+  class epimorphism_t {
     epi: a -> b
     left_cancelable(f, g: b -> c, epi | f  == epi | g): f == g
   }
 
-  LeftInverse(f: a -> b, g: a -> b): type_t =
+  left_inverse_t(f: a -> b, g: a -> b): type_t =
     f | g == id(a)
 
-  RightInverse(f: a -> b, g: a -> b): type_t =
+  right_inverse_t(f: a -> b, g: a -> b): type_t =
     g | f == id(b)
 
-  class Isomorphism {
+  class isomorphism_t {
     iso: a -> b
     inv: b -> a
-    left_inverse: LeftInverse(iso, inv)
-    right_inverse: RightInverse(iso, inv)
+    left_inverse: left_inverse_t(iso, inv)
+    right_inverse: right_inverse_t(iso, inv)
   }
 }

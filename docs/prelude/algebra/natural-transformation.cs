@@ -1,16 +1,16 @@
 module algebra
 
-class NaturalTransformation {
-  C: Category
-  D: Category
+class natural_transformation_t {
+  C: category_t
+  D: category_t
 
-  F: Functor(C, D)
-  G: Functor(C, D)
+  F: functor_t(C, D)
+  G: functor_t(C, D)
 
-  component(a: C.Object): F.map(a) D.-> G.map(a)
+  component(a: C.object_t): F.map(a) D.-> G.map(a)
 
   natural(
-    f: F.Morphism(a, b)
+    f: F.morphism_t(a, b)
   ): component(a) D.| G.fmap(f) == F.fmap(f) D.| component(b)
 
   note {

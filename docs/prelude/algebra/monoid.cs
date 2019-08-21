@@ -1,15 +1,15 @@
 module algebra
 
-class Monoid extends Semigroup {
+class monoid_t extends semigroup_t {
   id: E
   left_id(x: E): id * x == x
   right_id(x: E): x * id == x
 }
 
-extend Monoid {
-  as_category = Category {
-    Object = Unit
-    Morphism(_: Unit, _: Unit) = E
+extend monoid_t {
+  as_category = category_t {
+    object_t = Unit
+    morphism_t(_: Unit, _: Unit) = E
 
     id(_: Unit): E = this.id
 

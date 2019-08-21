@@ -1,10 +1,10 @@
 module algebra
 
-class Functor {
-  C: Category
-  D: Category
+class functor_t {
+  C: category_t
+  D: category_t
 
-  map(a: C.Object): D.Object
+  map(a: C.object_t): D.object_t
   fmap(f: a C.-> b): map(a) D.-> map(b)
 
   fmap_respect_then(
@@ -13,6 +13,6 @@ class Functor {
   ): fmap(f C.| g) == fmap(f) D.| fmap(g)
 
   fmap_respect_id(
-    a: C.Object
+    a: C.object_t
   ): fmap(C.id(a)) == D.id(map(a))
 }

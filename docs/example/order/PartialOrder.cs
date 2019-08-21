@@ -3,7 +3,7 @@ module order
 class PartialOrder extends PreOrder {
   antisymmetric(a <= b, b <= a): a == b
 
-  @infix(-<) Cover(a: E, b: E): Type =
+  @infix(-<) Cover(a: E, b: E): type_t =
     (a < b, (x: E, a <= x < b) => x == a)
 }
 

@@ -1,20 +1,20 @@
 module collection.list
 
 union List {
-  A: Type
+  A: type_t
 } unions {
   class Null {
-    A: Type
+    A: type_t
   }
 
   class Cons {
-    A: Type
+    A: type_t
     head: A
     tail: List(A)
   }
 }
 
-type List(A: Type) {
+type List(A: type_t) {
   Null
   Cons(head: A, tail: List(A))
 }

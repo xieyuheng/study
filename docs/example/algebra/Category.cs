@@ -1,9 +1,9 @@
 module algebra
 
 class Category {
-  Object: Type
+  Object: type_t
 
-  @infix(->) Morphism(Object, Object): Type
+  @infix(->) Morphism(Object, Object): type_t
 
   id(a: Object): a -> a
 
@@ -32,10 +32,10 @@ class Category {
     left_cancelable(f, g: b -> c, epi | f  == epi | g): f == g
   }
 
-  LeftInverse(f: a -> b, g: a -> b): Type =
+  LeftInverse(f: a -> b, g: a -> b): type_t =
     f | g == id(a)
 
-  RightInverse(f: a -> b, g: a -> b): Type =
+  RightInverse(f: a -> b, g: a -> b): type_t =
     g | f == id(b)
 
   class Isomorphism {

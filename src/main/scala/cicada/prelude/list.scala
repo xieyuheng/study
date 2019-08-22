@@ -41,13 +41,13 @@ object listTest extends Test {
   implicit val module = list.env
     .importAll(nat.env)
 
-  ep("list_t")
-  ep("null_t")
-  ep("cons_t")
+  util.evalPrint("list_t")
+  util.evalPrint("null_t")
+  util.evalPrint("cons_t")
 
-  ep("nat_t")
-  ep("zero_t")
-  ep("succ_t")
+  util.evalPrint("nat_t")
+  util.evalPrint("zero_t")
+  util.evalPrint("succ_t")
 
   val zero: Exp = "zero_t"
 
@@ -65,7 +65,7 @@ object listTest extends Test {
           "head" -> zero,
           "tail" -> "null_t")))))
 
-  ep(threeZeros)
+  util.evalPrint(threeZeros)
 
   val zeroAndOne =
     "cons_t" ap $(
@@ -76,14 +76,14 @@ object listTest extends Test {
         "head" -> one,
         "tail" -> "null_t")))
 
-  ep(zeroAndOne)
+  util.evalPrint(zeroAndOne)
 
-  ep("cons_t" ap $(
+  util.evalPrint("cons_t" ap $(
     "A" -> "nat_t",
     "head" -> "zero_t",
     "tail" -> "null_t"))
 
-  ep("cons_t" ap $(
+  util.evalPrint("cons_t" ap $(
     "A" -> "nat_t",
     "head" -> "zero_t",
     "tail" -> ("null_t" ap $("A" -> "nat_t"))))
@@ -94,10 +94,10 @@ object listTest extends Test {
   val oneZero = "cdr" ap $(
     "list" -> twoZeros)
 
-  ep(twoZeros)
-  ep(oneZero)
+  util.evalPrint(twoZeros)
+  util.evalPrint(oneZero)
 
-  ep("list_append" ap $(
+  util.evalPrint("list_append" ap $(
     "ante" -> threeZeros,
     "succ" -> threeZeros))
 }

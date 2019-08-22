@@ -33,16 +33,11 @@ object nat {
 object natTest extends Test {
   implicit val module = nat.env
 
-  ep("nat_t")
-  ep("zero_t")
-  ep("succ_t")
-  ep("succ_t" ap $("prev" -> "zero_t"))
-  ep("succ_t" ap $("prev" -> "zero_t") dot "prev")
+  util.evalOnRight("succ_t" ap $("prev" -> "zero_t")) { value =>
+    assert(nat.toInt(value) == 1)
+  }
 
-  eval("succ_t" ap $("prev" -> "zero_t"), module) match {
-    case Right(value) =>
-      println(nat.toInt(value))
-    case Left(errorMsg) =>
-      println(errorMsg)
+  util.evalOnRight("succ_t" ap $("prev" -> "zero_t") dot "prev") { value =>
+    assert(nat.toInt(value) == 0)
   }
 }

@@ -27,7 +27,7 @@ object vec {
 object vecTest extends Test {
   implicit val module = vec.env
 
-  ep("vec_t")
-  ep("null_vec_t")
-  ep("cons_vec_t")
+  util.evalPrint("vec_t")
+  util.evalPrint("null_vec_t")
+  util.evalPrint("cons_vec_t")
 }

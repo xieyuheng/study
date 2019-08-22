@@ -5,7 +5,12 @@ import cicada.pretty._
 
 object prettyTest extends Test {
   val `pretty can make Exp pretty` = {
+
+    println(s"------")
+
     val t = prettyExp(Type())
+
+    println(s"t: ${t}")
 
     val threeZeros = prettyExp(
       "cons_t" ap $(
@@ -19,6 +24,8 @@ object prettyTest extends Test {
             "head" -> "zero_t",
             "tail" -> "null_t"))))))
 
+    println(s"threeZeros: ${threeZeros}")
+
     val fn = prettyExp(
       Fn(
         args = $(
@@ -26,6 +33,8 @@ object prettyTest extends Test {
           "y" -> "nat_t"),
         ret = "nat_t",
         body = "zero_t"))
+
+    println(s"fn: ${fn}")
 
     val nestedFn = prettyExp(
       Fn(
@@ -44,10 +53,6 @@ object prettyTest extends Test {
           ret = "nat_t",
           body = "zero_t")))
 
-    println(s"------")
-    println(s"t: ${t}")
-    println(s"threeZeros: ${threeZeros}")
-    println(s"fn: ${fn}")
     println(s"nestedFn: ${nestedFn}")
     println(s"------")
   }

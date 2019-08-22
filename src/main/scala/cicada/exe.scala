@@ -9,12 +9,6 @@ object exe {
     env: Env,
   ): Either[ErrorMsg, Value] = {
     target match {
-      case t: TypeOfType =>
-        Left(ErrorMsg(s"can not apply a TypeOfType: ${t}"))
-
-      case t: ValueOfType =>
-        Left(ErrorMsg(s"can not apply a ValueOfType: ${t}"))
-
       case sumType: SumTypeValue =>
         for {
           newBind <- unify.onMap(args, sumType.map, sumType.bind, env)
@@ -39,6 +33,9 @@ object exe {
 
       case neu: NeutralValue =>
         Right(NeutralValue(ApNeutral(neu.neutral, args)))
+
+      case v: Value =>
+        Left(ErrorMsg(s"can not apply: ${v}"))
     }
   }
 }

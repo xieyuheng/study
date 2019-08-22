@@ -42,3 +42,7 @@ final case class FnValue(
 final case class NeutralValue(
   neutral: Neutral,
 ) extends Value
+
+final object TopValue extends Value
+
+final object BottomValue extends Value

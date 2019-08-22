@@ -47,6 +47,8 @@ object walk {
           ret = deep(fn.ret, bind))
       case neu: NeutralValue =>
         neu
+      case v: Value =>
+        v
     }
   }
 

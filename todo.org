@@ -5,7 +5,6 @@
 - vec_length
 - vec_map
 - vec_append
-- join
 - pre -- subtype relation
   - not just subtype relation
     because a value pre its type

@@ -121,6 +121,10 @@ object pretty {
         val bind = Bind()
         val neutralString = maybeNewline(prettyNeutral(neutral, bind))
         s"neutral {${neutralString}}"
+      case TopValue =>
+        s"top"
+      case BottomValue =>
+        s"bottom"
     }
   }
 

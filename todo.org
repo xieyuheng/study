@@ -18,3 +18,11 @@
   - set: ==, member relation, subset relation
   - type: ==, member relation
   - cat: ==, |
+* tartlet
+- better syntax
+- the little typer as test
+* minitt
+- examples
+- operational semantics
+- Normal expressions and Readback
+- Typing Rules

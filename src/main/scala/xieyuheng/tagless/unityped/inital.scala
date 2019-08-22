@@ -1,4 +1,4 @@
-package xieyuheng..tagless.unityped.inital
+package xieyuheng.tagless.unityped.inital
 
 sealed trait Exp
 final case class Lit (int: Int) extends Exp

@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 import java.util.UUID
 

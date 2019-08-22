@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 case object ValueTrivial extends Value {
   def readBack (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =

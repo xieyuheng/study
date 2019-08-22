@@ -1,4 +1,4 @@
-package xieyuheng..minitt
+package xieyuheng.minitt
 
 sealed trait Exp {
   def -:(ret: Exp) = Pi(U, ret, this)

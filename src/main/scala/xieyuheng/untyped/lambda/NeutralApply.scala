@@ -1,4 +1,4 @@
-package xieyuheng..untyped
+package xieyuheng.untyped
 
 case class NeutralApply (
   fun: Neutral,

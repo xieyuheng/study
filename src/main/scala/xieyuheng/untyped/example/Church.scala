@@ -1,7 +1,7 @@
-package xieyuheng..untyped.example
+package xieyuheng.untyped.example
 
 import scala.annotation.tailrec
-import xieyuheng..untyped._
+import xieyuheng.untyped._
 
 object Church {
   var m = Module()

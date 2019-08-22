@@ -1,4 +1,4 @@
-package xieyuheng..systemT
+package xieyuheng.systemT
 
 case class NeutralRecNat (
   t: Type,

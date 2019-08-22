@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 trait Constructor extends Exp {
   /** Constructor Exp must provide check method */

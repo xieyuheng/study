@@ -9,7 +9,7 @@
 ## Examples
 
 ``` scala
-import xieyuheng..tartlet._
+import xieyuheng.tartlet._
 
 var m = Module()
 

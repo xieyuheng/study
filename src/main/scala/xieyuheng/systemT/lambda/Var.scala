@@ -1,4 +1,4 @@
-package xieyuheng..systemT
+package xieyuheng.systemT
 
 case class Var (name: String) extends Eliminator {
   def eval(env: Env): Either[ErrorMsg, Value] = {

@@ -1,4 +1,4 @@
-package xieyuheng..untyped
+package xieyuheng.untyped
 
 object test extends App {
   val `freshen should generate new name not used` = {

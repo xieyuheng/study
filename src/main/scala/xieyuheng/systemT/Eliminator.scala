@@ -1,4 +1,4 @@
-package xieyuheng..systemT
+package xieyuheng.systemT
 
 trait Eliminator extends Exp {
   /** Eliminator Exp must provide infer method */

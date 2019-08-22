@@ -1,4 +1,4 @@
-package xieyuheng..untyped
+package xieyuheng.untyped
 
 import example.Church
 

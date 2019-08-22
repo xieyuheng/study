@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 case class NeutralIndAbsurd (
   target: Neutral,

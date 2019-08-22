@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 case object Atom extends Type {
   def eval(env: Env): Either[ErrorMsg, Value] =

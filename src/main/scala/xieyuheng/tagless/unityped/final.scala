@@ -1,4 +1,4 @@
-package xieyuheng..tagless.unityped.finial
+package xieyuheng.tagless.unityped.finial
 
 trait BasicSemantics {
   type Exp

@@ -1,4 +1,4 @@
-package xieyuheng..untyped
+package xieyuheng.untyped
 
 case class Var (
   name: String,

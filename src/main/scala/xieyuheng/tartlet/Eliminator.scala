@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 trait Eliminator extends Exp {
   /** Eliminator Exp must provide infer method */

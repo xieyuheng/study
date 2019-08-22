@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 case class TheValue (t: Value, value: Value) {
   def readBackTheValue(ctx: Ctx): Either[ErrorMsg, Exp] = {

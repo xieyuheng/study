@@ -1,3 +1,3 @@
-package xieyuheng..untyped
+package xieyuheng.untyped
 
 trait Neutral extends Value

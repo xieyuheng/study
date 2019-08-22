@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 trait Exp {
   def eval(env: Env): Either[ErrorMsg, Value]

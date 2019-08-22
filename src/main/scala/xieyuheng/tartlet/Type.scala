@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 trait Type extends Exp {
   /** Type Exp must provide infer method */

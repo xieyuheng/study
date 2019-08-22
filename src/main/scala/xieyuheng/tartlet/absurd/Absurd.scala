@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 case object Absurd extends Type {
   def eval(env: Env): Either[ErrorMsg, Value] =

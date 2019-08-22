@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 sealed trait Den
 final case class Def (t: Value, value: Value) extends Den

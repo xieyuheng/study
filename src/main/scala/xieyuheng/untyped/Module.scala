@@ -1,4 +1,4 @@
-package xieyuheng..untyped
+package xieyuheng.untyped
 
 case class Module(var env: Env = Env()) {
   def define(name: String, exp: Exp): Module = {

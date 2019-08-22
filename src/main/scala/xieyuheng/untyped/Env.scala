@@ -1,4 +1,4 @@
-package xieyuheng..untyped
+package xieyuheng.untyped
 
 case class Env (map: Map[String, Value] = Map()) {
   def lookupValue(name: String): Option[Value] =

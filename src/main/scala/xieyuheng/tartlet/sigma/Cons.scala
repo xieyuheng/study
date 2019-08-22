@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 case class Cons (car: Exp, cdr: Exp) extends Constructor {
   def eval(env: Env): Either[ErrorMsg, Value] =

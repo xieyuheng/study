@@ -1,4 +1,4 @@
-package xieyuheng..systemT
+package xieyuheng.systemT
 
 trait Constructor extends Exp {
   /** Constructor Exp must provide check method */

@@ -1,4 +1,4 @@
-package xieyuheng..systemT
+package xieyuheng.systemT
 
 case object Zero extends Constructor {
   def eval(env: Env): Either[ErrorMsg, Value] = {

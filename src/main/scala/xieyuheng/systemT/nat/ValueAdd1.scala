@@ -1,4 +1,4 @@
-package xieyuheng..systemT
+package xieyuheng.systemT
 
 case class ValueAdd1(prev: Value) extends Value {
   def readBack(usedNames: Set[String], t: Type): Either[ErrorMsg, Exp] = {

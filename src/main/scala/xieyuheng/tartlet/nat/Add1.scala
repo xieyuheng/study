@@ -1,4 +1,4 @@
-package xieyuheng..tartlet
+package xieyuheng.tartlet
 
 case class Add1 (prev: Exp) extends Constructor {
   def eval(env: Env): Either[ErrorMsg, Value] =

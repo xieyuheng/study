@@ -1,4 +1,3 @@
-- use ListMap instead of MultiMap for Value
 - json support
 - test as code
 - list_length

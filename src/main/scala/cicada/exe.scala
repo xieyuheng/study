@@ -1,9 +1,11 @@
 package cicada
 
+import scala.collection.immutable.ListMap
+
 object exe {
   def apply(
     target: Value,
-    args: MultiMap[String, Value],
+    args: ListMap[String, Value],
     env: Env,
   ): Either[ErrorMsg, Value] = {
     target match {

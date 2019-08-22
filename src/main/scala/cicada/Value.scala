@@ -1,5 +1,7 @@
 package cicada
 
+import scala.collection.immutable.ListMap
+
 sealed trait Value
 
 final case class TypeOfType(
@@ -13,25 +15,25 @@ final case class ValueOfType(
 
 final case class SumTypeValue(
   name: String,
-  map: MultiMap[String, Value],
+  map: ListMap[String, Value],
   memberNames: List[String],
   bind: Bind,
 ) extends Value
 
 final case class MemberTypeValue(
   name: String,
-  map: MultiMap[String, Value],
+  map: ListMap[String, Value],
   superName: String,
   bind: Bind,
 ) extends Value
 
 final case class PiValue(
-  args: MultiMap[String, Value],
+  args: ListMap[String, Value],
   ret: Value,
 ) extends Value
 
 final case class FnValue(
-  args: MultiMap[String, Value],
+  args: ListMap[String, Value],
   ret: Value,
   body: Exp,
   env: Env,

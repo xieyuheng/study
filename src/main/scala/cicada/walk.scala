@@ -2,6 +2,8 @@ package cicada
 
 import scala.annotation.tailrec
 
+import scala.collection.immutable.ListMap
+
 object walk {
   @tailrec
   def apply(x: Value, bind: Bind): Value = {
@@ -48,7 +50,7 @@ object walk {
     }
   }
 
-  def deepOnMap(map: MultiMap[String, Value], bind: Bind): MultiMap[String, Value] = {
-    map.mapValues(deep(_, bind))
+  def deepOnMap(map: ListMap[String, Value], bind: Bind): ListMap[String, Value] = {
+    ListMap(map.mapValues(deep(_, bind)).toList: _*)
   }
 }

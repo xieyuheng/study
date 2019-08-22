@@ -1,5 +1,7 @@
 package cicada
 
+import scala.collection.immutable.ListMap
+
 object pretty {
 
   val IndentUnit: String = "  "
@@ -65,21 +67,20 @@ object pretty {
   }
 
   def prettyValueMapWithDelimiter(
-    map: MultiMap[String, Value],
+    map: ListMap[String, Value],
     bind: Bind,
     delimiter: String,
   ): String = {
     walk.deepOnMap(map, bind)
-      .entriesInScope
       .map { case (name, value) => s"${name}: ${prettyValue(value)}" }
       .mkString(delimiter)
   }
 
-  def prettyValueMap(map: MultiMap[String, Value], bind: Bind): String = {
+  def prettyValueMap(map: ListMap[String, Value], bind: Bind): String = {
     prettyValueMapWithDelimiter(map, bind, "\n")
   }
 
-  def prettyValueArgs(map: MultiMap[String, Value], bind: Bind): String = {
+  def prettyValueArgs(map: ListMap[String, Value], bind: Bind): String = {
     prettyValueMapWithDelimiter(map, bind, ", ")
   }
 

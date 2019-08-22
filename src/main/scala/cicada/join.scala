@@ -10,7 +10,7 @@ object join {
     unify(x, y, bind, env) match {
       case Right((newBind)) =>
         (walk.deep(x, newBind), newBind)
-      case Left(_) => (TopValue, bind)
+      case Left(_) => (TopValue(), bind)
     }
   }
 }

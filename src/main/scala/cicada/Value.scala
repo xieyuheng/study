@@ -43,6 +43,6 @@ final case class NeutralValue(
   neutral: Neutral,
 ) extends Value
 
-final object TopValue extends Value
+final case class TopValue() extends Value
 
-final object BottomValue extends Value
+final case class BottomValue() extends Value

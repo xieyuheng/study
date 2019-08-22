@@ -13,7 +13,13 @@ object nat {
       "zero_t" -> $(),
       "succ_t" -> $("prev" -> The("nat_t"))))
 
+
   def toInt(value: Value): Int = {
+    import cicada.json.rw._
+    import upickle.default._
+
+    println(write(value, indent = 2))
+
     value match {
       case MemberTypeValue(name, map, superName, bind) =>
         name match {

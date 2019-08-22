@@ -51,6 +51,8 @@ object listTest extends Test {
 
   val zero: Exp = "zero_t"
 
+  val one = "succ_t" ap $("prev" -> zero)
+
   val threeZeros =
     "cons_t" ap $(
       "A" -> "nat_t",
@@ -64,8 +66,6 @@ object listTest extends Test {
           "tail" -> "null_t")))))
 
   ep(threeZeros)
-
-  val one = "succ_t" ap $("prev" -> zero)
 
   val zeroAndOne =
     "cons_t" ap $(

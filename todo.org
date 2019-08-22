@@ -1,5 +1,4 @@
 - check
-- json support
 - nat toInt for testing
 - list_length
 - list_map

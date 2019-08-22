@@ -13,17 +13,13 @@ object json {
       (implicit krw:RW[K], vrw:RW[V])
         : RW[MultiMap[K, V]] =
       readwriter[List[(K, V)]]
-        .bimap[MultiMap[K, V]](
-          _.entries,
-          MultiMap(_))
+        .bimap[MultiMap[K, V]](_.entries, MultiMap(_))
 
     implicit def rwListMap[K, V]
       (implicit krw:RW[K], vrw:RW[V])
         : RW[ListMap[K, V]] =
       readwriter[Map[K, V]]
-        .bimap[ListMap[K, V]](
-          _.toMap,
-          map => ListMap(map.toList: _*))
+        .bimap[ListMap[K, V]](_.toMap, map => ListMap(map.toList: _*))
 
     // Exp
     implicit def rwVar: RW[Var] = macroRW
@@ -35,11 +31,71 @@ object json {
     implicit def rwFn: RW[Fn] = macroRW
     implicit def rwAp: RW[Ap] = macroRW
     implicit def rwExp: RW[Exp] = RW.merge(
-      rwVar, rwType, rwThe, rwCase, rwField, rwPi, rwFn, rwAp)
+      rwVar,
+      rwType,
+      rwThe,
+      rwCase,
+      rwField,
+      rwPi,
+      rwFn,
+      rwAp,
+    )
+
+    implicit def rwId: RW[Id] = macroRW
+
+    implicit def rwBind: RW[Bind] =
+      readwriter[Map[Id, Value]]
+        .bimap[Bind](_.map, Bind(_))
+
+    implicit def rwEnv: RW[Env] =
+      readwriter[Map[String, Def]]
+        .bimap[Env](_.map, Env(_))
+
+    // Def
+    implicit def rwDefineValue: RW[DefineValue] = macroRW
+    implicit def rwDefineMemberType: RW[DefineMemberType] = macroRW
+    implicit def rwDefineSumType: RW[DefineSumType] = macroRW
+    implicit def rwDefineFn: RW[DefineFn] = macroRW
+    implicit def rwDef: RW[Def] = RW.merge(
+      rwDefineValue,
+      rwDefineMemberType,
+      rwDefineSumType,
+      rwDefineFn,
+    )
 
     // Value
-    implicit def rwId: RW[Id] = macroRW
     implicit def rwTypeOfType: RW[TypeOfType] = macroRW
+    implicit def rwValueOfType: RW[ValueOfType] = macroRW
+    implicit def rwSumTypeValue: RW[SumTypeValue] = macroRW
+    implicit def rwMemberTypeValue: RW[MemberTypeValue] = macroRW
+    implicit def rwPiValue: RW[PiValue] = macroRW
+    implicit def rwFnValue: RW[FnValue] = macroRW
+    implicit def rwNeutralValue: RW[NeutralValue] = macroRW
+    implicit def rwTopValue: RW[TopValue] = macroRW
+    implicit def rwBottomValue: RW[BottomValue] = macroRW
+    implicit def rwValue: RW[Value] = RW.merge(
+      rwTypeOfType,
+      rwValueOfType,
+      rwSumTypeValue,
+      rwMemberTypeValue,
+      rwPiValue,
+      rwFnValue,
+      rwNeutralValue,
+      rwTopValue,
+      rwBottomValue,
+    )
+
+    // Neutral
+    implicit def rwVarNeutral: RW[VarNeutral] = macroRW
+    implicit def rwCaseNeutral: RW[CaseNeutral] = macroRW
+    implicit def rwFieldNeutral: RW[FieldNeutral] = macroRW
+    implicit def rwApNeutral: RW[ApNeutral] = macroRW
+    implicit def rwNeutral: RW[Neutral] = RW.merge(
+      rwVarNeutral,
+      rwCaseNeutral,
+      rwFieldNeutral,
+      rwApNeutral,
+    )
   }
 }
 

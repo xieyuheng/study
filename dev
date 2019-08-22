@@ -17,8 +17,8 @@ run-tests () {
 
     for FILE in $(find . -name '*test')
     do
-        echo "// [testing] $FILE"
         echo ""
+        echo "// [testing] $FILE"
         if ! time $FILE
         then
             exit 1

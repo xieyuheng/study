@@ -18,6 +18,7 @@ scalacOptions ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.lihaoyi" %% "upickle" % "0.7.1",
+  "org.clapper" %% "classutil" % "1.5.0",
   "org.scalatest" %% "scalatest" % "3.0.8" % "test",
 )
 

@@ -8,5 +8,5 @@ scala:
 
 script:
 - sbt compile
-- sbt test
 - sbt mdoc
+- ./dev t

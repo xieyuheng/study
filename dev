@@ -6,6 +6,24 @@ api-doc () {
     now -n cicada target/scala-2.13/api/
 }
 
+t () {
+    sbt stage
+    run-tests
+}
+
+run-tests () {
+    cd target/universal/stage/bin
+
+    for FILE in $(find . -name '*-test')
+    do
+        echo "// > $FILE"
+        if ! time $FILE
+        then
+            exit 1
+        fi
+    done
+}
+
 main () {
     for TASK in $@
     do

@@ -1,4 +1,5 @@
 - json support
+- nat toInt for testing
 - list_length
 - list_map
 - vec_length
@@ -8,7 +9,6 @@
 - pre -- subtype relation
   - not just subtype relation
     because a value pre its type
-- nat toInt for testing
 - check
 - [test] MemberTypeValue can be used as type, just by using `The`
 - compile to js with runtime type information

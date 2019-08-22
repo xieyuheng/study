@@ -1,5 +1,6 @@
 package cicada
 
+import cicada.dsl._
 import cicada.pretty._
 
 object prettyTest extends Test {
@@ -7,39 +8,41 @@ object prettyTest extends Test {
     val t = prettyExp(Type())
 
     val threeZeros = prettyExp(
-      Ap(Var("cons_t"), MultiMap(
-        "A" -> Var("nat_t"),
-        "head" -> Var("zero_t"),
-        "tail" -> Ap(Var("cons_t"), MultiMap(
-          "A" -> Var("nat_t"),
-          "head" -> Var("zero_t"),
-          "tail" -> Ap(Var("cons_t"), MultiMap(
-            "A" -> Var("nat_t"),
-            "head" -> Var("zero_t"),
-            "tail" -> Var("null_t"))))))))
+      "cons_t" ap $(
+        "A" -> "nat_t",
+        "head" -> "zero_t",
+        "tail" -> ("cons_t" ap $(
+          "A" -> "nat_t",
+          "head" -> "zero_t",
+          "tail" -> ("cons_t" ap $(
+            "A" -> "nat_t",
+            "head" -> "zero_t",
+            "tail" -> "null_t"))))))
 
     val fn = prettyExp(
       Fn(
-        args = MultiMap(
-          "x" -> Var("nat_t"),
-          "y" -> Var("nat_t")),
-        ret = Var("nat_t"),
-        body = Var("zero_t")))
+        args = $(
+          "x" -> "nat_t",
+          "y" -> "nat_t"),
+        ret = "nat_t",
+        body = "zero_t"))
 
     val nestedFn = prettyExp(
       Fn(
-        args = MultiMap(
-          "x" -> Var("nat_t"),
-          "y" -> Var("nat_t")),
-        ret = Pi(MultiMap(
-          "x" -> Var("nat_t"),
-          "y" -> Var("nat_t")),
-          Var("nat_t")),
-        body = Fn(MultiMap(
-          "x" -> Var("nat_t"),
-          "y" -> Var("nat_t")),
-          Var("nat_t"),
-          Var("zero_t"))))
+        args = $(
+          "x" -> "nat_t",
+          "y" -> "nat_t"),
+        ret = Pi(
+          args = $(
+            "x" -> "nat_t",
+            "y" -> "nat_t"),
+          ret = "nat_t"),
+        body = Fn(
+          args = $(
+            "x" -> "nat_t",
+            "y" -> "nat_t"),
+          ret = "nat_t",
+          body = "zero_t")))
 
     println(s"------")
     println(s"t: ${t}")

@@ -24,7 +24,7 @@ object vec {
 
 }
 
-object vecTest extends App {
+object vecTest extends Test {
   implicit val module = vec.env
 
   ep("vec_t")

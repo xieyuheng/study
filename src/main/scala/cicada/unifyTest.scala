@@ -2,7 +2,7 @@ package cicada
 
 import scala.collection.immutable.ListMap
 
-object unifyTest extends App {
+object unifyTest extends Test {
   val `unify should not make bind weaker` = {
     val id = Id()
     val bind = Bind(Map(

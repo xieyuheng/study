@@ -37,7 +37,7 @@ object nat {
   }
 }
 
-object natTest extends App {
+object natTest extends Test {
   implicit val module = nat.env
 
   ep("nat_t")

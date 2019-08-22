@@ -2,7 +2,7 @@ package cicada
 
 import cicada.pretty._
 
-object prettyTest extends App {
+object prettyTest extends Test {
   val `pretty can make Exp pretty` = {
     val t = prettyExp(Type())
 

@@ -10,7 +10,7 @@ object json {
   }
 }
 
-object jsonTest extends App {
+object jsonTest extends Test {
   import json.rw._
 
   // ujson.write: ujson.Value => String

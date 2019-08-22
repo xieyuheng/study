@@ -37,7 +37,7 @@ object list {
 
 }
 
-object listTest extends App {
+object listTest extends Test {
   implicit val module = list.env
     .importAll(nat.env)
 

@@ -2,7 +2,7 @@ package cicada
 
 import cicada.dsl._
 
-object evalTest extends App {
+object evalTest extends Test {
   val `eval should eval Type to TypeOfType` = {
     val env = Env()
     for {

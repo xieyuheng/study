@@ -1,10 +1,9 @@
-import org.scalatest._
+package xieyuheng.tt.untyped
 
-import xieyuheng.tt.untyped._
-import xieyuheng.tt.untyped.example.Church
+import example.Church
 
-class ChurchSpec extends FlatSpec with Matchers {
-  "Church.m" should "run Church numerals" in {
+object churchTest extends App {
+  val `Church.m should run Church numerals` = {
     val m = Church.m
     m.run(Church.fromInt(0))
     m.run(Church.fromInt(1))

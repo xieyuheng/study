@@ -1,38 +1,37 @@
-import org.scalatest._
-import xieyuheng.tt.systemT._
+package xieyuheng.tt.systemT
 
-class SystemTSpec extends FlatSpec with Matchers {
-  "freshen" should "generate new name not used" in {
+object test extends App {
+  val `freshen should generate new name not used` = {
     val usedNames = Set("x", "x*")
     val freshName = Util.freshen(usedNames, "x")
     assert(!usedNames.contains(freshName))
   }
 
-  it should "add * to the end of name" in {
+  val `it should add * to the end of name` = {
     val usedNames = Set("x", "x*")
     val freshName = Util.freshen(usedNames, "x")
     assert(freshName == "x**")
   }
 
-  "eval" should "eval Lambda" in {
+  val `eval should eval Lambda` = {
     val exp = Lambda("x", Lambda("y", Var("y")))
     assert(exp.eval(Env()) ==
       Right(Closure(Env(), "x", Lambda("y", Var("y")))))
   }
 
-  it should "eval Apply" in {
+  val `it should eval Apply` = {
     val exp = Apply(Lambda("x", Var("x")), Lambda("x", Var("x")))
     assert(exp.eval(Env()) ==
       Right(Closure(Env(), "x", Var("x"))))
   }
 
-  "infer" should "infer type of Var" in {
+  val `infer should infer type of Var` = {
     val ctx = Ctx().ext("x", Nat)
 
     assert(Var("x").infer(ctx) == Right(Nat))
   }
 
-  "check" should "" in {
+  val `check should` = {
     assert(Zero.check(Ctx(), Nat) ==
       Right(()))
 
@@ -50,7 +49,7 @@ class SystemTSpec extends FlatSpec with Matchers {
       Right(()))
   }
 
-  "Module" can "define, claim and run exp" in {
+  val `Module can define, claim and run exp` = {
     var m = Module()
 
     m.claim("three", Nat)

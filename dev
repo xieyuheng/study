@@ -7,7 +7,7 @@ api-doc () {
 }
 
 t () {
-    rm target/universal/stage/bin/*
+    rm -f target/universal/stage/bin/*
     sbt stage
     run-tests
 }
@@ -17,7 +17,8 @@ run-tests () {
 
     for FILE in $(find . -name '*test')
     do
-        echo "// > $FILE"
+        echo "// [testing] $FILE"
+        echo ""
         if ! time $FILE
         then
             exit 1

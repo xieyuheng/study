@@ -1,10 +1,9 @@
-import org.scalatest._
+package cicada
 
-import cicada._
 import cicada.pretty._
 
-class prettySpec extends FlatSpec with Matchers {
-  "pretty" can "make Exp pretty" in {
+object prettyTest extends App {
+  val `pretty can make Exp pretty` = {
     val t = prettyExp(Type())
 
     val threeZeros = prettyExp(

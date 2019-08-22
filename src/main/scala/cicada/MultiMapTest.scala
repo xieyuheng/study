@@ -1,9 +1,7 @@
-import org.scalatest._
+package cicada
 
-import cicada._
-
-class MultiMapSpec extends FlatSpec with Matchers {
-  "MultiMap" can "update merge and get" in {
+object MultiMapTest extends App {
+  val `MultiMap can update merge and get` = {
     val x = MultiMap.fromList(List(1 -> 1, 2 -> 2, 4 -> 4))
 
     val y = x.update(4 -> 5).update(4 -> 6)
@@ -13,7 +11,7 @@ class MultiMapSpec extends FlatSpec with Matchers {
     assert(z.getList(4) == List(6, 5, 4, 4))
   }
 
-  it can "contains" in {
+  val `MultiMap can contains` = {
     val x = MultiMap.fromList(List(1 -> 1, 2 -> 2, 4 -> 4))
 
     assert(x.contains(1))

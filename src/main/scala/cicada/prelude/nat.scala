@@ -36,3 +36,20 @@ object nat {
     }
   }
 }
+
+object natTest extends App {
+  implicit val module = nat.env
+
+  ep("nat_t")
+  ep("zero_t")
+  ep("succ_t")
+  ep("succ_t" ap $("prev" -> "zero_t"))
+  ep("succ_t" ap $("prev" -> "zero_t") dot "prev")
+
+  eval("succ_t" ap $("prev" -> "zero_t"), module) match {
+    case Right(value) =>
+      println(nat.toInt(value))
+    case Left(errorMsg) =>
+      println(errorMsg)
+  }
+}

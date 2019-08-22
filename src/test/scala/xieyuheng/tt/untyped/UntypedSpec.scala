@@ -1,4 +1,5 @@
 import org.scalatest._
+
 import xieyuheng.tt.untyped._
 
 class UntypedSpec extends FlatSpec with Matchers {

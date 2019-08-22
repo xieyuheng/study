@@ -1,11 +1,9 @@
-import org.scalatest._
-
-import cicada._
+package cicada
 
 import scala.collection.immutable.ListMap
 
-class unifyTest extends FlatSpec with Matchers {
-  "unify" should "not make bind weaker" in {
+object unifyTest extends App {
+  val `unify should not make bind weaker` = {
     val id = Id()
     val bind = Bind(Map(
       id -> SumTypeValue(

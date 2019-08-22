@@ -1,24 +1,23 @@
-import org.scalatest._
+package cicada
 
-import cicada._
 import cicada.dsl._
 
-class evalSpec extends FlatSpec with Matchers {
-  "eval" should "eval Type to TypeOfType" in {
+object evalTest extends App {
+  val `eval should eval Type to TypeOfType` = {
     val env = Env()
     for {
       t <- eval(Type(), env)
     } assert(t.isInstanceOf[TypeOfType])
   }
 
-  it should "eval undefined Var to NeutralValue" in {
+  val `eval should eval undefined Var to NeutralValue` = {
     val env = Env()
     for {
       neu <- eval(Var("x"), env)
     } assert(neu == NeutralValue(VarNeutral("x")))
   }
 
-  it should "eval defined Var to value" in {
+  val `eval should eval defined Var to value` = {
     val xId = Id("x")
     val yId = Id("y")
 

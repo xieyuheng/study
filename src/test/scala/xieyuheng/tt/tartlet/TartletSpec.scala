@@ -1,4 +1,5 @@
 import org.scalatest._
+
 import xieyuheng.tt.tartlet._
 
 class TartletSpec extends FlatSpec with Matchers {

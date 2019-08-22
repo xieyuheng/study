@@ -23,3 +23,11 @@ object vec {
         "tail" -> The("vec_t" ap $("A" -> "A", "length" -> "n")))))
 
 }
+
+object vecTest extends App {
+  implicit val module = vec.env
+
+  ep("vec_t")
+  ep("null_vec_t")
+  ep("cons_vec_t")
+}

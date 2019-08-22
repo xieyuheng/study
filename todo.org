@@ -1,5 +1,4 @@
 - check
-- list_length
 - list_map
 - vec_length
 - vec_map

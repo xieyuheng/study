@@ -8,6 +8,8 @@ object list {
 
   val env = Env()
 
+  .importAll(nat.env)
+
   .defType("list_t", $("A" -> Type()),
     members = $(
       "null_t" -> $(),
@@ -20,6 +22,15 @@ object list {
       "list" -> The("list_t")),
     ret = The("list_t"),
     body = "list" dot "tail"))
+
+  .defFn("list_length",
+    args = $("list" -> The("list_t")),
+    ret = The("nat_t"),
+    body = Case("list", $(
+      "null_t" -> "zero_t",
+      "cons_t" -> ("succ_t" ap $(
+        "prev" -> ("list_length" ap $(
+          "list" -> ("list" dot "tail"))))))))
 
   .defFn("list_append",
     args = $(
@@ -39,15 +50,6 @@ object list {
 
 object listTest extends Test {
   implicit val module = list.env
-    .importAll(nat.env)
-
-  util.evalPrint("list_t")
-  util.evalPrint("null_t")
-  util.evalPrint("cons_t")
-
-  util.evalPrint("nat_t")
-  util.evalPrint("zero_t")
-  util.evalPrint("succ_t")
 
   val zero: Exp = "zero_t"
 
@@ -65,7 +67,7 @@ object listTest extends Test {
           "head" -> zero,
           "tail" -> "null_t")))))
 
-  util.evalPrint(threeZeros)
+  // util.evalPrint(threeZeros)
 
   val zeroAndOne =
     "cons_t" ap $(
@@ -76,17 +78,17 @@ object listTest extends Test {
         "head" -> one,
         "tail" -> "null_t")))
 
-  util.evalPrint(zeroAndOne)
+  // util.evalPrint(zeroAndOne)
 
-  util.evalPrint("cons_t" ap $(
-    "A" -> "nat_t",
-    "head" -> "zero_t",
-    "tail" -> "null_t"))
+  // util.evalPrint("cons_t" ap $(
+  //   "A" -> "nat_t",
+  //   "head" -> "zero_t",
+  //   "tail" -> "null_t"))
 
-  util.evalPrint("cons_t" ap $(
-    "A" -> "nat_t",
-    "head" -> "zero_t",
-    "tail" -> ("null_t" ap $("A" -> "nat_t"))))
+  // util.evalPrint("cons_t" ap $(
+  //   "A" -> "nat_t",
+  //   "head" -> "zero_t",
+  //   "tail" -> ("null_t" ap $("A" -> "nat_t"))))
 
   val twoZeros = "cdr" ap $(
     "list" -> threeZeros)
@@ -94,10 +96,14 @@ object listTest extends Test {
   val oneZero = "cdr" ap $(
     "list" -> twoZeros)
 
-  util.evalPrint(twoZeros)
-  util.evalPrint(oneZero)
+  // util.evalPrint(twoZeros)
+  // util.evalPrint(oneZero)
 
-  util.evalPrint("list_append" ap $(
-    "ante" -> threeZeros,
-    "succ" -> threeZeros))
+  util.evalOnRight(
+    "list_length" ap $(
+      "list" -> ("list_append" ap $(
+        "ante" -> threeZeros,
+        "succ" -> threeZeros)))) { value =>
+    assert(nat.toInt(value) == 6)
+  }
 }

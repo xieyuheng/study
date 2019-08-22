@@ -1,8 +1,8 @@
 # dsl
 
 ```scala mdoc:silent
-import xieyuheng.cicada._
-import xieyuheng.cicada.dsl._
+import cicada._
+import cicada.dsl._
 
 implicit val module = prelude.vec.env
 ```

@@ -9,3 +9,4 @@ scala:
 script:
 - sbt compile
 - sbt test
+- sbt mdoc

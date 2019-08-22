@@ -1,7 +1,8 @@
 import org.scalatest._
+
 import xieyuheng.cicada._
 
-class unifySpec extends FlatSpec with Matchers {
+class unifyTest extends FlatSpec with Matchers {
   "unify" should "not make bind weaker" in {
     val id = Id()
     val bind = Bind(Map(

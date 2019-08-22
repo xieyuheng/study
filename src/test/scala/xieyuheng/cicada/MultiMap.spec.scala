@@ -1,4 +1,5 @@
 import org.scalatest._
+
 import xieyuheng.cicada._
 
 class MultiMapSpec extends FlatSpec with Matchers {

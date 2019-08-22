@@ -4,7 +4,7 @@
 import xieyuheng.cicada._
 import xieyuheng.cicada.dsl._
 
-implicit val module = prelude.vec
+implicit val module = prelude.vec.env
 ```
 
 ```scala mdoc

@@ -1,17 +1,12 @@
-package xieyuheng.cicada
+package xieyuheng.cicada.prelude
 
+import xieyuheng.cicada._
 import xieyuheng.cicada.dsl._
+import xieyuheng.cicada.pretty._
 
-object prelude {
+object list {
 
-  val nat = Env()
-
-  .defType("nat_t", $(),
-    members = $(
-      "zero_t" -> $(),
-      "succ_t" -> $("prev" -> "nat_t")))
-
-  val list = Env()
+  val env = Env()
 
   .defType("list_t", $("A" -> Type()),
     members = $(
@@ -39,21 +34,5 @@ object prelude {
         "tail" -> ("list_append" ap $(
           "ante" -> ("ante" dot "tail"),
           "succ" -> "succ")))))))
-
-  val vec = Env()
-
-  .importAll(nat)
-
-  .defType("vec_t", $(
-    "A" -> Type(),
-    "length" -> The("nat_t")),
-    members = $(
-      "null_vec_t" -> $(
-        "length" -> "zero_t"),
-      "cons_vec_t" -> $(
-        "n" -> The("nat_t"),
-        "length" -> ("succ_t" ap $("prev" -> "n")),
-        "head" -> The("A"),
-        "tail" -> The("vec_t" ap $("A" -> "A", "length" -> "n")))))
 
 }

@@ -2,10 +2,13 @@ import org.scalatest._
 
 import xieyuheng.cicada._
 import xieyuheng.cicada.dsl._
+import xieyuheng.cicada.pretty._
+import xieyuheng.cicada.prelude._
 
 class preludeListSpec extends FlatSpec with Matchers {
   "prelude.list" should "work" in {
-    implicit val module = prelude.list.importAll(prelude.nat)
+    implicit val module = list.env
+      .importAll(nat.env)
 
     ep("list_t")
     ep("null_t")

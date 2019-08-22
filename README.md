@@ -1,13 +1,11 @@
-# cicada
-
-A dependently-typed programming language
+# Cicada
 
 ## Contributing
 
 - Compile: `sbt compile`
 - Run all tests: `sbt test`
 - Install: `sbt publishLocal`
-- Dependency: `libraryDependencies += "xieyuheng" %% "cicada" % "0.0.1"`
+- Dependency: `"xieyuheng" %% "cicada" % "0.0.1"`
 
 ## Docs
 

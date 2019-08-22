@@ -1,6 +1,0 @@
-- [minitt] examples
-- [minitt] operational semantics
-- [minitt] Normal expressions and Readback
-- [minitt] Typing Rules
-- tagless final encoding
-- the little typer as test

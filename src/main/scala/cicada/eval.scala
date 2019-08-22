@@ -1,5 +1,7 @@
 package cicada
 
+import scala.collection.immutable.ListMap
+
 object eval {
   def apply(exp: Exp, env: Env): Either[ErrorMsg, Value] = {
     exp match {
@@ -100,18 +102,18 @@ object eval {
   def onMap(
     map: MultiMap[String, Exp],
     env: Env,
-  ): Either[ErrorMsg, MultiMap[String, Value]] = {
-    val initResult: Either[ErrorMsg, MultiMap[String, Value]] =
-      Right(MultiMap())
+  ): Either[ErrorMsg, ListMap[String, Value]] = {
+    val initResult: Either[ErrorMsg, ListMap[String, Value]] =
+      Right(ListMap())
 
     def updateValueMap(
-      map: MultiMap[String, Value],
+      map: ListMap[String, Value],
       name: String,
       exp: Exp,
-    ): Either[ErrorMsg, MultiMap[String, Value]] = {
+    ): Either[ErrorMsg, ListMap[String, Value]] = {
       for {
         value <- eval(exp, env)
-      } yield map.update(name -> value)
+      } yield map + (name -> value)
     }
 
     map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
@@ -141,19 +143,19 @@ object eval {
   def yieldEnv(
     map: MultiMap[String, Exp],
     env: Env,
-  ): Either[ErrorMsg, (MultiMap[String, Value], Env)] = {
-    val initResult: Either[ErrorMsg, (MultiMap[String, Value], Env)] =
-      Right(MultiMap(), env)
+  ): Either[ErrorMsg, (ListMap[String, Value], Env)] = {
+    val initResult: Either[ErrorMsg, (ListMap[String, Value], Env)] =
+      Right(ListMap(), env)
 
     def updateValueMap(
-      map: MultiMap[String, Value],
+      map: ListMap[String, Value],
       name: String,
       exp: Exp,
       env: Env,
-    ): Either[ErrorMsg, (MultiMap[String, Value], Env)] = {
+    ): Either[ErrorMsg, (ListMap[String, Value], Env)] = {
       for {
         value <- eval(exp, env)
-      } yield (map.update(name -> value), env.defValue(name, value))
+      } yield (map + (name -> value), env.defValue(name, value))
     }
 
     map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
@@ -164,12 +166,12 @@ object eval {
   def yieldBind(
     map: MultiMap[String, Exp],
     env: Env,
-  ): Either[ErrorMsg, (MultiMap[String, Value], Bind)] = {
-    val initResult: Either[ErrorMsg, (MultiMap[String, Value], Bind)] =
-      Right((MultiMap(), Bind()))
+  ): Either[ErrorMsg, (ListMap[String, Value], Bind)] = {
+    val initResult: Either[ErrorMsg, (ListMap[String, Value], Bind)] =
+      Right((ListMap(), Bind()))
 
     def updateBind(
-      valueMap: MultiMap[String, Value],
+      valueMap: ListMap[String, Value],
       bind: Bind,
       name: String,
       value: Value,
@@ -186,7 +188,7 @@ object eval {
         (valueMap, bind) = valueMapAndbind
         value <- eval(exp, env.extendByValueMap(valueMap))
         newBind <- updateBind(valueMap, bind, name, value)
-      } yield ((valueMap.update(name -> value), newBind))
+      } yield ((valueMap + (name -> value), newBind))
     }
   }
 }

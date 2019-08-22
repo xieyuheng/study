@@ -1,5 +1,7 @@
 package cicada
 
+import scala.collection.immutable.ListMap
+
 import cicada.pretty._
 
 case class Env(map: Map[String, Def] = Map())
@@ -16,8 +18,8 @@ case class Env(map: Map[String, Def] = Map())
     Env(map + kv)
   }
 
-  def extendByValueMap(valueMap: MultiMap[String, Value]): Env = {
-    valueMap.entries.foldLeft(this) { case (env, (name, value)) =>
+  def extendByValueMap(valueMap: ListMap[String, Value]): Env = {
+    valueMap.foldLeft(this) { case (env, (name, value)) =>
       env.extend(name -> DefineValue(name, value))
     }
   }

@@ -1,5 +1,7 @@
 package cicada
 
+import scala.collection.immutable.ListMap
+
 import cicada.pretty._
 
 object unify {
@@ -129,8 +131,8 @@ object unify {
   }
 
   def onMap(
-    srcMap: MultiMap[String, Value],
-    tarMap: MultiMap[String, Value],
+    srcMap: ListMap[String, Value],
+    tarMap: ListMap[String, Value],
     bind: Bind,
     env: Env,
   ): Either[ErrorMsg, Bind] = {
@@ -150,7 +152,7 @@ object unify {
       }
     }
 
-    tarMap.entries.foldLeft(initResult) { case (result, (name, tarValue)) =>
+    tarMap.foldLeft(initResult) { case (result, (name, tarValue)) =>
       result.flatMap { bind => updateBind(bind, name, tarValue) }
     }
   }

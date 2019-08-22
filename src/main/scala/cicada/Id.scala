@@ -2,9 +2,10 @@ package cicada
 
 import java.util.UUID
 
-case class Id(name: String = "") {
-  val uuid: UUID = UUID.randomUUID()
-
+case class Id(
+  name: String = "",
+  uuid: UUID = UUID.randomUUID(),
+) {
   override def toString(): String = {
     name ++ "#" ++ uuid.toString
   }

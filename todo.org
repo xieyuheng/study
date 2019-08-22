@@ -1,5 +1,6 @@
+- use ListMap instead of MultiMap for Value
+- json support
 - test as code
-- value.toJson
 - list_length
 - list_map
 - vec_length

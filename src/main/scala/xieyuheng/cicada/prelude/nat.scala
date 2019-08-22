@@ -33,11 +33,13 @@ object nat {
 object natTest extends Test {
   implicit val module = nat.env
 
-  util.evalOnRight("succ_t" ap $("prev" -> "zero_t")) { value =>
-    assert(nat.toInt(value) == 1)
+  util.evalOnRight("succ_t" ap $("prev" -> "zero_t")) {
+    case value =>
+      assert(nat.toInt(value) == 1)
   }
 
-  util.evalOnRight("succ_t" ap $("prev" -> "zero_t") dot "prev") { value =>
-    assert(nat.toInt(value) == 0)
+  util.evalOnRight("succ_t" ap $("prev" -> "zero_t") dot "prev") {
+    case value =>
+      assert(nat.toInt(value) == 0)
   }
 }

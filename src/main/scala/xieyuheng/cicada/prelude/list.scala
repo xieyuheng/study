@@ -67,8 +67,6 @@ object listTest extends Test {
           "head" -> zero,
           "tail" -> "null_t")))))
 
-  // util.evalPrint(threeZeros)
-
   val zeroAndOne =
     "cons_t" ap $(
       "A" -> "nat_t",
@@ -78,32 +76,39 @@ object listTest extends Test {
         "head" -> one,
         "tail" -> "null_t")))
 
-  // util.evalPrint(zeroAndOne)
-
-  // util.evalPrint("cons_t" ap $(
-  //   "A" -> "nat_t",
-  //   "head" -> "zero_t",
-  //   "tail" -> "null_t"))
-
-  // util.evalPrint("cons_t" ap $(
-  //   "A" -> "nat_t",
-  //   "head" -> "zero_t",
-  //   "tail" -> ("null_t" ap $("A" -> "nat_t"))))
+  util.evalOnRight(
+    "list_length" ap $(
+      "list" -> (zeroAndOne))) {
+    case value =>
+      assert(nat.toInt(value) == 2)
+  }
 
   val twoZeros = "cdr" ap $(
     "list" -> threeZeros)
 
+  util.evalOnRight(
+    "list_length" ap $(
+      "list" -> (twoZeros))) {
+    case value =>
+      assert(nat.toInt(value) == 2)
+  }
+
   val oneZero = "cdr" ap $(
     "list" -> twoZeros)
 
-  // util.evalPrint(twoZeros)
-  // util.evalPrint(oneZero)
+  util.evalOnRight(
+    "list_length" ap $(
+      "list" -> (oneZero))) {
+    case value =>
+      assert(nat.toInt(value) == 1)
+  }
 
   util.evalOnRight(
     "list_length" ap $(
       "list" -> ("list_append" ap $(
         "ante" -> threeZeros,
-        "succ" -> threeZeros)))) { value =>
-    assert(nat.toInt(value) == 6)
+        "succ" -> threeZeros)))) {
+    case value =>
+      assert(nat.toInt(value) == 6)
   }
 }

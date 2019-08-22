@@ -18,8 +18,7 @@ object list {
         "tail" -> The("list_t" ap $("A" -> "A")))))
 
   .defExp("cdr", Fn(
-    args = $(
-      "list" -> The("list_t")),
+    args = $("list" -> The("list_t")),
     ret = The("list_t"),
     body = "list" dot "tail"))
 

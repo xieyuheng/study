@@ -13,12 +13,10 @@ t () {
 }
 
 run-tests () {
-    cd target/universal/stage/bin
-
-    for FILE in $(find . -name '*test')
+    for FILE in $(find . | grep "^\./target/universal/stage/bin/" | grep "test$")
     do
         echo ""
-        echo "// [testing] $FILE"
+        echo "[testing] $FILE"
         if ! time $FILE
         then
             exit 1

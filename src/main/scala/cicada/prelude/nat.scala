@@ -3,6 +3,9 @@ package cicada.prelude
 import cicada._
 import cicada.dsl._
 import cicada.pretty._
+import cicada.json.rw._
+
+import upickle.default._
 
 object nat {
 
@@ -13,32 +16,16 @@ object nat {
       "zero_t" -> $(),
       "succ_t" -> $("prev" -> The("nat_t"))))
 
-
   def toInt(value: Value): Int = {
-    import cicada.json.rw._
-    import upickle.default._
+    val json = writeJs(walk.deepSelf(value))
+    jsonToInt(json)
+  }
 
-    println(write(value, indent = 2))
-
-    value match {
-      case MemberTypeValue(name, map, superName, bind) =>
-        name match {
-          case "zero_t" => 0
-          case "succ_t" =>
-            map.get("prev") match {
-              case Some(value) =>
-                1 + toInt(walk.deep(value, bind))
-              case _ =>
-                throw new Exception(
-                  s"value is not a concrete nat: ${prettyValue(value)}")
-            }
-          case _ =>
-            throw new Exception(
-              s"value is not a concrete nat: ${prettyValue(value)}")
-        }
-      case _ =>
-        throw new Exception(
-          s"value is not a concrete nat: ${prettyValue(value)}")
+  def jsonToInt(json: ujson.Value): Int = {
+    json("name").str match {
+      case "zero_t" => 0
+      case "succ_t" =>
+        1 + jsonToInt(json("map")("prev"))
     }
   }
 }

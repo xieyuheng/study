@@ -10,16 +10,31 @@ import scala.collection.immutable.ListMap
 object json {
   object rw {
     implicit def rwMultiMap[K, V]
-      (implicit krw:RW[K], vrw:RW[V])
+      (implicit krw: RW[K], vrw: RW[V])
         : RW[MultiMap[K, V]] =
       readwriter[List[(K, V)]]
         .bimap[MultiMap[K, V]](_.entries, MultiMap(_))
 
     implicit def rwListMap[K, V]
-      (implicit krw:RW[K], vrw:RW[V])
+      (implicit krw: RW[K], vrw: RW[V])
         : RW[ListMap[K, V]] =
       readwriter[Map[K, V]]
         .bimap[ListMap[K, V]](_.toMap, map => ListMap(map.toList: _*))
+
+    implicit def rwDic[V]
+      (implicit vrw: RW[V])
+        : RW[Map[String, V]] =
+      readwriter[ujson.Value]
+        .bimap[Map[String, V]](
+          map => ujson.Obj.from(map.mapValues(writeJs[V](_))),
+          json => scala.collection.immutable.Map() ++
+            json.obj.value.mapValues(read[V](_)))
+
+    implicit def rwListDic[V]
+      (implicit vrw: RW[V])
+        : RW[ListMap[String, V]] =
+      readwriter[Map[String, V]]
+        .bimap[ListMap[String, V]](_.toMap, map => ListMap(map.toSeq: _*))
 
     // Exp
     implicit def rwVar: RW[Var] = macroRW

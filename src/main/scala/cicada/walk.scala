@@ -55,4 +55,15 @@ object walk {
   def deepOnMap(map: ListMap[String, Value], bind: Bind): ListMap[String, Value] = {
     ListMap(map.mapValues(deep(_, bind)).toList: _*)
   }
+
+  def deepSelf(x: Value): Value = {
+    x match {
+      case memberType: MemberTypeValue =>
+        memberType.copy(map = deepOnMap(memberType.map, memberType.bind))
+      case sumType: SumTypeValue =>
+        sumType.copy(map = deepOnMap(sumType.map, sumType.bind))
+      case v: Value =>
+        v
+    }
+  }
 }

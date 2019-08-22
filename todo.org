@@ -1,5 +1,4 @@
 - check
-- nat toInt for testing
 - list_length
 - list_map
 - vec_length

@@ -47,7 +47,7 @@ object list {
 
 }
 
-object listTest extends Test {
+object listTest extends App {
   implicit val module = list.env
 
   val zero: Exp = "zero_t"

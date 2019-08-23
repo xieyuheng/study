@@ -2,7 +2,7 @@ package xieyuheng.cicada
 
 import xieyuheng.cicada.dsl._
 
-object evalTest extends Test {
+object evalTest extends App {
   val `eval should eval Type to TypeOfType` = {
     val env = Env()
     for {

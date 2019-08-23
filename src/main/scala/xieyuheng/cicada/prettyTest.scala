@@ -3,7 +3,7 @@ package xieyuheng.cicada
 import xieyuheng.cicada.dsl._
 import xieyuheng.cicada.pretty._
 
-object prettyTest extends Test {
+object prettyTest extends App {
   val `pretty can make Exp pretty` = {
 
     println(s"------")

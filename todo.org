@@ -1,3 +1,4 @@
+- parser
 - more about nat
 - list_map
 - vec_length
@@ -19,7 +20,7 @@
   - type: ==, member relation
   - cat: ==, |
 * tartlet
-- better syntax
+- better dsl
 - the little typer as test
 * minitt
 - examples

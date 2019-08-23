@@ -30,7 +30,7 @@ object nat {
   }
 }
 
-object natTest extends Test {
+object natTest extends App {
   implicit val module = nat.env
 
   util.evalOnRight("succ_t" ap $("prev" -> "zero_t")) {

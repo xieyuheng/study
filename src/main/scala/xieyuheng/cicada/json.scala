@@ -114,7 +114,7 @@ object json {
   }
 }
 
-object jsonTest extends Test {
+object jsonTest extends App {
   import json.rw._
 
   // ujson.write: ujson.Value => String

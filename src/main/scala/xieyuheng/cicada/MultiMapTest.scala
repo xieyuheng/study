@@ -1,6 +1,6 @@
 package xieyuheng.cicada
 
-object MultiMapTest extends Test {
+object MultiMapTest extends App {
   val `MultiMap can update merge and get` = {
     val x = MultiMap.fromList(List(1 -> 1, 2 -> 2, 4 -> 4))
 

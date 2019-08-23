@@ -24,7 +24,7 @@ object check {
 
     //   ctx :- target.map.get(fieldName) <: t
     //   ----------------
-    //   ctx :- Field(target, fieldName) <: t
+    //   ctx :- Dot(target, fieldName) <: t
 
 
     // - Ap

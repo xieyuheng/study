@@ -41,7 +41,7 @@ object json {
     implicit def rwType: RW[Type] = macroRW
     implicit def rwThe: RW[The] = macroRW
     implicit def rwCase: RW[Case] = macroRW
-    implicit def rwField: RW[Field] = macroRW
+    implicit def rwDot: RW[Dot] = macroRW
     implicit def rwPi: RW[Pi] = macroRW
     implicit def rwFn: RW[Fn] = macroRW
     implicit def rwAp: RW[Ap] = macroRW
@@ -50,7 +50,7 @@ object json {
       rwType,
       rwThe,
       rwCase,
-      rwField,
+      rwDot,
       rwPi,
       rwFn,
       rwAp,
@@ -103,12 +103,12 @@ object json {
     // Neutral
     implicit def rwVarNeutral: RW[VarNeutral] = macroRW
     implicit def rwCaseNeutral: RW[CaseNeutral] = macroRW
-    implicit def rwFieldNeutral: RW[FieldNeutral] = macroRW
+    implicit def rwDotNeutral: RW[DotNeutral] = macroRW
     implicit def rwApNeutral: RW[ApNeutral] = macroRW
     implicit def rwNeutral: RW[Neutral] = RW.merge(
       rwVarNeutral,
       rwCaseNeutral,
-      rwFieldNeutral,
+      rwDotNeutral,
       rwApNeutral,
     )
   }

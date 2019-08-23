@@ -46,13 +46,13 @@ object eval {
                 map <- eval.onMap(map, env)
               } yield NeutralValue(CaseNeutral(neutral, map))
             case _ =>
-              Left(ErrorMsg("targetValue of Field should be MemberTypeValue or NeutralValue, " +
+              Left(ErrorMsg("targetValue of Dot should be MemberTypeValue or NeutralValue, " +
                 s"instead of: ${targetValue}"))
           }
         } yield result
       }
 
-      case Field(target, fieldName) => {
+      case Dot(target, fieldName) => {
         for {
           targetValue <- eval(target, env)
           result <- targetValue match {
@@ -67,9 +67,9 @@ object eval {
                 case None => Left(ErrorMsg(s"no field: ${fieldName}, on memberType: ${memberType}"))
               }
             case NeutralValue(neutral) =>
-              Right(NeutralValue(FieldNeutral(neutral, fieldName)))
+              Right(NeutralValue(DotNeutral(neutral, fieldName)))
             case _ =>
-              Left(ErrorMsg("targetValue of Field should be SumTypeValue, MemberTypeValue or NeutralValue, " +
+              Left(ErrorMsg("targetValue of Dot should be SumTypeValue, MemberTypeValue or NeutralValue, " +
                 s"instead of: ${targetValue}"))
           }
         } yield result

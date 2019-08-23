@@ -13,7 +13,7 @@ object dsl {
   }
 
   implicit class ExpExtension(exp: Exp) {
-    def dot(fieldName: String): Field = Field(exp, fieldName)
+    def dot(fieldName: String): Dot = Dot(exp, fieldName)
 
     def ap(mp: MultiMap[String, Exp]): Ap = {
       Ap(exp, mp)

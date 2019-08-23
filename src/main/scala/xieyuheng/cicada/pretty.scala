@@ -54,7 +54,7 @@ object pretty {
       case Case(target, map) =>
         val mapString = maybeNewline(prettyExpMap(map))
         s"${prettyExp(target)} case {${mapString}}"
-      case Field(target, fieldName) =>
+      case Dot(target, fieldName) =>
         s"${prettyExp(target)}.${fieldName}"
       case Pi(args, ret) =>
         s"pi (${prettyExpArgs(args)}): ${prettyExp(ret)}"
@@ -91,7 +91,7 @@ object pretty {
       case CaseNeutral(target, map) =>
         val mapString = maybeNewline(prettyValueMap(map, bind))
         s"${prettyNeutral(target, bind)} case {${mapString}}"
-      case FieldNeutral(target, fieldName) =>
+      case DotNeutral(target, fieldName) =>
         s"${prettyNeutral(target, bind)}.${fieldName}"
       case ApNeutral(target, args) =>
         s"${prettyNeutral(target, bind)}(${prettyValueArgs(args, bind)})"

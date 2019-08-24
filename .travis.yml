@@ -8,5 +8,4 @@ scala:
 
 script:
 - sbt compile
-- sbt mdoc
 - ./dev t

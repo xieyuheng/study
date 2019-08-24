@@ -10,7 +10,8 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * syntax
-- renew parsing-tech
+- a language for formal-grammar
+- a parser generator
 - lexing/
 - parsing/
 * set, type, cat

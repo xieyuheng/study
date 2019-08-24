@@ -1,4 +1,4 @@
-# Cicada
+# cicada
 
 ## Contributing
 

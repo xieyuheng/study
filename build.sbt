@@ -18,7 +18,6 @@ scalacOptions ++= Seq(
 
 libraryDependencies ++= Seq(
   "com.lihaoyi" %% "upickle" % "0.7.1",
-  "com.lihaoyi" %% "fastparse" % "2.1.3",
 )
 
 enablePlugins(JavaAppPackaging)

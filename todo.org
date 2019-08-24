@@ -9,11 +9,11 @@
   - this means keep Value serde-able
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
-* syntax
-- a language for formal-grammar
-- a parser generator
-- lexing/
-- parsing/
+* partech
+- formal-grammar
+- sentence generator
+- parser generator
+- embed in scala
 * set, type, cat
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

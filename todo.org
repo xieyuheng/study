@@ -10,8 +10,7 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * partech
-- formal-grammar
-- sentence generator
+- sentence generator -- handle repeats
 - parser generator
 - embed in scala
 * set, type, cat

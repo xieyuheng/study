@@ -39,6 +39,18 @@ case class LinearParseTree(parts: List[LinearParsePart]) {
     }
     .mkString(" ")
   }
+
+  def toStr(): String = {
+    parts.map { case part =>
+      part match {
+        case LinearParseStr(str) => str
+        case LinearParseVar(rule) => "<" ++ rule.name ++ ">"
+        case LinearParseBra(rule, choiceName) => ""
+        case LinearParseKet(rule, choiceName) => ""
+      }
+    }
+    .mkString("")
+  }
 }
 
 object LinearParseTree {

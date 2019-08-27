@@ -5,7 +5,7 @@ import xieyuheng.partech.dsl._
 object RuleTest extends App {
   import RuleExample._
 
-  println(sexp)
-  println(sexp_list)
+  println(bool_sexp)
+  println(bool_sexp_list)
   println(bool)
 }

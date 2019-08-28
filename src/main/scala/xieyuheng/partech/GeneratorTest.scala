@@ -7,6 +7,6 @@ object GeneratorTest extends App {
   val gen = Generator.fromRule(bool_sexp)
 
   gen.take(10).foreach { case tree => println(tree.toXML()) }
-
   gen.take(10).foreach { case tree => println(tree.toStr()) }
+  gen.take(10).foreach { case tree => println(tree.toPretty()) }
 }

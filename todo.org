@@ -1,3 +1,6 @@
+- abstract the theory of parsing
+  - start by explaining things you already know
+- renew tartlet with new syntax
 - more about nat
 - list_map
 - vec_length

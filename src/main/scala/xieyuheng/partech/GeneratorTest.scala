@@ -4,9 +4,16 @@ object GeneratorTest extends App {
   import xieyuheng.partech.dsl._
   import RuleExample._
 
-  val gen = Generator.fromRule(bool_sexp)
+  def show(rule: Rule): Unit = {
+    val gen = Generator.fromRule(rule)
 
-  gen.take(10).foreach { case tree => println(tree.toXML()) }
-  gen.take(10).foreach { case tree => println(tree.toStr()) }
-  gen.take(10).foreach { case tree => println(tree.toPretty()) }
+    gen.take(60).foreach { case tree => println(tree.toPretty()) }
+    gen.take(60).foreach { case tree => println(tree.toStr()) }
+  }
+
+  show(bool_sexp)
+  show(tom_dick_and_harry)
+  show(tdh)
+  show(tdh_left)
+  show(sum)
 }

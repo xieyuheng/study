@@ -28,18 +28,6 @@ case class LinearParseTree(parts: List[LinearParsePart]) {
     }
   }
 
-  def toXML(): String = {
-    parts.map { case part =>
-      part match {
-        case LinearParseStr(str) => '"' + str + '"'
-        case LinearParseVar(rule) => "<" ++ rule.name ++ ">"
-        case LinearParseBra(rule, choiceName) => "<" ++ rule.name ++ ":" ++ choiceName ++ ">"
-        case LinearParseKet(rule, choiceName) => "<" ++ rule.name ++ ":" ++ choiceName ++ ">"
-      }
-    }
-    .mkString(" ")
-  }
-
   def toPretty(): String = {
     parts.map { case part =>
       part match {

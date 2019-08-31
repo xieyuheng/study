@@ -1,7 +1,7 @@
 package xieyuheng.partech
 
 case class LinearParseTree(parts: List[LinearParsePart]) {
-  def indexOfNextVar(): Int = {
+  def indexOfNextVar: Int = {
     parts.indexWhere { case part =>
       part.isInstanceOf[LinearParseVar]
     }
@@ -9,6 +9,16 @@ case class LinearParseTree(parts: List[LinearParsePart]) {
 
   def complete(): Boolean = {
     indexOfNextVar == -1
+  }
+
+  def shift(): (LinearParseTree, LinearParseTree) = {
+    indexOfNextVar match {
+      case -1 => (LinearParseTree.empty, this)
+      case n => {
+        val (left, right) = this.parts.splitAt(n)
+        (LinearParseTree(left), LinearParseTree(right))
+      }
+    }
   }
 
   def expend(): List[LinearParseTree] = {
@@ -26,6 +36,10 @@ case class LinearParseTree(parts: List[LinearParsePart]) {
         } .toList
       }
     }
+  }
+
+  def append(that: LinearParseTree): LinearParseTree = {
+    LinearParseTree(this.parts ++ that.parts)
   }
 
   def toPretty(): String = {
@@ -51,9 +65,25 @@ case class LinearParseTree(parts: List[LinearParsePart]) {
     }
     .mkString("")
   }
+
+  def toStrWithoutVar(): String = {
+    parts.map { case part =>
+      part match {
+        case LinearParseStr(str) => str
+        case LinearParseVar(rule) => ""
+        case LinearParseBra(rule, choiceName) => ""
+        case LinearParseKet(rule, choiceName) => ""
+      }
+    }
+    .mkString("")
+  }
 }
 
 object LinearParseTree {
+  def empty: LinearParseTree = {
+    LinearParseTree(List())
+  }
+
   def fromRule(rule: Rule): LinearParseTree = {
     LinearParseTree(List(LinearParseVar(rule)))
   }

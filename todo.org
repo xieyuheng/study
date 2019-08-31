@@ -1,5 +1,3 @@
-- abstract the theory of parsing
-  - start by explaining things you already know
 - renew tartlet with new syntax
 - more about nat
 - list_map
@@ -13,8 +11,6 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * partech
-- sentence generator -- handle repeats
-- parser generator
 - embed in scala
 * set, type, cat
 - what is the difference between set, type and cat ?

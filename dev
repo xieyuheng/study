@@ -3,7 +3,7 @@
 api-doc () {
     sbt doc
     now switch xieyuheng
-    now -n cicada target/scala-2.13/api/
+    now -n cicada target/scala-2.12/api/
 }
 
 t () {

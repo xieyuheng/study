@@ -5,7 +5,7 @@ object GeneratorTest extends App {
   import RuleExample._
 
   def show(rule: Rule): Unit = {
-    Generator.fromRule(rule)
+    Generator(rule)
       .take(100)
       .foreach { case tree => println(tree.toStr()) }
   }

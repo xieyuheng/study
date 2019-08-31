@@ -5,15 +5,16 @@ object GeneratorTest extends App {
   import RuleExample._
 
   def show(rule: Rule): Unit = {
-    val gen = Generator.fromRule(rule)
-
-    gen.take(60).foreach { case tree => println(tree.toPretty()) }
-    gen.take(60).foreach { case tree => println(tree.toStr()) }
+    Generator.fromRule(rule)
+      .take(100)
+      .foreach { case tree => println(tree.toStr()) }
   }
 
-  show(bool_sexp)
-  show(tom_dick_and_harry)
-  show(tdh)
-  show(tdh_left)
-  show(sum)
+  show(bool_sexp.bool_sexp)
+  show(tom_dick_and_harry.tom_dick_and_harry)
+  show(tdh.tdh)
+  show(tdh_left.tdh_left)
+  show(sum.sum)
+  show(ab.ab)
+  show(abc.abc)
 }

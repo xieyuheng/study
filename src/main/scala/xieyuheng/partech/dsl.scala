@@ -1,11 +1,11 @@
 package xieyuheng.partech
 
 object dsl {
-  implicit def StrPartFromString(str: String): RulePartStr = {
+  implicit def RulePartStrFromString(str: String): RulePartStr = {
     RulePartStr(str)
   }
 
-  implicit def RulePartFromRule(rule: => Rule): RulePartRule = {
+  implicit def RulePartRuleFromRule(rule: => Rule): RulePartRule = {
     RulePartRule(() => rule)
   }
 }

@@ -5,18 +5,18 @@ import scala.collection.mutable.ListBuffer
 
 case class Generator(rule: Rule) {
   def generate(): Generating = {
-    Generating(ListBuffer(LinearParseTree.fromRule(rule)))
+    Generating(ListBuffer(LinearTree.fromRule(rule)))
   }
 
-  def take(n: Int): List[LinearParseTree] = {
+  def take(n: Int): List[LinearTree] = {
     val generating = generate()
 
     var count: Int = 0
-    var list: List[LinearParseTree] = List()
+    var list: List[LinearTree] = List()
 
     while (count < n) {
       count += 1
-      generating.nextLinearParseTree() match {
+      generating.nextLinearTree() match {
         case Some(tree) => list = list ++ List(tree)
         case None => {}
       }
@@ -27,11 +27,11 @@ case class Generator(rule: Rule) {
 }
 
 case class Generating(
-  queue: ListBuffer[LinearParseTree] = ListBuffer(),
+  queue: ListBuffer[LinearTree] = ListBuffer(),
 ) {
 
-  def nextLinearParseTree(): Option[LinearParseTree] = {
-    var result: Option[LinearParseTree] = None
+  def nextLinearTree(): Option[LinearTree] = {
+    var result: Option[LinearTree] = None
 
     breakable {
       while (true) {

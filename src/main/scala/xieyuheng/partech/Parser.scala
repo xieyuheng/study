@@ -5,21 +5,21 @@ import scala.collection.mutable.ListBuffer
 
 case class Parser(rule: Rule) {
   def parsing(text: String): Parsing = {
-    Parsing(text, ListBuffer((0, LinearParseTree.empty, LinearParseTree.fromRule(rule))))
+    Parsing(text, ListBuffer((0, LinearTree.empty, LinearTree.fromRule(rule))))
   }
 
-  def parse(text: String): Option[LinearParseTree] = {
-    parsing(text).nextLinearParseTree
+  def parse(text: String): Option[LinearTree] = {
+    parsing(text).nextLinearTree
   }
 }
 
 case class Parsing(
   text: String,
-  queue: ListBuffer[(Int, LinearParseTree, LinearParseTree)] = ListBuffer(),
+  queue: ListBuffer[(Int, LinearTree, LinearTree)] = ListBuffer(),
 ) {
 
-  def nextLinearParseTree(): Option[LinearParseTree] = {
-    var result: Option[LinearParseTree] = None
+  def nextLinearTree(): Option[LinearTree] = {
+    var result: Option[LinearTree] = None
 
     breakable {
       while (true) {

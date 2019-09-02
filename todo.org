@@ -11,7 +11,8 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * partech
-- embed in scala
+- Tree
+- serde to Tree
 * set, type, cat
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

@@ -1,12 +1,12 @@
 package xieyuheng.partech
 
-object ParserTest extends App {
+object TreeTest extends App {
   import xieyuheng.partech.dsl._
   import RuleExample._
 
   def show(rule: Rule, text: String): Unit = {
     Parser(rule).parse(text) match {
-      case Some(tree) => println(pretty.prettyLinearTree(tree))
+      case Some(linearTree) => println(pretty.prettyTree(Tree.fromLinearTree(linearTree)))
       case None => println(s"[PARSING ERROR] rule: ${rule.name}, text: ${text}")
     }
   }

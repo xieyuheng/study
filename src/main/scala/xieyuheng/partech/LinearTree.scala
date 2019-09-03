@@ -42,18 +42,6 @@ case class LinearTree(parts: List[LinearTreePart]) {
     LinearTree(this.parts ++ that.parts)
   }
 
-  def toPretty(): String = {
-    parts.map { case part =>
-      part match {
-        case LinearTreePartStr(str) => '"' + str + '"'
-        case LinearTreePartVar(rule) => s"${rule.name}"
-        case LinearTreePartBra(rule, choiceName) => s"${rule.name}:${choiceName} {"
-        case LinearTreePartKet(rule, choiceName) => "}"
-      }
-    }
-    .mkString(" ")
-  }
-
   def toStr(): String = {
     parts.map { case part =>
       part match {

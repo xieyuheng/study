@@ -11,8 +11,8 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * partech
-- Tree
-- serde to Tree
+- FromTree
+- RulePartPattern -- for any fix length string predicate
 * set, type, cat
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

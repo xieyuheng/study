@@ -1,11 +1,11 @@
 package xieyuheng.partech
 
-object FromTreeTest extends App {
+object TreeToTest extends App {
   import xieyuheng.partech.dsl._
   import RuleExample._
 
   def show[A](rule: Rule, text: String)
-    (implicit fromTree: FromTree[A])
+    (implicit treeTo: TreeTo[A])
       : Unit = {
     Parser(rule).parsing(text).nextTree match {
       case Some(tree) => println(Tree.to[A](tree))

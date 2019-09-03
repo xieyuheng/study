@@ -40,7 +40,7 @@ object Tree {
     stack(0)
   }
 
-  def to[A](tree: Tree)(implicit fromTree: FromTree[A]): A = {
-    fromTree(tree)
+  def to[A](tree: Tree)(implicit treeTo: TreeTo[A]): A = {
+    treeTo(tree)
   }
 }

@@ -9,20 +9,18 @@ object RuleExample {
       "unit" -> Seq(a),
       "cons" -> Seq(a, separater, non_empty_list(a))))
 
-  implicit def non_empty_list_from_tree[A](implicit aFromTree: FromTree[A]) = {
-    new FromTree[List[A]] {
-      def fromTree(tree: Tree): List[A] = {
-        tree match {
-          case Node(_, "unit", rule, Seq(a)) =>
-            List(aFromTree(a))
-          case Node(_, "cons", rule, Seq(a, _, tail)) =>
-            aFromTree(a) :: fromTree(tail)
-          case _ => throw new Exception()
-        }
+  implicit def tree_to_non_empty_list[A]
+    (implicit treeToA: TreeTo[A])
+      : TreeTo[List[A]] = TreeTo[List[A]] { case tree =>
+      tree match {
+        case Node(_, "unit", rule, Seq(a)) =>
+          List(Tree.to[A](a))
+        case Node(_, "cons", rule, Seq(a, _, tail)) =>
+          Tree.to[A](a) :: Tree.to[List[A]](tail)
+        case _ => throw new Exception()
       }
-    }
   }
-  
+
   object bool_sexp {
     def bool = Rule(
       "bool", Map(
@@ -34,15 +32,13 @@ object RuleExample {
     final case object False extends Bool
 
     object Bool {
-      implicit object BoolFromTree extends FromTree[Bool] {
-        def fromTree(tree: Tree): Bool = {
-          tree match {
-            case Node("bool", "true", rule, Seq(Leaf("true"))) =>
-              True
-            case Node("bool", "false", rule, Seq(Leaf("false"))) =>
-              False
-            case _ => throw new Exception()
-          }
+      implicit def treeToBool = TreeTo[Bool] { case tree =>
+        tree match {
+          case Node("bool", "true", rule, Seq(Leaf("true"))) =>
+            True
+          case Node("bool", "false", rule, Seq(Leaf("false"))) =>
+            False
+          case _ => throw new Exception()
         }
       }
     }
@@ -57,15 +53,13 @@ object RuleExample {
     final case class BoolSexpBool(bool: Bool) extends BoolSexp
 
     object BoolSexp {
-      implicit object BoolSexpFromTree extends FromTree[BoolSexp] {
-        def fromTree(tree: Tree): BoolSexp = {
-          tree match {
-            case Node("bool_sexp", "list", rule, Seq(_, list, _)) =>
-              BoolSexpList(Tree.to[List[BoolSexp]](list))
-            case Node("bool_sexp", "bool", rule, Seq(bool)) =>
-              BoolSexpBool(Tree.to[Bool](bool))
-            case _ => throw new Exception()
-          }
+      implicit def treeToBoolSexp: TreeTo[BoolSexp] = TreeTo[BoolSexp] { case tree =>
+        tree match {
+          case Node("bool_sexp", "list", rule, Seq(_, list, _)) =>
+            BoolSexpList(Tree.to[List[BoolSexp]](list))
+          case Node("bool_sexp", "bool", rule, Seq(bool)) =>
+            BoolSexpBool(Tree.to[Bool](bool))
+          case _ => throw new Exception()
         }
       }
     }
@@ -164,17 +158,15 @@ object RuleExample {
     final case class DigitSum(n: Int) extends Sum
 
     object Sum {
-      implicit object SumFromTree extends FromTree[Sum] {
-        def fromTree(tree: Tree): Sum = {
-          tree match {
-            case Node("sum", "digit", rule, Seq(Node("digit", "0", _, _))) =>
-              DigitSum(0)
-            case Node("sum", "digit", rule, Seq(Node("digit", "1", _, _))) =>
-              DigitSum(1)
-            case Node("sum", "sum", rule, Seq(x, Leaf(" + "), y)) =>
-              SumSum(fromTree(x), fromTree(y))
-            case _ => throw new Exception()
-          }
+      implicit def treeToSum: TreeTo[Sum] = TreeTo[Sum] { case tree =>
+        tree match {
+          case Node("sum", "digit", rule, Seq(Node("digit", "0", _, _))) =>
+            DigitSum(0)
+          case Node("sum", "digit", rule, Seq(Node("digit", "1", _, _))) =>
+            DigitSum(1)
+          case Node("sum", "sum", rule, Seq(x, Leaf(" + "), y)) =>
+            SumSum(Tree.to[Sum](x), Tree.to[Sum](y))
+          case _ => throw new Exception()
         }
       }
     }

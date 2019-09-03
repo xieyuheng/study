@@ -47,6 +47,9 @@ case class Parsing(
                           ruleParts.map(LinearTreePart.fromRulePart) ++
                           List(LinearTreePartKet(rule, choiceName))) }
                     .filter { case newRight =>
+                      // simply pruning by strLengthLowerBound
+                      // - pruning is always heuristic,
+                      // - pruning should balance with searching
                       newRight.strLengthLowerBound + tail.strLengthLowerBound <= rightText.length }
                     .map { case newRight => (i, left, newRight.append(tail)) }
                   queue.appendAll(frames)

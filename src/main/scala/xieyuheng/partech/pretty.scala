@@ -27,9 +27,9 @@ object pretty {
   def prettyTree(tree: Tree): String = {
     tree match {
       case Leaf(str) => '"' + str + '"'
-      case Node(ruleName, choiceName, rule, children) =>
+      case Node(rule, choiceName, children) =>
         val childrenStr = maybeNewline(children.map(prettyTree).mkString("\n"))
-        s"${ruleName}:${choiceName} {${childrenStr}}"
+        s"${rule.name}:${choiceName} {${childrenStr}}"
     }
   }
 

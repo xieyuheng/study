@@ -2,7 +2,7 @@ package xieyuheng.partech
 
 import xieyuheng.partech.dsl._
 
-object RuleExample {
+object Example {
 
   def non_empty_list(a: Rule)(implicit separater: String): Rule = Rule(
     s"list(${a.name})", Map(
@@ -13,9 +13,9 @@ object RuleExample {
     (implicit treeToA: TreeTo[A])
       : TreeTo[List[A]] = TreeTo[List[A]] { case tree =>
       tree match {
-        case Node(_, "unit", rule, Seq(a)) =>
+        case Node(rule, "unit", Seq(a)) =>
           List(Tree.to[A](a))
-        case Node(_, "cons", rule, Seq(a, _, tail)) =>
+        case Node(rule, "cons", Seq(a, _, tail)) =>
           Tree.to[A](a) :: Tree.to[List[A]](tail)
         case _ => throw new Exception()
       }
@@ -34,9 +34,9 @@ object RuleExample {
     object Bool {
       implicit def treeToBool = TreeTo[Bool] { case tree =>
         tree match {
-          case Node("bool", "true", rule, Seq(Leaf("true"))) =>
+          case Node(Rule("bool", _), "true", Seq(Leaf("true"))) =>
             True
-          case Node("bool", "false", rule, Seq(Leaf("false"))) =>
+          case Node(Rule("bool", _), "false", Seq(Leaf("false"))) =>
             False
           case _ => throw new Exception()
         }
@@ -55,9 +55,9 @@ object RuleExample {
     object BoolSexp {
       implicit def treeToBoolSexp: TreeTo[BoolSexp] = TreeTo[BoolSexp] { case tree =>
         tree match {
-          case Node("bool_sexp", "list", rule, Seq(_, list, _)) =>
+          case Node(Rule("bool_sexp", _), "list", Seq(_, list, _)) =>
             BoolSexpList(Tree.to[List[BoolSexp]](list))
-          case Node("bool_sexp", "bool", rule, Seq(bool)) =>
+          case Node(Rule("bool_sexp", _), "bool", Seq(bool)) =>
             BoolSexpBool(Tree.to[Bool](bool))
           case _ => throw new Exception()
         }
@@ -160,11 +160,11 @@ object RuleExample {
     object Sum {
       implicit def treeToSum: TreeTo[Sum] = TreeTo[Sum] { case tree =>
         tree match {
-          case Node("sum", "digit", rule, Seq(Node("digit", "0", _, _))) =>
+          case Node(Rule("sum", _), "digit", Seq(Node(Rule("digit", _), "0", _))) =>
             DigitSum(0)
-          case Node("sum", "digit", rule, Seq(Node("digit", "1", _, _))) =>
+          case Node(Rule("sum", _), "digit", Seq(Node(Rule("digit", _), "1", _))) =>
             DigitSum(1)
-          case Node("sum", "sum", rule, Seq(x, Leaf(" + "), y)) =>
+          case Node(Rule("sum", _), "sum", Seq(x, Leaf(" + "), y)) =>
             SumSum(Tree.to[Sum](x), Tree.to[Sum](y))
           case _ => throw new Exception()
         }

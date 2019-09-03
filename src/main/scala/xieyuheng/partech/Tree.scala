@@ -5,9 +5,8 @@ import scala.collection.mutable.ListBuffer
 sealed trait Tree
 final case class Leaf(str: String) extends Tree
 final case class Node(
-  ruleName: String,
-  choiceName: String,
   rule: Rule,
+  choiceName: String,
   children: Seq[Tree],
 ) extends Tree
 
@@ -29,7 +28,7 @@ object Tree {
           marks.trimStart(1)
           val children = stack.dropRight(count)
           stack.trimStart(children.length)
-          stack.prepend(Node(rule.name, choiceName, rule, children.toList))
+          stack.prepend(Node(rule, choiceName, children.toList))
         case LinearTreePartKet(rule, choiceName) =>
           marks.prepend(stack.length)
       }

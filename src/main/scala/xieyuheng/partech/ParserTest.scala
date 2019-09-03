@@ -2,7 +2,7 @@ package xieyuheng.partech
 
 object ParserTest extends App {
   import xieyuheng.partech.dsl._
-  import RuleExample._
+  import Example._
 
   def show(rule: Rule, text: String): Unit = {
     Parser(rule).parsing(text).nextTree match {

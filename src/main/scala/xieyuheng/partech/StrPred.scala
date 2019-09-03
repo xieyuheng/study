@@ -1,7 +1,7 @@
 package xieyuheng.partech
 
 case class StrPred
-  (name: String, length: Int)
+  (name: String, length: Int, gen: () => String)
   (pred: String => Boolean) {
 
   assert(length > 0)

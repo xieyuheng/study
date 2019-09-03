@@ -2,12 +2,12 @@ package xieyuheng.partech
 
 import xieyuheng.partech.example._
 
-object GeneratorTest extends App {
+object prettyTreeTest extends App {
   def show(ex: ExampleRule): Unit = {
     Generator(ex.main)
-      .take(100)
+      .take(10)
       .foreach { case tree =>
-        println(pretty.prettyLinearTree(tree))
+        // println(pretty.prettyTree(Tree.fromLinearTree(tree)))
       }
   }
 

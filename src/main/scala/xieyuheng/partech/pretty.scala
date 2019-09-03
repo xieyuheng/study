@@ -24,23 +24,24 @@ object pretty {
     }
   }
 
+  def getArgsStr(rule: Rule): String = {
+    if (rule.args.size == 0) {
+      ""
+    } else {
+      val str = rule.args.map {
+        case (name, rule) => s"${name} = ${rule.name}"
+      }.mkString(", ")
+
+      s"(${str})"
+    }
+  }
+
   def prettyTree(tree: Tree): String = {
     tree match {
       case Leaf(str) => '"' + str + '"'
       case Node(rule, choiceName, children) =>
         val childrenStr = maybeNewline(children.map(prettyTree).mkString("\n"))
-        val argsStr = {
-          if (rule.args.size == 0) {
-            ""
-          } else {
-            val str = rule.args.map {
-              case (name, rule) => s"${name} = ${rule.name}"
-            }.mkString(", ")
-
-            s" (${str})"
-          }
-        }
-        s"${rule.name}:${choiceName}${argsStr} {${childrenStr}}"
+        s"${rule.name}:${choiceName}${getArgsStr(rule)} {${childrenStr}}"
     }
   }
 
@@ -49,8 +50,10 @@ object pretty {
       part match {
         case LinearTreePartStr(str) => '"' + str + '"'
         case LinearTreePartRule(rule) => s"${rule.name}"
-        case LinearTreePartBra(rule, choiceName) => s"${rule.name}:${choiceName} {"
-        case LinearTreePartKet(rule, choiceName) => "}"
+        case LinearTreePartBra(rule, choiceName) =>
+          s"<${rule.name}:${choiceName}${getArgsStr(rule)}>"
+        case LinearTreePartKet(rule, choiceName) =>
+          s"</${rule.name}:${choiceName}${getArgsStr(rule)}>"
         case LinearTreePartPred(strPred) => strPred.toString
       }
     }.mkString(" ")

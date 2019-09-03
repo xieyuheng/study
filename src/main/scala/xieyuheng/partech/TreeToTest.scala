@@ -3,9 +3,6 @@ package xieyuheng.partech
 import xieyuheng.partech.example._
 
 object TreeToTest extends App {
-  import xieyuheng.partech.ruleDSL._
-  import example._
-
   def test(ex: ExampleRule): Unit = {
     val rule = ex.main
 

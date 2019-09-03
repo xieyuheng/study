@@ -1,7 +1,7 @@
 package xieyuheng.cicada.prelude
 
 import xieyuheng.cicada._
-import xieyuheng.cicada.dsl._
+import xieyuheng.cicada.expDSL._
 import xieyuheng.cicada.pretty._
 
 object list {

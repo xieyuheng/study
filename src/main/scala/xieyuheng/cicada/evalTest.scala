@@ -1,6 +1,6 @@
 package xieyuheng.cicada
 
-import xieyuheng.cicada.dsl._
+import xieyuheng.cicada.expDSL._
 
 object evalTest extends App {
   val `eval should eval Type to TypeOfType` = {

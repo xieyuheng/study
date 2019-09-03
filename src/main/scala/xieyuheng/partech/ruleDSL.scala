@@ -1,6 +1,6 @@
 package xieyuheng.partech
 
-object dsl {
+object ruleDSL {
 
   implicit def RulePartStrFromString(str: String): RulePartStr = {
     RulePartStr(str)

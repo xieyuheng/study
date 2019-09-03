@@ -5,7 +5,7 @@ package xieyuheng.cicada
   * (for testing only)
   */
 
-object dsl {
+object expDSL {
 
   object $ {
     def apply[K, V](entries: (K, V)*): MultiMap[K, V] =

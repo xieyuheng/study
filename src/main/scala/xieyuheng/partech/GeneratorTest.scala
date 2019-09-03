@@ -3,7 +3,7 @@ package xieyuheng.partech
 import xieyuheng.partech.example._
 
 object GeneratorTest extends App {
-  import xieyuheng.partech.dsl._
+  import xieyuheng.partech.ruleDSL._
   import example._
 
   def show(ex: ExampleRule): Unit = {

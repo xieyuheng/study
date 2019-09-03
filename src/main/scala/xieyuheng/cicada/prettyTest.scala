@@ -1,6 +1,6 @@
 package xieyuheng.cicada
 
-import xieyuheng.cicada.dsl._
+import xieyuheng.cicada.expDSL._
 import xieyuheng.cicada.pretty._
 
 object prettyTest extends App {

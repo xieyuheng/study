@@ -1,6 +1,6 @@
 package xieyuheng.cicada
 
-import xieyuheng.cicada.dsl._
+import xieyuheng.cicada.expDSL._
 
 import upickle.default._
 import upickle.default.{ ReadWriter => RW }

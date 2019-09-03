@@ -1,3 +1,5 @@
+- pre-calculate length of Rule -- by min all choices
+- note about pruning
 - fix StrPred for Generator
 - ExampleRule with main type
 - DecSum for dec_sum

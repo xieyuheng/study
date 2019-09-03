@@ -1,6 +1,6 @@
 package xieyuheng.partech
 
-import xieyuheng.partech.dsl._
+import xieyuheng.partech.ruleDSL._
 
 object RuleTest extends App {
   import example._

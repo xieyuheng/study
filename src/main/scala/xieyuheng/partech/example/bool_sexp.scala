@@ -1,7 +1,7 @@
 package xieyuheng.partech.example
 
 import xieyuheng.partech._
-import xieyuheng.partech.dsl._
+import xieyuheng.partech.ruleDSL._
 import xieyuheng.partech.example.collection._
 
 object bool_sexp extends ExampleRule {

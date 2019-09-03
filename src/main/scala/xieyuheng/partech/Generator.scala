@@ -5,7 +5,7 @@ import scala.collection.mutable.ListBuffer
 
 case class Generator(rule: Rule) {
   def generate(): Generating = {
-    Generating(ListBuffer(LinearTree.fromRule(rule)))
+    Generating(ListBuffer((LinearTree.empty, LinearTree.fromRule(rule))))
   }
 
   def take(n: Int): List[LinearTree] = {
@@ -27,7 +27,7 @@ case class Generator(rule: Rule) {
 }
 
 case class Generating(
-  queue: ListBuffer[LinearTree] = ListBuffer(),
+  queue: ListBuffer[(LinearTree, LinearTree)] = ListBuffer(),
 ) {
 
   def nextLinearTree(): Option[LinearTree] = {
@@ -36,31 +36,39 @@ case class Generating(
     breakable {
       while (true) {
         queue.headOption match {
-          case Some(tree) => {
+          case None => break
+          case Some((left, right)) => {
             queue.trimStart(1)
 
-            if (tree.complete()) {
-              result = Some(tree)
+            if (right.isEmpty) {
+              result = Some(left)
               break
             } else {
-              val treeList = tree.indexOfNextRule match {
-                case -1 => List()
-                case n => {
-                  val LinearTreePartRule(rule) = tree.parts(n)
-                  rule.choices.map { case (choiceName, ruleParts) =>
-                    val newParts = {
-                      List(LinearTreePartBra(rule, choiceName)) ++
-                      ruleParts.map(LinearTreePart.fromRulePart) ++
-                      List(LinearTreePartKet(rule, choiceName))
-                    }
-                    LinearTree(tree.parts.patch(n, newParts, 1))
-                  }.toList
+              val head = right.head
+              val tail = right.tail
+
+              head match {
+                case LinearTreePartStr(str) =>
+                  queue.prepend((left.consEnd(head), tail))
+                case LinearTreePartRule(rule) => {
+                  val frames = rule.choices
+                    .map { case (choiceName, ruleParts) =>
+                      LinearTree(
+                        List(LinearTreePartBra(rule, choiceName)) ++
+                          ruleParts.map(LinearTreePart.fromRulePart) ++
+                          List(LinearTreePartKet(rule, choiceName))) }
+                    .map { case newRight => (left, newRight.append(tail)) }
+                  queue.appendAll(frames)
                 }
+                case LinearTreePartBra(rule, choiceName) =>
+                  queue.prepend((left.consEnd(head), tail))
+                case LinearTreePartKet(rule, choiceName) =>
+                  queue.prepend((left.consEnd(head), tail))
+                case LinearTreePartPred(strPred) =>
+                  queue.prepend((left.consEnd(head), tail))
               }
-              queue.appendAll(treeList)
             }
           }
-          case None => break
         }
       }
     }

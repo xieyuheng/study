@@ -7,7 +7,7 @@ case class StrPred
   assert(length > 0)
 
   override def toString = {
-    s"[${name}#${length}?]"
+    s"[${length}#${name}]"
   }
 
   def check(str: String): Boolean = {

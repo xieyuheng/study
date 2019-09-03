@@ -14,16 +14,5 @@ object GeneratorTest extends App {
       .foreach { case tree => println(tree.toStr()) }
   }
 
-  Seq(
-    bool_sexp,
-    tom_dick_and_harry,
-    tdh,
-    tdh_left,
-    bin_sum,
-    // dec_sum,
-    ab,
-    abc,
-  ).foreach(show)
-
-  // ExampleRule.examples.foreach(show)
+  ExampleRule.examples.foreach(show)
 }

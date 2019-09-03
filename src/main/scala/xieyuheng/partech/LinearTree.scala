@@ -6,13 +6,13 @@ case class LinearTree(parts: List[LinearTreePart]) {
 
   def isEmpty = parts.isEmpty
 
-  def indexOfNextStrPred: Int = {
+  private def indexOfNextStrPred: Int = {
     parts.indexWhere { case part =>
       part.isInstanceOf[LinearTreePartPred]
     }
   }
 
-  def indexOfNextRule: Int = {
+  private def indexOfNextRule: Int = {
     parts.indexWhere { case part =>
       part.isInstanceOf[LinearTreePartRule]
     }

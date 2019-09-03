@@ -23,6 +23,8 @@ object tdh_left extends ExampleRule {
       "h" -> Seq("h"),
       "list" -> Seq(tdh_left_list)))
 
+  def treeToMainType = ???
+
   def tdh_left_list = Rule(
     "tdh_left_list", Map(
       "t" -> Seq(tdh_left_list_head, "&t"),

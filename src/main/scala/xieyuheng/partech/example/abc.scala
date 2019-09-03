@@ -23,6 +23,8 @@ object abc extends ExampleRule {
       "a_bc" -> Seq(a, bc),
       "ab_c" -> Seq(ab, c)))
 
+  def treeToMainType = ???
+
   def a: Rule = Rule(
     "a", Map(
       "one" -> Seq("a"),

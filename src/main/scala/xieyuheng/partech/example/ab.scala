@@ -20,6 +20,8 @@ object ab extends ExampleRule {
 
   def main = ab
 
+  def treeToMainType = ???
+
   def ab = Rule(
     "ab", Map(
       "head_a" -> Seq("a", b),

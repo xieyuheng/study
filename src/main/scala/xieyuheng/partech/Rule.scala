@@ -9,6 +9,7 @@ case class Rule(
 
   // just for defining Rule.getStrLengthLowerBound and strLengthLowerBound
   // - for we can not compare lambda (ruleGen)
+  //   but it is ok to mis-comparing some rules to be the same
   private def similar(that: Rule): Boolean = {
     this.name == that.name &&
     this.choices.keys.toSet == that.choices.keys.toSet &&

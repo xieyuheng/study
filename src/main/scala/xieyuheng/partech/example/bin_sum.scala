@@ -18,6 +18,8 @@ object bin_sum extends ExampleRule {
 
   def main = bin_sum
 
+  def treeToMainType = BinSum.treeToBinSum
+
   def bin_sum: Rule = Rule(
     "bin_sum", Map(
       "bin" -> Seq(bin),
@@ -45,5 +47,4 @@ object bin_sum extends ExampleRule {
       }
     }
   }
-
 }

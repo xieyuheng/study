@@ -1,7 +1,6 @@
 - fix StrPred for Generator
-- ExampleRule with main type
-- DecSum for dec_sum
-- AB and ABC for ab and abc
+- `AB` and `ABC` for `ab` and `abc`
+- `TDH` for `tdh` and friends
 - test partech by cicada syntax
 - renew tartlet with new syntax
 - more about nat

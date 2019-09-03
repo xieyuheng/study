@@ -10,7 +10,7 @@ object ParserTest extends App {
       Parser(rule).parsing(text).nextTree match {
         case Some(tree) => {}
         case None =>
-          println(s"[PARSING ERROR] should parse")
+          println(s"[ParserTest] should parse")
           println(s"- rule: ${rule.name}")
           println(s"- text: ${text}")
           throw new Exception()
@@ -20,7 +20,7 @@ object ParserTest extends App {
     ex.non_sentences.foreach { case text =>
       Parser(rule).parsing(text).nextTree match {
         case Some(tree) =>
-          println(s"[PARSING ERROR] should not parse")
+          println(s"[ParserTest] should not parse")
           println(s"- rule: ${rule.name}")
           println(s"- text: ${text}")
           println(s"- tree: ${pretty.prettyTree(tree)}")

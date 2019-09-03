@@ -19,6 +19,8 @@ object tom_dick_and_harry extends ExampleRule {
       "name" -> Seq(name),
       "list" -> Seq(name_list, " and ", name)))
 
+  def treeToMainType = ???
+
   def name = Rule(
     "name", Map(
       "tom" -> Seq("tom"),

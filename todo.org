@@ -1,4 +1,3 @@
-- `treeList` instead of `frames`
 - tex-like LinearTree print
 - `AB` and `ABC` for `ab` and `abc`
 - `TDH` for `tdh` and friends

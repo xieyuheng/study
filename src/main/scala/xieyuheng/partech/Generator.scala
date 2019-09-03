@@ -51,14 +51,14 @@ case class Generating(
                 case LinearTreePartStr(str) =>
                   queue.prepend((left.consEnd(head), tail))
                 case LinearTreePartRule(rule) => {
-                  val frames = rule.choices
+                  val treeList = rule.choices
                     .map { case (choiceName, ruleParts) =>
                       LinearTree(
                         List(LinearTreePartBra(rule, choiceName)) ++
                           ruleParts.map(LinearTreePart.fromRulePart) ++
                           List(LinearTreePartKet(rule, choiceName))) }
                     .map { case newRight => (left, newRight.append(tail)) }
-                  queue.appendAll(frames)
+                  queue.appendAll(treeList)
                 }
                 case LinearTreePartBra(rule, choiceName) =>
                   queue.prepend((left.consEnd(head), tail))

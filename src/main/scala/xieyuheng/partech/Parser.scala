@@ -40,7 +40,7 @@ case class Parsing(
                     queue.prepend((i + str.length, left.consEnd(head), tail))
                   }
                 case LinearTreePartRule(rule) => {
-                  val frames = rule.choices
+                  val treeList = rule.choices
                     .map { case (choiceName, ruleParts) =>
                       LinearTree(
                         List(LinearTreePartBra(rule, choiceName)) ++
@@ -52,7 +52,7 @@ case class Parsing(
                       // - pruning should balance with searching
                       newRight.strLengthLowerBound + tail.strLengthLowerBound <= rightText.length }
                     .map { case newRight => (i, left, newRight.append(tail)) }
-                  queue.appendAll(frames)
+                  queue.appendAll(treeList)
                 }
                 case LinearTreePartBra(rule, choiceName) =>
                   queue.prepend((i, left.consEnd(head), tail))

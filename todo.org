@@ -11,7 +11,7 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * partech
-- RulePartPred -- for any fix length string predicate
+- test partech by cicada syntax
 * set, type, cat
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

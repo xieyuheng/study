@@ -149,7 +149,7 @@ object Example {
         "dec" -> Seq(dec),
         "dec_sum" -> Seq(dec_sum, " + ", dec_sum)))
 
-    def dec = StrPred(1, str => str.forall(Character.isDigit), "dec")
+    def dec = StrPred("dec", 1) { str => str.forall(Character.isDigit) }
 
     sealed trait DecSum
     final case class DecSumSum(x: DecSum, y: DecSum) extends DecSum

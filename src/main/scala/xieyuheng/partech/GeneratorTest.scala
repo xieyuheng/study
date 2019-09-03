@@ -2,7 +2,7 @@ package xieyuheng.partech
 
 object GeneratorTest extends App {
   import xieyuheng.partech.dsl._
-  import Example._
+  import example._
 
   def show(rule: Rule): Unit = {
     Generator(rule)

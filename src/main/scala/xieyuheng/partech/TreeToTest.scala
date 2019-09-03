@@ -2,7 +2,7 @@ package xieyuheng.partech
 
 object TreeToTest extends App {
   import xieyuheng.partech.dsl._
-  import Example._
+  import example._
 
   def show[A](rule: Rule, text: String)
     (implicit treeTo: TreeTo[A])

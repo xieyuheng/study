@@ -1,3 +1,4 @@
+- sentences in examples
 - renew tartlet with new syntax
 - more about nat
 - list_map

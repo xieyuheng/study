@@ -11,7 +11,6 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * partech
-- better generic rule -- for pattern matching
 - RulePartPattern -- for any fix length string predicate
 * set, type, cat
 - what is the difference between set, type and cat ?

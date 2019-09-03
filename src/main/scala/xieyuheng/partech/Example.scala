@@ -5,17 +5,18 @@ import xieyuheng.partech.dsl._
 object Example {
 
   def non_empty_list(a: Rule)(implicit separater: String): Rule = Rule(
-    s"list(${a.name})", Map(
-      "unit" -> Seq(a),
-      "cons" -> Seq(a, separater, non_empty_list(a))))
+    s"non_empty_list", Map(
+      "one" -> Seq(a),
+      "more" -> Seq(a, separater, non_empty_list(a))),
+    args = Map("a" -> a))
 
   implicit def tree_to_non_empty_list[A]
     (implicit treeToA: TreeTo[A])
       : TreeTo[List[A]] = TreeTo[List[A]] { case tree =>
       tree match {
-        case Node(rule, "unit", Seq(a)) =>
+        case Node(Rule("non_empty_list", _, _), "one", Seq(a)) =>
           List(Tree.to[A](a))
-        case Node(rule, "cons", Seq(a, _, tail)) =>
+        case Node(Rule("non_empty_list", _, _), "more", Seq(a, _, tail)) =>
           Tree.to[A](a) :: Tree.to[List[A]](tail)
         case _ => throw new Exception()
       }
@@ -34,9 +35,9 @@ object Example {
     object Bool {
       implicit def treeToBool = TreeTo[Bool] { case tree =>
         tree match {
-          case Node(Rule("bool", _), "true", Seq(Leaf("true"))) =>
+          case Node(Rule("bool", _, _), "true", Seq(Leaf("true"))) =>
             True
-          case Node(Rule("bool", _), "false", Seq(Leaf("false"))) =>
+          case Node(Rule("bool", _, _), "false", Seq(Leaf("false"))) =>
             False
           case _ => throw new Exception()
         }
@@ -55,9 +56,9 @@ object Example {
     object BoolSexp {
       implicit def treeToBoolSexp: TreeTo[BoolSexp] = TreeTo[BoolSexp] { case tree =>
         tree match {
-          case Node(Rule("bool_sexp", _), "list", Seq(_, list, _)) =>
+          case Node(Rule("bool_sexp", _, _), "list", Seq(_, list, _)) =>
             BoolSexpList(Tree.to[List[BoolSexp]](list))
-          case Node(Rule("bool_sexp", _), "bool", Seq(bool)) =>
+          case Node(Rule("bool_sexp", _, _), "bool", Seq(bool)) =>
             BoolSexpBool(Tree.to[Bool](bool))
           case _ => throw new Exception()
         }
@@ -66,8 +67,8 @@ object Example {
 
     // def bool_sexp_list: Rule = Rule(
     //   "bool_sexp_list", Map(
-    //     "unit" -> Seq(bool_sexp),
-    //     "cons" -> Seq(bool_sexp, " ", bool_sexp_list)))
+    //     "one" -> Seq(bool_sexp),
+    //     "more" -> Seq(bool_sexp, " ", bool_sexp_list)))
 
     def bool_sexp_list: Rule = non_empty_list(bool_sexp)(" ")
   }
@@ -86,8 +87,8 @@ object Example {
 
     // def name_list: Rule = Rule(
     //   "name_list", Map(
-    //     "unit" -> Seq(name),
-    //     "cons" -> Seq(name, ", ", name_list)))
+    //     "one" -> Seq(name),
+    //     "more" -> Seq(name, ", ", name_list)))
 
     def name_list = non_empty_list(name)(", ")
   }
@@ -160,11 +161,11 @@ object Example {
     object Sum {
       implicit def treeToSum: TreeTo[Sum] = TreeTo[Sum] { case tree =>
         tree match {
-          case Node(Rule("sum", _), "digit", Seq(Node(Rule("digit", _), "0", _))) =>
+          case Node(Rule("sum", _, _), "digit", Seq(Node(Rule("digit", _, _), "0", _))) =>
             DigitSum(0)
-          case Node(Rule("sum", _), "digit", Seq(Node(Rule("digit", _), "1", _))) =>
+          case Node(Rule("sum", _, _), "digit", Seq(Node(Rule("digit", _, _), "1", _))) =>
             DigitSum(1)
-          case Node(Rule("sum", _), "sum", Seq(x, Leaf(" + "), y)) =>
+          case Node(Rule("sum", _, _), "sum", Seq(x, Leaf(" + "), y)) =>
             SumSum(Tree.to[Sum](x), Tree.to[Sum](y))
           case _ => throw new Exception()
         }

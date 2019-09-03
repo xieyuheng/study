@@ -3,8 +3,7 @@ package xieyuheng.partech
 case class Rule(
   name: String,
   choices: Map[String, Seq[RulePart]],
-  // args: Map[String, Rule] = Map()
-)
+  args: Map[String, Rule] = Map())
 
 sealed trait RulePart
 

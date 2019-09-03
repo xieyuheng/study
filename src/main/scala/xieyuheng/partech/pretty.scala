@@ -29,7 +29,18 @@ object pretty {
       case Leaf(str) => '"' + str + '"'
       case Node(rule, choiceName, children) =>
         val childrenStr = maybeNewline(children.map(prettyTree).mkString("\n"))
-        s"${rule.name}:${choiceName} {${childrenStr}}"
+        val argsStr = {
+          if (rule.args.size == 0) {
+            ""
+          } else {
+            val str = rule.args.map {
+              case (name, rule) => s"${name} = ${rule.name}"
+            }.mkString(", ")
+
+            s" (${str})"
+          }
+        }
+        s"${rule.name}:${choiceName}${argsStr} {${childrenStr}}"
     }
   }
 

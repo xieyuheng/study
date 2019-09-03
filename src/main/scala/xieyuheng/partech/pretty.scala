@@ -41,7 +41,7 @@ object pretty {
       case Leaf(str) => '"' + str + '"'
       case Node(rule, choiceName, children) =>
         val childrenStr = maybeNewline(children.map(prettyTree).mkString("\n"))
-        s"${rule.name}:${choiceName}${getArgsStr(rule)} {${childrenStr}}"
+        s"${rule.name}::${choiceName}${getArgsStr(rule)} {${childrenStr}}"
     }
   }
 
@@ -51,9 +51,9 @@ object pretty {
         case LinearTreePartStr(str) => '"' + str + '"'
         case LinearTreePartRule(rule) => s"${rule.name}"
         case LinearTreePartBra(rule, choiceName) =>
-          s"<${rule.name}:${choiceName}${getArgsStr(rule)}>"
+          s"<${rule.name}::${choiceName}${getArgsStr(rule)}>"
         case LinearTreePartKet(rule, choiceName) =>
-          s"</${rule.name}:${choiceName}${getArgsStr(rule)}>"
+          s"</${rule.name}::${choiceName}${getArgsStr(rule)}>"
         case LinearTreePartPred(strPred) => strPred.toString
       }
     }.mkString(" ")

@@ -38,11 +38,26 @@ case class Generating(
         queue.headOption match {
           case Some(tree) => {
             queue.trimStart(1)
+
             if (tree.complete()) {
               result = Some(tree)
               break
             } else {
-              queue.appendAll(tree.expend())
+              val treeList = tree.indexOfNextRule match {
+                case -1 => List()
+                case n => {
+                  val LinearTreePartRule(rule) = tree.parts(n)
+                  rule.choices.map { case (choiceName, ruleParts) =>
+                    val newParts = {
+                      List(LinearTreePartBra(rule, choiceName)) ++
+                      ruleParts.map(LinearTreePart.fromRulePart) ++
+                      List(LinearTreePartKet(rule, choiceName))
+                    }
+                    LinearTree(tree.parts.patch(n, newParts, 1))
+                  }.toList
+                }
+              }
+              queue.appendAll(treeList)
             }
           }
           case None => break

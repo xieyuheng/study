@@ -4,7 +4,19 @@ import xieyuheng.partech._
 import xieyuheng.partech.dsl._
 import xieyuheng.partech.example.collection._
 
-object bin_sum {
+object bin_sum extends ExampleRule {
+
+  val sentences = Seq(
+    "1 + 0",
+    "1 + 1 + 1 + 0",
+    "0 + 0",
+  )
+
+  val non_sentences = Seq(
+    "1 + 2",
+  )
+
+  def main = bin_sum
 
   def bin_sum: Rule = Rule(
     "bin_sum", Map(

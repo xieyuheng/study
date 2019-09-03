@@ -21,7 +21,7 @@ object Tree {
       part match {
         case LinearTreePartStr(str) =>
           stack.prepend(Leaf(str))
-        case LinearTreePartVar(rule) =>
+        case LinearTreePartRule(rule) =>
           throw new Exception(s"var: ${rule.name}, in linearTree: ${linearTree}")
         case LinearTreePartBra(rule, choiceName) =>
           val count = marks.head

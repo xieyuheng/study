@@ -4,7 +4,22 @@ import xieyuheng.partech._
 import xieyuheng.partech.dsl._
 import xieyuheng.partech.example.collection._
 
-object dec_sum {
+object dec_sum extends ExampleRule {
+
+  val sentences = Seq(
+    "1 + 0",
+    "1 + 1 + 1 + 0",
+    "0 + 0",
+    "1 + 2",
+    "1 + 9",
+    "1 + 9 + 5",
+  )
+
+  val non_sentences = Seq(
+    "11 + 12",
+  )
+
+  def main = dec_sum
 
   def dec_sum: Rule = Rule(
     "dec_sum", Map(

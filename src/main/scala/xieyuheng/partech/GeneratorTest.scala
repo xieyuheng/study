@@ -1,20 +1,29 @@
 package xieyuheng.partech
 
+import xieyuheng.partech.example._
+
 object GeneratorTest extends App {
   import xieyuheng.partech.dsl._
   import example._
 
-  def show(rule: Rule): Unit = {
+  def show(ex: ExampleRule): Unit = {
+    val rule = ex.main
+
     Generator(rule)
       .take(100)
       .foreach { case tree => println(tree.toStr()) }
   }
 
-  show(bool_sexp.bool_sexp)
-  show(tom_dick_and_harry.tom_dick_and_harry)
-  show(tdh.tdh)
-  show(tdh_left.tdh_left)
-  show(bin_sum.bin_sum)
-  show(ab.ab)
-  show(abc.abc)
+  Seq(
+    bool_sexp,
+    tom_dick_and_harry,
+    tdh,
+    tdh_left,
+    bin_sum,
+    // dec_sum,
+    ab,
+    abc,
+  ).foreach(show)
+
+  // ExampleRule.examples.foreach(show)
 }

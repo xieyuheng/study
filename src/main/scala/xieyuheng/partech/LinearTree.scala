@@ -1,11 +1,6 @@
 package xieyuheng.partech
 
 case class LinearTree(parts: List[LinearTreePart]) {
-  def indexOfNextVar: Int = {
-    parts.indexWhere { case part =>
-      part.isInstanceOf[LinearTreePartVar]
-    }
-  }
 
   def length = parts.length
 
@@ -17,40 +12,19 @@ case class LinearTree(parts: List[LinearTreePart]) {
     }
   }
 
-  def complete(): Boolean = {
-    indexOfNextVar == -1 && indexOfNextStrPred == -1
+  def indexOfNextRule: Int = {
+    parts.indexWhere { case part =>
+      part.isInstanceOf[LinearTreePartRule]
+    }
   }
 
-  def shift(): (LinearTree, LinearTree) = {
-    indexOfNextVar match {
-      case -1 => (LinearTree.empty, this)
-      case n => {
-        val (left, right) = this.parts.splitAt(n)
-        (LinearTree(left), LinearTree(right))
-      }
-    }
+  def complete(): Boolean = {
+    indexOfNextRule == -1 && indexOfNextStrPred == -1
   }
 
   def tail: LinearTree = LinearTree(parts.tail)
 
   def head: LinearTreePart = parts.head
-
-  def expend(): List[LinearTree] = {
-    indexOfNextVar match {
-      case -1 => List()
-      case n => {
-        val LinearTreePartVar(rule) = parts(n)
-        rule.choices.map { case (choiceName, ruleParts) =>
-          val newParts = {
-            List(LinearTreePartBra(rule, choiceName)) ++
-            ruleParts.map(LinearTreePart.fromRulePart) ++
-            List(LinearTreePartKet(rule, choiceName))
-          }
-          LinearTree(parts.patch(n, newParts, 1))
-        } .toList
-      }
-    }
-  }
 
   def append(that: LinearTree): LinearTree = {
     LinearTree(this.parts ++ that.parts)
@@ -64,22 +38,10 @@ case class LinearTree(parts: List[LinearTreePart]) {
     parts.map { case part =>
       part match {
         case LinearTreePartStr(str) => str
-        case LinearTreePartVar(rule) => "<" ++ rule.name ++ ">"
+        case LinearTreePartRule(rule) => "<" ++ rule.name ++ ">"
         case LinearTreePartBra(rule, choiceName) => ""
         case LinearTreePartKet(rule, choiceName) => ""
         case LinearTreePartPred(strPred) => strPred.toString
-      }
-    }.mkString("")
-  }
-
-  def toPureStr(): String = {
-    parts.map { case part =>
-      part match {
-        case LinearTreePartStr(str) => str
-        case LinearTreePartVar(rule) => ""
-        case LinearTreePartBra(rule, choiceName) => ""
-        case LinearTreePartKet(rule, choiceName) => ""
-        case LinearTreePartPred(strPred) => ""
       }
     }.mkString("")
   }
@@ -88,7 +50,7 @@ case class LinearTree(parts: List[LinearTreePart]) {
     parts.foldLeft(0) { case (bound, part) =>
       part match {
         case LinearTreePartStr(str) => bound + str.length
-        case LinearTreePartVar(rule) => bound + 1
+        case LinearTreePartRule(rule) => bound + 1
         case LinearTreePartBra(rule, choiceName) => bound
         case LinearTreePartKet(rule, choiceName) => bound
         case LinearTreePartPred(strPred) => bound + strPred.length
@@ -103,13 +65,13 @@ object LinearTree {
   }
 
   def fromRule(rule: Rule): LinearTree = {
-    LinearTree(List(LinearTreePartVar(rule)))
+    LinearTree(List(LinearTreePartRule(rule)))
   }
 }
 
 sealed trait LinearTreePart
 final case class LinearTreePartStr(str: String) extends LinearTreePart
-final case class LinearTreePartVar(rule: Rule) extends LinearTreePart
+final case class LinearTreePartRule(rule: Rule) extends LinearTreePart
 final case class LinearTreePartBra(rule: Rule, choiceName: String) extends LinearTreePart
 final case class LinearTreePartKet(rule: Rule, choiceName: String) extends LinearTreePart
 final case class LinearTreePartPred(strPred: StrPred) extends LinearTreePart
@@ -120,7 +82,7 @@ object LinearTreePart {
       case RulePartStr(str) => LinearTreePartStr(str)
       case RulePartRule(ruleGen) =>
         val rule = ruleGen()
-        LinearTreePartVar(rule)
+        LinearTreePartRule(rule)
       case RulePartPred(strPred) =>
         LinearTreePartPred(strPred)
     }

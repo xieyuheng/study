@@ -4,9 +4,17 @@ import xieyuheng.partech._
 import xieyuheng.partech.dsl._
 import xieyuheng.partech.example.collection._
 
-object tom_dick_and_harry {
+object tom_dick_and_harry extends ExampleRule {
 
-  def tom_dick_and_harry = Rule(
+  val sentences = Seq(
+    "tom, dick and harry",
+  )
+
+  val non_sentences = Seq(
+    "tom, dick, harry",
+  )
+
+  def main = Rule(
     "tom_dick_and_harry", Map(
       "name" -> Seq(name),
       "list" -> Seq(name_list, " and ", name)))

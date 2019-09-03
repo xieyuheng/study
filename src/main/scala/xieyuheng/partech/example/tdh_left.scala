@@ -4,11 +4,19 @@ import xieyuheng.partech._
 import xieyuheng.partech.dsl._
 import xieyuheng.partech.example.collection._
 
-object tdh_left {
+object tdh_left extends ExampleRule {
 
   // left regular grammar
 
-  def tdh_left = Rule(
+  val sentences = Seq(
+    "t,d&h",
+  )
+
+  val non_sentences = Seq(
+    "t,d,h",
+  )
+
+  def main = Rule(
     "tdh_left", Map(
       "t" -> Seq("t"),
       "d" -> Seq("d"),

@@ -13,11 +13,7 @@ object TreeToTest extends App {
     }
   }
 
-  Seq(
-    "(true false)",
-    "(true false true)",
-    "(true ((((false)))))",
-  ).foreach { show[bool_sexp.BoolSexp](bool_sexp.bool_sexp, _) }
+  bool_sexp.sentences.foreach { show[bool_sexp.BoolSexp](bool_sexp.main, _) }
 
 //   Seq(
 //     "tom, dick and harry",
@@ -31,12 +27,7 @@ object TreeToTest extends App {
 //     "t,d&h",
 //   ).foreach { show(tdh_left.tdh_left, _) }
 
-  Seq(
-    "1 + 0",
-    "1 + 1 + 1 + 0",
-    "0 + 0",
-    "1 + 2",
-  ).foreach { show[bin_sum.BinSum](bin_sum.bin_sum, _) }
+  bin_sum.sentences.foreach { show[bin_sum.BinSum](bin_sum.main, _) }
 
 //   Seq(
 //     "ab",

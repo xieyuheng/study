@@ -4,12 +4,21 @@ import xieyuheng.partech._
 import xieyuheng.partech.dsl._
 import xieyuheng.partech.example.collection._
 
-object abc {
+object abc extends ExampleRule {
 
   // ambiguous grammar
   // language = "a"^m "b"^n "c"^n | "a"^p "b"^p "c"^q
 
-  def abc = Rule(
+  val sentences = Seq(
+    "abc",
+    "aabbcc",
+  )
+
+  val non_sentences = Seq(
+    "abbccc",
+  )
+
+  def main = Rule(
     "abc", Map(
       "a_bc" -> Seq(a, bc),
       "ab_c" -> Seq(ab, c)))

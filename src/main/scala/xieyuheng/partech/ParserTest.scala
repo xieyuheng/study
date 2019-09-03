@@ -1,60 +1,34 @@
 package xieyuheng.partech
 
-object ParserTest extends App {
-  import xieyuheng.partech.dsl._
-  import example._
+import xieyuheng.partech.example._
 
-  def show(rule: Rule, text: String): Unit = {
-    Parser(rule).parsing(text).nextTree match {
-      case Some(tree) => println(pretty.prettyTree(tree))
-      case None => println(s"[PARSING ERROR] rule: ${rule.name}, text: ${text}")
+object ParserTest extends App {
+  def test(ex: ExampleRule): Unit = {
+    val rule = ex.main
+
+    ex.sentences.foreach { case text =>
+      Parser(rule).parsing(text).nextTree match {
+        case Some(tree) => {}
+        case None =>
+          println(s"[PARSING ERROR] should parse")
+          println(s"- rule: ${rule.name}")
+          println(s"- text: ${text}")
+          throw new Exception()
+      }
+    }
+
+    ex.non_sentences.foreach { case text =>
+      Parser(rule).parsing(text).nextTree match {
+        case Some(tree) =>
+          println(s"[PARSING ERROR] should not parse")
+          println(s"- rule: ${rule.name}")
+          println(s"- text: ${text}")
+          println(s"- tree: ${pretty.prettyTree(tree)}")
+          throw new Exception()
+        case None => {}
+      }
     }
   }
 
-  Seq(
-    "(true false)",
-    "(true false true)",
-    "(true ((((false)))))",
-  ).foreach { show(bool_sexp.bool_sexp, _) }
-
-  Seq(
-    "tom, dick and harry",
-  ).foreach { show(tom_dick_and_harry.tom_dick_and_harry, _) }
-
-  Seq(
-    "t,d&h",
-  ).foreach { show(tdh.tdh, _) }
-
-  Seq(
-    "t,d&h",
-  ).foreach { show(tdh_left.tdh_left, _) }
-
-  Seq(
-    "1 + 0",
-    "1 + 1 + 1 + 0",
-    "0 + 0",
-    "1 + 2",
-  ).foreach { show(bin_sum.bin_sum, _) }
-
-  Seq(
-    "1 + 0",
-    "1 + 1 + 1 + 0",
-    "0 + 0",
-    "1 + 2",
-    "1 + 9",
-    "1 + 9 + 5",
-  ).foreach { show(dec_sum.dec_sum, _) }
-
-  Seq(
-    "ab",
-    "abab",
-    "aabb",
-    "aab",
-  ).foreach { show(ab.ab, _) }
-
-  Seq(
-    "abc",
-    "aabbcc",
-  ).foreach { show(abc.abc, _) }
-
+  ExampleRule.examples.foreach(test)
 }

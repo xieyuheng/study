@@ -4,7 +4,20 @@ import xieyuheng.partech._
 import xieyuheng.partech.dsl._
 import xieyuheng.partech.example.collection._
 
-object bool_sexp {
+object bool_sexp extends ExampleRule {
+
+  val sentences = Seq(
+    "(true false)",
+    "(true false true)",
+    "(true ((((false)))))",
+  )
+
+  val non_sentences = Seq(
+    "true [false]",
+    "true false",
+  )
+
+  def main = bool_sexp
 
   def bool = Rule(
     "bool", Map(

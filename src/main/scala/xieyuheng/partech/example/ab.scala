@@ -4,9 +4,21 @@ import xieyuheng.partech._
 import xieyuheng.partech.dsl._
 import xieyuheng.partech.example.collection._
 
-object ab {
+object ab extends ExampleRule {
 
   // equal number of "a" "b"
+
+  val sentences = Seq(
+    "ab",
+    "abab",
+    "aabb",
+  )
+
+  val non_sentences = Seq(
+    "aab",
+  )
+
+  def main = ab
 
   def ab = Rule(
     "ab", Map(

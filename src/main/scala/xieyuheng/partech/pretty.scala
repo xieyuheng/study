@@ -48,7 +48,7 @@ object pretty {
     linearTree.parts.map { case part =>
       part match {
         case LinearTreePartStr(str) => '"' + str + '"'
-        case LinearTreePartVar(rule) => s"${rule.name}"
+        case LinearTreePartRule(rule) => s"${rule.name}"
         case LinearTreePartBra(rule, choiceName) => s"${rule.name}:${choiceName} {"
         case LinearTreePartKet(rule, choiceName) => "}"
         case LinearTreePartPred(strPred) => strPred.toString

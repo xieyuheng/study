@@ -50,7 +50,7 @@ case class LinearTree(parts: List[LinearTreePart]) {
     parts.foldLeft(0) { case (bound, part) =>
       part match {
         case LinearTreePartStr(str) => bound + str.length
-        case LinearTreePartRule(rule) => bound + 1
+        case LinearTreePartRule(rule) => bound + rule.strLengthLowerBound
         case LinearTreePartBra(rule, choiceName) => bound
         case LinearTreePartKet(rule, choiceName) => bound
         case LinearTreePartPred(strPred) => bound + strPred.length

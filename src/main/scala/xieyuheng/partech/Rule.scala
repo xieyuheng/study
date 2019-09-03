@@ -6,6 +6,36 @@ case class Rule(
   args: Map[String, Rule] = Map(),
 ) {
   assert(choices.size > 0)
+
+  // just for defining Rule.getStrLengthLowerBound and strLengthLowerBound
+  // - for we can not compare lambda (ruleGen)
+  private def similar(that: Rule): Boolean = {
+    this.name == that.name &&
+    this.choices.keys.toSet == that.choices.keys.toSet &&
+    this.args.keys.toSet == that.args.keys.toSet
+  }
+
+  lazy val strLengthLowerBound: Int = Rule.getStrLengthLowerBound(this, List(this))
+}
+
+object Rule {
+  private def getStrLengthLowerBound(rule: Rule, occured: List[Rule]): Int = {
+    rule.choices.map { case (_name, parts) =>
+      parts.foldLeft(0) { case (bound, part) =>
+        part match {
+          case RulePartStr(str) => bound + str.length
+          case RulePartRule(ruleGen) =>
+            val r = ruleGen()
+            if (occured.exists(r.similar)) {
+              bound + 1
+            } else {
+              bound + getStrLengthLowerBound(r, r :: occured)
+            }
+          case RulePartPred(strPred) => bound + strPred.length
+        }
+      }
+    }.min
+  }
 }
 
 sealed trait RulePart

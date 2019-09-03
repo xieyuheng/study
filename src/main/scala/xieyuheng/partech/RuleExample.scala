@@ -9,16 +9,66 @@ object RuleExample {
       "unit" -> Seq(a),
       "cons" -> Seq(a, separater, non_empty_list(a))))
 
+  implicit def non_empty_list_from_tree[A](implicit aFromTree: FromTree[A]) = {
+    new FromTree[List[A]] {
+      def fromTree(tree: Tree): List[A] = {
+        tree match {
+          case Node(_, "unit", rule, Seq(a)) =>
+            List(aFromTree(a))
+          case Node(_, "cons", rule, Seq(a, _, tail)) =>
+            aFromTree(a) :: fromTree(tail)
+          case _ => throw new Exception()
+        }
+      }
+    }
+  }
+  
   object bool_sexp {
     def bool = Rule(
       "bool", Map(
         "true" -> Seq("true"),
         "false" -> Seq("false")))
 
+    sealed trait Bool
+    final case object True extends Bool
+    final case object False extends Bool
+
+    object Bool {
+      implicit object BoolFromTree extends FromTree[Bool] {
+        def fromTree(tree: Tree): Bool = {
+          tree match {
+            case Node("bool", "true", rule, Seq(Leaf("true"))) =>
+              True
+            case Node("bool", "false", rule, Seq(Leaf("false"))) =>
+              False
+            case _ => throw new Exception()
+          }
+        }
+      }
+    }
+
     def bool_sexp = Rule(
       "bool_sexp", Map(
         "list" -> Seq("(", bool_sexp_list, ")"),
         "bool" -> Seq(bool)))
+
+    sealed trait BoolSexp
+    final case class BoolSexpList(list: List[BoolSexp]) extends BoolSexp
+    final case class BoolSexpBool(bool: Bool) extends BoolSexp
+
+    object BoolSexp {
+      implicit object BoolSexpFromTree extends FromTree[BoolSexp] {
+        def fromTree(tree: Tree): BoolSexp = {
+          tree match {
+            case Node("bool_sexp", "list", rule, Seq(_, list, _)) =>
+              BoolSexpList(Tree.to[List[BoolSexp]](list))
+            case Node("bool_sexp", "bool", rule, Seq(bool)) =>
+              BoolSexpBool(Tree.to[Bool](bool))
+            case _ => throw new Exception()
+          }
+        }
+      }
+    }
 
     // def bool_sexp_list: Rule = Rule(
     //   "bool_sexp_list", Map(
@@ -108,6 +158,26 @@ object RuleExample {
       "digit", Map(
         "0" -> Seq("0"),
         "1" -> Seq("1")))
+
+    sealed trait Sum
+    final case class SumSum(x: Sum, y: Sum) extends Sum
+    final case class DigitSum(n: Int) extends Sum
+
+    object Sum {
+      implicit object SumFromTree extends FromTree[Sum] {
+        def fromTree(tree: Tree): Sum = {
+          tree match {
+            case Node("sum", "digit", rule, Seq(Node("digit", "0", _, _))) =>
+              DigitSum(0)
+            case Node("sum", "digit", rule, Seq(Node("digit", "1", _, _))) =>
+              DigitSum(1)
+            case Node("sum", "sum", rule, Seq(x, Leaf(" + "), y)) =>
+              SumSum(fromTree(x), fromTree(y))
+            case _ => throw new Exception()
+          }
+        }
+      }
+    }
   }
 
   object ab {

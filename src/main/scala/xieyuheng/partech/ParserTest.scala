@@ -5,8 +5,8 @@ object ParserTest extends App {
   import RuleExample._
 
   def show(rule: Rule, text: String): Unit = {
-    Parser(rule).parse(text) match {
-      case Some(tree) => println(pretty.prettyLinearTree(tree))
+    Parser(rule).parsing(text).nextTree match {
+      case Some(tree) => println(pretty.prettyTree(tree))
       case None => println(s"[PARSING ERROR] rule: ${rule.name}, text: ${text}")
     }
   }

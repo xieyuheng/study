@@ -51,7 +51,7 @@ case class LinearTree(parts: List[LinearTreePart]) {
         case LinearTreePartKet(rule, choiceName) => ""
       }
     }
-    .mkString("")
+      .mkString("")
   }
 
   def toStrWithoutVar(): String = {

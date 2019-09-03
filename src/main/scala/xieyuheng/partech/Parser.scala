@@ -7,10 +7,6 @@ case class Parser(rule: Rule) {
   def parsing(text: String): Parsing = {
     Parsing(text, ListBuffer((0, LinearTree.empty, LinearTree.fromRule(rule))))
   }
-
-  def parse(text: String): Option[LinearTree] = {
-    parsing(text).nextLinearTree
-  }
 }
 
 case class Parsing(
@@ -57,5 +53,11 @@ case class Parsing(
     }
 
     result
+  }
+
+  def nextTree(): Option[Tree] = {
+    nextLinearTree().flatMap { case linearTree =>
+      Some(Tree.fromLinearTree(linearTree))
+    }
   }
 }

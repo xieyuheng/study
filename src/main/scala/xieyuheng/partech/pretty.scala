@@ -51,6 +51,7 @@ object pretty {
         case LinearTreePartVar(rule) => s"${rule.name}"
         case LinearTreePartBra(rule, choiceName) => s"${rule.name}:${choiceName} {"
         case LinearTreePartKet(rule, choiceName) => "}"
+        case LinearTreePartPred(strPred) => strPred.toString
       }
     }
       .mkString(" ")

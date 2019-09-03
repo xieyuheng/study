@@ -36,7 +36,7 @@ object TreeToTest extends App {
     "1 + 1 + 1 + 0",
     "0 + 0",
     "1 + 2",
-  ).foreach { show[sum.Sum](sum.sum, _) }
+  ).foreach { show[bin_sum.BinSum](bin_sum.bin_sum, _) }
 
 //   Seq(
 //     "ab",

@@ -20,34 +20,49 @@ case class Parsing(
     breakable {
       while (true) {
         queue.headOption match {
+          case None => break
           case Some((i, left, right)) => {
             val (leftText, rightText) = text.splitAt(i)
             queue.trimStart(1)
-            if (right.complete()) {
-              if (right.toStrWithoutVar == rightText) {
-                result = Some(left.append(right))
+
+            if (right.isEmpty) {
+              if(rightText.isEmpty) {
+                result = Some(left)
                 break
               }
             } else {
-              val frames = right.expend()
-                .map { case tree => tree.shift() }
-                .filter { case (mid, right) =>
-                  val midStr = mid.toStrWithoutVar
-                  val rightStr = right.toStrWithoutVar
-                  rightText.startsWith(midStr) &&
-                  rightStr.length <= rightText.length - midStr.length
-                  // TODO
-                  // improve pruning by rightStr
+              val head = right.head
+              val tail = right.tail
+
+              head match {
+                case LinearTreePartStr(str) =>
+                  if (rightText.startsWith(str)) {
+                    queue.prepend((i + str.length, left.consEnd(head), tail))
+                  }
+                case LinearTreePartVar(rule) => {
+                  val frames = rule.choices
+                    .map { case (choiceName, ruleParts) =>
+                      LinearTree(
+                        List(LinearTreePartBra(rule, choiceName)) ++
+                          ruleParts.map(LinearTreePart.fromRulePart) ++
+                          List(LinearTreePartKet(rule, choiceName))) }
+                    .filter { case newRight =>
+                      newRight.append(tail).strLengthLowerBound <= rightText.length }
+                    .map { case newRight => (i, left, newRight.append(tail)) }
+                  queue.appendAll(frames)
                 }
-                .map { case (mid, right) =>
-                  (i + mid.toStrWithoutVar.length,
-                    left.append(mid),
-                    right)
-                }
-              queue.appendAll(frames)
+                case LinearTreePartBra(rule, choiceName) =>
+                  queue.prepend((i, left.consEnd(head), tail))
+                case LinearTreePartKet(rule, choiceName) =>
+                  queue.prepend((i, left.consEnd(head), tail))
+                case LinearTreePartPred(strPred) =>
+                  if (strPred.check(rightText)) {
+                    val str = rightText.take(strPred.length)
+                    queue.prepend((i + strPred.length, left.consEnd(LinearTreePartStr(str)), tail))
+                  }
+              }
             }
           }
-          case None => break
         }
       }
     }

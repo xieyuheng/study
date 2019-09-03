@@ -14,7 +14,7 @@ object GeneratorTest extends App {
   show(tom_dick_and_harry.tom_dick_and_harry)
   show(tdh.tdh)
   show(tdh_left.tdh_left)
-  show(sum.sum)
+  show(bin_sum.bin_sum)
   show(ab.ab)
   show(abc.abc)
 }

@@ -31,6 +31,8 @@ object Tree {
           stack.prepend(Node(rule, choiceName, children.toList))
         case LinearTreePartKet(rule, choiceName) =>
           marks.prepend(stack.length)
+        case LinearTreePartPred(strPred) =>
+          throw new Exception(s"strPred: ${strPred}, in linearTree: ${linearTree}")
       }
     }
 

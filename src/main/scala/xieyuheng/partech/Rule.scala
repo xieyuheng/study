@@ -8,6 +8,8 @@ case class Rule(
 sealed trait RulePart
 
 final case class RulePartStr(str: String) extends RulePart {
+  assert(str.length > 0)
+
   override def toString = {
     '"' + str + '"'
   }
@@ -16,5 +18,11 @@ final case class RulePartStr(str: String) extends RulePart {
 final case class RulePartRule(ruleGen: () => Rule) extends RulePart {
   override def toString = {
     ruleGen().name
+  }
+}
+
+final case class RulePartPred(strPred: StrPred) extends RulePart {
+  override def toString = {
+    strPred.toString
   }
 }

@@ -7,7 +7,7 @@ object GeneratorTest extends App {
     Generator(ex.main)
       .take(100)
       .foreach { case tree =>
-        println(pretty.prettyLinearTree(tree))
+        println(tree.toStr)
       }
   }
 

@@ -65,7 +65,7 @@ case class Generating(
                 case LinearTreePartKet(rule, choiceName) =>
                   queue.prepend((left.consEnd(head), tail))
                 case LinearTreePartPred(strPred) =>
-                  queue.prepend((left.consEnd(head), tail))
+                  queue.prepend((left.consEnd(LinearTreePartStr(strPred.gen())), tail))
               }
             }
           }

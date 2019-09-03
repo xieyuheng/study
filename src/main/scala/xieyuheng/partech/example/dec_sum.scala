@@ -30,7 +30,7 @@ object dec_sum extends ExampleRule {
 
   val rand = scala.util.Random
 
-  def dec_gen(): String = rand.nextInt.toString
+  def dec_gen(): String = rand.nextInt(10).toString
 
   def dec = StrPred("dec", 1, dec_gen) { case str => str.forall(Character.isDigit) }
 

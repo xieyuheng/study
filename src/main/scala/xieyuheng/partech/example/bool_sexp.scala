@@ -26,6 +26,13 @@ object bool_sexp extends ExampleRule {
       "true" -> Seq("true"),
       "false" -> Seq("false")))
 
+  def bool_sexp = Rule(
+    "bool_sexp", Map(
+      "list" -> Seq("(", bool_sexp_list, ")"),
+      "bool" -> Seq(bool)))
+
+  def bool_sexp_list: Rule = non_empty_list(bool_sexp)(" ")
+
   sealed trait Bool
   final case object True extends Bool
   final case object False extends Bool
@@ -42,11 +49,6 @@ object bool_sexp extends ExampleRule {
     }
   }
 
-  def bool_sexp = Rule(
-    "bool_sexp", Map(
-      "list" -> Seq("(", bool_sexp_list, ")"),
-      "bool" -> Seq(bool)))
-
   sealed trait BoolSexp
   final case class BoolSexpList(list: List[BoolSexp]) extends BoolSexp
   final case class BoolSexpBool(bool: Bool) extends BoolSexp
@@ -62,12 +64,5 @@ object bool_sexp extends ExampleRule {
       }
     }
   }
-
-  // def bool_sexp_list: Rule = Rule(
-  //   "bool_sexp_list", Map(
-  //     "one" -> Seq(bool_sexp),
-  //     "more" -> Seq(bool_sexp, " ", bool_sexp_list)))
-
-  def bool_sexp_list: Rule = non_empty_list(bool_sexp)(" ")
 
 }

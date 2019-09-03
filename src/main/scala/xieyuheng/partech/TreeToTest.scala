@@ -20,6 +20,14 @@ object TreeToTest extends App {
 
   Seq(
     bool_sexp,
+    // tom_dick_and_harry,
+    // tdh,
+    // tdh_left,
     bin_sum,
+    dec_sum,
+    ab,
+    // abc,
   ).foreach(test)
+
+  ExampleRule.examples.foreach(test)
 }

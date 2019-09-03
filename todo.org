@@ -1,4 +1,4 @@
-- `AB` and `ABC` for `ab` and `abc`
+- `ABC` for `abc`
 - `TDH` for `tdh` and friends
 - test partech by cicada syntax
 - renew tartlet with new syntax

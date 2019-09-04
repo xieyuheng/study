@@ -9,7 +9,7 @@ d () {
 t () {
     rm -f target/universal/stage/bin/*
     sbt stage
-    run-tests
+    r
 }
 
 r () {

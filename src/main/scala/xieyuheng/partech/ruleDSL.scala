@@ -10,8 +10,13 @@ object ruleDSL {
     RulePartRule(() => rule)
   }
 
-  implicit def RulePartPredFromRule(strPred: StrPred): RulePartPred = {
+  implicit def RulePartPredFromStrPred(strPred: StrPred): RulePartPred = {
     RulePartPred(strPred)
   }
 
+  implicit def RuleFromStrPred(strPred: StrPred): Rule = {
+    Rule(
+      "$" ++ strPred.name, Map(
+        strPred.name -> Seq(RulePartPred(strPred))))
+  }
 }

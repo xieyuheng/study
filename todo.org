@@ -3,7 +3,7 @@
   - identifier
   - comment
   - span with lo and hi -- for error report
-- parser should operate on tokens
+- parser should operate on words
 - test partech by cicada syntax
 - more about nat
 - list_map

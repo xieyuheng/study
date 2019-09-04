@@ -16,7 +16,7 @@ object bin_sum extends ExampleRule {
     "1 + 2",
   )
 
-  def main = bin_sum
+  def start = bin_sum
 
   def treeToMainType = Some(BinSum.treeToBinSum)
 

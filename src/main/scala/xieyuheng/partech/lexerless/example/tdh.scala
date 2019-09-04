@@ -16,7 +16,7 @@ object tdh extends ExampleRule {
     "t,d,h",
   )
 
-  def main = tdh
+  def start = tdh
 
   def treeToMainType = None
 

@@ -1,8 +1,3 @@
-- need lexer -- to handle
-  - space -- `,` and `;` can be treated as space for cicada
-  - identifier
-  - comment
-  - span with lo and hi -- for error report
 - parser should operate on words
 - test partech by cicada syntax
 - more about nat

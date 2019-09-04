@@ -5,7 +5,7 @@ import xieyuheng.partech.lexerless._
 trait ExampleRule {
   def sentences: Seq[String]
   def non_sentences: Seq[String]
-  def main: Rule
+  def start: Rule
   def treeToMainType: Option[TreeTo[_]]
 }
 

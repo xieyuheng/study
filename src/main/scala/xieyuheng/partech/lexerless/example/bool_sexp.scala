@@ -22,7 +22,7 @@ object bool_sexp extends ExampleRule {
     "(true ((( (false)))))",
   )
 
-  def main = bool_sexp
+  def start = bool_sexp
 
   def treeToMainType = Some(BoolSexp.treeToBoolSexp)
 

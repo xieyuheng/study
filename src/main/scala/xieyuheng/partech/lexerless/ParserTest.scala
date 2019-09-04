@@ -4,7 +4,7 @@ import xieyuheng.partech.lexerless.example._
 
 object ParserTest extends App {
   def test(ex: ExampleRule): Unit = {
-    val rule = ex.main
+    val rule = ex.start
 
     ex.sentences.foreach { case text =>
       Parser(rule).parsing(text).nextTree match {

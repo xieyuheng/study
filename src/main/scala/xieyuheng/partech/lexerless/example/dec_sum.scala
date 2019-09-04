@@ -19,7 +19,7 @@ object dec_sum extends ExampleRule {
     "11 + 12",
   )
 
-  def main = dec_sum
+  def start = dec_sum
 
   def treeToMainType = Some(DecSum.treeToDecSum)
 

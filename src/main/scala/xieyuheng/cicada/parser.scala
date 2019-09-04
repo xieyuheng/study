@@ -49,6 +49,7 @@ object parser {
   val symbol_chars = Set(
     '=', ':', '.',
     ',', ';',
+    '<', '>',
     '(', ')',
     '[', ']',
     '{', '}',
@@ -76,4 +77,5 @@ object parser {
   }
 
   def lexer = Lexer(LexTable(wordMatcher, ignorer))
+
 }

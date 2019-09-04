@@ -18,7 +18,7 @@ object ab extends ExampleRule {
     "aab",
   )
 
-  def main = ab
+  def start = ab
 
   def treeToMainType = Some(AB.treeToAB)
 

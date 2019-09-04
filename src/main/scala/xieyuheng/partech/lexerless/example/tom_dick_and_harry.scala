@@ -14,7 +14,7 @@ object tom_dick_and_harry extends ExampleRule {
     "tom, dick, harry",
   )
 
-  def main = tom_dick_and_harry
+  def start = tom_dick_and_harry
 
   def treeToMainType = None
 

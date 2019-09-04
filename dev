@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-api-doc () {
+d () {
     sbt doc
     now switch xieyuheng
     now -n cicada target/scala-2.12/api/
@@ -12,7 +12,7 @@ t () {
     run-tests
 }
 
-run-tests () {
+r () {
     for FILE in $(find . | grep "^\./target/universal/stage/bin/" | grep "test$")
     do
         echo ""

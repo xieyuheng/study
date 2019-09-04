@@ -1,4 +1,4 @@
-package xieyuheng.partech
+package xieyuheng.partech.lexerless
 
 case class LinearTree(parts: List[LinearTreePart]) {
 

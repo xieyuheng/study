@@ -1,4 +1,4 @@
-package xieyuheng.partech
+package xieyuheng.partech.lexerless
 
 object ruleDSL {
 

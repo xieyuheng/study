@@ -1,6 +1,6 @@
-package xieyuheng.partech
+package xieyuheng.partech.lexerless
 
-import xieyuheng.partech.ruleDSL._
+import xieyuheng.partech.lexerless.ruleDSL._
 
 object predefined {
 

@@ -1,6 +1,6 @@
-package xieyuheng.partech.example
+package xieyuheng.partech.lexerless.example
 
-import xieyuheng.partech._
+import xieyuheng.partech.lexerless._
 
 trait ExampleRule {
   def sentences: Seq[String]

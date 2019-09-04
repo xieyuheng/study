@@ -1,4 +1,4 @@
-package xieyuheng.partech
+package xieyuheng.partech.lexerless
 
 case class StrPred
   (name: String, length: Int, gen: () => String)

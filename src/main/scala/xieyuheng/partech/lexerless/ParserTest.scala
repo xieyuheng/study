@@ -1,6 +1,6 @@
-package xieyuheng.partech
+package xieyuheng.partech.lexerless
 
-import xieyuheng.partech.example._
+import xieyuheng.partech.lexerless.example._
 
 object ParserTest extends App {
   def test(ex: ExampleRule): Unit = {

@@ -1,4 +1,4 @@
-package xieyuheng.partech
+package xieyuheng.partech.lexerless
 
 trait TreeTo[A] {
   def treeTo(tree: Tree): A

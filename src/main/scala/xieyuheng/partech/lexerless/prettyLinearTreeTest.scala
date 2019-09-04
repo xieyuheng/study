@@ -1,6 +1,6 @@
-package xieyuheng.partech
+package xieyuheng.partech.lexerless
 
-import xieyuheng.partech.example._
+import xieyuheng.partech.lexerless.example._
 
 object prettyLinearTreeTest extends App {
   def show(ex: ExampleRule): Unit = {

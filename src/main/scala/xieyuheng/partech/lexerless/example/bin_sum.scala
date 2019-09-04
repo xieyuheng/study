@@ -1,8 +1,8 @@
-package xieyuheng.partech.example
+package xieyuheng.partech.lexerless.example
 
-import xieyuheng.partech._
-import xieyuheng.partech.ruleDSL._
-import xieyuheng.partech.predefined._
+import xieyuheng.partech.lexerless._
+import xieyuheng.partech.lexerless.ruleDSL._
+import xieyuheng.partech.lexerless.predefined._
 
 object bin_sum extends ExampleRule {
 

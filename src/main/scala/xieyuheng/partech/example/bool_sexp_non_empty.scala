@@ -4,18 +4,18 @@ import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._
 import xieyuheng.partech.predefined._
 
-object bool_sexp extends ExampleRule {
+object bool_sexp_non_empty extends ExampleRule {
 
   val sentences = Seq(
     "(true false)",
     "(true false true)",
     "(true ((((false)))))",
-    "()",
   )
 
   val non_sentences = Seq(
     "true [false]",
     "true false",
+    "()",
     "( )",
     "( true false)",
     "(true false true )",
@@ -36,7 +36,7 @@ object bool_sexp extends ExampleRule {
       "list" -> Seq("(", bool_sexp_list, ")"),
       "bool" -> Seq(bool)))
 
-  def bool_sexp_list: Rule = list(bool_sexp)(" ")
+  def bool_sexp_list: Rule = non_empty_list(bool_sexp)(" ")
 
   sealed trait Bool
   final case object True extends Bool
@@ -62,7 +62,7 @@ object bool_sexp extends ExampleRule {
     implicit def treeToBoolSexp: TreeTo[BoolSexp] = TreeTo[BoolSexp] { case tree =>
       tree match {
         case Node(Rule("bool_sexp", _, _), "list", Seq(_, list, _)) =>
-          BoolSexpList(tree_to_list(Tree.to[BoolSexp])(list))
+          BoolSexpList(tree_to_non_empty_list(Tree.to[BoolSexp])(list))
         case Node(Rule("bool_sexp", _, _), "bool", Seq(bool)) =>
           BoolSexpBool(Tree.to[Bool](bool))
         case _ => throw new Exception()

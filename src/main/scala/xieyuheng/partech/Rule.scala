@@ -28,7 +28,7 @@ object Rule {
           case RulePartRule(ruleGen) =>
             val r = ruleGen()
             if (occured.exists(r.similar)) {
-              bound + 1
+              bound
             } else {
               bound + getStrLengthLowerBound(r, r :: occured)
             }

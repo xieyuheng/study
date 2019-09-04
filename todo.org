@@ -1,10 +1,16 @@
+- need lexer -- to handle
+  - space -- `,` and `;` can be treated as space for cicada
+  - identifier
+  - comment
+  - span with lo and hi -- for error report
+- parser should operate on tokens
 - test partech by cicada syntax
-- renew tartlet with new syntax
 - more about nat
 - list_map
 - vec_length
 - vec_map
 - vec_append
+- renew tartlet with partech
 - check
 - [test] MemberTypeValue can be used as type, just by using `The`
 - compile to js with runtime type information

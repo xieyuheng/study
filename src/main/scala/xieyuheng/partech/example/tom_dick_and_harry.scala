@@ -27,11 +27,6 @@ object tom_dick_and_harry extends ExampleRule {
       "dick" -> Seq("dick"),
       "harry" -> Seq("harry")))
 
-  // def name_list: Rule = Rule(
-  //   "name_list", Map(
-  //     "one" -> Seq(name),
-  //     "more" -> Seq(name, ", ", name_list)))
-
   def name_list = non_empty_list(name)(", ")
 
 }

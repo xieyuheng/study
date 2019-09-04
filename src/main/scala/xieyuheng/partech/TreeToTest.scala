@@ -26,7 +26,7 @@ object TreeToTest extends App {
     bin_sum,
     dec_sum,
     ab,
-    // abc,
+    abc,
   ).foreach(test)
 
   ExampleRule.examples.foreach(test)

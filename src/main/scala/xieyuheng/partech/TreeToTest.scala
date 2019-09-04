@@ -8,7 +8,8 @@ object TreeToTest extends App {
 
     ex.sentences.foreach { case text =>
       Parser(rule).parsing(text).nextTree match {
-        case Some(tree) => {}
+        case Some(tree) =>
+          println(ex.treeToMainType(tree))
         case None =>
           println(s"[TreeToTest]")
           println(s"- rule: ${rule.name}")
@@ -29,5 +30,5 @@ object TreeToTest extends App {
     abc,
   ).foreach(test)
 
-  ExampleRule.examples.foreach(test)
+  // ExampleRule.examples.foreach(test)
 }

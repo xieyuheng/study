@@ -31,8 +31,8 @@ object abc extends ExampleRule {
 
   def a: Rule = Rule(
     "a", Map(
-      "one" -> Seq("a"),
-      "more" -> Seq("a", a)))
+      "one_a" -> Seq("a"),
+      "more_a" -> Seq("a", a)))
 
   def ab: Rule = Rule(
     "ab", Map(
@@ -56,9 +56,9 @@ object abc extends ExampleRule {
   object ABC {
     implicit def treeToABC: TreeTo[ABC] = TreeTo[ABC] { case tree =>
       tree match {
-        case Node(Rule("ABC", _, _), "A_BC", Seq(a, bc)) =>
+        case Node(Rule("abc", _, _), "a_bc", Seq(a, bc)) =>
           A_BC(Tree.to[A](a), Tree.to[BC](bc))
-        case Node(Rule("ABC", _, _), "AB_C", Seq(ab, c)) =>
+        case Node(Rule("abc", _, _), "ab_c", Seq(ab, c)) =>
           AB_C(Tree.to[AB](ab), Tree.to[C](c))
         case _ => throw new Exception()
       }

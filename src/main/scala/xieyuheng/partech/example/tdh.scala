@@ -37,5 +37,4 @@ object tdh extends ExampleRule {
       "t" -> Seq("&t"),
       "d" -> Seq("&d"),
       "h" -> Seq("&h")))
-
 }

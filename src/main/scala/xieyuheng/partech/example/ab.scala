@@ -20,7 +20,7 @@ object ab extends ExampleRule {
 
   def main = ab
 
-  def treeToMainType = ???
+  def treeToMainType = AB.treeToAB
 
   def ab = Rule(
     "ab", Map(

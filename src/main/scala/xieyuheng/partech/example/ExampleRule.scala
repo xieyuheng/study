@@ -6,7 +6,7 @@ trait ExampleRule {
   def sentences: Seq[String]
   def non_sentences: Seq[String]
   def main: Rule
-  def treeToMainType: TreeTo[_]
+  def treeToMainType: Option[TreeTo[_]]
 }
 
 object ExampleRule {

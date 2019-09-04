@@ -16,14 +16,16 @@ object tdh extends ExampleRule {
     "t,d,h",
   )
 
-  def main = Rule(
+  def main = tdh
+
+  def treeToMainType = None
+
+  def tdh = Rule(
     "tdh", Map(
       "t" -> Seq("t"),
       "d" -> Seq("d"),
       "h" -> Seq("h"),
       "tdh_list" -> Seq(tdh_list)))
-
-  def treeToMainType = ???
 
   def tdh_list = Rule(
     "tdh_list", Map(
@@ -37,4 +39,5 @@ object tdh extends ExampleRule {
       "t" -> Seq("&t"),
       "d" -> Seq("&d"),
       "h" -> Seq("&h")))
+
 }

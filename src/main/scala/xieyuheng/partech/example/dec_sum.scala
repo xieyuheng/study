@@ -21,7 +21,7 @@ object dec_sum extends ExampleRule {
 
   def main = dec_sum
 
-  def treeToMainType = DecSum.treeToDecSum
+  def treeToMainType = Some(DecSum.treeToDecSum)
 
   def dec_sum: Rule = Rule(
     "dec_sum", Map(

@@ -19,7 +19,7 @@ object bool_sexp extends ExampleRule {
 
   def main = bool_sexp
 
-  def treeToMainType = BoolSexp.treeToBoolSexp
+  def treeToMainType = Some(BoolSexp.treeToBoolSexp)
 
   def bool = Rule(
     "bool", Map(

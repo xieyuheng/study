@@ -18,7 +18,7 @@ object bin_sum extends ExampleRule {
 
   def main = bin_sum
 
-  def treeToMainType = BinSum.treeToBinSum
+  def treeToMainType = Some(BinSum.treeToBinSum)
 
   def bin_sum: Rule = Rule(
     "bin_sum", Map(

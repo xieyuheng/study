@@ -1,6 +1,3 @@
-- `TDH` for `tdh`
-- `TDH` for `tdh_left`
-- `TDH` for `tom_dick_and_harry`
 - test partech by cicada syntax
 - renew tartlet with new syntax
 - more about nat

@@ -9,7 +9,10 @@ object TreeToTest extends App {
     ex.sentences.foreach { case text =>
       Parser(rule).parsing(text).nextTree match {
         case Some(tree) =>
-          println(ex.treeToMainType(tree))
+          ex.treeToMainType match {
+            case Some(treeTo) => println(treeTo(tree))
+            case None => {}
+          }
         case None =>
           println(s"[TreeToTest]")
           println(s"- rule: ${rule.name}")
@@ -19,16 +22,5 @@ object TreeToTest extends App {
     }
   }
 
-  Seq(
-    bool_sexp,
-    // tom_dick_and_harry,
-    // tdh,
-    // tdh_left,
-    bin_sum,
-    dec_sum,
-    ab,
-    abc,
-  ).foreach(test)
-
-  // ExampleRule.examples.foreach(test)
+  ExampleRule.examples.foreach(test)
 }

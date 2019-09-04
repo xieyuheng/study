@@ -14,12 +14,14 @@ object tom_dick_and_harry extends ExampleRule {
     "tom, dick, harry",
   )
 
-  def main = Rule(
+  def main = tom_dick_and_harry
+
+  def treeToMainType = None
+
+  def tom_dick_and_harry = Rule(
     "tom_dick_and_harry", Map(
       "name" -> Seq(name),
       "list" -> Seq(name_list, " and ", name)))
-
-  def treeToMainType = ???
 
   def name = Rule(
     "name", Map(

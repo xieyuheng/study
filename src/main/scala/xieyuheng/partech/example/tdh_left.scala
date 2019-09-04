@@ -16,14 +16,16 @@ object tdh_left extends ExampleRule {
     "t,d,h",
   )
 
-  def main = Rule(
+  def main = tdh_left
+
+  def treeToMainType = None
+
+  def tdh_left = Rule(
     "tdh_left", Map(
       "t" -> Seq("t"),
       "d" -> Seq("d"),
       "h" -> Seq("h"),
       "list" -> Seq(tdh_left_list)))
-
-  def treeToMainType = ???
 
   def tdh_left_list = Rule(
     "tdh_left_list", Map(

@@ -1,3 +1,4 @@
+- add predefined rules
 - test partech by cicada syntax
 - renew tartlet with new syntax
 - more about nat

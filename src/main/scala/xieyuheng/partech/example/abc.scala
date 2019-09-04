@@ -2,7 +2,7 @@ package xieyuheng.partech.example
 
 import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._
-import xieyuheng.partech.example.collection._
+import xieyuheng.partech.predefined._
 
 object abc extends ExampleRule {
 

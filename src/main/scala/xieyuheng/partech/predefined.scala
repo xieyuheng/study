@@ -1,9 +1,8 @@
-package xieyuheng.partech.example
+package xieyuheng.partech
 
-import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._
 
-object collection {
+object predefined {
 
   def non_empty_list(a: Rule)(implicit separater: String): Rule = Rule(
     s"non_empty_list", Map(
@@ -23,4 +22,17 @@ object collection {
       }
   }
 
+  val rand = scala.util.Random
+
+  def space_char_list: List[String] = List("\n", "\t", " ")
+  def space_char_gen(): String = space_char_list(rand.nextInt(space_char_list.length))
+  def space_char = StrPred("space_char", 1, space_char_gen)(space_char_list.contains(_))
+
+  def digit_char_list: List[String] = List("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+  def digit_char_gen(): String = digit_char_list(rand.nextInt(digit_char_list.length))
+  def digit_char = StrPred("digit_char", 1, digit_char_gen)(digit_char_list.contains(_))
+
+  def space = ???
+
+  def non_space_char = ???
 }

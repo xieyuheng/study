@@ -2,7 +2,7 @@ package xieyuheng.partech.example
 
 import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._
-import xieyuheng.partech.example.collection._
+import xieyuheng.partech.predefined._
 
 object bool_sexp extends ExampleRule {
 
@@ -15,6 +15,9 @@ object bool_sexp extends ExampleRule {
   val non_sentences = Seq(
     "true [false]",
     "true false",
+    "( true false)",
+    "(true false true )",
+    "(true ((( (false)))))",
   )
 
   def main = bool_sexp

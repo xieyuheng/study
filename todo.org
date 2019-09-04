@@ -1,4 +1,3 @@
-- bool_sexp_with_space
 - add predefined rules
 - test partech by cicada syntax
 - renew tartlet with new syntax

@@ -42,8 +42,6 @@ object Rule {
 sealed trait RulePart
 
 final case class RulePartStr(str: String) extends RulePart {
-  assert(str.length > 0)
-
   override def toString = {
     '"' + str + '"'
   }

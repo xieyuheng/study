@@ -13,6 +13,7 @@ object ExampleRule {
   val examples = Seq(
     bool_sexp,
     bool_sexp_non_empty,
+    bool_sexp_with_space,
     tom_dick_and_harry,
     tdh,
     tdh_left,

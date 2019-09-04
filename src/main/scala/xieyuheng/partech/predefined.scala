@@ -101,5 +101,5 @@ object predefined {
   def non_space_char = StrPred("non_space_char", 1, non_space_char_gen) {
     !space_char_list.contains(_) }
 
-  def space = list(non_space_char)("")
+  def space = list(space_char)("")
 }

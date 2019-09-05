@@ -4,10 +4,10 @@ import scala.collection.mutable.ListBuffer
 
 case class Parser(rule: Rule, lexer: Lexer) {
 
-  def parse(text: String): Either[ErrMsg, List[LinearTreePart]] = {
+  def parse(text: String): Either[ErrMsg, Tree] = {
     lexer.lex(text).flatMap { case words =>
       val parsing = Parsing(text, words, ListBuffer((0, List(), List(LinearTreePartRule(rule)))))
-      parsing.nextLinearTree() match {
+      parsing.nextTree() match {
         case Some(parts) => Right(parts)
         case None =>
           val lo = 0
@@ -82,5 +82,11 @@ case class Parsing(
     }
 
     result
+  }
+
+  def nextTree(): Option[Tree] = {
+    nextLinearTree().flatMap { case parts =>
+      Some(Tree.fromLinearTree(parts))
+    }
   }
 }

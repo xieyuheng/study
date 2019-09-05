@@ -22,7 +22,7 @@ object ParserTest extends App {
   sentences.foreach { case text =>
     Parser(rule, lexer).parse(text) match {
       case Right(tree) =>
-        println(pretty.prettyLinearTree(tree))
+        println(pretty.prettyTree(tree))
       case Left(error) =>
         println(s"[ParserTest] should parse")
         println(s"- rule: ${rule.name}")

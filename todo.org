@@ -1,4 +1,5 @@
-- parser should operate on words
+- parse error reporting
+- [maybe] avoid empty Seq in rule
 - test partech by cicada syntax
 - more about nat
 - list_map

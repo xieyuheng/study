@@ -1,9 +1,10 @@
+- Tree
+- pretty.prettyTree
 - TreeTo
 - ExampleRule
 - sexp example
-- Tree
-- pretty.prettyTree
 - parse error reporting
+- [maybe] WordPred for error reporting
 - test partech by cicada syntax -- read file from lib/core
 - more about nat
 - list_map

@@ -10,12 +10,6 @@ object predefined {
       "more" -> Seq(a, non_empty_list(a))),
     args = Map("a" -> a))
 
-  def list(a: Rule): Rule = Rule(
-    s"list", Map(
-      "null" -> Seq(),
-      "non_empty" -> Seq(non_empty_list(a))),
-    args = Map("a" -> a))
-
 
   def wordInCharSet(set: Set[Char]): String => Boolean = {
     { case word => word.forall(set.contains(_)) }

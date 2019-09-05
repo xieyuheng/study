@@ -1,4 +1,3 @@
-- avoid empty Seq in rule
 - TreeTo
 - ExampleRule
 - sexp example

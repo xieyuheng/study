@@ -5,7 +5,20 @@ case class Rule(
   choices: Map[String, Seq[RulePart]],
   args: Map[String, Rule] = Map(),
 ) {
-  assert(choices.size > 0)
+  if (choices.size == 0) {
+    println("Rule should not have empty choices")
+    println(s"name: ${name}")
+    throw new Exception()
+  }
+
+  choices.foreach { case (choiceName, ruleParts) =>
+    if (ruleParts.length == 0) {
+      println("Rule's choice should not have empty Seq")
+      println(s"name: ${name}")
+      println(s"choice: ${choiceName}")
+      throw new Exception()
+    }
+  }
 
   // just to get lower bound
   // - we can not use `==`, because we can not compare lambda (ruleGen)

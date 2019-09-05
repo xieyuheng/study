@@ -39,8 +39,10 @@ case class Parsing(
           queue.trimStart(1)
 
           if (right.isEmpty) {
-            result = Some(left)
-            continue = false
+            if (i == words.length) {
+              result = Some(left)
+              continue = false
+            }
           } else {
             val head = right.head
             val tail = right.tail

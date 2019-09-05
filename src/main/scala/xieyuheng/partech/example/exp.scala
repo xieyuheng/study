@@ -24,11 +24,11 @@ object exp {
     "exp", Map(
       "type" -> Seq("type"),
       "var" -> Seq(identifier),
-      "case" -> Seq(exp, "case", "{", list(case_clause), "}"),
+      "case" -> Seq(exp, "case", "{", non_empty_list(case_clause), "}"),
       "dot" -> Seq(exp, ".", identifier),
-      "pi" -> Seq("pi", "(", list(arg), ")", ":", exp),
-      "fn" -> Seq("fn", "(", list(arg), ")", ":", exp, "=", exp),
-      "ap" -> Seq(exp, "(", list(arg), ")"),
+      "pi" -> Seq("pi", "(", non_empty_list(arg), ")", ":", exp),
+      "fn" -> Seq("fn", "(", non_empty_list(arg), ")", ":", exp, "=", exp),
+      "ap" -> Seq(exp, "(", non_empty_list(arg), ")"),
     ))
 
   def case_clause = Rule.seq(

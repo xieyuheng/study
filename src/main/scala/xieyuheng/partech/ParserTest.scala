@@ -9,11 +9,12 @@ object ParserTest extends App {
   val sentences = List(
     "type",
     "n",
-    "succ_t(nat_add(x = x.prev, y = y))",
+    "x.prev",
+    "succ_t(prev = nat_add(x = x.prev, y = y))",
     """
     x case {
       zero_t => y
-      succ_t => succ_t(nat_add(x = x.prev, y = y))
+      succ_t => succ_t(prev = nat_add(x = x.prev, y = y))
     }
     """,
   )
@@ -21,7 +22,7 @@ object ParserTest extends App {
   sentences.foreach { case text =>
     Parser(rule, lexer).parse(text) match {
       case Right(tree) =>
-        println(tree)
+        println(pretty.prettyLinearTree(tree))
       case Left(error) =>
         println(s"[ParserTest] should parse")
         println(s"- rule: ${rule.name}")

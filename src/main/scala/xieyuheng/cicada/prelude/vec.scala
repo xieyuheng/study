@@ -19,4 +19,7 @@ object vec extends Module {
         "head" -> the("A"),
         "tail" -> the("vec_t" ap %("A" -> "A", "length" -> "n")))))
 
+  // TODO
+  // vec_map
+  // vec_append
 }

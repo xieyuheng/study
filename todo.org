@@ -1,6 +1,3 @@
-- prelude both cicada and dsl
-  - list_left_fold
-  - vec_length, vec_map, vec_append
 * cicada
 - check
 - [test] MemberTypeValue can be used as type, just by using `the`

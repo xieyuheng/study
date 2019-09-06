@@ -5,11 +5,18 @@
   - bring new logic quantifiers from type system to logic
 - uniform validity, uniform forall
 * proof of "not not (P or (not P))"
-not not (P or (not P))
-not not (P or (P -> false))
-not not (P | P -> false)
-not (P | P -> false) -> false
-((P | P -> false) -> false) -> false
-((P | P -> false) -> false) -> P -> (P -> false)
-((P | P -> false) -> false) -> P ->       false
-(P                -> false) -> P ->       false
+
+  not not (P or (not P))
+  not not (P or (P -> contradictory))
+  not not (P | P -> contradictory)
+  not (P | P -> contradictory) -> contradictory
+  ((P | P -> contradictory) -> contradictory) -> contradictory
+  ((P | P -> contradictory) -> contradictory) -> P -> (P -> contradictory)
+  ((P | P -> contradictory) -> contradictory) -> P ->       contradictory
+  (P                        -> contradictory) -> P ->       contradictory
+
+  but
+  1. we do not want to use false -> (P -> false)
+  2. "not not (P or (not P))" is not so meaningful
+     because we can not just view "not A" as "A -> false"
+     instead we need to know explicit what contradictory A implies (for example B and not B)

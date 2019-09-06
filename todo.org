@@ -1,15 +1,19 @@
-- more about nat
-- list_map
-- vec_length
-- vec_map
-- vec_append
-- renew tartlet with partech
+* cicada
 - check
 - [test] MemberTypeValue can be used as type, just by using `The`
 - compile to js with runtime type information
   - this means keep Value serde-able
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
+* prelude
+- nat_mul
+- nat_factorial
+- bool
+- nat_even_p
+- list_map
+- vec_length
+- vec_map
+- vec_append
 * partech
 - ExampleRule
 - sexp example
@@ -24,10 +28,11 @@
   - type: ==, member relation
   - cat: ==, |
 * tartlet
-- better dsl
+- better expDSL
 - the little typer as test
 * minitt
 - examples
+- better expDSL
 - operational semantics
 - Normal expressions and Readback
 - Typing Rules

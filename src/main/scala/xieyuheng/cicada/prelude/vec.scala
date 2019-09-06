@@ -2,15 +2,12 @@ package xieyuheng.cicada.prelude
 
 import xieyuheng.cicada._
 import xieyuheng.cicada.expDSL._
-import xieyuheng.cicada.pretty._
 
-object vec {
+object vec extends Module {
 
-  val env = Env()
+  import_all(nat)
 
-  .import_all(nat.env)
-
-  .define_type("vec_t", %(
+  define_type("vec_t", %(
     "A" -> the_type,
     "length" -> the("nat_t")),
     members = %(

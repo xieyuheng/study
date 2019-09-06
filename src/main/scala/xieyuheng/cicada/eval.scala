@@ -155,7 +155,7 @@ object eval {
     ): Either[ErrorMsg, (ListMap[String, Value], Env)] = {
       for {
         value <- eval(exp, env)
-      } yield (map + (name -> value), env.define_value(name, value))
+      } yield (map + (name -> value), env.extend(name -> DefineValue(name, value)))
     }
 
     map.entries.foldLeft(initResult) { case (result, (name, exp)) =>

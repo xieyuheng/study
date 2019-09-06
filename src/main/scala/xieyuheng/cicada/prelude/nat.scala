@@ -6,16 +6,14 @@ import xieyuheng.cicada.json.rw._
 
 import upickle.default._
 
-object nat {
+object nat extends Module {
 
-  val env = Env()
-
-  .define_type("nat_t", %(),
+  define_type("nat_t", %(),
     members = %(
       "zero_t" -> %(),
       "succ_t" -> %("prev" -> the("nat_t"))))
 
-  .define_fn("nat_add",
+  define_fn("nat_add",
     args = %(
       "x" -> the("nat_t"),
       "y" -> the("nat_t")),
@@ -45,4 +43,5 @@ object nat {
         1 + json_to_int(json("map")("prev"))
     }
   }
+
 }

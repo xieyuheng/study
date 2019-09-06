@@ -3,25 +3,23 @@ package xieyuheng.cicada.prelude
 import xieyuheng.cicada._
 import xieyuheng.cicada.expDSL._
 
-object list {
+object list extends Module {
 
-  val env = Env()
+  import_all(nat)
 
-  .import_all(nat.env)
-
-  .define_type("list_t", %("A" -> the_type),
+  define_type("list_t", %("A" -> the_type),
     members = %(
       "null_t" -> %(),
       "cons_t" -> %(
         "head" -> the("A"),
         "tail" -> the("list_t" ap %("A" -> "A")))))
 
-  .define_fn("cdr",
+  define_fn("cdr",
     args = %("list" -> the("list_t")),
     ret = the("list_t"),
     body = "list" dot "tail")
 
-  .define_fn("list_length",
+  define_fn("list_length",
     args = %("list" -> the("list_t")),
     ret = the("nat_t"),
     body = choice("list", %(
@@ -30,7 +28,7 @@ object list {
         "prev" -> ("list_length" ap %(
           "list" -> ("list" dot "tail"))))))))
 
-  .define_fn("list_append",
+  define_fn("list_append",
     args = %(
       "ante" -> the("list_t"),
       "succ" -> the("list_t")),

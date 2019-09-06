@@ -22,8 +22,8 @@ object evalTest extends App {
     val yId = Id("y")
 
     val env = Env()
-      .define_value("x", TypeOfType(xId))
-      .define_value("y", TypeOfType(yId))
+      .extend("x" -> DefineValue("x", TypeOfType(xId)))
+      .extend("y" -> DefineValue("y", TypeOfType(yId)))
 
     for {
       x <- eval("x", env)

@@ -10,8 +10,9 @@ import upickle.default._
 object nat_test extends Module with App {
 
   import_all(nat)
+  import_all(bool)
 
-  val succ_test = {
+  val test_succ = {
     eval_on_right("succ_t" ap %("prev" -> "zero_t")) {
       case value =>
         assert(nat.to_int(value) == 1)
@@ -23,7 +24,7 @@ object nat_test extends Module with App {
     }
   }
 
-  val nat_add_test = {
+  val test_nat_add = {
     eval_on_right("nat_add" ap %("x" -> "one", "y" -> "one")) {
       case value =>
         assert(nat.to_int(value) == 2)
@@ -40,7 +41,7 @@ object nat_test extends Module with App {
     }
   }
 
-  val nat_mul_test = {
+  val test_nat_mul = {
     eval_on_right("nat_mul" ap %("x" -> "one", "y" -> "one")) {
       case value =>
         assert(nat.to_int(value) == 1)
@@ -57,7 +58,7 @@ object nat_test extends Module with App {
     }
   }
 
-  val nat_factorial_test = {
+  val test_nat_factorial = {
     eval_on_right("nat_factorial" ap %("x" -> "zero")) {
       case value =>
         assert(nat.to_int(value) == 1)
@@ -80,6 +81,7 @@ object nat_test extends Module with App {
 
     eval_on_right("nat_factorial" ap %("x" -> "four")) {
       case value =>
+        value
         // PROBLEM the use of deepSelf in nat.to_int cost so much
         // assert(nat.to_int(value) == 24)
     }

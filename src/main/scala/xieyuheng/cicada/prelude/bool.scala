@@ -16,6 +16,37 @@ object bool extends Module {
   define("true", "true_t")
   define("false", "false_t")
 
+  define_fn("not",
+    args = %(
+      "x" -> the("bool_t")),
+    ret = the("bool_t"),
+    body = choice("x", %(
+      "true_t" -> "false_t",
+      "false_t" -> "true_t")))
+
+  define_fn("and",
+    args = %(
+      "x" -> the("bool_t"),
+      "y" -> the("bool_t")),
+    ret = the("bool_t"),
+    body = choice("x", %(
+      "true_t" -> choice("y", %(
+        "true_t" -> "true_t",
+        "false_t" -> "false_t")),
+      "false_t" -> "false_t")))
+
+  define_fn("or",
+    args = %(
+      "x" -> the("bool_t"),
+      "y" -> the("bool_t")),
+    ret = the("bool_t"),
+    body = choice("x", %(
+      "true_t" -> "true_t",
+      "false_t" -> choice("y", %(
+        "true_t" -> "true_t",
+        "false_t" -> "false_t")))))
+
+
   def to_boolean(value: Value): Boolean = {
     val json = writeJs(walk.deepSelf(value))
     json_to_boolean(json)

@@ -1,9 +1,3 @@
-- TreeTo
-- ExampleRule
-- sexp example
-- parse error reporting
-- [maybe] WordPred for error reporting
-- test partech by cicada syntax -- read file from lib/core
 - more about nat
 - list_map
 - vec_length
@@ -16,6 +10,14 @@
   - this means keep Value serde-able
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
+* partech
+- ExampleRule
+- sexp example
+- TreeTo
+- parse error reporting
+- [maybe] WordPred for error reporting
+- linear time parser for all context free grammar with epsilon
+- test partech by cicada syntax -- read file from lib/core
 * set, type, cat
 - what is the difference between set, type and cat ?
   - set: ==, member relation, subset relation

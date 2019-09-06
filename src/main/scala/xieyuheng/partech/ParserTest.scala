@@ -11,12 +11,24 @@ object ParserTest extends App {
     "n",
     "x.prev",
     "succ_t(prev = nat_add(x = x.prev, y = y))",
+
     """
     x case {
       zero_t => y
       succ_t => succ_t(prev = nat_add(x = x.prev, y = y))
     }
     """,
+
+    // """
+    // x case {
+    //   zero_t => y
+    //   succ_t => succ_t(prev = nat_add(x = x.prev, y = x case {
+    //     zero_t => y
+    //     succ_t => succ_t(prev = nat_add(x = x.prev, y = y))
+    //   }))
+    // }
+    // """,
+
   )
 
   sentences.foreach { case text =>

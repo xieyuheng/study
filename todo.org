@@ -1,12 +1,12 @@
 * cicada
 - check
 - [test] MemberTypeValue can be used as type, just by using `The`
+- [problem] deep walk cost so much
 - compile to js with runtime type information
   - this means keep Value serde-able
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * prelude
-- nat_factorial
 - bool
 - nat_even_p
 - list_map

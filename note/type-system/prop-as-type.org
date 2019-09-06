@@ -4,3 +4,12 @@
 - two way street
   - bring new logic quantifiers from type system to logic
 - uniform validity, uniform forall
+* proof of "not not (P or (not P))"
+not not (P or (not P))
+not not (P or (P -> false))
+not not (P | P -> false)
+not (P | P -> false) -> false
+((P | P -> false) -> false) -> false
+((P | P -> false) -> false) -> P -> (P -> false)
+((P | P -> false) -> false) -> P ->       false
+(P                -> false) -> P ->       false

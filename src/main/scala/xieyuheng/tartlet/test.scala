@@ -49,5 +49,18 @@ object test extends App {
 
     m.run(Apply(Apply(Var("+"), Var("three")), Var("three")))
     // The(Nat,Add1(Add1(Add1(Add1(Add1(Add1(Zero)))))))
+
+
+    // m.claim("three", Nat)
+    // m.define("three", add1(add1(add1(zero))))
+
+    // claim("+", Nat ->: Nat ->: Nat)
+    // define_fn("+") ("n", "k") {
+    //   ind_Nat("n", fn("_") { Nat }, "k",
+    //     fn("prev", "almost") { add1("almost") })}
+
+    // run("three")
+    // run("+" ap "three")
+    // run("+" ap "three" ap "three")
   }
 }

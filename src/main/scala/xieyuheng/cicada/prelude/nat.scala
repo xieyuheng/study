@@ -25,11 +25,11 @@ object nat extends Module {
           "x" -> ("x" dot "prev"),
           "y" -> "y")))))))
 
-  val zero: Exp = "zero_t"
-  val one = "succ_t" ap %("prev" -> zero)
-  val two = "succ_t" ap %("prev" -> one)
-  val three = "succ_t" ap %("prev" -> two)
-  val four = "succ_t" ap %("prev" -> three)
+  define("zero", "zero_t")
+  define("one", "succ_t" ap %("prev" -> "zero"))
+  define("two", "succ_t" ap %("prev" -> "one"))
+  define("three", "succ_t" ap %("prev" -> "two"))
+  define("four", "succ_t" ap %("prev" -> "three"))
 
   def to_int(value: Value): Int = {
     val json = writeJs(walk.deepSelf(value))

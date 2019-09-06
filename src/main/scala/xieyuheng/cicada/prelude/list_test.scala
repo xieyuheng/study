@@ -4,66 +4,56 @@ import xieyuheng.cicada._
 import xieyuheng.cicada.expDSL._
 import xieyuheng.cicada.pretty._
 
-object list_test extends App {
-  implicit val module = list.env
+object list_test extends Module with App {
 
-  val zero: Exp = "zero_t"
+  import_all(list)
+  import_all(nat)
 
-  val one = "succ_t" ap %("prev" -> zero)
-
-  val threeZeros =
+  define("three_zeros",
     "cons_t" ap %(
       "A" -> "nat_t",
-      "head" -> zero,
+      "head" -> "zero",
       "tail" -> ("cons_t" ap %(
         "A" -> "nat_t",
-        "head" -> zero,
+        "head" -> "zero",
         "tail" -> ("cons_t" ap %(
           "A" -> "nat_t",
-          "head" -> zero,
-          "tail" -> "null_t")))))
+          "head" -> "zero",
+          "tail" -> "null_t"))))))
 
-  val zeroAndOne =
+  define("zero_and_one",
     "cons_t" ap %(
       "A" -> "nat_t",
-      "head" -> zero,
+      "head" -> "zero",
       "tail" -> ("cons_t" ap %(
         "A" -> "nat_t",
-        "head" -> one,
-        "tail" -> "null_t")))
+        "head" -> "one",
+        "tail" -> "null_t"))))
 
-  util.evalOnRight(
-    "list_length" ap %(
-      "list" -> (zeroAndOne))) {
+  eval_on_right("list_length" ap %("list" -> "zero_and_one")) {
     case value =>
       assert(nat.to_int(value) == 2)
   }
 
-  val twoZeros = "cdr" ap %(
-    "list" -> threeZeros)
+  define("two_zeros", "cdr" ap %("list" -> "three_zeros"))
 
-  util.evalOnRight(
-    "list_length" ap %(
-      "list" -> (twoZeros))) {
+  eval_on_right("list_length" ap %("list" -> "two_zeros")) {
     case value =>
       assert(nat.to_int(value) == 2)
   }
 
-  val oneZero = "cdr" ap %(
-    "list" -> twoZeros)
+  define("one_zero", "cdr" ap %("list" -> "two_zeros"))
 
-  util.evalOnRight(
-    "list_length" ap %(
-      "list" -> (oneZero))) {
+  eval_on_right("list_length" ap %("list" -> "one_zero")) {
     case value =>
       assert(nat.to_int(value) == 1)
   }
 
-  util.evalOnRight(
+  eval_on_right(
     "list_length" ap %(
       "list" -> ("list_append" ap %(
-        "ante" -> threeZeros,
-        "succ" -> threeZeros)))) {
+        "ante" -> "three_zeros",
+        "succ" -> "three_zeros")))) {
     case value =>
       assert(nat.to_int(value) == 6)
   }

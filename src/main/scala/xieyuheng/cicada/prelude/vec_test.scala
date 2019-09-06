@@ -4,10 +4,11 @@ import xieyuheng.cicada._
 import xieyuheng.cicada.expDSL._
 import xieyuheng.cicada.pretty._
 
-object vec_test extends App {
-  implicit val module = vec.env
+object vec_test extends Module with App {
 
-  util.evalPrint("vec_t")
-  util.evalPrint("null_vec_t")
-  util.evalPrint("cons_vec_t")
+  import_all(vec)
+
+  eval_print("vec_t")
+  eval_print("null_vec_t")
+  eval_print("cons_vec_t")
 }

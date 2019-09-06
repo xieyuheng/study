@@ -12,7 +12,7 @@ object prettyTest extends App {
 
     println(s"t: ${t}")
 
-    val threeZeros = prettyExp(
+    val three_zeros = prettyExp(
       "cons_t" ap %(
         "A" -> "nat_t",
         "head" -> "zero_t",
@@ -24,7 +24,7 @@ object prettyTest extends App {
             "head" -> "zero_t",
             "tail" -> "null_t"))))))
 
-    println(s"threeZeros: ${threeZeros}")
+    println(s"three_zeros: ${three_zeros}")
 
     val fn = prettyExp(
       Fn(

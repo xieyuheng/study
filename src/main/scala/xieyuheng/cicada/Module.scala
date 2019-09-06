@@ -12,6 +12,18 @@ abstract class Module {
     env = env.extend(name -> DefineValue(name, value))
   }
 
+  def define(
+    name: String,
+    exp: Exp,
+  ): Unit = {
+    eval(exp, env) match {
+      case Right(value) =>
+        env = env.extend(name -> DefineValue(name, value))
+      case Left(errorMsg) =>
+        println(errorMsg)
+    }
+  }
+
   def define_member_type(
     name: String,
     map: MultiMap[String, Exp],
@@ -60,6 +72,23 @@ abstract class Module {
         case None => {}
       }
       env = env.extend(name -> newDefine)
+    }
+  }
+
+  def eval_print(exp: Exp): Unit = {
+    eval(exp, env) match {
+      case Right(value) =>
+        println(s"=> ${prettyValue(value)}")
+      case Left(errorMsg) =>
+        println(s"?> ${errorMsg}")
+    }
+  }
+
+  def eval_on_right[A](exp: Exp)(f: Value => A): A = {
+    eval(exp, env) match {
+      case Right(value) => f(value)
+      case Left(errorMsg) =>
+        throw new Exception(s"${errorMsg}")
     }
   }
 

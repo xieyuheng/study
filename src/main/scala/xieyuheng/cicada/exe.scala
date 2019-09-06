@@ -25,11 +25,14 @@ object exe {
       case fn: FnValue =>
         for {
           bind <- unify.onMap(args, fn.args, Bind(), env)
-          newArgs = walk.deepOnMap(fn.args, bind)
+          // TODO why the following is not right for `list_map_succ(exp: Exp)` ?
+          // newArgs = walk.deepOnMap(fn.args, bind)
+          // - it means unification is not effective here
+          // - we need to test unification separately
+          newArgs = walk.deepOnMap(args, bind)
           value <- eval(fn.body, fn.env.extendByValueMap(newArgs))
           bind <- unify(value, fn.ret, bind, env)
-          newValue = walk.deep(value, bind)
-        } yield newValue
+        } yield walk.deep(value, bind)
 
       case neu: NeutralValue =>
         Right(NeutralValue(ApNeutral(neu.neutral, args)))

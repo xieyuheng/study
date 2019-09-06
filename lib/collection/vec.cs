@@ -3,10 +3,9 @@ module collection.vec
 import * from datatype.nat
 
 type vec_t(A: type_t, length: nat_t) {
-  null_vec_t(length: zero_t)
-  cons_vec_t(n: nat_t, length: succ_t(n), head: A, tail: vec_t(A, n))
+  null_vec_t(length = zero_t)
+  cons_vec_t(n: nat_t, length = succ_t(n), head: A, tail: vec_t(A, n))
 }
-
 
 @infix(++)
 vec_append(ante: vec_t(A, m), succ: vec_t(A, n)): vec_t(A, m + n) = {

@@ -44,20 +44,38 @@ object list extends Module {
 
   define_fn("list_map",
     args = %(
-      "A" -> the_type,
-      "B" -> the_type,
-      "f" -> the(pi(%("x" -> the("A")), the("B"))),
-      "list" -> the("list_t" ap %("A" -> "A"))),
-    ret = the("list_t" ap %("A" -> "B")),
+      "A" :: Type(),
+      "B" :: Type(),
+      "f" :: pi(%("x" :: "A"), the("B")),
+      "list" :: ("list_t" ap %("A" := "A"))),
+    ret = the("list_t" ap %("A" := "B")),
     body = choice("list", %(
-      "null_t" -> "null_t",
-      "cons_t" -> ("cons_t" ap %(
-        "A" -> "B",
-        "head" -> ("f" ap %("x" -> ("list" dot "head"))),
-        "tail" -> ("list_map" ap %(
-          "A" -> "A",
-          "B" -> "B",
-          "f" -> "f",
-          "list" -> ("list" dot "tail"))))))))
+      "null_t" := "null_t",
+      "cons_t" := ("cons_t" ap %(
+        "A" := "B",
+        "head" := ("f" ap %("x" -> ("list" dot "head"))),
+        "tail" := ("list_map" ap %(
+          "A" := "A",
+          "B" := "B",
+          "f" := "f",
+          "list" := ("list" dot "tail"))))))))
+
+  // define_fn("list_map",
+  //   args = %(
+  //     "A" -> the_type,
+  //     "B" -> the_type,
+  //     "f" -> the(pi(%("x" -> the("A")), the("B"))),
+  //     "list" -> the("list_t" ap %("A" -> "A"))),
+  //   ret = the("list_t" ap %("A" -> "B")),
+  //   body = choice("list", %(
+  //     "null_t" -> "null_t",
+  //     "cons_t" -> ("cons_t" ap %(
+  //       "A" -> "B",
+  //       "head" -> ("f" ap %("x" -> ("list" dot "head"))),
+  //       "tail" -> ("list_map" ap %(
+  //         "A" -> "A",
+  //         "B" -> "B",
+  //         "f" -> "f",
+  //         "list" -> ("list" dot "tail"))))))))
 
 }

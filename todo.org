@@ -1,4 +1,12 @@
 * cicada
+- why we have value vs exp
+  - in lambda
+    for redux
+  - in cicada
+    for redux and unification
+    why unification instead of substitution ?
+    System Fω
+- what is in a record that lambda can not express ?
 - be sure about eval and apply on fn
 - check
 - [test] MemberTypeValue can be used as type, just by using `the`
@@ -28,7 +36,6 @@
 - how to extend tartlet to define new types?
 * minitt
 - better expDSL
-- examples
 - operational semantics
 - Normal expressions and Readback
 - Typing Rules

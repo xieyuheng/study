@@ -17,13 +17,17 @@ object expDSL {
   implicit class ExpExtension(exp: Exp) {
     def dot(fieldName: String): Dot = Dot(exp, fieldName)
     def ap(mp: MultiMap[String, Exp]): Ap = Ap(exp, mp)
+    def :: (name: String): (String, The) = (name, The(exp))
+    def =: (name: String): (String, Exp) = (name, exp)
   }
 
-  implicit class StringExtension(name: String) extends ExpExtension(Var(name))
+  implicit class StringExtension(name: String) extends ExpExtension(Var(name)) {
+    def := (exp: Exp): (String, Exp) = (name, exp)
+  }
 
   implicit def VarFromString(name: String): Var = Var(name)
 
-  implicit def StringVarTupleFromStringStringTuple(kv: (String, String)) = {
+  implicit def StringVarTupleFromStringStringTuple(kv: (String, String)): (String, Var) = {
     val (k, name) = kv
     (k, Var(name))
   }

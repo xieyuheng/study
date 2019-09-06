@@ -1,121 +1,149 @@
 package xieyuheng.minitt
 
 sealed trait Exp {
-  def -:(ret: Exp) = Pi(U, ret, this)
-  def *(cdr: Exp) = Sigma(U, this, cdr)
+  def ->:(arg: Exp) = Pi(EmptyPattern, arg, this)
+  def *(cdr: Exp) = Sigma(EmptyPattern, this, cdr)
   def $(arg: Exp) = Apply(this, arg)
 }
 final case class Var(name: String) extends Exp
-
 final case class Fn(pattern: Pattern, body: Exp) extends Exp
 final case class Apply(fun: Exp, arg: Exp) extends Exp
 final case class Pi(pattern: Pattern, arg: Exp, ret: Exp) extends Exp
-
 final case class Cons(car: Exp, cdr: Exp) extends Exp
 final case class Car(pair: Exp) extends Exp
 final case class Cdr(pair: Exp) extends Exp
 final case class Sigma(pattern: Pattern, car: Exp, cdr: Exp) extends Exp
-
 final case class Data(tag: String, body: Exp) extends Exp
-final case class Case(choices: Map[String, Exp]) extends Exp
-object Case {
-  def apply(pairs: (String, Exp)*) : Case = Case(Map(pairs: _*))
-}
+final case class Choice(choices: Map[String, Exp]) extends Exp
 final case class Sum(choices: Map[String, Exp]) extends Exp
-object Sum {
-  def apply(pairs: (String, Exp)*) : Sum = Sum(Map(pairs: _*))
-}
-
 final case object Sole extends Exp
 final case object Trivial extends Exp
-
-final case object Universe extends Exp
-
+final case object U extends Exp
 final case class Seq(decl: Decl, next: Exp) extends Exp
 
 sealed trait Pattern
-final case class V(name: String) extends Pattern
-final case class P(car: Pattern, cdr: Pattern) extends Pattern
-final case object U extends Pattern
+final case class VarPattern(name: String) extends Pattern
+final case class ConsPattern(car: Pattern, cdr: Pattern) extends Pattern
+final case object EmptyPattern extends Pattern
 
 sealed trait Decl
 final case class Let(name: String, t: Exp, body: Exp) extends Decl
 final case class LetRec(name: String, t: Exp, body: Exp) extends Decl
 
-object syntax {
-  def Arrow(arg: Exp, ret: Exp) = Pi(U, arg, ret)
-  def Pair(car: Exp, cdr: Exp) = Sigma(U, car, cdr)
+object expDSL {
+  def choice(pairs: (String, Exp)*) : Choice = Choice(Map(pairs: _*))
+  def sum(pairs: (String, Exp)*) : Sum = Sum(Map(pairs: _*))
 
   implicit def VarFromString(name: String) = Var(name)
-  implicit def VFromString(name: String) = V(name)
+  implicit def VarPatternFromString(name: String) = VarPattern(name)
 }
 
 object examples extends App {
-  import syntax._
+  import expDSL._
 
-  val id = Let("id",
-    Pi("A", Universe, Arrow("A", "A")),
+  // id : (A : U) -> A -> A
+  // id = (A, x) => x
+
+  Let("id",
+    Pi("A", U, "A" ->: "A"),
     Fn("A", Fn("x", "x")))
 
-  val Bool = Let("Bool", Universe, Sum(
-    "true" -> Trivial,
-    "false" -> Trivial))
+  // Bool : U
+  // Bool = sum {
+  //   true
+  //   false
+  // }
 
-  val elimBool = Let("elimBool",
-    Pi("C", Arrow("Bool", Universe),
-      Arrow(Apply("C", Data("true", Sole)),
-        Arrow(Apply("C", Data("false", Sole)),
-          Pi("b", "Bool", Apply("C", "b"))))),
-    Fn("C", Fn("h0", Fn("h1", Case(
+  Let("Bool", U,
+    sum(
+      "true" -> Trivial,
+      "false" -> Trivial))
+
+  // elimBool : (C : Bool -> U) -> C true -> C false -> (b : Bool) -> C b
+  // elimBool = (C, h0, h1) => choice {
+  //   true => h0
+  //   false => h1
+  // }
+
+  Let("elimBool",
+    Pi("C", "Bool" ->: U,
+      ("C" $ Data("true", Sole)) ->:
+        ("C" $ Data("false", Sole)) ->:
+        Pi("b", "Bool", "C" $ "b")),
+    Fn("C", Fn("h0", Fn("h1", choice(
       "true" -> Fn("_", "h0"),
       "false" -> Fn("_", "h1"))))))
 
-  val elimBool2 = Let("elimBool",
-    Pi("C", "Bool" -: Universe,
-      ("C" $ Data("true", Sole)) -:
-        ("C" $ Data("false", Sole)) -:
-        Pi("b", "Bool",  ("C" $ "b"))),
-    Fn("C", Fn("h0", Fn("h1", Case(
-      "true" -> Fn("_", "h0"),
-      "false" -> Fn("_", "h1"))))))
+  // Nat : U
+  // Nat = sum {
+  //   zero
+  //   succ Nat
+  // }
 
-  assert("a" -: "b" -: "c" == "a" -: ("b" -: "c"))
-  assert(elimBool == elimBool2)
+  LetRec("Nat", U,
+    sum(
+      "zero" -> Trivial,
+      "succ" -> "Nat"))
 
-  val Nat = LetRec("Nat",
-    Universe,
-    Sum(
-      "Zero" -> Trivial,
-      "Succ" -> "Nat"))
+  // List : U -> U
+  // List = A => sum {
+  //   nil
+  //   cons A List A
+  // }
 
-  val List = LetRec("List",
-    Universe -: Universe,
-    Fn("A", Sum(
-      "Nil" -> Trivial,
-      "Cons" -> "A" * ("List" $ "A"))))
+  LetRec("List", U ->: U,
+    Fn("A", sum(
+      "nil" -> Trivial,
+      "cons" -> "A" * ("List" $ "A"))))
 
-  val natrec = LetRec("natrec",
-    Pi("C", "Nat" -: Universe,
-      ("C" $ Data("Zero", Sole)) -:
-        Pi("n", "Nat", ("C" $ "n") -: ("C" $ Data("Succ", "n"))) -:
+  // natrec : (C : Nat -> U) -> C zero -> ((n : Nat) -> C n -> C (succ n)) ->
+  //          (n : Nat) -> C n
+  // natrec = (C, a, g) => choice {
+  //   zero => a
+  //   succ prev => g prev (natrec C a g prev)
+  // }
+
+  LetRec("natrec",
+    Pi("C", "Nat" ->: U,
+      ("C" $ Data("zero", Sole)) ->:
+        Pi("n", "Nat", ("C" $ "n") ->: ("C" $ Data("succ", "n"))) ->:
         Pi("n", "Nat", ("C" $ "n"))),
-    Fn("C", Fn("a", Fn("g", Case(
-      "Zero" -> Fn("_", "a"),
-      "Succ" -> Fn("prev", "g" $ "prev" $ ("natrec" $ "C" $ "a" $ "g" $ "prev")))))))
+    Fn("C", Fn("a", Fn("g", choice(
+      "zero" -> Fn("_", "a"),
+      "succ" -> Fn("prev", "g" $ "prev" $ ("natrec" $ "C" $ "a" $ "g" $ "prev")))))))
 
-  val add = LetRec("add",
-    "Nat" -: "Nat" -: "Nat",
-    Fn("x", Case(
-      "Zero" -> Fn("_", "x"),
-      "Succ" -> Fn("prev", Data("Succ", "add" $ "x" $ "prev")))))
+  // add : Nat -> Nat -> Nat
+  // add = x => choice {
+  //   zero => x
+  //   succ prev => succ (add x prev)
+  // }
 
-  val eqNat = LetRec("eqNat",
-    "Nat" -: "Nat" -: "Bool",
-    Case(
-      "Zero" -> Fn("_", Case(
-        "Zero" -> Fn("_", Data("true", Sole)),
-        "Succ" -> Fn("_", Data("false", Sole)))),
-      "Succ" -> Fn("x", Case(
-        "Zero" -> Fn("_", Data("false", Sole)),
-        "Succ" -> Fn("y", "eqNat" $ "x" $ "y")))))
+  LetRec("add",
+    "Nat" ->: "Nat" ->: "Nat",
+    Fn("x", choice(
+      "zero" -> Fn("_", "x"),
+      "succ" -> Fn("prev", Data("succ", "add" $ "x" $ "prev")))))
+
+  // eqNat : Nat -> Nat -> Bool
+  // eqNat = choice {
+  //   zero => choice {
+  //     zero => true
+  //     succ _ => false
+  //   }
+  //   succ x => choice {
+  //     zero => false
+  //     succ y => eqNat x y
+  //   }
+  // }
+
+  LetRec("eqNat",
+    "Nat" ->: "Nat" ->: "Bool",
+    choice(
+      "zero" -> Fn("_", choice(
+        "zero" -> Fn("_", Data("true", Sole)),
+        "succ" -> Fn("_", Data("false", Sole)))),
+      "succ" -> Fn("x", choice(
+        "zero" -> Fn("_", Data("false", Sole)),
+        "succ" -> Fn("y", "eqNat" $ "x" $ "y")))))
+
 }

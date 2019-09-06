@@ -38,7 +38,7 @@ object expDSL {
   implicit def VarPatternFromString(name: String) = VarPattern(name)
 }
 
-object examples extends App {
+object example extends App {
   import expDSL._
 
   // id : (A : U) -> A -> A
@@ -147,3 +147,6 @@ object examples extends App {
         "succ" -> Fn("y", "eqNat" $ "x" $ "y")))))
 
 }
+
+sealed trait Value
+// TODO

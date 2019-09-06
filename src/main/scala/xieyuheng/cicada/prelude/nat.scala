@@ -25,6 +25,19 @@ object nat extends Module {
           "x" -> ("x" dot "prev"),
           "y" -> "y")))))))
 
+  define_fn("nat_mul",
+    args = %(
+      "x" -> the("nat_t"),
+      "y" -> the("nat_t")),
+    ret = the("nat_t"),
+    body = choice("x", %(
+      "zero_t" -> "zero_t",
+      "succ_t" -> ("nat_add" ap %(
+        "x" -> "y",
+        "y" -> ("nat_mul" ap %(
+          "x" -> ("x" dot "prev"),
+          "y" -> "y")))))))
+
   define("zero", "zero_t")
   define("one", "succ_t" ap %("prev" -> "zero"))
   define("two", "succ_t" ap %("prev" -> "one"))

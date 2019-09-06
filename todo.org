@@ -6,7 +6,6 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * prelude
-- nat_mul
 - nat_factorial
 - bool
 - nat_even_p

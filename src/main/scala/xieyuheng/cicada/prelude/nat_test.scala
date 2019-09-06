@@ -30,4 +30,25 @@ object nat_test extends Module with App {
     case value =>
       assert(nat.to_int(value) == 4)
   }
+
+  eval_on_right("nat_add" ap %("x" -> "two", "y" -> "three")) {
+    case value =>
+      assert(nat.to_int(value) == 5)
+  }
+
+
+  eval_on_right("nat_mul" ap %("x" -> "one", "y" -> "one")) {
+    case value =>
+      assert(nat.to_int(value) == 1)
+  }
+
+  eval_on_right("nat_mul" ap %("x" -> "two", "y" -> "two")) {
+    case value =>
+      assert(nat.to_int(value) == 4)
+  }
+
+  eval_on_right("nat_mul" ap %("x" -> "two", "y" -> "three")) {
+    case value =>
+      assert(nat.to_int(value) == 6)
+  }
 }

@@ -55,6 +55,17 @@ object nat extends Module {
         "y" -> ("nat_factorial" ap %(
           "x" -> ("x" dot "prev"))))))))
 
+  define_fn("nat_even_p",
+    args = %(
+      "x" -> the("nat_t")),
+    ret = the("bool_t"),
+    body = choice("x", %(
+      "zero_t" -> "true_t",
+      "succ_t" -> choice("x" dot "prev", %(
+        "zero_t" -> "false_t",
+        "succ_t" -> ("nat_even_p" ap %("x" -> ("x" dot "prev" dot "prev"))))))))
+
+
   def to_int(value: Value): Int = {
     val json = writeJs(walk.deepSelf(value))
     json_to_int(json)

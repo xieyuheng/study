@@ -86,4 +86,31 @@ object nat_test extends Module with App {
         // assert(nat.to_int(value) == 24)
     }
   }
+
+  val test_nat_even_p = {
+    eval_on_right("nat_even_p" ap %("x" -> "zero")) {
+      case value =>
+        assert(bool.to_boolean(value) == true)
+    }
+
+    eval_on_right("nat_even_p" ap %("x" -> "one")) {
+      case value =>
+        assert(bool.to_boolean(value) == false)
+    }
+
+    eval_on_right("nat_even_p" ap %("x" -> "two")) {
+      case value =>
+        assert(bool.to_boolean(value) == true)
+    }
+
+    eval_on_right("nat_even_p" ap %("x" -> "three")) {
+      case value =>
+        assert(bool.to_boolean(value) == false)
+    }
+
+    eval_on_right("nat_even_p" ap %("x" -> "four")) {
+      case value =>
+        assert(bool.to_boolean(value) == true)
+    }
+  }
 }

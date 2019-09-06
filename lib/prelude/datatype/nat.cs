@@ -29,7 +29,7 @@ nat_factorial(x: nat_t): nat_t = {
 nat_even_p(x: nat_t): bool_t = {
   x case {
     zero_t => true_t
-    succ_t => x case {
+    succ_t => x.prev case {
       zero_t => false_t
       succ_t => nat_even_p(x.prev.prev)
     }

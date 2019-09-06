@@ -42,4 +42,29 @@ object list extends Module {
           "ante" -> ("ante" dot "tail"),
           "succ" -> "succ")))))))
 
+// list_map(A: type_t, B: type_t, f: A -> B, list: list_t(A)): list_t(B) = {
+//   list case {
+//     null_t => list
+//     cons_t => cons_t(fun(list.car), list_map(fun, list.cdr))
+//   }
+// }
+
+  define_fn("list_map",
+    args = %(
+      "A" -> the_type,
+      "B" -> the_type,
+      "f" -> the(pi(%("x" -> the("A")), the("B"))),
+      "list" -> the("list_t" ap %("A" -> "A"))),
+    ret = the("list_t" ap %("A" -> "B")),
+    body = choice("list", %(
+      "null_t" -> "null_t",
+      "cons_t" -> ("cons_t" ap %(
+        "A" -> "B",
+        "head" -> ("f" ap %("x" -> ("list" dot "head"))),
+        "tail" -> ("list_map" ap %(
+          "A" -> "A",
+          "B" -> "B",
+          "f" -> "f",
+          "list" -> ("list" dot "tail"))))))))
+
 }

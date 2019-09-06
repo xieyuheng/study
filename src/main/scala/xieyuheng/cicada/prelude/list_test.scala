@@ -59,4 +59,16 @@ object list_test extends Module with App {
         assert(nat.to_int(value) == 6)
     }
   }
+
+  val test_list_map = {
+    eval_on_right("list_map" ap %(
+      "A" -> "nat_t",
+      "B" -> "nat_t",
+      "f" -> fn(%("x" -> the("nat_t")), the("nat_t"), "succ_t" ap %("prev" -> "x")),
+      "list" -> "three_zeros")) {
+      case value =>
+        println(prettyValue(value))
+    }
+  }
+
 }

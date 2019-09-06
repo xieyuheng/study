@@ -11,6 +11,8 @@ object expDSL {
   def the(exp: Exp) = The(exp)
   def the_type = Type()
   def choice(target: Exp, map: MultiMap[String, Exp]) = Choice(target, map)
+  def pi(args: MultiMap[String, Exp], ret: Exp) = Pi(args, ret)
+  def fn(args: MultiMap[String, Exp], ret: Exp, body: Exp) = Fn(args, ret, body)
 
   implicit class ExpExtension(exp: Exp) {
     def dot(fieldName: String): Dot = Dot(exp, fieldName)

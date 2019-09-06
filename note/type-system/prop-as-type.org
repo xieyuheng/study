@@ -1,0 +1,6 @@
+- core logic types
+- history
+- beyond core types
+- two way street
+  - bring new logic quantifiers from type system to logic
+- uniform validity, uniform forall

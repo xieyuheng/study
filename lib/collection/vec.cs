@@ -17,11 +17,11 @@ vec_append(ante: vec_t(A, m), succ: vec_t(A, n)): vec_t(A, m + n) = {
   }
 }
 
-vec_map(fun: A -> B, vec: vec_t(A, n)): vec_t(A, n) = {
+vec_map(f: A -> B, vec: vec_t(A, n)): vec_t(A, n) = {
   vec case {
     null_vec_t => vec
     cons_vec_t => cons_vec_t(
-      head = fun(vec.head),
-      tail = vec_map(fun, vec.tail))
+      head = f(vec.head),
+      tail = vec_map(f, vec.tail))
   }
 }

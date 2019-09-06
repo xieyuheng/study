@@ -3,7 +3,7 @@
 ## Contributing
 
 - Compile: `sbt compile`
-- Run all tests: `sbt test`
+- Test: `./dev t`
 - Install: `sbt publishLocal`
 - Dependency: `"xieyuheng" %% "cicada" % "0.0.1"`
 

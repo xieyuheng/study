@@ -13,6 +13,12 @@ object nat extends Module {
       "zero_t" -> %(),
       "succ_t" -> %("prev" -> the("nat_t"))))
 
+  define("zero", "zero_t")
+  define("one", "succ_t" ap %("prev" -> "zero"))
+  define("two", "succ_t" ap %("prev" -> "one"))
+  define("three", "succ_t" ap %("prev" -> "two"))
+  define("four", "succ_t" ap %("prev" -> "three"))
+
   define_fn("nat_add",
     args = %(
       "x" -> the("nat_t"),
@@ -48,12 +54,6 @@ object nat extends Module {
         "x" -> "x",
         "y" -> ("nat_factorial" ap %(
           "x" -> ("x" dot "prev"))))))))
-
-  define("zero", "zero_t")
-  define("one", "succ_t" ap %("prev" -> "zero"))
-  define("two", "succ_t" ap %("prev" -> "one"))
-  define("three", "succ_t" ap %("prev" -> "two"))
-  define("four", "succ_t" ap %("prev" -> "three"))
 
   def to_int(value: Value): Int = {
     val json = writeJs(walk.deepSelf(value))

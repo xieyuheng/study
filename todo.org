@@ -7,7 +7,6 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * prelude
-- bool
 - nat_even_p
 - list_map
 - vec_length

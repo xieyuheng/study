@@ -17,7 +17,7 @@ object check {
     //     ctx.unify(target, sub) :- body <: t
     //   }
     //   --------------------
-    //   ctx :- Case(target, clauses) <: t
+    //   ctx :- Choice(target, clauses) <: t
 
 
     // - target can be MemberType or SumType

@@ -40,7 +40,7 @@ object json {
     implicit def rwVar: RW[Var] = macroRW
     implicit def rwType: RW[Type] = macroRW
     implicit def rwThe: RW[The] = macroRW
-    implicit def rwCase: RW[Case] = macroRW
+    implicit def rwChoice: RW[Choice] = macroRW
     implicit def rwDot: RW[Dot] = macroRW
     implicit def rwPi: RW[Pi] = macroRW
     implicit def rwFn: RW[Fn] = macroRW
@@ -49,7 +49,7 @@ object json {
       rwVar,
       rwType,
       rwThe,
-      rwCase,
+      rwChoice,
       rwDot,
       rwPi,
       rwFn,
@@ -63,15 +63,15 @@ object json {
         .bimap[Bind](_.map, Bind(_))
 
     implicit def rwEnv: RW[Env] =
-      readwriter[Map[String, Def]]
+      readwriter[Map[String, Define]]
         .bimap[Env](_.map, Env(_))
 
-    // Def
+    // Define
     implicit def rwDefineValue: RW[DefineValue] = macroRW
     implicit def rwDefineMemberType: RW[DefineMemberType] = macroRW
     implicit def rwDefineSumType: RW[DefineSumType] = macroRW
     implicit def rwDefineFn: RW[DefineFn] = macroRW
-    implicit def rwDef: RW[Def] = RW.merge(
+    implicit def rwDefine: RW[Define] = RW.merge(
       rwDefineValue,
       rwDefineMemberType,
       rwDefineSumType,
@@ -102,12 +102,12 @@ object json {
 
     // Neutral
     implicit def rwVarNeutral: RW[VarNeutral] = macroRW
-    implicit def rwCaseNeutral: RW[CaseNeutral] = macroRW
+    implicit def rwChoiceNeutral: RW[ChoiceNeutral] = macroRW
     implicit def rwDotNeutral: RW[DotNeutral] = macroRW
     implicit def rwApNeutral: RW[ApNeutral] = macroRW
     implicit def rwNeutral: RW[Neutral] = RW.merge(
       rwVarNeutral,
-      rwCaseNeutral,
+      rwChoiceNeutral,
       rwDotNeutral,
       rwApNeutral,
     )
@@ -141,13 +141,13 @@ object jsonTest extends App {
 
   // Exp
   println(write[Exp]
-    ("cons_t" ap $(
+    ("cons_t" ap %(
       "A" -> "nat_t",
       "head" -> "zero_t",
-      "tail" -> ("cons_t" ap $(
+      "tail" -> ("cons_t" ap %(
         "A" -> "nat_t",
         "head" -> "zero_t",
-        "tail" -> ("cons_t" ap $(
+        "tail" -> ("cons_t" ap %(
           "A" -> "nat_t",
           "head" -> "zero_t",
           "tail" -> "null_t"))))), indent = 2))

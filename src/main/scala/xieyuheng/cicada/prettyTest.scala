@@ -13,13 +13,13 @@ object prettyTest extends App {
     println(s"t: ${t}")
 
     val threeZeros = prettyExp(
-      "cons_t" ap $(
+      "cons_t" ap %(
         "A" -> "nat_t",
         "head" -> "zero_t",
-        "tail" -> ("cons_t" ap $(
+        "tail" -> ("cons_t" ap %(
           "A" -> "nat_t",
           "head" -> "zero_t",
-          "tail" -> ("cons_t" ap $(
+          "tail" -> ("cons_t" ap %(
             "A" -> "nat_t",
             "head" -> "zero_t",
             "tail" -> "null_t"))))))
@@ -28,7 +28,7 @@ object prettyTest extends App {
 
     val fn = prettyExp(
       Fn(
-        args = $(
+        args = %(
           "x" -> "nat_t",
           "y" -> "nat_t"),
         ret = "nat_t",
@@ -38,16 +38,16 @@ object prettyTest extends App {
 
     val nestedFn = prettyExp(
       Fn(
-        args = $(
+        args = %(
           "x" -> "nat_t",
           "y" -> "nat_t"),
         ret = Pi(
-          args = $(
+          args = %(
             "x" -> "nat_t",
             "y" -> "nat_t"),
           ret = "nat_t"),
         body = Fn(
-          args = $(
+          args = %(
             "x" -> "nat_t",
             "y" -> "nat_t"),
           ret = "nat_t",

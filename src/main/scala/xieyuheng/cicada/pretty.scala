@@ -51,7 +51,7 @@ object pretty {
         "Type"
       case The(t) =>
         s"the(${prettyExp(t)})"
-      case Case(target, map) =>
+      case Choice(target, map) =>
         val mapString = maybeNewline(prettyExpMap(map))
         s"${prettyExp(target)} case {${mapString}}"
       case Dot(target, fieldName) =>
@@ -88,7 +88,7 @@ object pretty {
     neutral match {
       case VarNeutral(name) =>
         name
-      case CaseNeutral(target, map) =>
+      case ChoiceNeutral(target, map) =>
         val mapString = maybeNewline(prettyValueMap(map, bind))
         s"${prettyNeutral(target, bind)} case {${mapString}}"
       case DotNeutral(target, fieldName) =>
@@ -128,7 +128,7 @@ object pretty {
     }
   }
 
-  def prettyDef(definition: Def): String = {
+  def prettyDefine(definition: Define): String = {
     definition match {
       case DefineValue(name, value) =>
         s"define_value ${name} = ${prettyValue(value)}"

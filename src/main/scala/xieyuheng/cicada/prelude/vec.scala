@@ -8,26 +8,18 @@ object vec {
 
   val env = Env()
 
-  .importAll(nat.env)
+  .import_all(nat.env)
 
-  .defType("vec_t", $(
-    "A" -> Type(),
-    "length" -> The("nat_t")),
-    members = $(
-      "null_vec_t" -> $(
+  .define_type("vec_t", %(
+    "A" -> the_type,
+    "length" -> the("nat_t")),
+    members = %(
+      "null_vec_t" -> %(
         "length" -> "zero_t"),
-      "cons_vec_t" -> $(
-        "n" -> The("nat_t"),
-        "length" -> ("succ_t" ap $("prev" -> "n")),
-        "head" -> The("A"),
-        "tail" -> The("vec_t" ap $("A" -> "A", "length" -> "n")))))
+      "cons_vec_t" -> %(
+        "n" -> the("nat_t"),
+        "length" -> ("succ_t" ap %("prev" -> "n")),
+        "head" -> the("A"),
+        "tail" -> the("vec_t" ap %("A" -> "A", "length" -> "n")))))
 
-}
-
-object vecTest extends App {
-  implicit val module = vec.env
-
-  util.evalPrint("vec_t")
-  util.evalPrint("null_vec_t")
-  util.evalPrint("cons_vec_t")
 }

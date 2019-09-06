@@ -32,7 +32,7 @@ object eval {
         } yield ValueOfType(Id(), t)
       }
 
-      case Case(target, map) => {
+      case Choice(target, map) => {
         for {
           targetValue <- eval(target, env)
           result <- targetValue match {
@@ -44,7 +44,7 @@ object eval {
             case NeutralValue(neutral) =>
               for {
                 map <- eval.onMap(map, env)
-              } yield NeutralValue(CaseNeutral(neutral, map))
+              } yield NeutralValue(ChoiceNeutral(neutral, map))
             case _ =>
               Left(ErrorMsg("targetValue of Dot should be MemberTypeValue or NeutralValue, " +
                 s"instead of: ${targetValue}"))
@@ -155,7 +155,7 @@ object eval {
     ): Either[ErrorMsg, (ListMap[String, Value], Env)] = {
       for {
         value <- eval(exp, env)
-      } yield (map + (name -> value), env.defValue(name, value))
+      } yield (map + (name -> value), env.define_value(name, value))
     }
 
     map.entries.foldLeft(initResult) { case (result, (name, exp)) =>

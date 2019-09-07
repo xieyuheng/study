@@ -3,7 +3,7 @@ package xieyuheng.minitt
 sealed trait Exp
 final case class Var(name: String) extends Exp
 final case class Fn(pattern: Pattern, body: Exp) extends Exp
-final case class Apply(fun: Exp, arg: Exp) extends Exp
+final case class Ap(fun: Exp, arg: Exp) extends Exp
 final case class Pi(pattern: Pattern, arg: Exp, ret: Exp) extends Exp
 final case class Cons(car: Exp, cdr: Exp) extends Exp
 final case class Car(pair: Exp) extends Exp

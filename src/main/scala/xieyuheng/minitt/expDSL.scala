@@ -23,7 +23,7 @@ object expDSL {
   implicit class ExpExtension(exp: Exp) {
     def ->:(arg: Exp) = Pi(EmptyPattern, arg, exp)
     def *(cdr: Exp) = Sigma(EmptyPattern, exp, cdr)
-    def $(arg: Exp) = Apply(exp, arg)
+    def $(arg: Exp) = Ap(exp, arg)
     def :: (pattern: Pattern): (Pattern, Exp) = (pattern, exp)
   }
 

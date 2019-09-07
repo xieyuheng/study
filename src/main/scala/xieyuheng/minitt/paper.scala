@@ -2,7 +2,7 @@ package xieyuheng.minitt
 
 import xieyuheng.minitt.expDSL._
 
-object example extends Module with App {
+object paper extends Module {
 
   // id : (A : U) -> A -> A
   // id A, x = x

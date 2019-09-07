@@ -1,14 +1,20 @@
 package xieyuheng.minitt
 
 case class Module() {
-  var declarations: List[Decl] = List()
+  var env: Env = EmptyEnv
 
-  def let(name: String, t: Exp, e: Exp): Unit = {
-    declarations = declarations :+ Let(name, t, e)
+  def let(pattern: Pattern, t: Exp, e: Exp): Unit = {
+    env = DeclEnv(Let(pattern, t, e), env)
   }
 
-  def letrec(name: String, t: Exp, e: Exp): Unit = {
-    declarations = declarations :+ LetRec(name, t, e)
+  def letrec(pattern: Pattern, t: Exp, e: Exp): Unit = {
+    env = DeclEnv(LetRec(pattern, t, e), env)
   }
+
+  def import_all(module: Module): Unit = {
+    env = Env.append(module.env, env)
+  }
+
+  def run(exp: Exp): Value = eval(exp, env)
 
 }

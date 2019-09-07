@@ -35,7 +35,7 @@
 - the little typer as test
 - how to extend tartlet to define new types?
 * minitt
-- operational semantics
+
 - Normal expressions and Readback
 - Typing Rules
 - better expDSL

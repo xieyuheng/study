@@ -13,16 +13,16 @@ object expDSL {
     exp
   }
 
-  def pi(pair: (Pattern, Exp))(ret: Exp): Pi = {
+  def pi(pair: (Pattern, Exp))(t: Exp): Pi = {
     val (pattern, arg) = pair
-    Pi(pattern, arg, ret)
+    Pi(pattern, arg, t)
   }
 
   def %(tag: String, body: Exp = Sole): Data = Data(tag, body)
 
   implicit class ExpExtension(exp: Exp) {
-    def ->:(arg: Exp) = Pi(EmptyPattern, arg, exp)
-    def *(cdr: Exp) = Sigma(EmptyPattern, exp, cdr)
+    def ->:(arg: Exp) = Pi(UnderscorePattern, arg, exp)
+    def *(cdr: Exp) = Sigma(UnderscorePattern, exp, cdr)
     def $(arg: Exp) = Ap(exp, arg)
     def :: (pattern: Pattern): (Pattern, Exp) = (pattern, exp)
   }

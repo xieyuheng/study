@@ -13,12 +13,12 @@ final case class DataValue(tag: String, body: Value) extends Value
 final case class SumValue(chclo: ChoiceClosure) extends Value
 final case class ChoiceValue(chclo: ChoiceClosure) extends Value
 
-case class FnClosure(fn: Fn, env: Env)
-case class ChoiceClosure(ch: Choice, env: Env)
+case class FnClosure(pattern: Pattern, body: Exp, env: Env)
+case class ChoiceClosure(choices: Map[String, Exp], env: Env)
 
 sealed trait Neutral
 final case class VarNeutral(name: String) extends Neutral
 final case class ApNeutral(target: Neutral, arg: Value) extends Neutral
 final case class CarNeutral(target: Neutral) extends Neutral
 final case class CdrNeutral(target: Neutral) extends Neutral
-final case class ChoiceNeutral(target: Neutral, chclo: ChoiceNeutral) extends Neutral
+final case class ChoiceNeutral(target: Neutral, chclo: ChoiceClosure) extends Neutral

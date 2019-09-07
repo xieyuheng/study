@@ -5,7 +5,7 @@ import xieyuheng.minitt.expDSL._
 object example extends Module with App {
 
   // id : (A : U) -> A -> A
-  // id = (A, x) => x
+  // id A, x = x
 
   let("id",
     pi("A" :: U) { "A" ->: "A" },
@@ -23,7 +23,7 @@ object example extends Module with App {
       "false" -> Trivial))
 
   // elimBool : (C : Bool -> U) -> C true -> C false -> (b : Bool) -> C b
-  // elimBool = (C, h0, h1) => choice {
+  // elimBool C h0 h1 = choice {
   //   true => h0
   //   false => h1
   // }
@@ -50,7 +50,7 @@ object example extends Module with App {
       "succ" -> "Nat"))
 
   // List : U -> U
-  // List = A => sum {
+  // List A = sum {
   //   nil
   //   cons A List A
   // }
@@ -63,7 +63,7 @@ object example extends Module with App {
 
   // natrec : (C : Nat -> U) -> C zero -> ((n : Nat) -> C n -> C (succ n)) ->
   //          (n : Nat) -> C n
-  // natrec = (C, a, g) => choice {
+  // natrec C a g = choice {
   //   zero => a
   //   succ prev => g prev (natrec C a g prev)
   // }
@@ -79,7 +79,7 @@ object example extends Module with App {
         "succ" -> fn("prev") { "g" $ "prev" $ ("natrec" $ "C" $ "a" $ "g" $ "prev") }) })
 
   // add : Nat -> Nat -> Nat
-  // add = x => choice {
+  // add x = choice {
   //   zero => x
   //   succ prev => succ (add x prev)
   // }

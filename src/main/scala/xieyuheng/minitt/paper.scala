@@ -33,10 +33,9 @@ object paper extends Module {
       ("C" $ %("true")) ->:
       ("C" $ %("false")) ->:
       pi("b" :: "Bool") { "C" $ "b" } },
-    fn("C", "h0", "h1") {
-      choice(
-        "true" -> fn("_") { "h0" },
-        "false" -> fn("_") { "h1" }) })
+    fn("C", "h0", "h1") { choice(
+      "true" -> fn("_") { "h0" },
+      "false" -> fn("_") { "h1" }) })
 
   // Nat : U
   // Nat = sum {
@@ -56,10 +55,9 @@ object paper extends Module {
   // }
 
   letrec("List", U ->: U,
-    fn("A") {
-      sum(
-        "nil" -> Trivial,
-        "cons" -> "A" * ("List" $ "A")) })
+    fn("A") { sum(
+      "nil" -> Trivial,
+      "cons" -> "A" * ("List" $ "A")) })
 
   // natrec : (C : Nat -> U) ->
   //          C zero ->
@@ -75,10 +73,9 @@ object paper extends Module {
       ("C" $ %("zero")) ->:
       pi("n" :: "Nat") { ("C" $ "n") ->: ("C" $ %("succ", "n")) } ->:
       pi("n" :: "Nat") { ("C" $ "n") } },
-    fn("C", "a", "g") {
-      choice(
-        "zero" -> fn("_") { "a" },
-        "succ" -> fn("prev") { "g" $ "prev" $ ("natrec" $ "C" $ "a" $ "g" $ "prev") }) })
+    fn("C", "a", "g") { choice(
+      "zero" -> fn("_") { "a" },
+      "succ" -> fn("prev") { "g" $ "prev" $ ("natrec" $ "C" $ "a" $ "g" $ "prev") }) })
 
   // add : Nat -> Nat -> Nat
   // add x = choice {

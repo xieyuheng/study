@@ -61,8 +61,10 @@ object example extends Module with App {
         "nil" -> Trivial,
         "cons" -> "A" * ("List" $ "A")) })
 
-  // natrec : (C : Nat -> U) -> C zero -> ((n : Nat) -> C n -> C (succ n)) ->
-  //          (n : Nat) -> C n
+  // natrec : (C : Nat -> U) ->
+  //          C zero ->
+  //          ((n : Nat) -> C n -> C (succ n)) ->
+  //          ((n : Nat) -> C n)
   // natrec C a g = choice {
   //   zero => a
   //   succ prev => g prev (natrec C a g prev)

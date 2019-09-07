@@ -86,12 +86,10 @@ object paper extends Module {
   //   succ prev => succ (add x prev)
   // }
 
-  letrec("add",
-    "Nat" ->: "Nat" ->: "Nat",
-    fn("x") {
-      choice(
-        "zero" -> fn("_") { "x" },
-        "succ" -> fn("prev") { %("succ", "add" $ "x" $ "prev") }) })
+  letrec("add", "Nat" ->: "Nat" ->: "Nat",
+    fn("x") { choice(
+      "zero" -> fn("_") { "x" },
+      "succ" -> fn("prev") { %("succ", "add" $ "x" $ "prev") }) })
 
   // eqNat : Nat -> Nat -> Bool
   // eqNat = choice {
@@ -105,16 +103,13 @@ object paper extends Module {
   //   }
   // }
 
-  letrec("eqNat",
-    "Nat" ->: "Nat" ->: "Bool",
+  letrec("eqNat", "Nat" ->: "Nat" ->: "Bool",
     choice(
-      "zero" -> fn("_") {
-        choice(
-          "zero" -> fn("_") { %("true") },
-          "succ" -> fn("_") { %("false") }) },
-      "succ" -> fn("x") {
-        choice(
-          "zero" -> fn("_") { %("false") },
-          "succ" -> fn("y") { "eqNat" $ "x" $ "y" }) }))
+      "zero" -> fn("_") { choice(
+        "zero" -> fn("_") { %("true") },
+        "succ" -> fn("_") { %("false") }) },
+      "succ" -> fn("x") { choice(
+        "zero" -> fn("_") { %("false") },
+        "succ" -> fn("y") { "eqNat" $ "x" $ "y" }) }))
 
 }

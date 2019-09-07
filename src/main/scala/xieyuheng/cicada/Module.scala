@@ -2,7 +2,7 @@ package xieyuheng.cicada
 
 import xieyuheng.cicada.pretty._
 
-abstract class Module {
+case class Module() {
   var env: Env = Env()
 
   def define_value(

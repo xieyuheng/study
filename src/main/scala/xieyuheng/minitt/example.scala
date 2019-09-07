@@ -1,12 +1,13 @@
 package xieyuheng.minitt
 
-object example extends App {
-  import expDSL._
+import xieyuheng.minitt.expDSL._
+
+object example extends Module with App {
 
   // id : (A : U) -> A -> A
   // id = (A, x) => x
 
-  Let("id",
+  let("id",
     pi("A" :: U) { "A" ->: "A" },
     fn("A", "x") { "x" })
 
@@ -16,7 +17,7 @@ object example extends App {
   //   false
   // }
 
-  Let("Bool", U,
+  let("Bool", U,
     sum(
       "true" -> Trivial,
       "false" -> Trivial))
@@ -27,7 +28,7 @@ object example extends App {
   //   false => h1
   // }
 
-  Let("elimBool",
+  let("elimBool",
     pi("C" :: "Bool" ->: U) {
       ("C" $ %("true")) ->:
       ("C" $ %("false")) ->:
@@ -43,7 +44,7 @@ object example extends App {
   //   succ Nat
   // }
 
-  LetRec("Nat", U,
+  letrec("Nat", U,
     sum(
       "zero" -> Trivial,
       "succ" -> "Nat"))
@@ -54,7 +55,7 @@ object example extends App {
   //   cons A List A
   // }
 
-  LetRec("List", U ->: U,
+  letrec("List", U ->: U,
     fn("A") {
       sum(
         "nil" -> Trivial,
@@ -67,7 +68,7 @@ object example extends App {
   //   succ prev => g prev (natrec C a g prev)
   // }
 
-  LetRec("natrec",
+  letrec("natrec",
     pi("C" :: "Nat" ->: U) {
       ("C" $ %("zero")) ->:
       pi("n" :: "Nat") { ("C" $ "n") ->: ("C" $ %("succ", "n")) } ->:
@@ -83,7 +84,7 @@ object example extends App {
   //   succ prev => succ (add x prev)
   // }
 
-  LetRec("add",
+  letrec("add",
     "Nat" ->: "Nat" ->: "Nat",
     fn("x") {
       choice(
@@ -102,7 +103,7 @@ object example extends App {
   //   }
   // }
 
-  LetRec("eqNat",
+  letrec("eqNat",
     "Nat" ->: "Nat" ->: "Bool",
     choice(
       "zero" -> fn("_") {

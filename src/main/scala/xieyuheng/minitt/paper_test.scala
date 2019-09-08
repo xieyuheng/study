@@ -2,7 +2,7 @@ package xieyuheng.minitt
 
 import xieyuheng.minitt.expDSL._
 
-object evalTest extends Module with App {
+object paper_test extends Module with App {
 
   import_all(paper)
 

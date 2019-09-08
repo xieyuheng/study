@@ -22,7 +22,7 @@ case class Module() {
   def run_print(exp: Exp): Value = {
     println(prettyExp(exp))
     val value = run(exp)
-    print("=> ")
+    print("// ==> ")
     println(prettyValue(value))
     println()
     value

@@ -6,29 +6,22 @@ object paper_test extends Module with App {
 
   import_all(paper)
 
-  run_print(
-    "id" $ "bool_t" $ %("true"))
+  assert_eq("id" $ "bool_t" $ "true")("true")
+  assert_eq("id" $ "bool_t" $ "false")("false")
+  assert_eq("id" $ "bool_t" $ "id")("id")
 
-  run_print(
-    "add" $
-      %("succ", %("zero")) $
-      %("succ", %("zero")))
+  assert_eq("double" $ "one")("two")
+  assert_eq("double" $ "two")("four")
+  assert_eq("double" $ "three")("six")
 
-  run_print(
-    %("cons", %("zero") * %("nil")))
+  assert_eq("square" $ "one")("one")
+  assert_eq("square" $ "two")("four")
+  assert_eq("square" $ "three")("nine")
 
-  run_print(
-    %("nil"))
-
-  run_print(
-    "nat_eq" $
-      %("succ", %("succ", %("zero"))) $
-      %("succ", %("succ", %("zero"))))
-
-  run_print(
-    "nat_eq" $
-      %("succ", %("zero")) $
-      %("succ", %("succ", %("zero"))))
+  assert_eq("nat_eq" $ "one" $ "one")("true")
+  assert_eq("nat_eq" $ "two" $ "two")("true")
+  assert_eq("nat_eq" $ "one" $ "two")("false")
+  assert_eq("nat_eq" $ "two" $ "one")("false")
 
   println("------\n")
 

@@ -1,5 +1,5 @@
 * partech
-- linear time parser for all context free grammar with epsilon
+- parser for all context free grammar without epsilon
 - ExampleRule
 - sexp example
 - TreeTo

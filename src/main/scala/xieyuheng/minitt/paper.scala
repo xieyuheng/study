@@ -11,102 +11,102 @@ object paper extends Module {
     pi("A" :: U) { "A" ->: "A" },
     fn("A", "x") { "x" })
 
-  // Bool : U
-  // Bool = sum {
+  // bool_t : U
+  // bool_t = sum {
   //   true
   //   false
   // }
 
-  let("Bool", U,
+  let("bool_t", U,
     sum(
       "true" -> Trivial,
       "false" -> Trivial))
 
-  // elimBool : (C : Bool -> U) -> C true -> C false -> (b : Bool) -> C b
-  // elimBool C h0 h1 = choice {
+  // bool_elim : (C : bool_t -> U) -> C true -> C false -> (b : bool_t) -> C b
+  // bool_elim C h0 h1 = choice {
   //   true => h0
   //   false => h1
   // }
 
-  let("elimBool",
-    pi("C" :: "Bool" ->: U) {
+  let("bool_elim",
+    pi("C" :: "bool_t" ->: U) {
       ("C" $ %("true")) ->:
       ("C" $ %("false")) ->:
-      pi("b" :: "Bool") { "C" $ "b" } },
+      pi("b" :: "bool_t") { "C" $ "b" } },
     fn("C", "h0", "h1") { choice(
       "true" -> fn("_") { "h0" },
       "false" -> fn("_") { "h1" }) })
 
-  // Nat : U
-  // Nat = sum {
+  // nat_t : U
+  // nat_t = sum {
   //   zero
-  //   succ Nat
+  //   succ nat_t
   // }
 
-  letrec("Nat", U,
+  letrec("nat_t", U,
     sum(
       "zero" -> Trivial,
-      "succ" -> "Nat"))
+      "succ" -> "nat_t"))
 
-  // List : U -> U
-  // List A = sum {
+  // list_t : U -> U
+  // list_t A = sum {
   //   nil
-  //   cons A List A
+  //   cons A list_t A
   // }
 
-  letrec("List", U ->: U,
+  letrec("list_t", U ->: U,
     fn("A") { sum(
       "nil" -> Trivial,
-      "cons" -> "A" * ("List" $ "A")) })
+      "cons" -> "A" * ("list_t" $ "A")) })
 
-  // natrec : (C : Nat -> U) ->
+  // nat_rec : (C : nat_t -> U) ->
   //          C zero ->
-  //          ((n : Nat) -> C n -> C (succ n)) ->
-  //          ((n : Nat) -> C n)
-  // natrec C a g = choice {
+  //          ((n : nat_t) -> C n -> C (succ n)) ->
+  //          ((n : nat_t) -> C n)
+  // nat_rec C a g = choice {
   //   zero => a
-  //   succ prev => g prev (natrec C a g prev)
+  //   succ prev => g prev (nat_rec C a g prev)
   // }
 
-  letrec("natrec",
-    pi("C" :: "Nat" ->: U) {
+  letrec("nat_rec",
+    pi("C" :: "nat_t" ->: U) {
       ("C" $ %("zero")) ->:
-      pi("n" :: "Nat") { ("C" $ "n") ->: ("C" $ %("succ", "n")) } ->:
-      pi("n" :: "Nat") { ("C" $ "n") } },
+      pi("n" :: "nat_t") { ("C" $ "n") ->: ("C" $ %("succ", "n")) } ->:
+      pi("n" :: "nat_t") { ("C" $ "n") } },
     fn("C", "a", "g") { choice(
       "zero" -> fn("_") { "a" },
-      "succ" -> fn("prev") { "g" $ "prev" $ ("natrec" $ "C" $ "a" $ "g" $ "prev") }) })
+      "succ" -> fn("prev") { "g" $ "prev" $ ("nat_rec" $ "C" $ "a" $ "g" $ "prev") }) })
 
-  // add : Nat -> Nat -> Nat
+  // add : nat_t -> nat_t -> nat_t
   // add x = choice {
   //   zero => x
   //   succ prev => succ (add x prev)
   // }
 
-  letrec("add", "Nat" ->: "Nat" ->: "Nat",
+  letrec("add", "nat_t" ->: "nat_t" ->: "nat_t",
     fn("x") { choice(
       "zero" -> fn("_") { "x" },
       "succ" -> fn("prev") { %("succ", "add" $ "x" $ "prev") }) })
 
-  // eqNat : Nat -> Nat -> Bool
-  // eqNat = choice {
+  // nat_eq : nat_t -> nat_t -> bool_t
+  // nat_eq = choice {
   //   zero => choice {
   //     zero => true
   //     succ _ => false
   //   }
   //   succ x => choice {
   //     zero => false
-  //     succ y => eqNat x y
+  //     succ y => nat_eq x y
   //   }
   // }
 
-  letrec("eqNat", "Nat" ->: "Nat" ->: "Bool",
+  letrec("nat_eq", "nat_t" ->: "nat_t" ->: "bool_t",
     choice(
       "zero" -> fn("_") { choice(
         "zero" -> fn("_") { %("true") },
         "succ" -> fn("_") { %("false") }) },
       "succ" -> fn("x") { choice(
         "zero" -> fn("_") { %("false") },
-        "succ" -> fn("y") { "eqNat" $ "x" $ "y" }) }))
+        "succ" -> fn("y") { "nat_eq" $ "x" $ "y" }) }))
 
 }

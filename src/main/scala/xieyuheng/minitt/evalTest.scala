@@ -7,7 +7,7 @@ object evalTest extends Module with App {
   import_all(paper)
 
   println(run(
-    "id" $ "Bool" $ %("true")))
+    "id" $ "bool_t" $ %("true")))
 
   println(run(
     "add" $
@@ -21,12 +21,12 @@ object evalTest extends Module with App {
     %("nil")))
 
   println(run(
-    "eqNat" $
+    "nat_eq" $
       %("succ", %("succ", %("zero"))) $
       %("succ", %("succ", %("zero")))))
 
   println(run(
-    "eqNat" $
+    "nat_eq" $
       %("succ", %("zero")) $
       %("succ", %("succ", %("zero")))))
 }

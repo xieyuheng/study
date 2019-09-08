@@ -3,8 +3,8 @@ package xieyuheng.minitt
 sealed trait Value
 final case class NeutralValue(neutral: Neutral) extends Value
 final case class FnValue(fnclo: FnClosure) extends Value
-final case class PiValue(t: Value, fnclo: FnClosure) extends Value
-final case class SigmaValue(t: Value, fnclo: FnClosure) extends Value
+final case class PiValue(arg: Value, fnclo: FnClosure) extends Value
+final case class SigmaValue(arg: Value, fnclo: FnClosure) extends Value
 final case object UValue extends Value
 final case class ConsValue(car: Value, cdr: Value) extends Value
 final case object SoleValue extends Value

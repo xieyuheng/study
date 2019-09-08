@@ -5,6 +5,10 @@ object expDSL {
 
   def sum(pairs: (String, Exp)*): Sum = Sum(Map(pairs: _*))
 
+  def cons(car: Exp, cdr: Exp): Exp = Cons(car, cdr)
+
+  def cons(car: Pattern, cdr: Pattern): Pattern = ConsPattern(car, cdr)
+
   def fn(patterns: Pattern*)(body: Exp): Exp = {
     var exp = body
     patterns.reverse.foreach { case pattern =>
@@ -20,14 +24,21 @@ object expDSL {
 
   def %(tag: String, body: Exp = Sole): Data = Data(tag, body)
 
-  implicit class ExpExtension(exp: Exp) {
-    def ->:(arg: Exp) = Pi(UnderscorePattern, arg, exp)
-    def *(cdr: Exp) = Sigma(UnderscorePattern, exp, cdr)
-    def $(arg: Exp) = Ap(exp, arg)
-    def :: (pattern: Pattern): (Pattern, Exp) = (pattern, exp)
+  implicit class PatternExtension(pattern: Pattern) {
+    def *(cdr: Pattern): Pattern = ConsPattern(pattern, cdr)
   }
 
-  implicit class StringExtension(string: String) extends ExpExtension(Var(string))
+  implicit class ExpExtension(exp: Exp) {
+    def ->:(arg: Exp): Exp = Pi(UnderscorePattern, arg, exp)
+    def **(t: Exp): Exp = Sigma(UnderscorePattern, exp, t)
+    def *(cdr: Exp): Exp = Cons(exp, cdr)
+    def $(arg: Exp): Exp = Ap(exp, arg)
+    def ::(pattern: Pattern): (Pattern, Exp) = (pattern, exp)
+  }
+
+  implicit class StringExtension(string: String) extends ExpExtension(Var(string)) {
+    def *(cdr: String): Pattern = ConsPattern(VarPattern(string), VarPattern(cdr))
+  }
 
   implicit def VarFromString(name: String) = Var(name)
 

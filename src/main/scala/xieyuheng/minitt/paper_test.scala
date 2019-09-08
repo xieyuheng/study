@@ -6,27 +6,57 @@ object paper_test extends Module with App {
 
   import_all(paper)
 
-  println(run(
-    "id" $ "bool_t" $ %("true")))
+  run_print(
+    "id" $ "bool_t" $ %("true"))
 
-  println(run(
+  run_print(
     "add" $
       %("succ", %("zero")) $
-      %("succ", %("zero"))))
+      %("succ", %("zero")))
 
-  println(run(
-    %("cons", %("zero") * %("nil"))))
+  run_print(
+    %("cons", %("zero") * %("nil")))
 
-  println(run(
-    %("nil")))
+  run_print(
+    %("nil"))
 
-  println(run(
+  run_print(
     "nat_eq" $
       %("succ", %("succ", %("zero"))) $
-      %("succ", %("succ", %("zero")))))
+      %("succ", %("succ", %("zero"))))
 
-  println(run(
+  run_print(
     "nat_eq" $
       %("succ", %("zero")) $
-      %("succ", %("succ", %("zero")))))
+      %("succ", %("succ", %("zero"))))
+
+  println("------\n")
+
+  run_print(
+    "list_append" $ "nat_t")
+
+  run_print(
+    "list_append" $ "nat_t" $ %("nil"))
+
+  run_print(
+    "list_append" $ "nat_t" $ %("nil") $ %("nil"))
+
+  println("------\n")
+
+  run_print(
+    "list_append" $ "nat_t")
+
+  run_print(
+    "list_append" $ "nat_t" $ %("cons", %("zero") * %("nil")))
+
+  run_print(
+    "list_append" $ "nat_t" $ %("cons", %("zero") * %("nil")) $ %("nil"))
+
+  println("------\n")
+
+  val two_zeros = %("cons", %("zero") * %("cons", %("zero") * %("nil")))
+
+  run_print(
+    "list_append" $ "nat_t" $ two_zeros $ two_zeros)
+
 }

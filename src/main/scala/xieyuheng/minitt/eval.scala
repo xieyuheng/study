@@ -1,5 +1,7 @@
 package xieyuheng.minitt
 
+import xieyuheng.minitt.pretty._
+
 object eval {
   def ap(f: Value, arg: Value): Value = {
     f match {
@@ -23,7 +25,9 @@ object eval {
     value match {
       case ConsValue(car: Value, cdr: Value) => car
       case NeutralValue(target) => NeutralValue(CarNeutral(target))
-      case _ => throw new Exception()
+      case _ =>
+        println(s"value is not a ConsValue: ${prettyValue(value)}")
+        throw new Exception()
     }
   }
 
@@ -31,7 +35,9 @@ object eval {
     value match {
       case ConsValue(car: Value, cdr: Value) => cdr
       case NeutralValue(target) => NeutralValue(CdrNeutral(target))
-      case _ => throw new Exception()
+      case _ =>
+        println(s"value is not a ConsValue: ${prettyValue(value)}")
+        throw new Exception()
     }
   }
 
@@ -52,7 +58,9 @@ object eval {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case EmptyEnv => throw new Exception()
+      case EmptyEnv =>
+        println(s"can not find name: ${name}")
+        throw new Exception()
     }
   }
 
@@ -64,7 +72,7 @@ object eval {
         } else {
           None
         }
-      case ConsPattern(carPattern: Pattern, cdrPattern: Pattern) => ???
+      case ConsPattern(carPattern: Pattern, cdrPattern: Pattern) =>
         projectPattern(name, carPattern, car(value)) match {
           case Some(value) => Some(value)
           case None => projectPattern(name, cdrPattern, cdr(value)) match {

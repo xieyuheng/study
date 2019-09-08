@@ -1,5 +1,7 @@
 package xieyuheng.minitt
 
+import xieyuheng.minitt.pretty._
+
 case class Module() {
   var env: Env = EmptyEnv
 
@@ -16,5 +18,14 @@ case class Module() {
   }
 
   def run(exp: Exp): Value = eval(exp, env)
+
+  def run_print(exp: Exp): Value = {
+    println(prettyExp(exp))
+    val value = run(exp)
+    print("=> ")
+    println(prettyValue(value))
+    println()
+    value
+  }
 
 }

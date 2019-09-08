@@ -62,6 +62,14 @@ object paper extends Module {
       "nil" -> Trivial,
       "cons" -> "A" * ("list_t" $ "A")) })
 
+  letrec("list_append",
+    pi("A" :: U) {
+      "list_t" $ "A" ->: "list_t" $ "A" ->: "list_t" $ "A" },
+    fn("A") { choice(
+      "nil" -> fn("_") { fn("y") { "y" } },
+      "cons" -> fn("car" * "cdr") { fn("y") {
+        %("cons", "car" * ("list_append" $ "A" $ "cdr" $ "y")) } }) } )
+
   // nat_rec : (C : nat_t -> U) ->
   //          C zero ->
   //          ((n : nat_t) -> C n -> C (succ n)) ->

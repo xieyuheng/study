@@ -38,4 +38,5 @@
 * minitt
 - Normal expressions and Readback
 - Typing Rules
+- simplify by not using Pattern
 - partech

@@ -22,7 +22,10 @@ object paper extends Module {
       "true" -> Trivial,
       "false" -> Trivial))
 
-  // bool_elim : (C : bool_t -> U) -> C true -> C false -> (b : bool_t) -> C b
+  // bool_elim : (C : bool_t -> U) ->
+  //             C true ->
+  //             C false ->
+  //             (b : bool_t) -> C b
   // bool_elim C h0 h1 = choice {
   //   true => h0
   //   false => h1

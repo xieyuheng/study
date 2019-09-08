@@ -1,21 +1,3 @@
-* cicada
-- eval for cicada without_logic_variable
-- why we have value vs exp
-  - in lambda
-    for redux
-  - in cicada
-    for redux and unification
-    why unification instead of substitution ?
-    System Fω
-- what is in a record that lambda can not express ?
-- be sure about eval and apply on fn
-- check
-- [test] MemberTypeValue can be used as type, just by using `the`
-- [problem] deep walk cost so much
-- compile to js with runtime type information
-  - this means keep Value serde-able
-    - Value includes FnValue which contains Exp
-      this Exp is also serde-able
 * partech
 - linear time parser for all context free grammar with epsilon
 - ExampleRule
@@ -23,13 +5,13 @@
 - TreeTo
 - parse error reporting
 - [maybe] WordPred for error reporting
-* tartlet
-- change the style to grouping by function instead of grouping by data
-- better expDSL
-- better Module
-- better tests
-- the little typer as test
-- how to extend tartlet to define new types?
+* cicada
+- eval for cicada without_logic_variable
+- partially filled data can be used as type
+- compile to js with runtime type information
+  - this means keep Value serde-able
+    - Value includes FnValue which contains Exp
+      this Exp is also serde-able
 * minitt
 - readback
 - Ctx
@@ -38,3 +20,12 @@
 - check
 - infer
 - examples
+* tartlet
+- change the style to grouping by function instead of grouping by data
+- better expDSL
+- better Module
+- better tests
+- the little typer as test
+- how to extend tartlet to define new types?
+  - keep tartlet subrecursive
+    but be generic about data and ind, rec and iter

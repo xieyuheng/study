@@ -1,22 +1,39 @@
 package xieyuheng.partech
 
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.Set
+import scala.collection.mutable.ArrayBuffer
 
 object Earley {
-  case class Frame()
+  case class Item(rule: Rule, choiceName: String, parts: List[RulePart], index: Int)
 }
+
 case class Earley(
   words: List[Word],
-  queue: ListBuffer[Earley.Frame],
+  start: Rule,
 ) {
+  import Earley._
 
-  def nextLinearTree(): Option[List[LinearTreePart]] = {
+  var active: ArrayBuffer[Set[Item]] = ArrayBuffer.fill(words.length)(Set())
+  var completed: ArrayBuffer[Set[Item]] = ArrayBuffer.fill(words.length)(Set())
+
+  def predict(rule: Rule, index: Int): Unit = {
+    rule.choices.foreach { case (name, parts) =>
+      ???
+    }
+  }
+
+  // def scan
+  // def complete
+
+  def run(): Unit = {
+    predict(start, 0)
+  }
+
+  val recognize: Boolean = {
     ???
   }
 
   def nextTree(): Option[Tree] = {
-    nextLinearTree().flatMap { case parts =>
-      Some(Tree.fromLinearTree(parts))
-    }
+    ???
   }
 }

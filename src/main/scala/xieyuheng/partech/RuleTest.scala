@@ -1,10 +1,9 @@
-package xieyuheng.partech.example
+package xieyuheng.partech
 
-import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._
 import xieyuheng.partech.predefined._
 
-object exp {
+object RuleTest extends App {
 
   def lexer = Lexer.default
 
@@ -42,6 +41,8 @@ object exp {
     "case_clause", List(
       identifier, "=", ">", exp))
 
+  case class Item(rule: Rule, choiceName: String, index: Int)
+
   def arg = Rule(
     "arg", Map(
       "value" -> List(identifier, "=", exp),
@@ -50,4 +51,21 @@ object exp {
       "type_comma" ->  List(identifier, ":", exp, ","),
     ))
 
+  def arg2 = Rule(
+    "arg", Map(
+      "value" -> List(identifier, "=", exp),
+      "type" ->  List(identifier, ":", exp),
+      "value_comma" -> List(identifier, "=", exp, ","),
+      "type_comma" ->  List(identifier, ":", exp, ","),
+    ))
+
+  assert(Item(arg, "value", 0) == Item(arg2, "value", 0))
+
+  import scala.collection.mutable.Set
+
+  var itemSet: Set[Item] = Set()
+  itemSet += Item(arg, "value", 0)
+  itemSet += Item(arg2, "value", 0)
+
+  assert(itemSet.size == 1)
 }

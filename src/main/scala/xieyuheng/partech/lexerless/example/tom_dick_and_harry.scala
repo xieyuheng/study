@@ -6,11 +6,11 @@ import xieyuheng.partech.lexerless.predefined._
 
 object tom_dick_and_harry extends ExampleRule {
 
-  val sentences = Seq(
+  val sentences = List(
     "tom, dick and harry",
   )
 
-  val non_sentences = Seq(
+  val non_sentences = List(
     "tom, dick, harry",
   )
 
@@ -20,14 +20,14 @@ object tom_dick_and_harry extends ExampleRule {
 
   def tom_dick_and_harry = Rule(
     "tom_dick_and_harry", Map(
-      "name" -> Seq(name),
-      "list" -> Seq(name_list, " and ", name)))
+      "name" -> List(name),
+      "list" -> List(name_list, " and ", name)))
 
   def name = Rule(
     "name", Map(
-      "tom" -> Seq("tom"),
-      "dick" -> Seq("dick"),
-      "harry" -> Seq("harry")))
+      "tom" -> List("tom"),
+      "dick" -> List("dick"),
+      "harry" -> List("harry")))
 
   def name_list = non_empty_list(name)(", ")
 

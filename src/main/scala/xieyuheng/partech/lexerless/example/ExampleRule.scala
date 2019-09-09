@@ -3,14 +3,14 @@ package xieyuheng.partech.lexerless.example
 import xieyuheng.partech.lexerless._
 
 trait ExampleRule {
-  def sentences: Seq[String]
-  def non_sentences: Seq[String]
+  def sentences: List[String]
+  def non_sentences: List[String]
   def start: Rule
   def treeToMainType: Option[TreeTo[_]]
 }
 
 object ExampleRule {
-  val examples = Seq(
+  val examples = List(
     bool_sexp,
     bool_sexp_non_empty,
     bool_sexp_with_space,

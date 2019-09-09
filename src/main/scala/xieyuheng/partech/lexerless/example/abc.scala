@@ -10,12 +10,12 @@ object abc extends ExampleRule {
 
   // language = "a"^m "b"^n "c"^n | "a"^p "b"^p "c"^q
 
-  val sentences = Seq(
+  val sentences = List(
     "abc",
     "aabbcc",
   )
 
-  val non_sentences = Seq(
+  val non_sentences = List(
     "abbccc",
   )
 
@@ -25,28 +25,28 @@ object abc extends ExampleRule {
 
   def abc = Rule(
     "abc", Map(
-      "a_bc" -> Seq(a, bc),
-      "ab_c" -> Seq(ab, c)))
+      "a_bc" -> List(a, bc),
+      "ab_c" -> List(ab, c)))
 
   def a: Rule = Rule(
     "a", Map(
-      "one_a" -> Seq("a"),
-      "more_a" -> Seq("a", a)))
+      "one_a" -> List("a"),
+      "more_a" -> List("a", a)))
 
   def ab: Rule = Rule(
     "ab", Map(
-      "one_ab" -> Seq("ab"),
-      "more_ab" -> Seq("a", ab, "b")))
+      "one_ab" -> List("ab"),
+      "more_ab" -> List("a", ab, "b")))
 
   def bc: Rule = Rule(
     "bc", Map(
-      "one_bc" -> Seq("bc"),
-      "more_bc" -> Seq("b", bc, "c")))
+      "one_bc" -> List("bc"),
+      "more_bc" -> List("b", bc, "c")))
 
   def c: Rule = Rule(
     "c", Map(
-      "one_c" -> Seq("c"),
-      "more_c" -> Seq("c", c)))
+      "one_c" -> List("c"),
+      "more_c" -> List("c", c)))
 
   sealed trait ABC
   final case class A_BC(a: A, bc: BC) extends ABC
@@ -55,9 +55,9 @@ object abc extends ExampleRule {
   object ABC {
     implicit def treeToABC: TreeTo[ABC] = TreeTo[ABC] { case tree =>
       tree match {
-        case Node(Rule("abc", _, _), "a_bc", Seq(a, bc)) =>
+        case Node(Rule("abc", _, _), "a_bc", List(a, bc)) =>
           A_BC(Tree.to[A](a), Tree.to[BC](bc))
-        case Node(Rule("abc", _, _), "ab_c", Seq(ab, c)) =>
+        case Node(Rule("abc", _, _), "ab_c", List(ab, c)) =>
           AB_C(Tree.to[AB](ab), Tree.to[C](c))
         case _ => throw new Exception()
       }
@@ -73,7 +73,7 @@ object abc extends ExampleRule {
       tree match {
         case Node(Rule("a", _, _), "one_a", _) =>
           ONE_A()
-        case Node(Rule("a", _, _), "more_a", Seq(_, a)) =>
+        case Node(Rule("a", _, _), "more_a", List(_, a)) =>
           MORE_A(Tree.to[A](a))
         case _ => throw new Exception()
       }
@@ -89,7 +89,7 @@ object abc extends ExampleRule {
       tree match {
         case Node(Rule("ab", _, _), "one_ab", _) =>
           ONE_AB()
-        case Node(Rule("ab", _, _), "more_ab", Seq(_, ab, _)) =>
+        case Node(Rule("ab", _, _), "more_ab", List(_, ab, _)) =>
           MORE_AB(Tree.to[AB](ab))
         case _ => throw new Exception()
       }
@@ -105,7 +105,7 @@ object abc extends ExampleRule {
       tree match {
         case Node(Rule("bc", _, _), "one_bc", _) =>
           ONE_BC()
-        case Node(Rule("bc", _, _), "more_bc", Seq(_, bc, _)) =>
+        case Node(Rule("bc", _, _), "more_bc", List(_, bc, _)) =>
           MORE_BC(Tree.to[BC](bc))
         case _ => throw new Exception()
       }
@@ -121,7 +121,7 @@ object abc extends ExampleRule {
       tree match {
         case Node(Rule("c", _, _), "one_c", _) =>
           ONE_C()
-        case Node(Rule("c", _, _), "more_c", Seq(_, c)) =>
+        case Node(Rule("c", _, _), "more_c", List(_, c)) =>
           MORE_C(Tree.to[C](c))
         case _ => throw new Exception()
       }

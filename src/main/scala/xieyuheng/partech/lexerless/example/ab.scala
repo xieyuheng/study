@@ -8,13 +8,13 @@ object ab extends ExampleRule {
 
   // equal number of "a" "b"
 
-  val sentences = Seq(
+  val sentences = List(
     "ab",
     "abab",
     "aabb",
   )
 
-  val non_sentences = Seq(
+  val non_sentences = List(
     "aab",
   )
 
@@ -24,20 +24,20 @@ object ab extends ExampleRule {
 
   def ab = Rule(
     "ab", Map(
-      "head_a" -> Seq("a", b),
-      "head_b" -> Seq("b", a)))
+      "head_a" -> List("a", b),
+      "head_b" -> List("b", a)))
 
   def a: Rule = Rule(
     "a", Map(
-      "one_a" -> Seq("a"),
-      "more_a" -> Seq("a", ab),
-      "after_b" -> Seq("b", a, a)))
+      "one_a" -> List("a"),
+      "more_a" -> List("a", ab),
+      "after_b" -> List("b", a, a)))
 
   def b: Rule = Rule(
     "b", Map(
-      "one_b" -> Seq("b"),
-      "more_b" -> Seq("b", ab),
-      "after_a" -> Seq("a", b, b)))
+      "one_b" -> List("b"),
+      "more_b" -> List("b", ab),
+      "after_a" -> List("a", b, b)))
 
   sealed trait AB
   final case class HEAD_A(b: B) extends AB
@@ -46,9 +46,9 @@ object ab extends ExampleRule {
   object AB {
     implicit def treeToAB: TreeTo[AB] = TreeTo[AB] { case tree =>
       tree match {
-        case Node(Rule("ab", _, _), "head_a", Seq(_, b)) =>
+        case Node(Rule("ab", _, _), "head_a", List(_, b)) =>
           HEAD_A(Tree.to[B](b))
-        case Node(Rule("ab", _, _), "head_b", Seq(_, a)) =>
+        case Node(Rule("ab", _, _), "head_b", List(_, a)) =>
           HEAD_B(Tree.to[A](a))
         case _ => throw new Exception()
       }
@@ -65,9 +65,9 @@ object ab extends ExampleRule {
       tree match {
         case Node(Rule("a", _, _), "one_a", _) =>
           ONE_A()
-        case Node(Rule("a", _, _), "more_a", Seq(_, ab)) =>
+        case Node(Rule("a", _, _), "more_a", List(_, ab)) =>
           MORE_A(Tree.to[AB](ab))
-        case Node(Rule("a", _, _), "after_b", Seq(_, a1, a2)) =>
+        case Node(Rule("a", _, _), "after_b", List(_, a1, a2)) =>
           AFTER_B(Tree.to[A](a1), Tree.to[A](a2))
         case _ => throw new Exception()
       }
@@ -84,9 +84,9 @@ object ab extends ExampleRule {
       tree match {
         case Node(Rule("b", _, _), "one_b", _) =>
           ONE_B()
-        case Node(Rule("b", _, _), "more_b", Seq(_, ab)) =>
+        case Node(Rule("b", _, _), "more_b", List(_, ab)) =>
           MORE_B(Tree.to[AB](ab))
-        case Node(Rule("b", _, _), "after_a", Seq(_, b1, b2)) =>
+        case Node(Rule("b", _, _), "after_a", List(_, b1, b2)) =>
           AFTER_A(Tree.to[B](b1), Tree.to[B](b2))
         case _ => throw new Exception()
       }

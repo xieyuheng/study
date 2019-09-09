@@ -17,6 +17,6 @@ object ruleDSL {
   implicit def RuleFromStrPred(strPred: StrPred): Rule = {
     Rule(
       "$" ++ strPred.name, Map(
-        strPred.name -> Seq(RulePartPred(strPred))))
+        strPred.name -> List(RulePartPred(strPred))))
   }
 }

@@ -6,13 +6,13 @@ import xieyuheng.partech.lexerless.predefined._
 
 object bin_sum extends ExampleRule {
 
-  val sentences = Seq(
+  val sentences = List(
     "1 + 0",
     "1 + 1 + 1 + 0",
     "0 + 0",
   )
 
-  val non_sentences = Seq(
+  val non_sentences = List(
     "1 + 2",
   )
 
@@ -22,13 +22,13 @@ object bin_sum extends ExampleRule {
 
   def bin_sum: Rule = Rule(
     "bin_sum", Map(
-      "bin" -> Seq(bin),
-      "bin_sum" -> Seq(bin_sum, " + ", bin_sum)))
+      "bin" -> List(bin),
+      "bin_sum" -> List(bin_sum, " + ", bin_sum)))
 
   def bin = Rule(
     "bin", Map(
-      "0" -> Seq("0"),
-      "1" -> Seq("1")))
+      "0" -> List("0"),
+      "1" -> List("1")))
 
   sealed trait BinSum
   final case class BinSumSum(x: BinSum, y: BinSum) extends BinSum
@@ -37,11 +37,11 @@ object bin_sum extends ExampleRule {
   object BinSum {
     implicit def treeToBinSum: TreeTo[BinSum] = TreeTo[BinSum] { case tree =>
       tree match {
-        case Node(Rule("bin_sum", _, _), "bin", Seq(Node(Rule("bin", _, _), "0", _))) =>
+        case Node(Rule("bin_sum", _, _), "bin", List(Node(Rule("bin", _, _), "0", _))) =>
           BinSumBin(0)
-        case Node(Rule("bin_sum", _, _), "bin", Seq(Node(Rule("bin", _, _), "1", _))) =>
+        case Node(Rule("bin_sum", _, _), "bin", List(Node(Rule("bin", _, _), "1", _))) =>
           BinSumBin(1)
-        case Node(Rule("bin_sum", _, _), "bin_sum", Seq(x, Leaf(" + "), y)) =>
+        case Node(Rule("bin_sum", _, _), "bin_sum", List(x, Leaf(" + "), y)) =>
           BinSumSum(Tree.to[BinSum](x), Tree.to[BinSum](y))
         case _ => throw new Exception()
       }

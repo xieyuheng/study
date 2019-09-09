@@ -6,8 +6,8 @@ object predefined {
 
   def non_empty_list(a: Rule): Rule = Rule(
     s"non_empty_list", Map(
-      "one" -> Seq(a),
-      "more" -> Seq(a, non_empty_list(a))),
+      "one" -> List(a),
+      "more" -> List(a, non_empty_list(a))),
     args = Map("a" -> a))
 
 

@@ -6,7 +6,7 @@ import xieyuheng.partech.lexerless.predefined._
 
 object dec_sum extends ExampleRule {
 
-  val sentences = Seq(
+  val sentences = List(
     "1 + 0",
     "1 + 1 + 1 + 0",
     "0 + 0",
@@ -15,7 +15,7 @@ object dec_sum extends ExampleRule {
     "1 + 9 + 5",
   )
 
-  val non_sentences = Seq(
+  val non_sentences = List(
     "11 + 12",
   )
 
@@ -25,8 +25,8 @@ object dec_sum extends ExampleRule {
 
   def dec_sum: Rule = Rule(
     "dec_sum", Map(
-      "dec" -> Seq(dec),
-      "dec_sum" -> Seq(dec_sum, " + ", dec_sum)))
+      "dec" -> List(dec),
+      "dec_sum" -> List(dec_sum, " + ", dec_sum)))
 
   val rand = scala.util.Random
 
@@ -41,9 +41,9 @@ object dec_sum extends ExampleRule {
   object DecSum {
     implicit def treeToDecSum: TreeTo[DecSum] = TreeTo[DecSum] { case tree =>
       tree match {
-        case Node(Rule("dec_sum", _, _), "dec", Seq(Leaf(str))) =>
+        case Node(Rule("dec_sum", _, _), "dec", List(Leaf(str))) =>
           DecSumDec(str.toInt)
-        case Node(Rule("dec_sum", _, _), "dec_sum", Seq(x, Leaf(" + "), y)) =>
+        case Node(Rule("dec_sum", _, _), "dec_sum", List(x, Leaf(" + "), y)) =>
           DecSumSum(Tree.to[DecSum](x), Tree.to[DecSum](y))
         case _ => throw new Exception()
       }

@@ -2,7 +2,7 @@ package xieyuheng.partech
 
 case class Rule(
   name: String,
-  choices: Map[String, Seq[RulePart]],
+  choices: Map[String, List[RulePart]],
   args: Map[String, Rule] = Map(),
 ) {
   if (choices.size == 0) {
@@ -13,28 +13,42 @@ case class Rule(
 
   choices.foreach { case (choiceName, ruleParts) =>
     if (ruleParts.length == 0) {
-      println("Rule's choice should not have empty Seq")
+      println("Rule's choice should not have empty List")
       println(s"name: ${name}")
       println(s"choice: ${choiceName}")
       throw new Exception()
     }
   }
 
-  // just to get lower bound
+  // - to get lower bound
   // - we can not use `==`, because we can not compare lambda (ruleGen)
   //   but it is ok to mis-comparing some rules to be the same
   //   the lower bound will not be the greatest lower bound
-  private def similar(that: Rule): Boolean = {
-    this.name == that.name &&
-    this.choices.keys.toSet == that.choices.keys.toSet &&
-    this.args.keys.toSet == that.args.keys.toSet
+
+  override def equals(that: Any): Boolean = {
+    that match {
+      case that: Rule =>
+        this.name == that.name &&
+        this.choices.keys.toSet == that.choices.keys.toSet &&
+        this.args.keys.toSet == that.args.keys.toSet
+      case _ => false
+    }
+  }
+
+  override def hashCode = {
+    val matters = (
+      this.name,
+      this.choices.keys.toSet,
+      this.args.keys.toSet)
+
+      matters.hashCode
   }
 
   lazy val lowerBound: Int = Rule.lowerBound(this, List(this))
 }
 
 object Rule {
-  def seq(name: String, parts: Seq[RulePart]): Rule = {
+  def list(name: String, parts: List[RulePart]): Rule = {
     Rule(name, Map(name -> parts))
   }
 
@@ -45,7 +59,7 @@ object Rule {
           case RulePartStr(str) => bound + 1
           case RulePartRule(ruleGen) =>
             val r = ruleGen()
-            if (occured.exists(r.similar)) {
+            if (occured.exists(r == _)) {
               bound
             } else {
               bound + Rule.lowerBound(r, r :: occured)

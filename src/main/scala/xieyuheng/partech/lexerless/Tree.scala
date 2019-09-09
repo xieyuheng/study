@@ -7,7 +7,7 @@ final case class Leaf(str: String) extends Tree
 final case class Node(
   rule: Rule,
   choiceName: String,
-  children: Seq[Tree],
+  children: List[Tree],
 ) extends Tree
 
 object Tree {

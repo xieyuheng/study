@@ -6,17 +6,17 @@ object predefined {
 
   def non_empty_list(a: Rule)(implicit separater: String): Rule = Rule(
     s"non_empty_list", Map(
-      "one" -> Seq(a),
-      "more" -> Seq(a, separater, non_empty_list(a))),
+      "one" -> List(a),
+      "more" -> List(a, separater, non_empty_list(a))),
     args = Map("a" -> a))
 
   implicit def tree_to_non_empty_list[A]
     (implicit treeToA: TreeTo[A])
       : TreeTo[List[A]] = TreeTo[List[A]] { case tree =>
       tree match {
-        case Node(Rule("non_empty_list", _, _), "one", Seq(a)) =>
+        case Node(Rule("non_empty_list", _, _), "one", List(a)) =>
           List(treeToA(a))
-        case Node(Rule("non_empty_list", _, _), "more", Seq(a, _, tail)) =>
+        case Node(Rule("non_empty_list", _, _), "more", List(a, _, tail)) =>
           treeToA(a) :: tree_to_non_empty_list(treeToA)(tail)
         case _ => throw new Exception()
       }
@@ -25,8 +25,8 @@ object predefined {
 
   def list(a: Rule)(implicit separater: String): Rule = Rule(
     s"list", Map(
-      "null" -> Seq(),
-      "non_empty" -> Seq(non_empty_list(a))),
+      "null" -> List(),
+      "non_empty" -> List(non_empty_list(a))),
     args = Map("a" -> a))
 
   implicit def tree_to_list[A]
@@ -35,7 +35,7 @@ object predefined {
       tree match {
         case Node(Rule("list", _, _), "null", _) =>
           List()
-        case Node(Rule("list", _, _), "non_empty", Seq(l)) =>
+        case Node(Rule("list", _, _), "non_empty", List(l)) =>
           tree_to_non_empty_list(treeToA)(l)
         case _ => throw new Exception()
       }

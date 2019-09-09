@@ -2,7 +2,7 @@ package xieyuheng.partech.lexerless
 
 case class Rule(
   name: String,
-  choices: Map[String, Seq[RulePart]],
+  choices: Map[String, List[RulePart]],
   args: Map[String, Rule] = Map(),
 ) {
   assert(choices.size > 0)

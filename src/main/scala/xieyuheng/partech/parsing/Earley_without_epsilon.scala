@@ -3,10 +3,10 @@ package xieyuheng.partech
 import scala.collection.mutable.Set
 import scala.collection.mutable.ArrayBuffer
 
-object Earley {
+object Earley_without_epsilon {
 
-  def init(words: List[Word], rule: Rule): Earley = {
-    Earley(words: List[Word], rule: Rule)
+  def init(text: String, words: List[Word], rule: Rule): Earley_without_epsilon = {
+    Earley_without_epsilon(text: String, words: List[Word], rule: Rule)
   }
 
   case class Item(rule: Rule, choiceName: String, parts: List[RulePart], dot: Int, origin: Int) {
@@ -41,8 +41,8 @@ object Earley {
   }
 }
 
-case class Earley(words: List[Word], start: Rule) {
-  import Earley._
+case class Earley_without_epsilon(text: String, words: List[Word], start: Rule) {
+  import Earley_without_epsilon._
 
   var active: ArrayBuffer[Set[Item]] = ArrayBuffer.fill(words.length + 1)(Set())
   var completed: ArrayBuffer[Set[Item]] = ArrayBuffer.fill(words.length + 1)(Set())
@@ -147,13 +147,16 @@ case class Earley(words: List[Word], start: Rule) {
   }
 
   def report(): Unit = {
+    println(s"text: ${text}")
+    println()
+
     val indexes = 0 until words.length
 
     indexes.foreach { case index =>
       println(s"#${index}: ${words(index)}")
-      println("active:")
+      println("- active:")
       active(index).foreach { case item => println(s"  ${item}") }
-      println("completed:")
+      println("- completed:")
       completed(index).foreach { case item => println(s"  ${item}") }
       println()
     }
@@ -161,10 +164,10 @@ case class Earley(words: List[Word], start: Rule) {
     {
       val index = words.length
 
-      println(s"THE END")
-      println("active:")
+      println(s"#END:")
+      println("- active:")
       active(index).foreach { case item => println(s"  ${item}") }
-      println("completed:")
+      println("- completed:")
       completed(index).foreach { case item => println(s"  ${item}") }
       println()
     }

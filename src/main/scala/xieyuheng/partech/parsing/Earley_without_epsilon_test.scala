@@ -3,10 +3,10 @@ package xieyuheng.partech
 import xieyuheng.partech.ruleDSL._
 import xieyuheng.partech.predefined._
 
-object EarleyTest extends App {
+object Earley_without_epsilon_test extends App {
   def test(rule: Rule, lexer: Lexer, text: String): Unit = {
     lexer.lex(text).foreach { case words =>
-      val parsing = Earley.init(words, rule)
+      val parsing = Earley_without_epsilon.init(text, words, rule)
       parsing.run()
     }
   }
@@ -35,5 +35,9 @@ object EarleyTest extends App {
     ))
 
   test(S, Lexer.default, "a-a+a")
+
+  test(S, Lexer.default, "a-a+a+a-a+a")
+
+  test(S, Lexer.default, "a-a+a+aa+a")
 
 }

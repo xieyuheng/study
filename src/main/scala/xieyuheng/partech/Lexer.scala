@@ -7,7 +7,7 @@ case class LexTable(
 case class Span(lo: Int, hi: Int)
 case class Word(str: String, span: Span) {
   override def toString: String = {
-    '"' + str + '"' ++ s"#${span.lo}-${span.hi}"
+    '"' + str + '"' ++ s" [${span.lo}, ${span.hi}]"
   }
 }
 

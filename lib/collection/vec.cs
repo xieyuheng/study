@@ -8,20 +8,16 @@ type vec_t(A: type_t, length: nat_t) {
 }
 
 @infix(++)
-vec_append(ante: vec_t(A, m), succ: vec_t(A, n)): vec_t(A, m + n) = {
-  ante case {
+vec_append(ante: vec_t(A, m), succ: vec_t(A, n)): vec_t(A, m + n) {
+  ante choice {
     null_vec_t => succ
-    cons_vec_t => cons_vec_t(
-      head = ante.head,
-      tail = ante.tail ++ succ)
+    cons_vec_t => cons_vec_t(ante.head, ante.tail ++ succ)
   }
 }
 
-vec_map(f: A -> B, vec: vec_t(A, n)): vec_t(A, n) = {
-  vec case {
+vec_map(f: A -> B, vec: vec_t(A, n)): vec_t(A, n) {
+  vec choice {
     null_vec_t => vec
-    cons_vec_t => cons_vec_t(
-      head = f(vec.head),
-      tail = vec_map(f, vec.tail))
+    cons_vec_t => cons_vec_t(f(vec.head), vec_map(f, vec.tail))
   }
 }

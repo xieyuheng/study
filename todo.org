@@ -6,6 +6,8 @@
 - parse error reporting
 - [maybe] WordPred for error reporting
 * cicada
+- module system
+- class and extends
 - eval for cicada without_logic_variable
 - partially filled data can be used as type
 - compile to js with runtime type information

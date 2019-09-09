@@ -25,24 +25,16 @@ case class Rule(
   //   but it is ok to mis-comparing some rules to be the same
   //   the lower bound will not be the greatest lower bound
 
+  val matters = (name, choices.keys.toSet, args.keys.toSet)
+
   override def equals(that: Any): Boolean = {
     that match {
-      case that: Rule =>
-        this.name == that.name &&
-        this.choices.keys.toSet == that.choices.keys.toSet &&
-        this.args.keys.toSet == that.args.keys.toSet
+      case that: Rule => this.matters == that.matters
       case _ => false
     }
   }
 
-  override def hashCode = {
-    val matters = (
-      this.name,
-      this.choices.keys.toSet,
-      this.args.keys.toSet)
-
-      matters.hashCode
-  }
+  override def hashCode = matters.hashCode
 
   lazy val lowerBound: Int = Rule.lowerBound(this, List(this))
 }

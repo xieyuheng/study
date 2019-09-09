@@ -41,7 +41,19 @@ object RuleTest extends App {
     "case_clause", List(
       identifier, "=", ">", exp))
 
-  case class Item(rule: Rule, choiceName: String, index: Int)
+  case class Item(rule: Rule, choiceName: String, parts: List[RulePart], index: Int) {
+    val matters = (rule, choiceName, parts.length, index)
+
+    override def equals(that: Any): Boolean = {
+      that match {
+        case that: Item => this.matters == that.matters
+        case _ => false
+      }
+    }
+
+    override def hashCode = matters.hashCode
+
+  }
 
   def arg = Rule(
     "arg", Map(
@@ -59,13 +71,16 @@ object RuleTest extends App {
       "type_comma" ->  List(identifier, ":", exp, ","),
     ))
 
-  assert(Item(arg, "value", 0) == Item(arg2, "value", 0))
+  val item1 = Item(arg, "value", List(identifier, "=", exp), 0)
+  val item2 = Item(arg2, "value", List(identifier, "=", exp), 0)
+
+  assert(item1 == item2)
 
   import scala.collection.mutable.Set
 
   var itemSet: Set[Item] = Set()
-  itemSet += Item(arg, "value", 0)
-  itemSet += Item(arg2, "value", 0)
+  itemSet += item1
+  itemSet += item2
 
   assert(itemSet.size == 1)
 }

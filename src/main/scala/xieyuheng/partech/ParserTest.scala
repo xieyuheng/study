@@ -19,15 +19,31 @@ object ParserTest extends App {
     }
     """,
 
-    // """
-    // x case {
-    //   zero_t => y
-    //   succ_t => succ_t(prev = nat_add(x = x.prev, y = x case {
-    //     zero_t => y
-    //     succ_t => succ_t(prev = nat_add(x = x.prev, y = y))
-    //   }))
-    // }
-    // """,
+    """
+    x case {
+      zero_t => y
+      succ_t => succ_t(prev = nat_add(x = x.prev, y = x case {
+        zero_t => y
+        succ_t => succ_t(prev = nat_add(x = x.prev, y = y))
+      }))
+    }
+    """,
+
+    """
+    x case {
+      zero_t => x case {
+         zero_t => y
+         succ_t => succ_t(prev = nat_add(x = x.prev, y = x case {
+           zero_t => y
+           succ_t => succ_t(prev = nat_add(x = x.prev, y = y))
+         }))
+       }
+      succ_t => succ_t(prev = nat_add(x = x.prev, y = x case {
+        zero_t => y
+        succ_t => succ_t(prev = nat_add(x = x.prev, y = y))
+      }))
+    }
+    """,
 
   )
 

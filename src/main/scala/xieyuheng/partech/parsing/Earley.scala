@@ -232,7 +232,7 @@ case class Earley(words: List[Word], rule: Rule) {
         } else {
           if (prevList.length > 1) {
             println(s"many trees: ${prevList.length}")
-            println(s"trees: ${prevList}")
+            println(s"prevList: ${prevList}")
             println(s"newItem: ${newItem}")
             println(s"causeOfCompletion: ${causeOfCompletion}")
             println(s"itemset:")

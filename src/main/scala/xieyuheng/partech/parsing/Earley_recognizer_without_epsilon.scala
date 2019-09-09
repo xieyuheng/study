@@ -3,10 +3,10 @@ package xieyuheng.partech
 import scala.collection.mutable.Set
 import scala.collection.mutable.ArrayBuffer
 
-object Earley_without_epsilon {
+object Earley_recognizer_without_epsilon {
 
-  def init(text: String, words: List[Word], rule: Rule): Earley_without_epsilon = {
-    Earley_without_epsilon(text: String, words: List[Word], rule: Rule)
+  def init(text: String, words: List[Word], rule: Rule): Earley_recognizer_without_epsilon = {
+    Earley_recognizer_without_epsilon(text: String, words: List[Word], rule: Rule)
   }
 
   case class Item(rule: Rule, choiceName: String, parts: List[RulePart], dot: Int, origin: Int) {
@@ -41,8 +41,8 @@ object Earley_without_epsilon {
   }
 }
 
-case class Earley_without_epsilon(text: String, words: List[Word], start: Rule) {
-  import Earley_without_epsilon._
+case class Earley_recognizer_without_epsilon(text: String, words: List[Word], start: Rule) {
+  import Earley_recognizer_without_epsilon._
 
   var active: ArrayBuffer[Set[Item]] = ArrayBuffer.fill(words.length + 1)(Set())
   var completed: ArrayBuffer[Set[Item]] = ArrayBuffer.fill(words.length + 1)(Set())

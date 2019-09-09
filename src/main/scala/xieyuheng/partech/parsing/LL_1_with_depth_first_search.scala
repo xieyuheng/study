@@ -2,7 +2,7 @@ package xieyuheng.partech
 
 import scala.collection.mutable.ListBuffer
 
-object LL1_plus_depth_first_search {
+object LL_1_with_depth_first_search {
   case class Frame(
     leftIndex: Int,
     left: List[LinearTreePart],
@@ -21,14 +21,14 @@ object LL1_plus_depth_first_search {
     }
   }
 
-  def init(words: List[Word], rule: Rule): LL1_plus_depth_first_search = {
-    LL1_plus_depth_first_search(words, ListBuffer(Frame.init(words, rule)))
+  def init(words: List[Word], rule: Rule): LL_1_with_depth_first_search = {
+    LL_1_with_depth_first_search(words, ListBuffer(Frame.init(words, rule)))
   }
 }
 
-case class LL1_plus_depth_first_search(
+case class LL_1_with_depth_first_search(
   words: List[Word],
-  queue: ListBuffer[LL1_plus_depth_first_search.Frame],
+  queue: ListBuffer[LL_1_with_depth_first_search.Frame],
 ) {
 
   def nextLinearTree(): Option[List[LinearTreePart]] = {

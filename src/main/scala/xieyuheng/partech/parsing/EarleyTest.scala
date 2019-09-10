@@ -4,7 +4,7 @@ import xieyuheng.partech.pretty._
 import xieyuheng.partech.ruleDSL._
 import xieyuheng.partech.predefined._
 
-object Earley_test extends App {
+object EarleyTest extends App {
 
   def lex(text: String): List[Word] = {
     Lexer.default.lex(text) match {

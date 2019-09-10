@@ -25,4 +25,5 @@ object TreeToTest extends App {
   }
 
   test(ab)
+  test(sexp)
 }

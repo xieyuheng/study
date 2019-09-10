@@ -1,6 +1,3 @@
-* partech
-- error report with ErrMsg and Span
-- fix equals between rules -- how ? by ruleGen with uuid ?
 * cicada
 - eval for cicada without_logic_variable
 - class and extends
@@ -29,3 +26,7 @@
 - how to extend tartlet to define new types?
   - keep tartlet subrecursive
     but be generic about data and ind, rec and iter
+* partech
+- ErrMsg and Span
+- better report with ErrMsg in context
+- [maybe] fix equals between rules -- how ? by ruleGen with uuid ?

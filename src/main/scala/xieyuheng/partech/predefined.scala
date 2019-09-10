@@ -10,6 +10,17 @@ object predefined {
       "more" -> List(a, non_empty_list(a))),
     args = Map("a" -> a))
 
+  implicit def tree_to_non_empty_list[A]
+    (implicit treeToA: TreeTo[A])
+      : TreeTo[List[A]] = TreeTo[List[A]] { case tree =>
+      tree match {
+        case Node(Rule("non_empty_list", _, _), "one", List(a)) =>
+          List(treeToA(a))
+        case Node(Rule("non_empty_list", _, _), "more", List(a, tail)) =>
+          treeToA(a) :: tree_to_non_empty_list(treeToA)(tail)
+        case _ => throw new Exception()
+      }
+  }
 
   def wordInCharSet(set: Set[Char]): String => Boolean = {
     { case word => word.forall(set.contains(_)) }

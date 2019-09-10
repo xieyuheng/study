@@ -9,7 +9,7 @@ object ParserTest extends App {
     val lexer = ex.lexer
 
     ex.sentences.foreach { case text =>
-      Parser(rule, lexer).parse(text) match {
+      Parser(lexer, rule).parse(text) match {
         case Right(tree) => {}
         case Left(error) =>
           println(s"[ParserTest] should parse")
@@ -21,7 +21,7 @@ object ParserTest extends App {
     }
 
     ex.non_sentences.foreach { case text =>
-      Parser(rule, lexer).parse(text) match {
+      Parser(lexer, rule).parse(text) match {
         case Right(tree) =>
           println(s"[ParserTest] should not parse")
           println(s"- rule: ${rule.name}")
@@ -33,11 +33,10 @@ object ParserTest extends App {
     }
   }
 
-
   test(exp)
   test(sexp)
   test(tdh)
   test(tdh_left)
   test(tom_dick_and_harry)
-  test(ab)  
+  test(ab)
 }

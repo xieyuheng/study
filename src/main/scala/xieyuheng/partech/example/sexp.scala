@@ -43,6 +43,8 @@ object sexp extends ExampleRule {
 
   def start = sexp
 
+  def treeToMainType = None
+
   def sexp: Rule = Rule(
     "sexp", Map(
       "null" -> List("(", ")"),

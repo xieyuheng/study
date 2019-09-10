@@ -73,6 +73,8 @@ object exp extends ExampleRule {
 
   def start = exp
 
+  def treeToMainType = None
+
   def exp: Rule = Rule(
     "exp", Map(
       "type" -> List("type"),

@@ -7,5 +7,5 @@ trait ExampleRule {
   def non_sentences: List[String]
   def lexer: Lexer
   def start: Rule
-  // def treeToMainType: Option[TreeTo[_]]
+  def treeToMainType: Option[TreeTo[_]]
 }

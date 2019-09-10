@@ -10,15 +10,24 @@ object sexp extends ExampleRule {
 
   def sentences = List(
     "()",
+    "( )",
     "(a b c)",
     "n",
     "(a b (c))",
     "(((a)) b (c))",
+    "(true false)",
+    "(true false true)",
+    "(true ((((false)))))",
+    "( true false)",
+    "(true false true )",
+    "(true ((( (false)))))",
   )
 
   def non_sentences = List(
     "(",
     "())",
+    "true [false]",
+    "true false",
   )
 
   def identifier = WordPred (

@@ -36,4 +36,8 @@ object ParserTest extends App {
 
   test(exp)
   test(sexp)
+  test(tdh)
+  test(tdh_left)
+  test(tom_dick_and_harry)
+  test(ab)  
 }

@@ -211,7 +211,9 @@ case class Earley(words: List[Word], rule: Rule) {
 
   def parse(): Either[ErrMsg, Tree] = {
     val startItem = completedStarts(0)
-    collectNode(startItem)
+    collectNode(startItem).flatMap { case tree =>
+      Right(tree.children(0))
+    }
   }
 
   def collectNode(item: Item): Either[ErrMsg, Node] = {

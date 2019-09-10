@@ -54,7 +54,7 @@ object pretty {
           s"<${rule.name}::${choiceName}${getArgsStr(rule)}>"
         case LinearTreePartKet(rule, choiceName) =>
           s"</${rule.name}::${choiceName}${getArgsStr(rule)}>"
-        case LinearTreePartPred(pred) => pred.toString
+        case LinearTreePartPred(wordPred) => s"[${wordPred.name}]"
       }
     }.mkString(" ")
   }

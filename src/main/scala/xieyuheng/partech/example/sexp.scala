@@ -21,15 +21,16 @@ object sexp extends ExampleRule {
     "())",
   )
 
-  def identifier: String => Boolean = { case word =>
-    word.headOption match {
-      case Some(char) =>
-        val head_set = lower_case_char_set ++ upper_case_char_set + '_'
-        val tail_set = head_set ++ digit_char_set
-        head_set.contains(char) && wordInCharSet(tail_set)(word.tail)
-      case None => false
-    }
-  }
+  def identifier = WordPred (
+    "identifier", { case word =>
+      word.headOption match {
+        case Some(char) =>
+          val head_set = lower_case_char_set ++ upper_case_char_set + '_'
+          val tail_set = head_set ++ digit_char_set
+          head_set.contains(char) && wordInCharSet(tail_set)(word.tail)
+        case None => false
+      }
+    })
 
   def start = sexp
 

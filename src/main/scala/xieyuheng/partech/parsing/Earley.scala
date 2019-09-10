@@ -109,8 +109,8 @@ case class Earley(words: List[Word], rule: Rule) {
         if (str == words(index).str) {
           bringForwardItem(item, index)
         }
-      case RulePartPred(pred) =>
-        if (pred(words(index).str)) {
+      case RulePartPred(wordPred) =>
+        if (wordPred.pred(words(index).str)) {
           val newParts = item.parts.patch(item.dot, List(RulePartStr(words(index).str)), 1)
           bringForwardItem(item.copy(parts = newParts), index)
         }
@@ -294,7 +294,7 @@ case class Earley(words: List[Word], rule: Rule) {
             countStrBeforeDot(n + 1, parts, dot - 1)
           case RulePartRule(ruleGen) =>
             n
-          case RulePartPred(pred) =>
+          case RulePartPred(wordPred) =>
             throw new Exception()
         }
       }
@@ -306,7 +306,7 @@ case class Earley(words: List[Word], rule: Rule) {
       case RulePartStr(str) => Leaf(str)
       case RulePartRule(ruleGen) =>
         throw new Exception()
-      case RulePartPred(pred) =>
+      case RulePartPred(wordPred) =>
         throw new Exception()
     }
 

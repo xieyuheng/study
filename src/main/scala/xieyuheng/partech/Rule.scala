@@ -56,7 +56,7 @@ object Rule {
             } else {
               bound + Rule.lowerBound(r, r :: occured)
             }
-          case RulePartPred(pred) => bound + 1
+          case RulePartPred(wordPred) => bound + 1
         }
       }
     }.min
@@ -78,4 +78,4 @@ final case class RulePartRule(ruleGen: () => Rule) extends RulePart {
   }
 }
 
-final case class RulePartPred(pred: String => Boolean) extends RulePart
+final case class RulePartPred(wordPred: WordPred) extends RulePart

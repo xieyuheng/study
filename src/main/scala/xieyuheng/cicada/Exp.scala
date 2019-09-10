@@ -28,7 +28,7 @@ final case class Member(
 final case class Record(
   name: String,
   fileds: ListMap[String, (Exp, Option[Exp])],
-  supers: List[String],
+  superNames: List[String],
 ) extends Exp
 
 final case class GetField(target: Exp, fieldName: String) extends Exp

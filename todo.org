@@ -1,10 +1,9 @@
 * partech
-- error report with ErrMsg and Span
 - ExampleRule
 - sexp example
 - TreeTo
 - fix equals between rules
-- parse error reporting
+- error report with ErrMsg and Span
 - [maybe] WordPred for error reporting
 * cicada
 - eval for cicada without_logic_variable
@@ -16,6 +15,8 @@
     - Value includes FnValue which contains Exp
       this Exp is also serde-able
 * minitt
+- concrete syntax for minitt
+- read code from file
 - readback
 - Ctx
 - checkDeclAndExtend

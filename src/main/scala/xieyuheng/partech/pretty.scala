@@ -44,18 +44,4 @@ object pretty {
         s"${rule.name}::${choiceName}${getArgsStr(rule)} {${childrenStr}}"
     }
   }
-
-  def prettyLinearTree(parts: List[LinearTreePart]): String = {
-    parts.map { case part =>
-      part match {
-        case LinearTreePartStr(str) => '"' + str + '"'
-        case LinearTreePartRule(rule) => s"${rule.name}"
-        case LinearTreePartBra(rule, choiceName) =>
-          s"<${rule.name}::${choiceName}${getArgsStr(rule)}>"
-        case LinearTreePartKet(rule, choiceName) =>
-          s"</${rule.name}::${choiceName}${getArgsStr(rule)}>"
-        case LinearTreePartPred(wordPred) => s"[${wordPred.name}]"
-      }
-    }.mkString(" ")
-  }
 }

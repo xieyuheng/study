@@ -5,6 +5,11 @@ import scala.collection.mutable.ArrayBuffer
 
 import xieyuheng.partech.ruleDSL._
 
+// Earley parser -- O(n^3)
+// - collect parse tree by Earley's method, can not handle ambiguity.
+// - ambiguity check is not decidable, thus only reported at runtime.
+// - can not handle epsilon
+
 object Earley {
 
   def init(words: List[Word], rule: Rule): Earley = {

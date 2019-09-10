@@ -29,11 +29,7 @@ case class Lexer(table: LexTable) {
         case None =>
           val hi = text.length
           val lo = text.length - remain.length
-          Left(ErrMsg(
-            tag = "Lexer",
-            msg = s"",
-            text = text,
-            span = Span(lo, hi)))
+          Left(ErrMsg("Lexer", s"", Span(lo, hi)))
       }
     }
 
@@ -43,8 +39,6 @@ case class Lexer(table: LexTable) {
     }
   }
 }
-
-
 
 object Lexer {
 

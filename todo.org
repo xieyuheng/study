@@ -1,8 +1,9 @@
 * partech
-- simple parser API Either[..., ...]
+- error report with ErrMsg and Span
 - ExampleRule
 - sexp example
 - TreeTo
+- fix equals between rules
 - parse error reporting
 - [maybe] WordPred for error reporting
 * cicada

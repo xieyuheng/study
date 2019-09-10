@@ -209,53 +209,69 @@ case class Earley(words: List[Word], rule: Rule) {
 
   val recognize: Boolean = completedStarts.length > 0
 
-  def nextTree(): Option[Tree] = {
-    if (recognize) {
-      val startItem = completedStarts(0)
-      Some(collectNode(startItem))
-    } else {
-      None
-    }
+  def parse(): Either[ErrMsg, Tree] = {
+    val startItem = completedStarts(0)
+    collectNode(startItem)
   }
 
-  def collectNode(item: Item): Node = {
+  def collectNode(item: Item): Either[ErrMsg, Node] = {
     item.completedBy match {
-      case Some(causeOfCompletion) => {}
-        val (newItem, children) = collectChildren(item)
-        val itemset = active(causeOfCompletion.origin) ++ completed(causeOfCompletion.origin)
-        val prevList = itemset.filter { case prev =>
-          prev.dot == newItem.dot - 1 &&
-          prev.rule == newItem.rule &&
-          prev.choiceName == newItem.choiceName
-        }.toList
-        if (prevList.length == 0) {
-            println(s"newItem: ${newItem}")
-            println(s"causeOfCompletion: ${causeOfCompletion}")
-            println(s"itemset:")
-            itemset.foreach { case item => println(s"  ${item}")}
-            throw new Exception()
-        } else {
-          if (prevList.length > 1) {
-            println(s"many trees: ${prevList.length}")
-            println(s"prevList:")
-            prevList.foreach { case item => println(s"  ${item}")}
-            println(s"newItem: ${newItem}")
-            println(s"causeOfCompletion: ${causeOfCompletion}")
-            println(s"itemset:")
-            itemset.foreach { case item => println(s"  ${item}")}
+      case Some(causeOfCompletion) =>
+        for {
+          pair <- collectChildren(item)
+          (newItem, children) = pair
+
+          itemset = active(causeOfCompletion.origin) ++ completed(causeOfCompletion.origin)
+
+          prevList = itemset.filter { case prev =>
+            prev.dot == newItem.dot - 1 &&
+            prev.rule == newItem.rule &&
+            prev.choiceName == newItem.choiceName
+          }.toList
+
+          result <- {
+            if (prevList.length == 0) {
+              val msg = {
+                s"newItem: ${newItem}" ::
+                s"causeOfCompletion: ${causeOfCompletion}" ::
+                s"itemset:" ::
+                itemset.map { case item => s"  ${item}"}.toList
+              }.mkString("\n")
+              Left(ErrMsg("Earley.parse", msg, Span(0, 0)))
+            } else {
+              if (prevList.length > 1) {
+                val msg = {
+                  s"many trees: ${prevList.length}" ::
+                  s"prevList:" ::
+                  prevList.map { case item => s"  ${item}"} ++
+                  s"newItem: ${newItem}" ::
+                  s"causeOfCompletion: ${causeOfCompletion}" ::
+                  s"itemset:" ::
+                  itemset.map { case item => s"  ${item}"}.toList
+                }.mkString("\n")
+                Left(ErrMsg("Earley.parse", msg, Span(0, 0)))
+              } else {
+                val prev = prevList(0)
+                for {
+                  node <- collectNode(prev)
+                  mid <- collectNode(causeOfCompletion)
+                } yield node.copy(
+                  children = (node.children :+ mid) ++ children)
+              }
+            }
           }
-          val prev = prevList(0)
-          val node: Node = collectNode(prev)
-          node.copy(children = (node.children :+ collectNode(causeOfCompletion)) ++ children)
-        }
+
+        } yield result
+
       case None =>
-        val (_newItem, children) = collectChildren(item)
-        Node(item.rule, item.choiceName, children)
+        for {
+          pair <- collectChildren(item)
+          (_newItem, children) = pair
+        } yield Node(item.rule, item.choiceName, children)
     }
   }
 
-  def collectChildren(item: Item): (Item, List[Tree]) = {
-
+  def collectChildren(item: Item): Either[ErrMsg, (Item, List[Tree])] = {
     import scala.annotation.tailrec
 
     @tailrec
@@ -284,6 +300,6 @@ case class Earley(words: List[Word], rule: Rule) {
         throw new Exception()
     }
 
-    (item.copy(dot = item.dot - n), children)
+    Right((item.copy(dot = item.dot - n), children))
   }
 }

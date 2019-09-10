@@ -1,5 +1,6 @@
 * partech
 - note about earley parser
+- simple parser API Either[..., ...]
 - ExampleRule
 - sexp example
 - TreeTo

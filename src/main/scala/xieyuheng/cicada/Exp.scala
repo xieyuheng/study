@@ -25,9 +25,11 @@ final case class Member(
   clubName: String,
 ) extends Exp
 
+final case class Record(
+  name: String,
+  fileds: ListMap[String, (Exp, Option[Exp])],
+  supers: List[String],
+) extends Exp
+
 final case class GetField(target: Exp, fieldName: String) extends Exp
 final case class GetFieldType(target: Exp, fieldName: String) extends Exp
-
-final case class RefineField(target: Exp, fieldName: String, arg: Exp) extends Exp
-final case class FillField(target: Exp, fieldName: String, arg: Exp) extends Exp
-final case class Refine(target: Exp, arg: Exp) extends Exp

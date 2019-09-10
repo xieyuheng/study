@@ -4,18 +4,20 @@ import xieyuheng.minitt.expDSL._
 
 object paper extends Module {
 
-  // id : (A : U) -> A -> A
-  // id A, x = x
+  s"""
+  id(A: U, x: A): A = x
+  """
 
   let("id",
     pi("A" :: U) { "A" ->: "A" },
     fn("A", "x") { "x" })
 
-  // bool_t : U
-  // bool_t = sum {
-  //   true
-  //   false
-  // }
+  s"""
+  bool_t: U = sum {
+    true
+    false
+  }
+  """
 
   let("bool_t", U,
     sum(
@@ -25,14 +27,27 @@ object paper extends Module {
   let("true", "bool_t", %("true"))
   let("false", "bool_t", %("false"))
 
-  // bool_elim : (C : bool_t -> U) ->
-  //             C true ->
-  //             C false ->
-  //             (b : bool_t) -> C b
-  // bool_elim C h0 h1 = choice {
-  //   true => h0
-  //   false => h1
-  // }
+  s"""
+  bool_elim : (C : bool_t -> U) ->
+              C true ->
+              C false ->
+              (b : bool_t) -> C b
+  bool_elim C h0 h1 = choice {
+    true => h0
+    false => h1
+  }
+  """
+
+  s"""
+  bool_elim(
+    C: bool_t -> U,
+    h0: C(true),
+    h1: C(false),
+  ): (b : bool_t) -> C(b) = choice {
+    true => h0
+    false => h1
+  }
+  """
 
   let("bool_elim",
     pi("C" :: "bool_t" ->: U) {
@@ -43,11 +58,12 @@ object paper extends Module {
       "true" -> fn("_") { "h0" },
       "false" -> fn("_") { "h1" }) })
 
-  // nat_t : U
-  // nat_t = sum {
-  //   zero
-  //   succ nat_t
-  // }
+  s"""
+  nat_t: U = sum {
+    zero
+    succ nat_t
+  }
+  """
 
   letrec("nat_t", U,
     sum(
@@ -66,14 +82,28 @@ object paper extends Module {
   let("nine", "nat_t", %("succ", "eight"))
   let("ten", "nat_t", %("succ", "nine"))
 
-  // nat_rec : (C : nat_t -> U) ->
-  //           C zero ->
-  //           ((n : nat_t) -> C n -> C (succ n)) ->
-  //           ((n : nat_t) -> C n)
-  // nat_rec C a g = choice {
-  //   zero => a
-  //   succ prev => g prev (nat_rec C a g prev)
-  // }
+
+  s"""
+  nat_rec : (C : nat_t -> U) ->
+            C zero ->
+            ((n : nat_t) -> C n -> C (succ n)) ->
+            ((n : nat_t) -> C n)
+  nat_rec C a g = choice {
+    zero => a
+    succ prev => g prev (nat_rec C a g prev)
+  }
+  """
+
+  s"""
+  nat_rec(
+    C: nat_t -> U,
+    a: C(zero),
+    g: (n: nat_t, C(n)) -> C(succ(n)),
+  ): (n: nat_t) -> C(n) = choice {
+    zero => a
+    succ(prev) => g(prev, nat_rec(C, a, g, prev))
+  }
+  """
 
   letrec("nat_rec",
     pi("C" :: "nat_t" ->: U) {
@@ -84,16 +114,12 @@ object paper extends Module {
       "zero" -> fn("_") { "a" },
       "succ" -> fn("prev") { "g" $ "prev" $ ("nat_rec" $ "C" $ "a" $ "g" $ "prev") }) })
 
-  // add : nat_t -> nat_t -> nat_t
-  // add x = choice {
-  //   zero => x
-  //   succ prev => succ (add x prev)
-  // }
-
-  // letrec("add", "nat_t" ->: "nat_t" ->: "nat_t",
-  //   fn("x") { choice(
-  //     "zero" -> fn("_") { "x" },
-  //     "succ" -> fn("prev") { %("succ", "add" $ "x" $ "prev") }) })
+  s"""
+  add(x: nat_t): (y: nat_t) -> nat_t = choice {
+    zero => (y: nat_t): nat_t => y
+    succ prev => (y: nat_t): nat_t => succ(add(prev, y))
+  }
+  """
 
   letrec("add", "nat_t" ->: "nat_t" ->: "nat_t",
     choice(
@@ -103,11 +129,6 @@ object paper extends Module {
   let("double", "nat_t" ->: "nat_t",
     fn("x") { "add" $ "x" $ "x" })
 
-  // letrec("mul", "nat_t" ->: "nat_t" ->: "nat_t",
-  //   fn("x") { choice(
-  //     "zero" -> fn("_") { %("zero") },
-  //     "succ" -> fn("prev") { "add" $ "y" $ ("mul" $ "x" $ "prev") }) })
-
   letrec("mul", "nat_t" ->: "nat_t" ->: "nat_t",
     choice(
       "zero" -> fn("_") { fn("y") { %("zero") } },
@@ -115,7 +136,6 @@ object paper extends Module {
 
   let("square", "nat_t" ->: "nat_t",
     fn("x") { "mul" $ "x" $ "x" })
-
 
   // nat_eq : nat_t -> nat_t -> bool_t
   // nat_eq = choice {

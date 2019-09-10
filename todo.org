@@ -1,14 +1,14 @@
 * partech
-- parser for all context free grammar without epsilon
+- note about earley parser
 - ExampleRule
 - sexp example
 - TreeTo
 - parse error reporting
 - [maybe] WordPred for error reporting
 * cicada
-- module system
-- class and extends
 - eval for cicada without_logic_variable
+- class and extends
+- module system
 - partially filled data can be used as type
 - compile to js with runtime type information
   - this means keep Value serde-able

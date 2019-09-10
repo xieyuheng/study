@@ -3,44 +3,52 @@ module algebra
 class category_t {
   object_t: type_t
 
-  @infix(->) morphism_t(object_t, object_t): type_t
+  morphism_t(object_t, object_t): type_t
 
-  id(a: object_t): a -> a
+  id(a: object_t): morphism_t(a, a)
 
-  @infix(|) then(f: a -> b, g: b -> c): b -> c
+  compose(f: morphism_t(a, b), g: morphism_t(b, c)): morphism_t(b, c)
 
-  @infix(.) compose(g: b -> c, f: a -> b): b -> c = f | g
-
-  left_id(f: a -> b): id(a) | f == f
-  right_id(f: a -> b): f | id(b) == f
+  left_id(f: morphism_t(a, b)): eqv(compose(id(a), f), f)
+  right_id(f: morphism_t(a, b)): eqv(compose(f, id(b)), f)
 
   associative(
-    f: a -> b,
-    g: b -> c,
-    h: c -> d,
-  ): f | (g | h) == (f | g) | h
+    f: morphism_t(a, b),
+    g: morphism_t(b, c),
+    h: morphism_t(c, d),
+  ): eqv(compose(f, compose(g, h)), compose(compose(f, g), h))
 
   /** derived types: */
 
   class monomorphism_t {
-    mono: a -> b
-    right_cancelable(f, g: c -> a, f | mono == g | mono): f == g
+    mono: morphism_t(a, b)
+    right_cancelable(
+      f: morphism_t(c, a),
+      g: morphism_t(c, a),
+      eqv(compose(f, mono), compose(g, mono)),
+    ): eqv(f, g)
   }
 
   class epimorphism_t {
-    epi: a -> b
-    left_cancelable(f, g: b -> c, epi | f  == epi | g): f == g
+    epi: morphism_t(a, b)
+    left_cancelable(
+      f: morphism_t(b, c),
+      g: morphism_t(b, c),
+      eqv(compose(epi, f), compose(epi, g)),
+    ): eqv(f, g)
   }
 
-  left_inverse_t(f: a -> b, g: a -> b): type_t =
-    f | g == id(a)
+  left_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type_t = {
+    eqv(compose(f, g), id(a))
+  }
 
-  right_inverse_t(f: a -> b, g: a -> b): type_t =
-    g | f == id(b)
+  right_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type_t = {
+    eqv(compose(g, f), id(b))
+  }
 
   class isomorphism_t {
-    iso: a -> b
-    inv: b -> a
+    iso: morphism_t(a, b)
+    inv: morphism_t(b, a)
     left_inverse: left_inverse_t(iso, inv)
     right_inverse: right_inverse_t(iso, inv)
   }

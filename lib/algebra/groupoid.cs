@@ -1,7 +1,7 @@
 module algebra
 
 class groupoid_t extends category_t {
-  inv(f: a -> b): b -> a
+  inv(f: morphism_t(a, b)): morphism_t(b, a)
 
-  isomorphic_inv(f: a -> b): Isomorphism(f, inv(f))
+  isomorphic_inv(f: morphism_t(a, b)): isomorphism_t(f, inv(f))
 }

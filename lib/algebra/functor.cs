@@ -5,14 +5,14 @@ class functor_t {
   D: category_t
 
   map(a: C.object_t): D.object_t
-  fmap(f: a C.-> b): map(a) D.-> map(b)
+  fmap(f: C.morphism_t(a, b)): D.morphism_t(map(a), map(b))
 
   fmap_respect_then(
-    f: a C.-> b,
-    g: b C.-> c,
-  ): fmap(f C.| g) == fmap(f) D.| fmap(g)
+    f: C.morphism_t(a, b),
+    g: C.morphism_t(b, c),
+  ): eqv(fmap(C.compose(f, g)), D.compose(fmap(f), fmap(g)))
 
   fmap_respect_id(
     a: C.object_t
-  ): fmap(C.id(a)) == D.id(map(a))
+  ): eqv(fmap(C.id(a)), D.id(map(a)))
 }

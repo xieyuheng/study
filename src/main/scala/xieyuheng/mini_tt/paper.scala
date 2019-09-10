@@ -1,6 +1,6 @@
-package xieyuheng.minitt
+package xieyuheng.mini_tt
 
-import xieyuheng.minitt.expDSL._
+import xieyuheng.mini_tt.expDSL._
 
 object paper extends Module {
 

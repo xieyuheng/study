@@ -1,5 +1,5 @@
-* minitt
-- concrete syntax for minitt
+* mini_tt
+- concrete syntax for mini_tt
 - read code from file
 - readback
 - Ctx
@@ -9,6 +9,8 @@
 - infer
 - examples
 * cicada
+- subtype relation between club and members and class and supers
+  recursively extended to fields in record and pi and si
 - eval for cicada without_logic_variable
 - class and extends
 - module system

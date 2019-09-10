@@ -1,6 +1,6 @@
-package xieyuheng.minitt
+package xieyuheng.mini_tt
 
-import xieyuheng.minitt.pretty._
+import xieyuheng.mini_tt.pretty._
 
 case class Module() {
   var env: Env = EmptyEnv

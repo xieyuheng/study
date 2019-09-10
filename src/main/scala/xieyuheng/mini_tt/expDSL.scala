@@ -1,4 +1,4 @@
-package xieyuheng.minitt
+package xieyuheng.mini_tt
 
 object expDSL {
   def choice(pairs: (String, Exp)*): Choice = Choice(Map(pairs: _*))

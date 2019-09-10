@@ -7,7 +7,7 @@ class category_t {
 
   id(a: object_t): morphism_t(a, a)
 
-  compose(f: morphism_t(a, b), g: morphism_t(b, c)): morphism_t(b, c)
+  compose(f: morphism_t(a, b), g: morphism_t(b, c)): morphism_t(a, c)
 
   left_id(f: morphism_t(a, b)): eqv(compose(id(a), f), f)
   right_id(f: morphism_t(a, b)): eqv(compose(f, id(b)), f)

@@ -6,11 +6,11 @@ case class NeutralRecNat (
   base: TheValue,
   step: TheValue,
 ) extends Neutral {
-  def readBackNeutral(usedNames: Set[String]): Either[ErrorMsg, Exp] = {
+  def readbackNeutral(usedNames: Set[String]): Either[ErrorMsg, Exp] = {
     for {
-      targetExp <- target.readBackNeutral(usedNames)
-      baseExp <- base.readBackTheValue(usedNames)
-      stepExp <- step.readBackTheValue(usedNames)
+      targetExp <- target.readbackNeutral(usedNames)
+      baseExp <- base.readbackTheValue(usedNames)
+      stepExp <- step.readbackTheValue(usedNames)
     } yield RecNat(t, targetExp, baseExp, stepExp)
   }
 }

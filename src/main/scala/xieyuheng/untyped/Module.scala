@@ -14,7 +14,7 @@ case class Module(var env: Env = Env()) {
   def run(exp: Exp): Either[ErrorMsg, Exp] = {
     val result = for {
       value <- exp.eval(env)
-      norm <- value.readBack(Set())
+      norm <- value.readback(Set())
     } yield norm
 
     result match {

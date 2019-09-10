@@ -1,5 +1,5 @@
 package xieyuheng.systemT
 
 trait Neutral {
-  def readBackNeutral (usedNames: Set[String]): Either[ErrorMsg, Exp]
+  def readbackNeutral (usedNames: Set[String]): Either[ErrorMsg, Exp]
 }

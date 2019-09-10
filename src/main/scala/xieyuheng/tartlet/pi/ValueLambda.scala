@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 case class ValueLambda(closure: Closure) extends Value {
-  def readBack (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =
+  def readback (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =
     t match {
       case ValuePi(argType, retType) => {
         val freshName = Util.freshen(ctx.names, retType.name)
@@ -9,7 +9,7 @@ case class ValueLambda(closure: Closure) extends Value {
         for {
           bodyValue <- Apply.exe(this, arg)
           realRetType <- retType.apply(arg)
-          body <- bodyValue.readBack(
+          body <- bodyValue.readback(
             ctx.ext(freshName, Bind(argType)),
             realRetType)
         } yield Lambda(freshName, body)

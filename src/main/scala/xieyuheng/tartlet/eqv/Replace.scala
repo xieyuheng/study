@@ -53,7 +53,7 @@ case class Replace (
             base <- base.check(ctx, baseType)
             toValue <- to.eval(ctx.toEnv)
             typeValue <- Apply.exe(motiveValue, toValue)
-            typeExp <- typeValue.readBack(ctx, ValueUniverse)
+            typeExp <- typeValue.readback(ctx, ValueUniverse)
           } yield The(typeExp, Replace(the.value, motive, base))
         case _ =>
           Left(ErrorMsg(

@@ -39,7 +39,7 @@ case class Var (name: String) extends Eliminator {
     ctx.lookupType(name) match {
       case Some(typeValue) => {
         for {
-          typeExp <- typeValue.readBack(ctx, ValueUniverse)
+          typeExp <- typeValue.readback(ctx, ValueUniverse)
         } yield The(typeExp, this)
       }
       case None =>

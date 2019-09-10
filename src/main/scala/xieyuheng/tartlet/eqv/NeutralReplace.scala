@@ -5,11 +5,11 @@ case class NeutralReplace (
   motive: TheValue,
   base: TheValue,
 ) extends Neutral {
-  def readBackNeutral(ctx: Ctx): Either[ErrorMsg, Exp] = {
+  def readbackNeutral(ctx: Ctx): Either[ErrorMsg, Exp] = {
     for {
-      target <- target.readBackNeutral(ctx)
-      motive <- motive.readBackTheValue(ctx)
-      base <- base.readBackTheValue(ctx)
+      target <- target.readbackNeutral(ctx)
+      motive <- motive.readbackTheValue(ctx)
+      base <- base.readbackTheValue(ctx)
     } yield Replace(target, motive, base)
   }
 }

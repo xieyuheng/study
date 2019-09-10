@@ -44,7 +44,7 @@ case class Module(
       the <- exp.infer(ctx)
       typeValue <- the.t.eval(env)
       value <- exp.eval(env)
-      norm <- value.readBack(ctx, typeValue)
+      norm <- value.readback(ctx, typeValue)
     } yield The(the.t, norm)
 
     result match {

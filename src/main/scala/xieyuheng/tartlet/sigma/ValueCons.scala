@@ -1,9 +1,9 @@
 package xieyuheng.tartlet
 
 case class ValueCons (car: Value, cdr: Value) extends Value {
-  def readBack (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =
+  def readback (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =
     for {
-      car <- car.readBack(ctx, t)
-      cdr <- cdr.readBack(ctx, t)
+      car <- car.readback(ctx, t)
+      cdr <- cdr.readback(ctx, t)
     } yield Cons(car, cdr)
 }

@@ -41,7 +41,7 @@ case class Apply (
             rand <- rand.check(ctx, argType)
             argValue <- rand.eval(ctx.toEnv)
             retValue <- retType.apply(argValue)
-            retExp <- retValue.readBack(ctx, ValueUniverse)
+            retExp <- retValue.readback(ctx, ValueUniverse)
           } yield The(retExp, Apply(the.value, rand))
         }
         case _ =>

@@ -32,7 +32,7 @@ case class Module(
     val result = for {
       t <- exp.infer(ctx)
       value <- exp.eval(env)
-      norm <- value.readBack(ctx.names, t)
+      norm <- value.readback(ctx.names, t)
     } yield norm
 
     result match {

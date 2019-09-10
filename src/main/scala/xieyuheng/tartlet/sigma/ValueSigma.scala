@@ -4,13 +4,13 @@ case class ValueSigma (
   carType: Value,
   cdrType: Closure,
 ) extends Value {
-  def readBack (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] = {
+  def readback (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] = {
     val freshName = Util.freshen(ctx.names, cdrType.name)
     for {
-      carTypeExp <- carType.readBack(ctx, ValueUniverse)
+      carTypeExp <- carType.readback(ctx, ValueUniverse)
       cdrTypeExpValue <- cdrType.apply(
         TheNeutral(carType, NeutralVar(freshName)))
-      cdrTypeExp <- cdrTypeExpValue.readBack(
+      cdrTypeExp <- cdrTypeExpValue.readback(
         ctx.ext(freshName, Bind(carType)), ValueUniverse)
     } yield Sigma(freshName, carTypeExp, cdrTypeExp)
   }

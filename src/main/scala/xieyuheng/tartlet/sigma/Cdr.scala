@@ -37,7 +37,7 @@ case class Cdr (
             pairValue <- the.value.eval(ctx.toEnv)
             carValue <- Car.exe(pairValue)
             realCdrType <- cdrType.apply(carValue)
-            cdrTypeExp <- realCdrType.readBack(ctx, ValueUniverse)
+            cdrTypeExp <- realCdrType.readback(ctx, ValueUniverse)
           } yield The(cdrTypeExp, the.value)
         case _ =>
           Left(ErrorMsg(

@@ -25,13 +25,13 @@ object test extends App {
       Right(Closure(Env(), "x", Var("x"))))
   }
 
-  val `readBack should readBack normal form` = {
+  val `readback should readback normal form` = {
     for {
       value <- Apply(
         Lambda("x", Lambda("y", Apply(Var("x"), Var("y")))),
         Lambda("x", Var("x")))
       .eval(Env())
-      norm <- value.readBack(Set())
+      norm <- value.readback(Set())
     } yield assert(norm == Lambda("y", Var("y")))
   }
 

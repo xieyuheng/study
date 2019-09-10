@@ -1,5 +1,5 @@
 package xieyuheng.systemT
 
 trait Value {
-  def readBack (usedNames: Set[String], t: Type): Either[ErrorMsg, Exp]
+  def readback (usedNames: Set[String], t: Type): Either[ErrorMsg, Exp]
 }

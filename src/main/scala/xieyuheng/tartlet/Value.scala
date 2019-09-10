@@ -1,5 +1,5 @@
 package xieyuheng.tartlet
 
 trait Value {
-  def readBack (ctx: Ctx, t: Value): Either[ErrorMsg, Exp]
+  def readback (ctx: Ctx, t: Value): Either[ErrorMsg, Exp]
 }

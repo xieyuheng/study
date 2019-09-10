@@ -56,7 +56,7 @@ case class IndNat (
       base <- base.check(ctx, baseType)
       step <- step.check(ctx, IndNat.stepType(motiveValue))
       typeValue <- Apply.exe(motiveValue, targetValue)
-      t <- typeValue.readBack(ctx, ValueUniverse)
+      t <- typeValue.readback(ctx, ValueUniverse)
     } yield The(t, IndNat(target, motive, base, step))
    }
  }

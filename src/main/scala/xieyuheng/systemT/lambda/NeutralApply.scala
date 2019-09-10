@@ -4,10 +4,10 @@ case class NeutralApply (
   fun: Neutral,
   arg: TheValue,
 ) extends Neutral {
-  def readBackNeutral(usedNames: Set[String]): Either[ErrorMsg, Exp] = {
+  def readbackNeutral(usedNames: Set[String]): Either[ErrorMsg, Exp] = {
     for {
-      rator <- fun.readBackNeutral (usedNames)
-      rand <- arg.readBackTheValue (usedNames)
+      rator <- fun.readbackNeutral (usedNames)
+      rand <- arg.readbackTheValue (usedNames)
     } yield Apply(rator, rand)
   }
 }

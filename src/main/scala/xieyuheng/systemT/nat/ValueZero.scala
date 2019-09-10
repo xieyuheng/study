@@ -1,7 +1,7 @@
 package xieyuheng.systemT
 
 case object ValueZero extends Value {
-  def readBack(usedNames: Set[String], t: Type): Either[ErrorMsg, Exp] = {
+  def readback(usedNames: Set[String], t: Type): Either[ErrorMsg, Exp] = {
     t match {
       case Nat =>
         Right(Zero)

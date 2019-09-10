@@ -6,12 +6,12 @@ case class NeutralIndNat (
   base: TheValue,
   step: TheValue,
 ) extends Neutral {
-  def readBackNeutral(ctx: Ctx): Either[ErrorMsg, Exp] = {
+  def readbackNeutral(ctx: Ctx): Either[ErrorMsg, Exp] = {
     for {
-      target <- target.readBackNeutral(ctx)
-      motive <- motive.readBackTheValue(ctx)
-      base <- base.readBackTheValue(ctx)
-      step <- step.readBackTheValue(ctx)
+      target <- target.readbackNeutral(ctx)
+      motive <- motive.readbackTheValue(ctx)
+      base <- base.readbackTheValue(ctx)
+      step <- step.readbackTheValue(ctx)
     } yield IndNat(target, motive, base, step)
   }
 }

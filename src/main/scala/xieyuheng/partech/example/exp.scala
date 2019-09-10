@@ -48,7 +48,10 @@ object exp extends ExampleRule {
     """,
   )
 
-  def non_sentences = List()
+  def non_sentences = List(
+    "x..y",
+    "x...y",
+  )
 
   def preservedIdentifiers = Set(
     "type", "case", "fn", "pi")

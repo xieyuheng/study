@@ -1,5 +1,6 @@
 package xieyuheng.partech
 
+import xieyuheng.partech.pretty._
 import xieyuheng.partech.example._
 
 object ParserTest extends App {
@@ -9,8 +10,7 @@ object ParserTest extends App {
 
     ex.sentences.foreach { case text =>
       Parser(rule, lexer).parse(text) match {
-        case Right(tree) =>
-          println(pretty.prettyTree(tree))
+        case Right(tree) => {}
         case Left(error) =>
           println(s"[ParserTest] should parse")
           println(s"- rule: ${rule.name}")
@@ -19,7 +19,21 @@ object ParserTest extends App {
           throw new Exception()
       }
     }
+
+    ex.non_sentences.foreach { case text =>
+      Parser(rule, lexer).parse(text) match {
+        case Right(tree) =>
+          println(s"[ParserTest] should not parse")
+          println(s"- rule: ${rule.name}")
+          println(s"- text: ${text}")
+          println(s"- tree: ${prettyTree(tree)}")
+          throw new Exception()
+        case Left(error) => {}
+      }
+    }
   }
 
+
   test(exp)
+  test(sexp)
 }

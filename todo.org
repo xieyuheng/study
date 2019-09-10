@@ -1,8 +1,7 @@
 * partech
-- sexp example
+- WordPred for error reporting
 - TreeTo
 - error report with ErrMsg and Span
-- WordPred for error reporting
 - fix equals between rules -- how ? by ruleGen with uuid ?
 * cicada
 - eval for cicada without_logic_variable

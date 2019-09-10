@@ -210,9 +210,17 @@ case class Earley(words: List[Word], rule: Rule) {
   val recognize: Boolean = completedStarts.length > 0
 
   def parse(): Either[ErrMsg, Tree] = {
-    val startItem = completedStarts(0)
-    collectNode(startItem).flatMap { case tree =>
-      Right(tree.children(0))
+    if (completedStarts.length != 1) {
+      Left(ErrMsg("Earley.parse", "", Span(0, 0)))
+    } else {
+      val startItem = completedStarts(0)
+      collectNode(startItem).flatMap { case tree =>
+        if (tree.children.length != 1) {
+          Left(ErrMsg("Earley.parse", "", Span(0, 0)))
+        } else {
+          Right(tree.children(0))
+        }
+      }
     }
   }
 

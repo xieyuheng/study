@@ -2,12 +2,12 @@ module order
 
 class pre_order_t {
   E: type_t
-  @infix(<=) pre_t(E, E): type_t
-  reflexive(a: E): a <= a
-  transitive(a <= b, b <= c): a <= c
+  pre_t(E, E): type_t
+  reflexive(a: E): pre_t(a, a)
+  transitive(pre_t(a, b), pre_t(b, c)): pre_t(a, c)
 
-  @infix(<) strict_pre_t(a: E, b: E): type_t =
-    (a <= b, a != b)
+  strict_pre_t(a: E, b: E): type_t =
+    (pre_t(a <= b), not_eqv(a, b))
 }
 
 // thin category

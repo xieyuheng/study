@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
 upload_api_doc () {
-    sbt doc
-    now switch xieyuheng
-    now -n cicada target/scala-2.12/api/
-    surge target/scala-2.12/api/ cicada.surge.sh
+    sbt doc && \
+        now switch xieyuheng && \
+        now -n cicada target/scala-2.12/api/ && \
+        surge target/scala-2.12/api/ cicada.surge.sh
 }
 
 t () {
     rm -f target/universal/stage/bin/*
-    sbt stage
-    run_test
-    run_minitt_test
+
+    sbt stage && \
+        run_test && \
+        run_minitt_test
 }
 
 run_test () {
@@ -38,6 +39,14 @@ run_minitt_test () {
             exit 1
         fi
     done
+}
+
+release () {
+    t && \
+        pushd target/universal && \
+        cp -r stage cicada && \
+        tar -cf cicada.tar cicada && \
+        popd
 }
 
 main () {

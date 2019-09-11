@@ -10,13 +10,19 @@ object minitt {
       var file_name: Option[String] = None
     }
 
-    args.grouped(2).toList.foreach {
-      case Array("--eval", file_name) =>
+    args match {
+      case Array(file_name) =>
         maybe.file_name = Some(file_name)
-      case Array(arg1, arg2) =>
-        println(s"unknown argument pair: ${arg1} ${arg2}")
-      case Array(arg) =>
-        println(s"unknown argument: ${arg}")
+      case _ => {
+        args.grouped(2).toList.foreach {
+          case Array("--eval", file_name) =>
+            maybe.file_name = Some(file_name)
+          case Array(arg1, arg2) =>
+            println(s"unknown argument pair: ${arg1} ${arg2}")
+          case Array(arg) =>
+            println(s"unknown argument: ${arg}")
+        }
+      }
     }
 
     maybe.file_name match {
@@ -24,7 +30,8 @@ object minitt {
       case None =>
         val usage = s"""
         |usage:
-        |  --eval <file_name>
+        |  <file_name>
+        |  --eval <file_name> [default]
         """.stripMargin
 
         println(usage)

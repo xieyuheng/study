@@ -35,7 +35,14 @@ object pretty {
   }
 
   def prettyExpMap(map: Map[String, Exp]): String = {
-    prettyExpMapWithDelimiter(map, "\n")
+    prettyExpMapWithDelimiter(map, ";\n")
+  }
+
+  def cons_exp_to_list(cons: Cons): List[Exp] = {
+    cons.cdr match {
+      case cdr: Cons => cons.car :: cons_exp_to_list(cdr)
+      case _ => cons.car :: List(cons.cdr)
+    }
   }
 
   def prettyExp(exp: Exp): String = {
@@ -44,22 +51,28 @@ object pretty {
       case Fn(pattern, body) =>
         s"${prettyPattern(pattern)} => ${prettyExp(body)}"
       case Ap(fun, arg) =>
-        s"${prettyExp(fun)} $$ ${prettyExp(arg)}"
+        s"${prettyExp(fun)}(${prettyExp(arg)})"
       case Pi(pattern, argType, t) =>
-        s"(${prettyPattern(pattern)} : ${prettyExp(argType)}) -> ${prettyExp(t)}"
-      case Cons(car, cdr) => s"${prettyExp(car)} * ${prettyExp(cdr)}"
+        s"(${prettyPattern(pattern)}: ${prettyExp(argType)}) -> ${prettyExp(t)}"
+      case cons: Cons =>
+        val str = cons_exp_to_list(cons).map(prettyExp(_)).mkString(", ")
+        s"[${str}]"
       case Car(pair) => s"${prettyExp(pair)}.car"
       case Cdr(pair) => s"${prettyExp(pair)}.cdr"
       case Sigma(pattern, argType, t) =>
-        s"(${prettyPattern(pattern)} : ${prettyExp(argType)}) * ${prettyExp(t)}"
+        s"(${prettyPattern(pattern)}: ${prettyExp(argType)}) ** ${prettyExp(t)}"
+      case Data(tag: String, body: Cons) =>
+        s"${tag}${prettyExp(body)}"
+      case Data(tag: String, body: Sole.type) =>
+        s"${tag}${prettyExp(body)}"
       case Data(tag: String, body: Exp) =>
-        s"${tag} ${prettyExp(body)}"
+        s"${tag}[${prettyExp(body)}]"
       case Mat(mats: Map[String, Exp]) =>
-        s"mat {${prettyExpMap(mats)}}"
+        s"match {${prettyExpMap(mats)}}"
       case Sum(mats: Map[String, Exp]) =>
         s"sum {${prettyExpMap(mats)}}"
-      case Sole => "()"
-      case Trivial => "()"
+      case Sole => "[]"
+      case Trivial => "[]"
       case U => "U"
     }
   }
@@ -77,13 +90,20 @@ object pretty {
       case VarNeutral(name: String) =>
         s"[${name}]"
       case ApNeutral(target: Neutral, arg: Value) =>
-        s"[${prettyNeutral(target)} => ${prettyValue(arg)}]"
+        s"[${prettyNeutral(target)}(${prettyValue(arg)})]"
       case CarNeutral(target: Neutral) =>
         s"[${prettyNeutral(target)}.car]"
       case CdrNeutral(target: Neutral) =>
         s"[${prettyNeutral(target)}.cdr]"
       case MatNeutral(target: Neutral, MatClosure(mats: Map[String, Exp], env: Env)) =>
-        s"[mat (${prettyNeutral(target)}) {${maybeNewline(prettyExpMap(mats))}}]"
+        s"[match {${maybeNewline(prettyExpMap(mats))}} (${prettyNeutral(target)})]"
+    }
+  }
+
+  def cons_value_to_list(cons: ConsValue): List[Value] = {
+    cons.cdr match {
+      case cdr: ConsValue => cons.car :: cons_value_to_list(cdr)
+      case _ => cons.car :: List(cons.cdr)
     }
   }
 
@@ -93,20 +113,25 @@ object pretty {
       case FnValue(FnClosure(pattern: Pattern, body: Exp, env: Env)) =>
         s"${prettyPattern(pattern)} => ${prettyExp(body)}"
       case PiValue(arg: Value, FnClosure(pattern: Pattern, body: Exp, env: Env)) =>
-        s"(${prettyPattern(pattern)} : ${prettyValue(arg)}) -> ${prettyExp(body)}"
+        s"(${prettyPattern(pattern)}: ${prettyValue(arg)}) -> ${prettyExp(body)}"
       case SigmaValue(arg: Value, FnClosure(pattern: Pattern, body: Exp, env: Env)) =>
-        s"(${prettyPattern(pattern)} : ${prettyValue(arg)}) * ${prettyExp(body)}"
+        s"(${prettyPattern(pattern)}: ${prettyValue(arg)}) ** ${prettyExp(body)}"
       case UValue => "U"
-      case ConsValue(car: Value, cdr: Value) =>
-        s"${prettyValue(car)} * ${prettyValue(cdr)}"
-      case SoleValue => "()"
-      case TrivialValue => "()"
+      case cons: ConsValue =>
+        val str = cons_value_to_list(cons).map(prettyValue(_)).mkString(", ")
+        s"[${str}]"
+      case SoleValue => "[]"
+      case TrivialValue => "[]"
+      case DataValue(tag: String, body: ConsValue) =>
+        s"${tag}${prettyValue(body)}"
+      case DataValue(tag: String, body: SoleValue.type) =>
+        s"${tag}${prettyValue(body)}"
       case DataValue(tag: String, body: Value) =>
-        s"${tag} ${prettyValue(body)}"
+        s"${tag}[${prettyValue(body)}]"
       case SumValue(MatClosure(mats: Map[String, Exp], env: Env)) =>
         s"sum {${maybeNewline(prettyExpMap(mats))}}"
       case MatValue(MatClosure(mats: Map[String, Exp], env: Env)) =>
-        s"mat {${maybeNewline(prettyExpMap(mats))}}"
+        s"match {${maybeNewline(prettyExpMap(mats))}}"
     }
   }
 

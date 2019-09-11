@@ -114,7 +114,7 @@ object grammar_test extends App {
     s"""
     letrec add: (x: nat_t) -> (y: nat_t) -> nat_t = match {
       zero[] => y => y;
-      succ[prev] => y => succ(add(prev, y));
+      succ[prev] => y => succ[add(prev, y)];
     }
     """,
 
@@ -258,8 +258,8 @@ object grammar_test extends App {
     assert_decl_to_tree(
       s"""
       let bool_t: U = sum {
-        true;
-        false;
+        true[];
+        false[];
       }
       """,
       Let("bool_t", U,
@@ -397,7 +397,7 @@ object grammar_test extends App {
     assert_decl_to_tree(
       s"""
       letrec nat_t: U = sum {
-        zero;
+        zero[];
         succ[nat_t];
       }
       """,

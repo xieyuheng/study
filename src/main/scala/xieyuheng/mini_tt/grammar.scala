@@ -195,13 +195,13 @@ object grammar {
         exp },
       "cons" -> { case List(_, exp_comma_list, _) =>
         val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
-        list.init.foldRight(list.last) { case (tail, head) =>
+        list.init.foldRight(list.last) { case (head, tail) =>
           Cons(head, tail) } },
       "cons_one_without_comma" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
       "cons_without_last_comma" -> { case List(_, exp_comma_list, exp, _) =>
         val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
-        list.foldRight(exp_matcher(exp)) { case (tail, head) =>
+        list.foldRight(exp_matcher(exp)) { case (head, tail) =>
           Cons(head, tail) } },
       "sigma" -> { case List(_, pattern, _, argType, _, _, _, t) =>
         Sigma(pattern_matcher(pattern), exp_matcher(argType), exp_matcher(t)) },
@@ -226,16 +226,19 @@ object grammar {
 
   def sum_clause = Rule(
     "sum_clause", Map(
-      "sum_trivial" -> List(identifier, ";"),
       "sum_clause" -> List(identifier, exp, ";"),
     ))
 
   def sum_clause_matcher: Tree => (String, Exp) = Tree.matcher[(String, Exp)](
     "sum_clause", Map(
-      "sum_trivial" -> { case List(Leaf(name), _) =>
-        (name, Trivial) },
-      "sum_clause" -> { case List(Leaf(name), exp, _) =>
-        (name, exp_matcher(exp)) },
+      "sum_clause" -> { case List(Leaf(name), t, _) =>
+        val exp = exp_matcher(t)
+        if (exp == Sole) {
+          (name, Trivial)
+        } else {
+          (name, exp)
+        }
+      },
     ))
 
   def mat_clause = Rule(
@@ -266,13 +269,13 @@ object grammar {
       "var" -> { case List(Leaf(name)) => VarPattern(name) },
       "cons" -> { case List(_, pattern_comma_list, _) =>
         val list = non_empty_list_matcher(pattern_comma_matcher)(pattern_comma_list)
-        list.init.foldRight(list.last) { case (tail, head) =>
+        list.init.foldRight(list.last) { case (head, tail) =>
           ConsPattern(head, tail) } },
       "cons_one_without_comma" -> { case List(_, pattern, _) =>
         pattern_matcher(pattern) },
       "cons_without_last_comma" -> { case List(_, pattern_comma_list, pattern, _) =>
         val list = non_empty_list_matcher(pattern_comma_matcher)(pattern_comma_list)
-        list.foldRight(pattern_matcher(pattern)) { case (tail, head) =>
+        list.foldRight(pattern_matcher(pattern)) { case (head, tail) =>
           ConsPattern(head, tail) } },
       "sole" -> { case _ => SolePattern },
     ))

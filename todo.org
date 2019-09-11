@@ -1,10 +1,5 @@
-- read code from file
 * minitt
 - readback
-- [maybe] parser
-  - parser.parse_exp
-  - parser.parse_module
-  - parser.parse_decl
 - Ctx
 - checkDeclAndExtend
 - checkTypeOfType

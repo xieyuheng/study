@@ -1,23 +1,39 @@
 #!/usr/bin/env bash
 
-d () {
+upload_api_doc () {
     sbt doc
     now switch xieyuheng
     now -n cicada target/scala-2.12/api/
+    surge target/scala-2.12/api/ cicada.surge.sh
 }
 
 t () {
     rm -f target/universal/stage/bin/*
     sbt stage
-    r
+    run_test
+    run_minitt_test
 }
 
-r () {
+run_test () {
     for FILE in $(find . | grep "^\./target/universal/stage/bin/" | grep "test$")
     do
         echo ""
-        echo "[testing] $FILE"
+        echo "[test] $FILE"
         if ! time $FILE
+        then
+            exit 1
+        fi
+    done
+}
+
+run_minitt_test () {
+    MINITT=./target/universal/stage/bin/minitt
+
+    for FILE in $(find . | grep "^\./example/minitt/" | grep "\.tt$")
+    do
+        echo ""
+        echo "[minitt_test] $FILE"
+        if ! time $MINITT --eval $FILE
         then
             exit 1
         fi

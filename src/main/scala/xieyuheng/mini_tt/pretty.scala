@@ -45,13 +45,13 @@ object pretty {
         s"${prettyPattern(pattern)} => ${prettyExp(body)}"
       case Ap(fun, arg) =>
         s"${prettyExp(fun)} $$ ${prettyExp(arg)}"
-      case Pi(pattern, arg, t) =>
-        s"(${prettyPattern(pattern)} : ${prettyExp(arg)}) -> ${prettyExp(t)}"
+      case Pi(pattern, argType, t) =>
+        s"(${prettyPattern(pattern)} : ${prettyExp(argType)}) -> ${prettyExp(t)}"
       case Cons(car, cdr) => s"${prettyExp(car)} * ${prettyExp(cdr)}"
       case Car(pair) => s"${prettyExp(pair)}.car"
       case Cdr(pair) => s"${prettyExp(pair)}.cdr"
-      case Sigma(pattern, arg, t) =>
-        s"(${prettyPattern(pattern)} : ${prettyExp(arg)}) * ${prettyExp(t)}"
+      case Sigma(pattern, argType, t) =>
+        s"(${prettyPattern(pattern)} : ${prettyExp(argType)}) * ${prettyExp(t)}"
       case Data(tag: String, body: Exp) =>
         s"${tag} ${prettyExp(body)}"
       case Choice(choices: Map[String, Exp]) =>

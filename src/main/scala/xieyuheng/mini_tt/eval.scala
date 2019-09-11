@@ -90,13 +90,13 @@ object eval {
       case Fn(pattern: Pattern, body: Exp) =>
         FnValue(FnClosure(pattern, body, env))
       case Ap(fun: Exp, arg: Exp) => ap(eval(fun, env), eval(arg, env))
-      case Pi(pattern: Pattern, arg: Exp, t: Exp) =>
-        PiValue(eval(arg, env), FnClosure(pattern, t, env))
+      case Pi(pattern: Pattern, argType: Exp, t: Exp) =>
+        PiValue(eval(argType, env), FnClosure(pattern, t, env))
       case Cons(car, cdr) => ConsValue(eval(car, env), eval(cdr, env))
       case Car(pair) => car(eval(pair, env))
       case Cdr(pair) => cdr(eval(pair, env))
-      case Sigma(pattern: Pattern, arg: Exp, t: Exp) =>
-        SigmaValue(eval(arg, env), FnClosure(pattern, t, env))
+      case Sigma(pattern: Pattern, argType: Exp, t: Exp) =>
+        SigmaValue(eval(argType, env), FnClosure(pattern, t, env))
       case Data(tag, body) => DataValue(tag, eval(body, env))
       case Choice(choices) => ChoiceValue(ChoiceClosure(choices, env))
       case Sum(choices) => SumValue(ChoiceClosure(choices, env))

@@ -137,17 +137,33 @@ object paper extends Module {
   let("square", "nat_t" ->: "nat_t",
     fn("x") { "mul" $ "x" $ "x" })
 
-  // nat_eq : nat_t -> nat_t -> bool_t
-  // nat_eq = choice {
-  //   zero => choice {
-  //     zero => true
-  //     succ _ => false
-  //   }
-  //   succ x => choice {
-  //     zero => false
-  //     succ y => nat_eq x y
-  //   }
-  // }
+  s"""
+  nat_eq : nat_t -> nat_t -> bool_t
+  nat_eq = choice {
+    zero => choice {
+      zero => true
+      succ _ => false
+    }
+    succ x => choice {
+      zero => false
+      succ y => nat_eq x y
+    }
+  }
+  """
+
+  s"""
+  nat_eq : nat_t -> nat_t -> bool_t
+  nat_eq = choice {
+    zero => choice {
+      zero => true
+      succ _ => false
+    }
+    succ x => choice {
+      zero => false
+      succ y => nat_eq x y
+    }
+  }
+  """
 
   letrec("nat_eq", "nat_t" ->: "nat_t" ->: "bool_t",
     choice(

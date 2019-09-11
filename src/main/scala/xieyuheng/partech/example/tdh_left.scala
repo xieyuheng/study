@@ -20,7 +20,7 @@ object tdh_left extends ExampleRule {
 
   def start = tdh_left
 
-  def treeToMainType = None
+  def matcher = None
 
   def tdh_left = Rule(
     "tdh_left", Map(

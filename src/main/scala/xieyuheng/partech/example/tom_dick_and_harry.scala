@@ -18,7 +18,7 @@ object tom_dick_and_harry extends ExampleRule {
 
   def start = tom_dick_and_harry
 
-  def treeToMainType = None
+  def matcher = None
 
   def tom_dick_and_harry = Rule(
     "tom_dick_and_harry", Map(

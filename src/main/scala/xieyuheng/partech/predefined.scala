@@ -16,11 +16,6 @@ object predefined {
       "more" -> { case List(a, tail) => matcher(a) :: non_empty_list_matcher(matcher)(tail) }
     ))
 
-  implicit def tree_to_non_empty_list[A]
-    (implicit treeToA: TreeTo[A])
-      : TreeTo[List[A]] = {
-    TreeTo[List[A]](non_empty_list_matcher(treeToA.apply))
-  }
 
   def wordInCharSet(set: Set[Char]): String => Boolean = {
     { case word => word.forall(set.contains(_)) }

@@ -1,5 +1,5 @@
+- read code from file
 * mini_tt
-- no TreeTo
 - readback
 - [maybe] parser
   - parser.parse_exp

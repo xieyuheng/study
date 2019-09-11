@@ -20,7 +20,7 @@ object tdh extends ExampleRule {
 
   def start = tdh
 
-  def treeToMainType = None
+  def matcher = None
 
   def tdh = Rule(
     "tdh", Map(

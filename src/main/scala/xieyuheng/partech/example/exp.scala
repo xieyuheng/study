@@ -73,7 +73,7 @@ object exp extends ExampleRule {
 
   def start = exp
 
-  def treeToMainType = None
+  def matcher = None
 
   def exp: Rule = Rule(
     "exp", Map(

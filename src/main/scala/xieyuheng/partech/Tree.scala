@@ -13,9 +13,6 @@ final case class Node(
 ) extends Tree
 
 object Tree {
-  def to[A](tree: Tree)(implicit treeTo: TreeTo[A]): A = {
-    treeTo(tree)
-  }
 
   def matcher[A](
     name: String,
@@ -40,5 +37,4 @@ object Tree {
           throw new Exception()
       }
   }
-
 }

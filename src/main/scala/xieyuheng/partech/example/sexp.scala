@@ -43,7 +43,7 @@ object sexp extends ExampleRule {
 
   def start = sexp
 
-  def treeToMainType = Some(Sexp.treeToSexp)
+  def matcher = Some(sexp_matcher)
 
   def sexp: Rule = Rule(
     "sexp", Map(
@@ -53,21 +53,20 @@ object sexp extends ExampleRule {
     ))
 
 
+  def sexp_matcher: Tree => Sexp = Tree.matcher[Sexp](
+    "sexp", Map(
+      "null" -> { case _ => NullSexp },
+      "atom" -> { case List(Leaf(str)) => AtomSexp(str) },
+      "sexp_list" -> { case List(_, list, _) =>
+        var sexp: Sexp = NullSexp
+        val sexp_list = non_empty_list_matcher(sexp_matcher)(list)
+        sexp_list.reverse.foreach { case car => sexp = ConsSexp(car, sexp) }
+        sexp }
+    ))
+
+
   sealed trait Sexp
   final case object NullSexp extends Sexp
   final case class AtomSexp(str: String) extends Sexp
   final case class ConsSexp(car: Sexp, cdr: Sexp) extends Sexp
-
-  object Sexp {
-    implicit def treeToSexp: TreeTo[Sexp] = TreeTo.fromMatcher[Sexp](
-      "sexp", Map(
-        "null" -> { case _ => NullSexp },
-        "atom" -> { case List(Leaf(str)) => AtomSexp(str) },
-        "sexp_list" -> { case List(_, list, _) =>
-          var sexp: Sexp = NullSexp
-          val sexp_list = Tree.to[List[Sexp]](list)
-          sexp_list.reverse.foreach { case car => sexp = ConsSexp(car, sexp) }
-          sexp }
-      ))
-  }
 }

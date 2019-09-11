@@ -2,7 +2,7 @@ package xieyuheng.partech
 
 import xieyuheng.partech.example._
 
-object TreeToTest extends App {
+object treeMatcherTest extends App {
   def test(ex: ExampleRule): Unit = {
     val rule = ex.start
     val lexer = ex.lexer
@@ -10,12 +10,12 @@ object TreeToTest extends App {
     ex.sentences.foreach { case text =>
       Parser(lexer, rule).parse(text) match {
         case Right(tree) =>
-          ex.treeToMainType match {
-            case Some(treeTo) => println(treeTo(tree))
+          ex.matcher match {
+            case Some(matcher) => println(matcher(tree))
             case None => {}
           }
         case Left(error) =>
-          println(s"[TreeToTest]")
+          println(s"[treeMatcherTest]")
           println(s"- rule: ${rule.name}")
           println(s"- text: ${text}")
           println(s"- error: ${error}")

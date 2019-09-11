@@ -30,6 +30,21 @@ object grammar {
       }
     })
 
+  def module = Rule(
+    "module", Map(
+      "module" -> List(non_empty_list(decl)),
+    ))
+
+  def module_matcher = Tree.matcher[Module](
+    "module", Map(
+      "module" -> { case List(decl_list) =>
+        var module = Module()
+        non_empty_list_matcher(decl_matcher)(decl_list)
+          .foreach { case decl => module.declare(decl) }
+        module
+      },
+    ))
+
   def decl = Rule(
     "decl", Map(
       "let" -> List("let", pattern, ":", exp, "=", exp),

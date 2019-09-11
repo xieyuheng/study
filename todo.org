@@ -1,5 +1,4 @@
 * mini_tt
-- concrete syntax for mini_tt
 - readback
 - Ctx
 - checkDeclAndExtend

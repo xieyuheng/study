@@ -2,9 +2,9 @@ package xieyuheng.mini_tt
 
 import xieyuheng.mini_tt.expDSL._
 
-object paper_test extends Module with App {
+object paper_without_parser_test extends Module with App {
 
-  import_all(paper)
+  import_all(paper_without_parser)
 
   assert_eq("id" $ "bool_t" $ "true")("true")
   assert_eq("id" $ "bool_t" $ "false")("false")

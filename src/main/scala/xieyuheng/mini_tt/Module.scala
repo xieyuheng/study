@@ -5,12 +5,16 @@ import xieyuheng.mini_tt.pretty._
 case class Module() {
   var env: Env = EmptyEnv
 
+  def declare(decl: Decl): Unit = {
+    env = DeclEnv(decl, env)
+  }
+
   def let(pattern: Pattern, t: Exp, e: Exp): Unit = {
-    env = DeclEnv(Let(pattern, t, e), env)
+    declare(Let(pattern, t, e))
   }
 
   def letrec(pattern: Pattern, t: Exp, e: Exp): Unit = {
-    env = DeclEnv(Letrec(pattern, t, e), env)
+    declare(Letrec(pattern, t, e))
   }
 
   def import_all(module: Module): Unit = {

@@ -68,7 +68,7 @@ object pretty {
     pattern match {
       case VarPattern(name) => name
       case ConsPattern(car, cdr) => s"${prettyPattern(car)} * ${prettyPattern(cdr)}"
-      case UnderscorePattern => "_"
+      case SolePattern => "[]"
     }
   }
 

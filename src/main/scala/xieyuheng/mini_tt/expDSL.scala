@@ -29,8 +29,8 @@ object expDSL {
   }
 
   implicit class ExpExtension(exp: Exp) {
-    def ->:(arg: Exp): Exp = Pi(UnderscorePattern, arg, exp)
-    def **(t: Exp): Exp = Sigma(UnderscorePattern, exp, t)
+    def ->:(arg: Exp): Exp = Pi(SolePattern, arg, exp)
+    def **(t: Exp): Exp = Sigma(SolePattern, exp, t)
     def *(cdr: Exp): Exp = Cons(exp, cdr)
     def $(arg: Exp): Exp = Ap(exp, arg)
     def ::(pattern: Pattern): (Pattern, Exp) = (pattern, exp)

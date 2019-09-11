@@ -19,4 +19,4 @@ final case object U extends Exp
 sealed trait Pattern
 final case class VarPattern(name: String) extends Pattern
 final case class ConsPattern(car: Pattern, cdr: Pattern) extends Pattern
-final case object UnderscorePattern extends Pattern
+final case object SolePattern extends Pattern

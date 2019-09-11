@@ -53,7 +53,7 @@ object exp extends ExampleRule {
     "x...y",
   )
 
-  def preservedIdentifiers = Set(
+  def preservedIdentifiers: Set[String] = Set(
     "type", "case", "fn", "pi")
 
   def identifier = WordPred(

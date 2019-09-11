@@ -5,11 +5,7 @@ import xieyuheng.mini_tt.expDSL._
 object paper extends Module {
 
   s"""
-  id(A: U, x: A): A = x
-  """
-
-  s"""
-  id: (A: U) -> A = (x) => x
+  let id: (A: U) -> A = x => x
   """
 
   let("id",
@@ -17,9 +13,9 @@ object paper extends Module {
     fn("A", "x") { "x" })
 
   s"""
-  bool_t: U = sum {
-    true
-    false
+  let bool_t: U = sum {
+    true[]
+    false[]
   }
   """
 
@@ -54,14 +50,14 @@ object paper extends Module {
   """
 
   s"""
-  bool_elim:
+  let bool_elim:
     (C: bool_t -> U) ->
     C(true) ->
     C(false) ->
-    (b : bool_t) -> C(b) =
+    (b: bool_t) -> C(b) =
   (C, h0, h1) => choice {
-    true => h0
-    false => h1
+    true _ => h0
+    false _ => h1
   }
   """
 
@@ -117,7 +113,7 @@ object paper extends Module {
     g: (n: nat_t, C(n)) -> C(succ(n)),
   ): (n: nat_t) -> C(n) = choice {
     zero => a
-    succ(prev) => g(prev, nat_rec(C, a, g, prev))
+    succ[prev] => g(prev, nat_rec(C, a, g, prev))
   }
   """
 

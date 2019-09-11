@@ -80,7 +80,7 @@ object eval {
             case None => None
           }
         }
-      case UnderscorePattern => None
+      case SolePattern => None
     }
   }
 

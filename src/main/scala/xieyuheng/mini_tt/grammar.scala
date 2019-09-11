@@ -32,17 +32,32 @@ object grammar {
 
   def module = Rule(
     "module", Map(
-      "module" -> List(non_empty_list(decl)),
+      "module" -> List(non_empty_list(top)),
     ))
 
   def module_matcher = Tree.matcher[Module](
     "module", Map(
-      "module" -> { case List(decl_list) =>
+      "module" -> { case List(top_list) =>
         var module = Module()
-        non_empty_list_matcher(decl_matcher)(decl_list)
-          .foreach { case decl => module.declare(decl) }
+        module.top_list = non_empty_list_matcher(top_matcher)(top_list)
         module
       },
+    ))
+
+  def top = Rule(
+    "top", Map(
+      "decl" -> List(decl),
+      "eval" -> List("eval", "!", exp),
+      "eq" -> List("eq", "!", exp, exp),
+      "not_eq" -> List("not_eq", "!", exp, exp),
+    ))
+
+  def top_matcher = Tree.matcher[Top](
+    "top", Map(
+      "decl" -> { case List(decl) => TopDecl(decl_matcher(decl)) },
+      "eval" -> { case List(_, _, exp) => TopEval(exp_matcher(exp)) },
+      "eq" -> { case List(_, _, x, y) => TopEq(exp_matcher(x), exp_matcher(y)) },
+      "not_eq" -> { case List(_, _, x, y) => TopNotEq(exp_matcher(x), exp_matcher(y)) },
     ))
 
   def decl = Rule(

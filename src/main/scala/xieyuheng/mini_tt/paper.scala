@@ -18,6 +18,14 @@ object paper_test extends App {
 
   let true: bool_t = true[]
   let false: bool_t = false[]
+
+  eq! id(bool_t, true) true
+  eq! id(bool_t, false) false
+  eq! id(bool_t, id) id
+
+  eval! id(bool_t, true)
+  eval! id(bool_t, false)
+  eval! id(bool_t, id)
   """
 
   var module = Parser(grammar.lexer, grammar.module).parse(code) match {
@@ -29,7 +37,5 @@ object paper_test extends App {
       throw new Exception()
   }
 
-  module.assert_eq("id" $ "bool_t" $ "true")("true")
-  module.assert_eq("id" $ "bool_t" $ "false")("false")
-  module.assert_eq("id" $ "bool_t" $ "id")("id")
+  module.run()
 }

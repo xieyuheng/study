@@ -1,9 +1,10 @@
 * mini_tt
-- parser
+- no TreeTo
+- readback
+- [maybe] parser
   - parser.parse_exp
   - parser.parse_module
   - parser.parse_decl
-- readback
 - Ctx
 - checkDeclAndExtend
 - checkTypeOfType

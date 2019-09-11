@@ -4,20 +4,9 @@ import xieyuheng.mini_tt.expDSL._
 
 object paper_without_parser extends Module {
 
-  s"""
-  let id: (A: U) -> A = x => x
-  """
-
   let("id",
     pi("A" :: U) { "A" ->: "A" },
     fn("A", "x") { "x" })
-
-  s"""
-  let bool_t: U = sum {
-    true[]
-    false[]
-  }
-  """
 
   let("bool_t", U,
     sum(
@@ -27,40 +16,6 @@ object paper_without_parser extends Module {
   let("true", "bool_t", %("true"))
   let("false", "bool_t", %("false"))
 
-  s"""
-  bool_elim : (C : bool_t -> U) ->
-              C true ->
-              C false ->
-              (b : bool_t) -> C b
-  bool_elim C h0 h1 = mat {
-    true => h0
-    false => h1
-  }
-  """
-
-  s"""
-  bool_elim(
-    C: bool_t -> U,
-    h0: C(true),
-    h1: C(false),
-  ): (b : bool_t) -> C(b) = mat {
-    true => h0
-    false => h1
-  }
-  """
-
-  s"""
-  let bool_elim:
-    (C: bool_t -> U) ->
-    C(true) ->
-    C(false) ->
-    (b: bool_t) -> C(b) =
-  (C, h0, h1) => mat {
-    true _ => h0
-    false _ => h1
-  }
-  """
-
   let("bool_elim",
     pi("C" :: "bool_t" ->: U) {
       ("C" $ %("true")) ->:
@@ -69,13 +24,6 @@ object paper_without_parser extends Module {
     fn("C", "h0", "h1") { mat(
       "true" -> fn("_") { "h0" },
       "false" -> fn("_") { "h1" }) })
-
-  s"""
-  nat_t: U = sum {
-    zero
-    succ nat_t
-  }
-  """
 
   letrec("nat_t", U,
     sum(
@@ -94,29 +42,6 @@ object paper_without_parser extends Module {
   let("nine", "nat_t", %("succ", "eight"))
   let("ten", "nat_t", %("succ", "nine"))
 
-
-  s"""
-  nat_rec : (C : nat_t -> U) ->
-            C zero ->
-            ((n : nat_t) -> C n -> C (succ n)) ->
-            ((n : nat_t) -> C n)
-  nat_rec C a g = mat {
-    zero => a
-    succ prev => g prev (nat_rec C a g prev)
-  }
-  """
-
-  s"""
-  nat_rec(
-    C: nat_t -> U,
-    a: C(zero),
-    g: (n: nat_t, C(n)) -> C(succ(n)),
-  ): (n: nat_t) -> C(n) = mat {
-    zero => a
-    succ[prev] => g(prev, nat_rec(C, a, g, prev))
-  }
-  """
-
   letrec("nat_rec",
     pi("C" :: "nat_t" ->: U) {
       ("C" $ %("zero")) ->:
@@ -125,13 +50,6 @@ object paper_without_parser extends Module {
     fn("C", "a", "g") { mat(
       "zero" -> fn("_") { "a" },
       "succ" -> fn("prev") { "g" $ "prev" $ ("nat_rec" $ "C" $ "a" $ "g" $ "prev") }) })
-
-  s"""
-  add(x: nat_t): (y: nat_t) -> nat_t = mat {
-    zero => (y: nat_t): nat_t => y
-    succ prev => (y: nat_t): nat_t => succ(add(prev, y))
-  }
-  """
 
   letrec("add", "nat_t" ->: "nat_t" ->: "nat_t",
     mat(
@@ -149,56 +67,6 @@ object paper_without_parser extends Module {
   let("square", "nat_t" ->: "nat_t",
     fn("x") { "mul" $ "x" $ "x" })
 
-  s"""
-  nat_eq : nat_t -> nat_t -> bool_t
-  nat_eq = mat {
-    zero => mat {
-      zero => true
-      succ _ => false
-    }
-    succ x => mat {
-      zero => false
-      succ y => nat_eq x y
-    }
-  }
-  """
-
-  s"""
-  nat_eq : nat_t -> nat_t -> bool_t = mat {
-    zero => mat {
-      zero => true
-      succ => false
-    }
-    succ[x] => mat {
-      zero => false
-      succ[y] => nat_eq(x, y)
-    }
-  }
-  """
-
-  s"""
-  nat_eq(x: nat_t, y: nat_t): bool_t =
-  x match {
-    zero => y match {
-      zero => true
-      succ => false
-    }
-    succ(x_prev) => y match {
-      zero => false
-      succ(y_prev) => nat_eq(x_prev, y_prev)
-    }
-  }
-  """
-
-  s"""
-  nat_eq : nat_t -> nat_t -> bool_t = match {
-    zero, zero => true
-    zero, succ => false
-    succ(x), zero => false
-    succ(x), succ(y) => nat_eq(x, y)
-  }
-  """
-
   letrec("nat_eq", "nat_t" ->: "nat_t" ->: "bool_t",
     mat(
       "zero" -> fn("_") { mat(
@@ -207,13 +75,6 @@ object paper_without_parser extends Module {
       "succ" -> fn("x") { mat(
         "zero" -> fn("_") { %("false") },
         "succ" -> fn("y") { "nat_eq" $ "x" $ "y" }) }))
-
-  s"""
-  list_t: U -> U = (A) => sum {
-    nil()
-    cons(A, list_t(A))
-  }
-  """
 
   letrec("list_t", U ->: U,
     fn("A") { sum(

@@ -25,7 +25,7 @@ case class Rule(
   //   but it is ok to mis-comparing some rules to be the same
   //   the lower bound will not be the greatest lower bound
 
-  val matters = (name, choices.keys.toSet, args.keys.toSet)
+  val matters = (name, choices.keys.toSet, args)
 
   override def equals(that: Any): Boolean = {
     that match {

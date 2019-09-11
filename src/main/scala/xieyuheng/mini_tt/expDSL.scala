@@ -9,6 +9,8 @@ object expDSL {
 
   def cons(car: Pattern, cdr: Pattern): Pattern = ConsPattern(car, cdr)
 
+  def __ = SolePattern
+
   def fn(patterns: Pattern*)(body: Exp): Exp = {
     var exp = body
     patterns.reverse.foreach { case pattern =>

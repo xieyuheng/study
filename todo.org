@@ -30,4 +30,4 @@
 * partech
 - ErrMsg and Span
 - better report with ErrMsg in context
-- [maybe] fix equals between rules -- how ? by ruleGen with uuid ?
+- [important] fix equals between rules -- how ? by ruleGen with uuid ?

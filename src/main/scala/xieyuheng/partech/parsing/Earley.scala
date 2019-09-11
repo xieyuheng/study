@@ -211,12 +211,14 @@ case class Earley(words: List[Word], rule: Rule) {
 
   def parse(): Either[ErrMsg, Tree] = {
     if (completedStarts.length != 1) {
-      Left(ErrMsg("Earley.parse", "", Span(0, 0)))
+      Left(ErrMsg("Earley.parse",
+        s"(completedStarts.length != 1), completedStarts: ${completedStarts}",
+        Span(0, 0)))
     } else {
       val startItem = completedStarts(0)
       collectNode(startItem).flatMap { case tree =>
         if (tree.children.length != 1) {
-          Left(ErrMsg("Earley.parse", "", Span(0, 0)))
+          Left(ErrMsg("Earley.parse", "(tree.children.length != 1)", Span(0, 0)))
         } else {
           Right(tree.children(0))
         }

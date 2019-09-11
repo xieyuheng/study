@@ -8,178 +8,6 @@ object grammar {
 
   val lexer = Lexer.default
 
-  val sentences = List(
-    s"""
-    let a: A = x
-    """,
-
-    s"""
-    let id: (A: U) -> A = x => x
-    """,
-
-    s"""
-    let bool_t: U = sum {
-      true[];
-      false[];
-    }
-    """,
-
-    s"""
-    let bool_elim:
-      (C: (_: bool_t) -> U) ->
-      (h0: C(true)) ->
-      (h1: C(false)) ->
-      (b: bool_t) -> C(b) =
-    C => h0 => h1 => match {
-      true[] => h0;
-      false[] => h1;
-    }
-    """,
-
-
-    s"""
-    letrec nat_t: U = sum {
-      zero[];
-      succ[nat_t];
-    }
-    """,
-
-    s"""
-    let zero: nat_t = zero[]
-    """,
-
-    s"""
-    let one: nat_t = succ[zero]
-    """,
-
-    s"""
-    let two: nat_t = succ[one]
-    """,
-
-    s"""
-    let three: nat_t = succ[two]
-    """,
-
-    s"""
-    let four: nat_t = succ[three]
-    """,
-
-    s"""
-    let five: nat_t = succ[four]
-    """,
-
-    s"""
-    let six: nat_t = succ[five]
-    """,
-
-    s"""
-    let seven: nat_t = succ[six]
-    """,
-
-    s"""
-    let eight: nat_t = succ[seven]
-    """,
-
-    s"""
-    let nine: nat_t = succ[eight]
-    """,
-
-    s"""
-    let ten: nat_t = succ[nine]
-    """,
-
-    s"""
-    letrec nat_rec:
-      (C: (_: nat_t) -> U) ->
-      (a: C(zero)) ->
-      (g: (n: nat_t) -> (_: C(n)) -> C(succ[n])) ->
-      (n: nat_t) -> C(n) =
-    C => a => g => match {
-      zero [] => a;
-      succ [prev] => g(prev, nat_rec(C, a, g, prev));
-    }
-    """,
-
-    s"""
-    letrec add: (x: nat_t) -> (y: nat_t) -> nat_t = match {
-      zero[] => y => y;
-      succ[prev] => y => succ(add(prev, y));
-    }
-    """,
-
-    s"""
-    letrec nat_eq: (x: nat_t) -> (y: nat_t) -> bool_t =
-    match {
-      zero[] => match {
-        zero[] => true;
-        succ[_] => false;
-      };
-      succ[x_prev] => match {
-        zero[] => false;
-        succ[y_prev] => nat_eq(x_prev, y_prev);
-      };
-    }
-    """,
-
-    s"""
-    letrec _: _ = [A , list_t(A) ,]
-    """,
-
-    s"""
-    let x: (_: X) -> U = A => cons[A, list_t(A), ]
-    """,
-
-    s"""
-    let x: X = sum {
-      nil[];
-    }
-    """,
-
-    s"""
-    let x: X = sum {
-      cons[A, list_t(A), ];
-    }
-    """,
-
-    // TODO
-    // can not parse
-
-    // problem is about non_empty_list(clause)
-    // we need to test non_empty_list in partech
-
-    // s"""
-    // letrec x: X = sum {
-    //   nil[];
-    //   cons[A, list_t(A), ];
-    // }
-    // """,
-
-    // TODO
-    // can not treeTo
-
-    // s"""
-    // letrec list_t: (A: U) -> U =
-    // A => sum {
-    //   nil[];
-    //   cons[A, list_t(A)];
-    // }
-    // """,
-
-    // s"""
-    // letrec list_append: (A: U) -> (x: list_t(A)) -> (y: list_t(A)) -> list_t(A) =
-    // A => match {
-    //   nil[] => y => y;
-    //   cons[head, tail] => y => cons[head, list_append(A, tail, y)];
-    // }
-    // """,
-  )
-
-  val non_sentences = List(
-    "",
-  )
-
-  def start = decl
-
   def preserved_identifiers: Set[String] = Set(
     "let", "letrec",
     "sum", "match",
@@ -239,7 +67,7 @@ object grammar {
         List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "car" -> List(exp, ".", "car"),
       "cdr" -> List(exp, ".", "cdr"),
-      "match" -> List("match", "{", non_empty_list(clause), "}"),
+      "match" -> List("match", "{", non_empty_list(mat_clause), "}"),
     ))
 
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -256,14 +84,51 @@ object grammar {
         Ap(fn, exp_matcher(exp)) },
       "car" -> { case List(exp, _, _) => Car(exp_matcher(exp)) },
       "cdr" -> { case List(exp, _, _) => Cdr(exp_matcher(exp)) },
-      "match" -> { case List(_, _, clause_list, _) =>
-        Mat(non_empty_list_matcher(clause_matcher)(clause_list).toMap) },
+      "match" -> { case List(_, _, mat_clause_list, _) =>
+        Mat(non_empty_list_matcher(mat_clause_matcher)(mat_clause_list).toMap) },
+    ))
+
+  def multi_pi_arg: Rule = Rule(
+    "multi_pi_arg", Map(
+      "arg" -> List(exp),
+      "arg_comma" -> List(exp, ","),
+      "arg_type" -> List(pattern, ":", exp),
+      "arg_type_comma" -> List(pattern, ":", exp, ","),
+    ))
+
+  def multi_pi_arg_matcher = Tree.matcher[(Pattern, Exp)](
+    "multi_pi_arg", Map(
+      "arg" -> { case List(exp) =>
+        (SolePattern, exp_matcher(exp)) },
+      "arg_comma" -> { case List(exp, _) =>
+        (SolePattern, exp_matcher(exp)) },
+      "arg_type" -> { case List(pattern, _, exp) =>
+        (pattern_matcher(pattern), exp_matcher(exp)) },
+      "arg_type_comma" -> { case List(pattern, _, exp, _) =>
+        (pattern_matcher(pattern), exp_matcher(exp)) },
+    ))
+
+
+  def multi_fn_arg: Rule = Rule(
+    "multi_fn_arg", Map(
+      "arg" -> List(pattern),
+      "arg_comma" -> List(pattern, ","),
+    ))
+
+  def multi_fn_arg_matcher = Tree.matcher[Pattern](
+    "multi_fn_arg", Map(
+      "arg" -> { case List(pattern) =>
+        pattern_matcher(pattern) },
+      "arg_comma" -> { case List(pattern, _) =>
+        pattern_matcher(pattern) },
     ))
 
   def non_rator: Rule = Rule(
     "non_rator", Map(
       "pi" -> List("(", pattern, ":", exp, ")", "-", ">", exp),
+      "multi_pi" -> List("(", non_empty_list(multi_pi_arg), ")", "-", ">", exp),
       "fn" -> List(pattern, "=", ">", exp),
+      "multi_fn" -> List("(", non_empty_list(multi_fn_arg), ")", "=", ">", exp),
       "cons" ->
         List("[", non_empty_list(exp_comma), "]"),
       "cons_one_without_comma" ->
@@ -272,7 +137,7 @@ object grammar {
         List("[", non_empty_list(exp_comma), exp, "]"),
       "sigma" -> List("(", pattern, ":", exp, ")", "*", "*", exp),
       "data" -> List(identifier, exp),
-      "sum" -> List("sum", "{", non_empty_list(clause), "}"),
+      "sum" -> List("sum", "{", non_empty_list(sum_clause), "}"),
       "sole" -> List("[", "]"),
       "trivial" -> List("trivial"),
       "U" -> List("U"),
@@ -282,8 +147,22 @@ object grammar {
     "non_rator", Map(
       "pi" -> { case List(_, pattern, _, argType, _, _, _, t) =>
         Pi(pattern_matcher(pattern), exp_matcher(argType), exp_matcher(t)) },
-      "fn" -> { case List(pattern, _, _, exp) =>
-        Fn(pattern_matcher(pattern), exp_matcher(exp)) },
+      "multi_pi" -> { case List(_, multi_pi_arg_list, _, _, _, t) =>
+        var exp = exp_matcher(t)
+        non_empty_list_matcher(multi_pi_arg_matcher)(multi_pi_arg_list)
+          .reverse.foreach { case (pattern, argType) =>
+            exp = Pi(pattern, argType, exp)
+          }
+        exp },
+      "fn" -> { case List(pattern, _, _, t) =>
+        Fn(pattern_matcher(pattern), exp_matcher(t)) },
+      "multi_fn" -> { case List(_, multi_fn_arg_list, _, _, _, t) =>
+        var exp = exp_matcher(t)
+        non_empty_list_matcher(multi_fn_arg_matcher)(multi_fn_arg_list)
+          .reverse.foreach { case pattern =>
+            exp = Fn(pattern, exp)
+          }
+        exp },
       "cons" -> { case List(_, exp_comma_list, _) =>
         val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
         list.init.foldRight(list.last) { case (tail, head) =>
@@ -298,8 +177,8 @@ object grammar {
         Sigma(pattern_matcher(pattern), exp_matcher(argType), exp_matcher(t)) },
       "data" -> { case List(Leaf(tag), exp) =>
         Data(tag, exp_matcher(exp)) },
-      "sum" -> { case List(_, _, clause_list, _) =>
-        Sum(non_empty_list_matcher(clause_matcher)(clause_list).toMap) },
+      "sum" -> { case List(_, _, sum_clause_list, _) =>
+        Sum(non_empty_list_matcher(sum_clause_matcher)(sum_clause_list).toMap) },
       "sole" -> { case _ => Sole },
       "trivial" -> { case _ => Trivial },
       "U" -> { case _ => U },
@@ -315,14 +194,28 @@ object grammar {
       "exp_comma" -> { case List(exp, _) => exp_matcher(exp) },
     ))
 
-  def clause = Rule(
-    "clause", Map(
-      "clause" -> List(identifier, exp, ";"),
+  def sum_clause = Rule(
+    "sum_clause", Map(
+      "sum_trivial" -> List(identifier, ";"),
+      "sum_clause" -> List(identifier, exp, ";"),
     ))
 
-  def clause_matcher: Tree => (String, Exp) = Tree.matcher[(String, Exp)](
-    "clause", Map(
-      "clause" -> { case List(Leaf(name), exp, _) =>
+  def sum_clause_matcher: Tree => (String, Exp) = Tree.matcher[(String, Exp)](
+    "sum_clause", Map(
+      "sum_trivial" -> { case List(Leaf(name), _) =>
+        (name, Trivial) },
+      "sum_clause" -> { case List(Leaf(name), exp, _) =>
+        (name, exp_matcher(exp)) },
+    ))
+
+  def mat_clause = Rule(
+    "mat_clause", Map(
+      "mat_clause" -> List(identifier, exp, ";"),
+    ))
+
+  def mat_clause_matcher: Tree => (String, Exp) = Tree.matcher[(String, Exp)](
+    "mat_clause", Map(
+      "mat_clause" -> { case List(Leaf(name), exp, _) =>
         (name, exp_matcher(exp)) },
     ))
 

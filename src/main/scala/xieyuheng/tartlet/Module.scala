@@ -49,7 +49,7 @@ case class Module(
 
     result match {
       case Right(exp) =>
-        println(s"// ${exp}")
+        println(s"==> ${exp}")
       case Left(ErrorMsg(msg)) =>
         println(s"error: ${msg}")
     }

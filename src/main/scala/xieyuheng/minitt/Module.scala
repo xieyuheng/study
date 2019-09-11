@@ -31,11 +31,7 @@ case class Module() {
       case TopDecl(decl) =>
         env = DeclEnv(decl, env)
       case TopEval(exp) =>
-        println(prettyExp(exp))
-        val value = eval(exp, env)
-        print("==> ")
-        println(prettyValue(value))
-        println()
+        print_exp(exp)
       case TopEq(e1, e2) =>
         val v1 = eval(e1, env)
         val v2 = eval(e2, env)
@@ -81,13 +77,12 @@ case class Module() {
     }
   }
 
-  def print_exp(exp: Exp): Value = {
+  def print_exp(exp: Exp): Unit = {
     println(prettyExp(exp))
     val value = eval(exp, this.env)
     print("==> ")
     println(prettyValue(value))
     println()
-    value
   }
 
 }

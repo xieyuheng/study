@@ -54,10 +54,10 @@ object pretty {
         s"(${prettyPattern(pattern)} : ${prettyExp(argType)}) * ${prettyExp(t)}"
       case Data(tag: String, body: Exp) =>
         s"${tag} ${prettyExp(body)}"
-      case Choice(choices: Map[String, Exp]) =>
-        s"choice {${prettyExpMap(choices)}}"
-      case Sum(choices: Map[String, Exp]) =>
-        s"sum {${prettyExpMap(choices)}}"
+      case Mat(mats: Map[String, Exp]) =>
+        s"mat {${prettyExpMap(mats)}}"
+      case Sum(mats: Map[String, Exp]) =>
+        s"sum {${prettyExpMap(mats)}}"
       case Sole => "()"
       case Trivial => "()"
       case U => "U"
@@ -82,8 +82,8 @@ object pretty {
         s"[${prettyNeutral(target)}.car]"
       case CdrNeutral(target: Neutral) =>
         s"[${prettyNeutral(target)}.cdr]"
-      case ChoiceNeutral(target: Neutral, ChoiceClosure(choices: Map[String, Exp], env: Env)) =>
-        s"[choice (${prettyNeutral(target)}) {${maybeNewline(prettyExpMap(choices))}}]"
+      case MatNeutral(target: Neutral, MatClosure(mats: Map[String, Exp], env: Env)) =>
+        s"[mat (${prettyNeutral(target)}) {${maybeNewline(prettyExpMap(mats))}}]"
     }
   }
 
@@ -103,10 +103,10 @@ object pretty {
       case TrivialValue => "()"
       case DataValue(tag: String, body: Value) =>
         s"${tag} ${prettyValue(body)}"
-      case SumValue(ChoiceClosure(choices: Map[String, Exp], env: Env)) =>
-        s"sum {${maybeNewline(prettyExpMap(choices))}}"
-      case ChoiceValue(ChoiceClosure(choices: Map[String, Exp], env: Env)) =>
-        s"choice {${maybeNewline(prettyExpMap(choices))}}"
+      case SumValue(MatClosure(mats: Map[String, Exp], env: Env)) =>
+        s"sum {${maybeNewline(prettyExpMap(mats))}}"
+      case MatValue(MatClosure(mats: Map[String, Exp], env: Env)) =>
+        s"mat {${maybeNewline(prettyExpMap(mats))}}"
     }
   }
 

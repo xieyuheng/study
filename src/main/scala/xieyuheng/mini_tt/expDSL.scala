@@ -1,7 +1,7 @@
 package xieyuheng.mini_tt
 
 object expDSL {
-  def choice(pairs: (String, Exp)*): Choice = Choice(Map(pairs: _*))
+  def mat(pairs: (String, Exp)*): Mat = Mat(Map(pairs: _*))
 
   def sum(pairs: (String, Exp)*): Sum = Sum(Map(pairs: _*))
 

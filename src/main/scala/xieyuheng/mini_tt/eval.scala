@@ -7,13 +7,13 @@ object eval {
     f match {
       case FnValue(fnclo) =>
         eval(fnclo.body, PatternEnv(fnclo.pattern, arg, fnclo.env))
-      case ChoiceValue(chclo) => arg match {
+      case MatValue(chclo) => arg match {
         case DataValue(tag, body) =>
-          chclo.choices.get(tag) match {
+          chclo.mats.get(tag) match {
             case Some(exp) => ap(eval(exp, chclo.env), body)
             case None => throw new Exception()
           }
-        case NeutralValue(target) => NeutralValue(ChoiceNeutral(target, chclo))
+        case NeutralValue(target) => NeutralValue(MatNeutral(target, chclo))
         case _ => throw new Exception()
       }
       case NeutralValue(target) => NeutralValue(ApNeutral(target, arg))
@@ -98,8 +98,8 @@ object eval {
       case Sigma(pattern: Pattern, argType: Exp, t: Exp) =>
         SigmaValue(eval(argType, env), FnClosure(pattern, t, env))
       case Data(tag, body) => DataValue(tag, eval(body, env))
-      case Choice(choices) => ChoiceValue(ChoiceClosure(choices, env))
-      case Sum(choices) => SumValue(ChoiceClosure(choices, env))
+      case Mat(mats) => MatValue(MatClosure(mats, env))
+      case Sum(mats) => SumValue(MatClosure(mats, env))
       case Sole => SoleValue
       case Trivial => TrivialValue
       case U => UValue

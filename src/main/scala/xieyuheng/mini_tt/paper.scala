@@ -32,7 +32,7 @@ object paper extends Module {
               C true ->
               C false ->
               (b : bool_t) -> C b
-  bool_elim C h0 h1 = choice {
+  bool_elim C h0 h1 = mat {
     true => h0
     false => h1
   }
@@ -43,7 +43,7 @@ object paper extends Module {
     C: bool_t -> U,
     h0: C(true),
     h1: C(false),
-  ): (b : bool_t) -> C(b) = choice {
+  ): (b : bool_t) -> C(b) = mat {
     true => h0
     false => h1
   }
@@ -55,7 +55,7 @@ object paper extends Module {
     C(true) ->
     C(false) ->
     (b: bool_t) -> C(b) =
-  (C, h0, h1) => choice {
+  (C, h0, h1) => mat {
     true _ => h0
     false _ => h1
   }
@@ -66,7 +66,7 @@ object paper extends Module {
       ("C" $ %("true")) ->:
       ("C" $ %("false")) ->:
       pi("b" :: "bool_t") { "C" $ "b" } },
-    fn("C", "h0", "h1") { choice(
+    fn("C", "h0", "h1") { mat(
       "true" -> fn("_") { "h0" },
       "false" -> fn("_") { "h1" }) })
 
@@ -100,7 +100,7 @@ object paper extends Module {
             C zero ->
             ((n : nat_t) -> C n -> C (succ n)) ->
             ((n : nat_t) -> C n)
-  nat_rec C a g = choice {
+  nat_rec C a g = mat {
     zero => a
     succ prev => g prev (nat_rec C a g prev)
   }
@@ -111,7 +111,7 @@ object paper extends Module {
     C: nat_t -> U,
     a: C(zero),
     g: (n: nat_t, C(n)) -> C(succ(n)),
-  ): (n: nat_t) -> C(n) = choice {
+  ): (n: nat_t) -> C(n) = mat {
     zero => a
     succ[prev] => g(prev, nat_rec(C, a, g, prev))
   }
@@ -122,19 +122,19 @@ object paper extends Module {
       ("C" $ %("zero")) ->:
       pi("n" :: "nat_t") { ("C" $ "n") ->: ("C" $ %("succ", "n")) } ->:
       pi("n" :: "nat_t") { ("C" $ "n") } },
-    fn("C", "a", "g") { choice(
+    fn("C", "a", "g") { mat(
       "zero" -> fn("_") { "a" },
       "succ" -> fn("prev") { "g" $ "prev" $ ("nat_rec" $ "C" $ "a" $ "g" $ "prev") }) })
 
   s"""
-  add(x: nat_t): (y: nat_t) -> nat_t = choice {
+  add(x: nat_t): (y: nat_t) -> nat_t = mat {
     zero => (y: nat_t): nat_t => y
     succ prev => (y: nat_t): nat_t => succ(add(prev, y))
   }
   """
 
   letrec("add", "nat_t" ->: "nat_t" ->: "nat_t",
-    choice(
+    mat(
       "zero" -> fn("_") { fn("y") { "y" } },
       "succ" -> fn("prev") { fn("y") { %("succ", "add" $ "prev" $ "y") } }))
 
@@ -142,7 +142,7 @@ object paper extends Module {
     fn("x") { "add" $ "x" $ "x" })
 
   letrec("mul", "nat_t" ->: "nat_t" ->: "nat_t",
-    choice(
+    mat(
       "zero" -> fn("_") { fn("y") { %("zero") } },
       "succ" -> fn("prev") { fn("y") { "add" $ "y" $ ("mul" $ "prev" $ "y") } }) )
 
@@ -151,12 +151,12 @@ object paper extends Module {
 
   s"""
   nat_eq : nat_t -> nat_t -> bool_t
-  nat_eq = choice {
-    zero => choice {
+  nat_eq = mat {
+    zero => mat {
       zero => true
       succ _ => false
     }
-    succ x => choice {
+    succ x => mat {
       zero => false
       succ y => nat_eq x y
     }
@@ -164,12 +164,12 @@ object paper extends Module {
   """
 
   s"""
-  nat_eq : nat_t -> nat_t -> bool_t = choice {
-    zero => choice {
+  nat_eq : nat_t -> nat_t -> bool_t = mat {
+    zero => mat {
       zero => true
       succ => false
     }
-    succ[x] => choice {
+    succ[x] => mat {
       zero => false
       succ[y] => nat_eq(x, y)
     }
@@ -200,11 +200,11 @@ object paper extends Module {
   """
 
   letrec("nat_eq", "nat_t" ->: "nat_t" ->: "bool_t",
-    choice(
-      "zero" -> fn("_") { choice(
+    mat(
+      "zero" -> fn("_") { mat(
         "zero" -> fn("_") { %("true") },
         "succ" -> fn("_") { %("false") }) },
-      "succ" -> fn("x") { choice(
+      "succ" -> fn("x") { mat(
         "zero" -> fn("_") { %("false") },
         "succ" -> fn("y") { "nat_eq" $ "x" $ "y" }) }))
 
@@ -223,7 +223,7 @@ object paper extends Module {
   letrec("list_append",
     pi("A" :: U) {
       "list_t" $ "A" ->: "list_t" $ "A" ->: "list_t" $ "A" },
-    fn("A") { choice(
+    fn("A") { mat(
       "nil" -> fn("_") { fn("y") { "y" } },
       "cons" -> fn("car" * "cdr") { fn("y") {
         %("cons", "car" * ("list_append" $ "A" $ "cdr" $ "y")) } }) } )

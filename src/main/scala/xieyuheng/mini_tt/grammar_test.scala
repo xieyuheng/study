@@ -5,12 +5,12 @@ import xieyuheng.partech.pretty._
 import xieyuheng.partech.example._
 
 object grammar_test extends App {
-  def test(): Unit = {
-    val rule = grammar.start
-    val lexer = grammar.lexer
-    val sentences = grammar.sentences
-    val non_sentences = grammar.non_sentences
+  val rule = grammar.start
+  val lexer = grammar.lexer
+  val sentences = grammar.sentences
+  val non_sentences = grammar.non_sentences
 
+  def parser_test(): Unit = {
     sentences.foreach { case text =>
       Parser(lexer, rule).parse(text) match {
         case Right(tree) => {}
@@ -36,5 +36,23 @@ object grammar_test extends App {
     }
   }
 
-  test()
+  parser_test()
+
+  def to_tree_test(): Unit = {
+    sentences.foreach { case text =>
+      Parser(lexer, rule).parse(text) match {
+        case Right(tree) =>
+          println(grammar.decl_matcher(tree))
+        case Left(error) =>
+          println(s"[TreeToTest]")
+          println(s"- rule: ${rule.name}")
+          println(s"- text: ${text}")
+          println(s"- error: ${error}")
+          throw new Exception()
+      }
+    }
+  }
+
+  to_tree_test()
+
 }

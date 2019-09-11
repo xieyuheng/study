@@ -10,6 +10,10 @@ object grammar {
 
   val sentences = List(
     s"""
+    let a: A = x
+    """,
+
+    s"""
     let id: (A: U) -> A = x => x
     """,
 
@@ -122,20 +126,52 @@ object grammar {
     """,
 
     s"""
-    letrec list_t: (A: U) -> U =
-    A => sum {
+    let x: (_: X) -> U = A => cons[A, list_t(A), ]
+    """,
+
+    s"""
+    let x: X = sum {
       nil[];
-      cons[A, list_t(A)];
     }
     """,
 
     s"""
-    letrec list_append: (A: U) -> (x: list_t(A)) -> (y: list_t(A)) -> list_t(A) =
-    A => match {
-      nil[] => y => y;
-      cons[head, tail] => y => cons[head, list_append(A, tail, y)];
+    let x: X = sum {
+      cons[A, list_t(A), ];
     }
     """,
+
+    // TODO
+    // can not parse
+
+    // problem is about non_empty_list(clause)
+    // we need to test non_empty_list in partech
+
+    // s"""
+    // letrec x: X = sum {
+    //   nil[];
+    //   cons[A, list_t(A), ];
+    // }
+    // """,
+
+    // TODO
+    // can not treeTo
+
+    // s"""
+    // letrec list_t: (A: U) -> U =
+    // A => sum {
+    //   nil[];
+    //   cons[A, list_t(A)];
+    // }
+    // """,
+
+    // s"""
+    // letrec list_append: (A: U) -> (x: list_t(A)) -> (y: list_t(A)) -> list_t(A) =
+    // A => match {
+    //   nil[] => y => y;
+    //   cons[head, tail] => y => cons[head, list_append(A, tail, y)];
+    // }
+    // """,
   )
 
   val non_sentences = List(
@@ -174,10 +210,10 @@ object grammar {
 
   def decl_matcher = Tree.matcher[Decl](
     "decl", Map(
-      "let" -> { case List(p, _, e, _, t) =>
-        Let(treeToPattern(p), treeToExp(e), treeToExp(t)) },
-      "letrec" -> { case List(p, _, e, _, t) =>
-        Letrec(treeToPattern(p), treeToExp(e), treeToExp(t)) },
+      "let" -> { case List(_, p, _, e, _, t) =>
+        Let(pattern_matcher(p), exp_matcher(e), exp_matcher(t)) },
+      "letrec" -> { case List(_, p, _, e, _, t) =>
+        Letrec(pattern_matcher(p), exp_matcher(e), exp_matcher(t)) },
     ))
 
   def exp: Rule = Rule(
@@ -186,7 +222,7 @@ object grammar {
       "non_rator" -> List(non_rator),
     ))
 
-  def exp_matcher = Tree.matcher[Exp](
+  def exp_matcher: Tree => Exp = Tree.matcher[Exp](
     "exp", Map(
       "rator" -> { case List(rator) => rator_matcher(rator) },
       "non_rator" -> { case List(non_rator) => non_rator_matcher(non_rator) },
@@ -220,7 +256,8 @@ object grammar {
         Ap(fn, exp_matcher(exp)) },
       "car" -> { case List(exp, _, _) => Car(exp_matcher(exp)) },
       "cdr" -> { case List(exp, _, _) => Cdr(exp_matcher(exp)) },
-      "match" -> { case List(_, _, clause_list, _) => ??? },
+      "match" -> { case List(_, _, clause_list, _) =>
+        Mat(non_empty_list_matcher(clause_matcher)(clause_list).toMap) },
     ))
 
   def non_rator: Rule = Rule(
@@ -241,9 +278,31 @@ object grammar {
       "U" -> List("U"),
     ))
 
-  def non_rator_matcher = Tree.matcher[Exp](
+  def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "non_rator", Map(
-
+      "pi" -> { case List(_, pattern, _, argType, _, _, _, t) =>
+        Pi(pattern_matcher(pattern), exp_matcher(argType), exp_matcher(t)) },
+      "fn" -> { case List(pattern, _, _, exp) =>
+        Fn(pattern_matcher(pattern), exp_matcher(exp)) },
+      "cons" -> { case List(_, exp_comma_list, _) =>
+        val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
+        list.init.foldRight(list.last) { case (tail, head) =>
+          Cons(head, tail) } },
+      "cons_one_without_comma" -> { case List(_, exp, _) =>
+        exp_matcher(exp) },
+      "cons_without_last_comma" -> { case List(_, exp_comma_list, exp, _) =>
+        val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
+        list.foldRight(exp_matcher(exp)) { case (tail, head) =>
+          Cons(head, tail) } },
+      "sigma" -> { case List(_, pattern, _, argType, _, _, _, t) =>
+        Sigma(pattern_matcher(pattern), exp_matcher(argType), exp_matcher(t)) },
+      "data" -> { case List(Leaf(tag), exp) =>
+        Data(tag, exp_matcher(exp)) },
+      "sum" -> { case List(_, _, clause_list, _) =>
+        Sum(non_empty_list_matcher(clause_matcher)(clause_list).toMap) },
+      "sole" -> { case _ => Sole },
+      "trivial" -> { case _ => Trivial },
+      "U" -> { case _ => U },
     ))
 
   def exp_comma = Rule(
@@ -258,9 +317,14 @@ object grammar {
 
   def clause = Rule(
     "clause", Map(
-      "clause_with_comma" -> List(identifier, exp, ";"),
+      "clause" -> List(identifier, exp, ";"),
     ))
 
+  def clause_matcher: Tree => (String, Exp) = Tree.matcher[(String, Exp)](
+    "clause", Map(
+      "clause" -> { case List(Leaf(name), exp, _) =>
+        (name, exp_matcher(exp)) },
+    ))
 
   def pattern: Rule = Rule(
     "pattern", Map(
@@ -274,9 +338,20 @@ object grammar {
       "sole" -> List("[", "]"),
     ))
 
-  def pattern_matcher = Tree.matcher[Pattern](
+  def pattern_matcher: Tree => Pattern = Tree.matcher[Pattern](
     "pattern", Map(
-
+      "var" -> { case List(Leaf(name)) => VarPattern(name) },
+      "cons" -> { case List(_, pattern_comma_list, _) =>
+        val list = non_empty_list_matcher(pattern_comma_matcher)(pattern_comma_list)
+        list.init.foldRight(list.last) { case (tail, head) =>
+          ConsPattern(head, tail) } },
+      "cons_one_without_comma" -> { case List(_, pattern, _) =>
+        pattern_matcher(pattern) },
+      "cons_without_last_comma" -> { case List(_, pattern_comma_list, pattern, _) =>
+        val list = non_empty_list_matcher(pattern_comma_matcher)(pattern_comma_list)
+        list.foldRight(pattern_matcher(pattern)) { case (tail, head) =>
+          ConsPattern(head, tail) } },
+      "sole" -> { case _ => SolePattern },
     ))
 
   def pattern_comma = Rule(
@@ -288,8 +363,4 @@ object grammar {
     "pattern_comma", Map(
       "pattern_comma" -> { case List(pattern, _) => pattern_matcher(pattern) },
     ))
-
-  implicit def treeToExp: TreeTo[Exp] = TreeTo[Exp](exp_matcher)
-  implicit def treeToPattern: TreeTo[Pattern] = TreeTo[Pattern](pattern_matcher)
-  implicit def treeToDecl: TreeTo[Decl] = TreeTo[Decl](decl_matcher)
 }

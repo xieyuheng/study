@@ -10,8 +10,8 @@ final case class Car(pair: Exp) extends Exp
 final case class Cdr(pair: Exp) extends Exp
 final case class Sigma(pattern: Pattern, argType: Exp, t: Exp) extends Exp
 final case class Data(tag: String, body: Exp) extends Exp
-final case class Choice(choices: Map[String, Exp]) extends Exp
-final case class Sum(choices: Map[String, Exp]) extends Exp
+final case class Mat(mats: Map[String, Exp]) extends Exp
+final case class Sum(mats: Map[String, Exp]) extends Exp
 final case object Sole extends Exp
 final case object Trivial extends Exp
 final case object U extends Exp

@@ -16,17 +16,5 @@ object TreeTo {
   def fromMatcher[A](
     name: String,
     map: Map[String, List[Tree] => A],
-  ): TreeTo[A] = TreeTo[A] {
-    case Node(rule, choiceName, children) =>
-      if (rule.name == name) {
-        map.get(choiceName) match {
-          case Some(f) => f(children)
-          case None => throw new Exception()
-        }
-      } else {
-        throw new Exception()
-      }
-    case _ => throw new Exception()
-  }
-
+  ): TreeTo[A] = TreeTo[A](Tree.matcher[A](name, map))
 }

@@ -53,12 +53,12 @@ object exp extends ExampleRule {
     "x...y",
   )
 
-  def preservedIdentifiers: Set[String] = Set(
+  def preserved_identifiers: Set[String] = Set(
     "type", "case", "fn", "pi")
 
   def identifier = WordPred(
     "identifier", { case word =>
-      if (preservedIdentifiers.contains(word)) {
+      if (preserved_identifiers.contains(word)) {
         false
       } else {
         word.headOption match {

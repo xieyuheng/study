@@ -5,21 +5,21 @@ import xieyuheng.partech.ruleDSL._
 object predefined {
 
   def non_empty_list(a: Rule): Rule = Rule(
-    s"non_empty_list", Map(
+    "non_empty_list", Map(
       "one" -> List(a),
       "more" -> List(a, non_empty_list(a))),
     args = Map("a" -> a))
 
+  def non_empty_list_matcher[A](matcher: Tree => A): Tree => List[A] = Tree.matcher(
+    "non_empty_list", Map(
+      "one" -> { case List(a) => List(matcher(a)) },
+      "more" -> { case List(a, tail) => matcher(a) :: non_empty_list_matcher(matcher)(tail) }
+    ))
+
   implicit def tree_to_non_empty_list[A]
     (implicit treeToA: TreeTo[A])
-      : TreeTo[List[A]] = TreeTo[List[A]] { case tree =>
-      tree match {
-        case Node(Rule("non_empty_list", _, _), "one", List(a)) =>
-          List(treeToA(a))
-        case Node(Rule("non_empty_list", _, _), "more", List(a, tail)) =>
-          treeToA(a) :: tree_to_non_empty_list(treeToA)(tail)
-        case _ => throw new Exception()
-      }
+      : TreeTo[List[A]] = {
+    TreeTo[List[A]](non_empty_list_matcher(treeToA.apply))
   }
 
   def wordInCharSet(set: Set[Char]): String => Boolean = {

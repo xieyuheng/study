@@ -7,12 +7,12 @@ object RuleTest extends App {
 
   def lexer = Lexer.default
 
-  def preservedIdentifiers = Set(
+  def preserved_identifiers = Set(
     "type", "case", "fn", "pi")
 
   def identifier = WordPred (
     "identifier", { case word =>
-      if (preservedIdentifiers.contains(word)) {
+      if (preserved_identifiers.contains(word)) {
         false
       } else {
         word.headOption match {

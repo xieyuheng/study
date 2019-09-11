@@ -144,7 +144,7 @@ object grammar {
 
   def start = decl
 
-  def preservedIdentifiers: Set[String] = Set(
+  def preserved_identifiers: Set[String] = Set(
     "let", "letrec",
     "sum", "match",
     "trivial",
@@ -153,7 +153,7 @@ object grammar {
 
   def identifier: WordPred = WordPred(
     "identifier", { case word =>
-      if (preservedIdentifiers.contains(word)) {
+      if (preserved_identifiers.contains(word)) {
         false
       } else {
         word.headOption match {
@@ -166,95 +166,130 @@ object grammar {
       }
     })
 
-  def decl = Rule("decl", Map(
-    "let" -> List("let", pattern, ":", exp, "=", exp),
-    "letrec" -> List("letrec", pattern, ":", exp, "=", exp),
-  ))
+  def decl = Rule(
+    "decl", Map(
+      "let" -> List("let", pattern, ":", exp, "=", exp),
+      "letrec" -> List("letrec", pattern, ":", exp, "=", exp),
+    ))
 
-  def exp: Rule = Rule("exp", Map(
-    "rator" -> List(rator),
-    "non_rator" -> List(non_rator),
-  ))
+  def decl_matcher = Tree.matcher[Decl](
+    "decl", Map(
+      "let" -> { case List(p, _, e, _, t) =>
+        Let(treeToPattern(p), treeToExp(e), treeToExp(t)) },
+      "letrec" -> { case List(p, _, e, _, t) =>
+        Letrec(treeToPattern(p), treeToExp(e), treeToExp(t)) },
+    ))
 
-  def non_rator: Rule = Rule("non_rator", Map(
-    "pi" -> List("(", pattern, ":", exp, ")", "-", ">", exp),
-    "fn" -> List(pattern, "=", ">", exp),
-    "cons" ->
-      List("[", non_empty_list(exp_comma), "]"),
-    "cons_one_without_comma" ->
-      List("[", exp, "]"),
-    "cons_without_last_comma" ->
-      List("[", non_empty_list(exp_comma), exp, "]"),
-    "sigma" -> List("(", pattern, ":", exp, ")", "*", "*", exp),
-    "data" -> List(identifier, exp),
-    "sum" -> List("sum", "{", non_empty_list(clause), "}"),
-    "sole" -> List("[", "]"),
-    "trivial" -> List("trivial"),
-    "U" -> List("U"),
-  ))
+  def exp: Rule = Rule(
+    "exp", Map(
+      "rator" -> List(rator),
+      "non_rator" -> List(non_rator),
+    ))
 
-  def rator: Rule = Rule("rator", Map(
-    "var" -> List(identifier),
-    "ap" ->
-      List(rator, "(", non_empty_list(exp_comma), ")"),
-    "ap_one_without_comma" ->
-      List(rator, "(", exp, ")"),
-    "ap_without_last_comma" ->
-      List(rator, "(", non_empty_list(exp_comma), exp, ")"),
-    "car" -> List(exp, ".", "car"),
-    "cdr" -> List(exp, ".", "cdr"),
-    "match" -> List("match", "{", non_empty_list(clause), "}"),
-  ))
+  def exp_matcher = Tree.matcher[Exp](
+    "exp", Map(
+      "rator" -> { case List(rator) => rator_matcher(rator) },
+      "non_rator" -> { case List(non_rator) => non_rator_matcher(non_rator) },
+    ))
 
-  def exp_comma = Rule("exp_comma", Map(
-    "exp_comma" -> List(exp, ","),
-  ))
+  def rator: Rule = Rule(
+    "rator", Map(
+      "var" -> List(identifier),
+      "ap" ->
+        List(rator, "(", non_empty_list(exp_comma), ")"),
+      "ap_one_without_comma" ->
+        List(rator, "(", exp, ")"),
+      "ap_without_last_comma" ->
+        List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "car" -> List(exp, ".", "car"),
+      "cdr" -> List(exp, ".", "cdr"),
+      "match" -> List("match", "{", non_empty_list(clause), "}"),
+    ))
 
-  def clause = Rule("clause", Map(
-    "clause_with_comma" -> List(identifier, exp, ";"),
-  ))
+  def rator_matcher: Tree => Exp = Tree.matcher[Exp](
+    "rator", Map(
+      "var" -> { case List(Leaf(name)) => Var(name) },
+      "ap" -> { case List(rator, _, exp_comma_list, _) =>
+        non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
+          .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) } },
+      "ap_one_without_comma" -> { case List(rator, _, exp, _) =>
+        Ap(rator_matcher(rator), exp_matcher(exp)) },
+      "ap_without_last_comma" -> { case List(rator, _, exp_comma_list, exp, _) =>
+        val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
+          .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
+        Ap(fn, exp_matcher(exp)) },
+      "car" -> { case List(exp, _, _) => Car(exp_matcher(exp)) },
+      "cdr" -> { case List(exp, _, _) => Cdr(exp_matcher(exp)) },
+      "match" -> { case List(_, _, clause_list, _) => ??? },
+    ))
 
-  def pattern: Rule = Rule("pattern", Map(
-    "var" -> List(identifier),
-    "cons" ->
-      List("[", non_empty_list(pattern_comma), "]"),
-    "cons_one_without_comma" ->
-      List("[", pattern, "]"),
-    "cons_without_last_comma" ->
-      List("[", non_empty_list(pattern_comma), pattern, "]"),
-    "sole" -> List("[", "]"),
-  ))
+  def non_rator: Rule = Rule(
+    "non_rator", Map(
+      "pi" -> List("(", pattern, ":", exp, ")", "-", ">", exp),
+      "fn" -> List(pattern, "=", ">", exp),
+      "cons" ->
+        List("[", non_empty_list(exp_comma), "]"),
+      "cons_one_without_comma" ->
+        List("[", exp, "]"),
+      "cons_without_last_comma" ->
+        List("[", non_empty_list(exp_comma), exp, "]"),
+      "sigma" -> List("(", pattern, ":", exp, ")", "*", "*", exp),
+      "data" -> List(identifier, exp),
+      "sum" -> List("sum", "{", non_empty_list(clause), "}"),
+      "sole" -> List("[", "]"),
+      "trivial" -> List("trivial"),
+      "U" -> List("U"),
+    ))
 
-  def pattern_comma = Rule("pattern_comma", Map(
-    "pattern_comma" -> List(pattern, ","),
-  ))
+  def non_rator_matcher = Tree.matcher[Exp](
+    "non_rator", Map(
 
-  implicit def treeToDecl: TreeTo[Decl] = TreeTo[Decl] { case tree =>
-    tree match {
-      case Node(Rule("decl", _, _), "let", List(p, _, e, _, t)) =>
-        Let(treeToPattern(p), treeToExp(e), treeToExp(t))
-      case Node(Rule("decl", _, _), "letrec", List(p, _, e, _, t)) =>
-        Letrec(treeToPattern(p), treeToExp(e), treeToExp(t))
-      case _ => throw new Exception()
-    }
-  }
+    ))
 
-  implicit def treeToExp: TreeTo[Exp] = TreeTo[Exp] { case tree =>
-    tree match {
-      case Node(Rule("exp", _, _), "rator", List(rator)) =>
-        ???
-      case Node(Rule("exp", _, _), "non_rator", List(exp)) =>
-        ???
-      case _ => throw new Exception()
-    }
-  }
+  def exp_comma = Rule(
+    "exp_comma", Map(
+      "exp_comma" -> List(exp, ","),
+    ))
 
-  implicit def treeToPattern: TreeTo[Pattern] = TreeTo[Pattern] { case tree =>
-    tree match {
-      case Node(Rule("pattern", _, _), "head_a", List(_, b)) =>
-        ???
-      case _ => throw new Exception()
-    }
-  }
+  def exp_comma_matcher = Tree.matcher[Exp](
+    "exp_comma", Map(
+      "exp_comma" -> { case List(exp, _) => exp_matcher(exp) },
+    ))
 
+  def clause = Rule(
+    "clause", Map(
+      "clause_with_comma" -> List(identifier, exp, ";"),
+    ))
+
+
+  def pattern: Rule = Rule(
+    "pattern", Map(
+      "var" -> List(identifier),
+      "cons" ->
+        List("[", non_empty_list(pattern_comma), "]"),
+      "cons_one_without_comma" ->
+        List("[", pattern, "]"),
+      "cons_without_last_comma" ->
+        List("[", non_empty_list(pattern_comma), pattern, "]"),
+      "sole" -> List("[", "]"),
+    ))
+
+  def pattern_matcher = Tree.matcher[Pattern](
+    "pattern", Map(
+
+    ))
+
+  def pattern_comma = Rule(
+    "pattern_comma", Map(
+      "pattern_comma" -> List(pattern, ","),
+    ))
+
+  def pattern_comma_matcher = Tree.matcher[Pattern](
+    "pattern_comma", Map(
+      "pattern_comma" -> { case List(pattern, _) => pattern_matcher(pattern) },
+    ))
+
+  implicit def treeToExp: TreeTo[Exp] = TreeTo[Exp](exp_matcher)
+  implicit def treeToPattern: TreeTo[Pattern] = TreeTo[Pattern](pattern_matcher)
+  implicit def treeToDecl: TreeTo[Decl] = TreeTo[Decl](decl_matcher)
 }

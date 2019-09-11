@@ -8,6 +8,10 @@ object paper extends Module {
   id(A: U, x: A): A = x
   """
 
+  s"""
+  id: (A: U) -> A = (x) => x
+  """
+
   let("id",
     pi("A" :: U) { "A" ->: "A" },
     fn("A", "x") { "x" })
@@ -44,6 +48,18 @@ object paper extends Module {
     h0: C(true),
     h1: C(false),
   ): (b : bool_t) -> C(b) = choice {
+    true => h0
+    false => h1
+  }
+  """
+
+  s"""
+  bool_elim:
+    (C: bool_t -> U) ->
+    C(true) ->
+    C(false) ->
+    (b : bool_t) -> C(b) =
+  (C, h0, h1) => choice {
     true => h0
     false => h1
   }
@@ -152,16 +168,38 @@ object paper extends Module {
   """
 
   s"""
-  nat_eq : nat_t -> nat_t -> bool_t
-  nat_eq = choice {
+  nat_eq : nat_t -> nat_t -> bool_t = choice {
     zero => choice {
       zero => true
-      succ _ => false
+      succ => false
     }
-    succ x => choice {
+    succ[x] => choice {
       zero => false
-      succ y => nat_eq x y
+      succ[y] => nat_eq(x, y)
     }
+  }
+  """
+
+  s"""
+  nat_eq(x: nat_t, y: nat_t): bool_t =
+  x match {
+    zero => y match {
+      zero => true
+      succ => false
+    }
+    succ(x_prev) => y match {
+      zero => false
+      succ(y_prev) => nat_eq(x_prev, y_prev)
+    }
+  }
+  """
+
+  s"""
+  nat_eq : nat_t -> nat_t -> bool_t = match {
+    zero, zero => true
+    zero, succ => false
+    succ(x), zero => false
+    succ(x), succ(y) => nat_eq(x, y)
   }
   """
 
@@ -174,13 +212,12 @@ object paper extends Module {
         "zero" -> fn("_") { %("false") },
         "succ" -> fn("y") { "nat_eq" $ "x" $ "y" }) }))
 
-
-
-  // list_t : U -> U
-  // list_t A = sum {
-  //   nil
-  //   cons A list_t A
-  // }
+  s"""
+  list_t: U -> U = (A) => sum {
+    nil()
+    cons(A, list_t(A))
+  }
+  """
 
   letrec("list_t", U ->: U,
     fn("A") { sum(

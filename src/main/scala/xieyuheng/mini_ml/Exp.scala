@@ -1,4 +1,4 @@
-package xieyuheng.hindley_milner
+package xieyuheng.mini_ml
 
 sealed trait Exp
 final case class Var(name: String) extends Exp

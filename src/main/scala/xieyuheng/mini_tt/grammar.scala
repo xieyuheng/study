@@ -20,7 +20,6 @@ object grammar {
     }
     """,
 
-
     s"""
     let bool_elim:
       (C: (_: bool_t) -> U) ->
@@ -168,8 +167,8 @@ object grammar {
     })
 
   def decl = Rule("decl", Map(
-    "let" -> List("let", identifier, ":", exp, "=", exp),
-    "letrec" -> List("letrec", identifier, ":", exp, "=", exp),
+    "let" -> List("let", pattern, ":", exp, "=", exp),
+    "letrec" -> List("letrec", pattern, ":", exp, "=", exp),
   ))
 
   def exp: Rule = Rule("exp", Map(
@@ -230,20 +229,32 @@ object grammar {
     "pattern_comma" -> List(pattern, ","),
   ))
 
-  // sealed trait AB
-  // final case class HEAD_A(b: B) extends AB
-  // final case class HEAD_B(a: A) extends AB
+  implicit def treeToDecl: TreeTo[Decl] = TreeTo[Decl] { case tree =>
+    tree match {
+      case Node(Rule("decl", _, _), "let", List(p, _, e, _, t)) =>
+        Let(treeToPattern(p), treeToExp(e), treeToExp(t))
+      case Node(Rule("decl", _, _), "letrec", List(p, _, e, _, t)) =>
+        Letrec(treeToPattern(p), treeToExp(e), treeToExp(t))
+      case _ => throw new Exception()
+    }
+  }
 
-  // object AB {
-  //   implicit def treeToAB: TreeTo[AB] = TreeTo[AB] { case tree =>
-  //     tree match {
-  //       case Node(Rule("ab", _, _), "head_a", List(_, b)) =>
-  //         HEAD_A(Tree.to[B](b))
-  //       case Node(Rule("ab", _, _), "head_b", List(_, a)) =>
-  //         HEAD_B(Tree.to[A](a))
-  //       case _ => throw new Exception()
-  //     }
-  //   }
-  // }
+  implicit def treeToExp: TreeTo[Exp] = TreeTo[Exp] { case tree =>
+    tree match {
+      case Node(Rule("exp", _, _), "rator", List(rator)) =>
+        ???
+      case Node(Rule("exp", _, _), "non_rator", List(exp)) =>
+        ???
+      case _ => throw new Exception()
+    }
+  }
+
+  implicit def treeToPattern: TreeTo[Pattern] = TreeTo[Pattern] { case tree =>
+    tree match {
+      case Node(Rule("pattern", _, _), "head_a", List(_, b)) =>
+        ???
+      case _ => throw new Exception()
+    }
+  }
 
 }

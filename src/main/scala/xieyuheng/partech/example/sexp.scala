@@ -59,21 +59,15 @@ object sexp extends ExampleRule {
   final case class ConsSexp(car: Sexp, cdr: Sexp) extends Sexp
 
   object Sexp {
-    implicit def treeToSexp: TreeTo[Sexp] = TreeTo[Sexp] { case tree =>
-      tree match {
-        case Node(Rule("sexp", _, _), "null", _) =>
-          NullSexp
-        case Node(Rule("sexp", _, _), "atom", List(Leaf(str))) =>
-          AtomSexp(str)
-        case Node(Rule("sexp", _, _), "sexp_list", List(_, list, _)) =>
+    implicit def treeToSexp: TreeTo[Sexp] = TreeTo.fromMatcher[Sexp](
+      "sexp", Map(
+        "null" -> { case _ => NullSexp },
+        "atom" -> { case List(Leaf(str)) => AtomSexp(str) },
+        "sexp_list" -> { case List(_, list, _) =>
           var sexp: Sexp = NullSexp
           val sexp_list = Tree.to[List[Sexp]](list)
-          sexp_list.reverse.foreach { case car =>
-            sexp = ConsSexp(car, sexp)
-          }
-          sexp
-        case _ => throw new Exception()
-      }
-    }
+          sexp_list.reverse.foreach { case car => sexp = ConsSexp(car, sexp) }
+          sexp }
+      ))
   }
 }

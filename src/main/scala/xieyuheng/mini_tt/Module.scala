@@ -10,7 +10,7 @@ case class Module() {
   }
 
   def letrec(pattern: Pattern, t: Exp, e: Exp): Unit = {
-    env = DeclEnv(LetRec(pattern, t, e), env)
+    env = DeclEnv(Letrec(pattern, t, e), env)
   }
 
   def import_all(module: Module): Unit = {

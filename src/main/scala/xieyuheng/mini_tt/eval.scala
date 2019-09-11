@@ -53,7 +53,7 @@ object eval {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case DeclEnv(LetRec(pattern, t, e), rest) =>
+      case DeclEnv(Letrec(pattern, t, e), rest) =>
         projectPattern(name, pattern, eval(e, env)) match {
           case Some(value) => value
           case None => lookup(name, rest)

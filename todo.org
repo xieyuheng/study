@@ -1,6 +1,5 @@
 * mini_tt
 - concrete syntax for mini_tt
-- read code from file
 - readback
 - Ctx
 - checkDeclAndExtend

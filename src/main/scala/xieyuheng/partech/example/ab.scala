@@ -46,15 +46,11 @@ object ab extends ExampleRule {
   final case class HEAD_B(a: A) extends AB
 
   object AB {
-    implicit def treeToAB: TreeTo[AB] = TreeTo[AB] { case tree =>
-      tree match {
-        case Node(Rule("ab", _, _), "head_a", List(_, b)) =>
-          HEAD_A(Tree.to[B](b))
-        case Node(Rule("ab", _, _), "head_b", List(_, a)) =>
-          HEAD_B(Tree.to[A](a))
-        case _ => throw new Exception()
-      }
-    }
+    implicit def treeToAB = TreeTo.fromMatcher[AB](
+      "ab", Map(
+        "head_a" -> { case List(_, b) => HEAD_A(Tree.to[B](b)) },
+        "head_b" -> { case List(_, a) => HEAD_B(Tree.to[A](a)) },
+      ))
   }
 
   sealed trait A
@@ -63,17 +59,12 @@ object ab extends ExampleRule {
   final case class AFTER_B(a1: A, a2: A) extends A
 
   object A {
-    implicit def treeToA: TreeTo[A] = TreeTo[A] { case tree =>
-      tree match {
-        case Node(Rule("a", _, _), "one_a", _) =>
-          ONE_A()
-        case Node(Rule("a", _, _), "more_a", List(_, ab)) =>
-          MORE_A(Tree.to[AB](ab))
-        case Node(Rule("a", _, _), "after_b", List(_, a1, a2)) =>
-          AFTER_B(Tree.to[A](a1), Tree.to[A](a2))
-        case _ => throw new Exception()
-      }
-    }
+    implicit def treeToA: TreeTo[A] = TreeTo.fromMatcher[A](
+      "a", Map(
+        "one_a" -> { _ => ONE_A() },
+        "more_a" -> { case List(_, ab) => MORE_A(Tree.to[AB](ab)) },
+        "after_b" -> { case List(_, a1, a2) => AFTER_B(Tree.to[A](a1), Tree.to[A](a2)) },
+      ))
   }
 
   sealed trait B
@@ -82,17 +73,12 @@ object ab extends ExampleRule {
   final case class AFTER_A(b1: B, b2: B) extends B
 
   object B {
-    implicit def treeToB: TreeTo[B] = TreeTo[B] { case tree =>
-      tree match {
-        case Node(Rule("b", _, _), "one_b", _) =>
-          ONE_B()
-        case Node(Rule("b", _, _), "more_b", List(_, ab)) =>
-          MORE_B(Tree.to[AB](ab))
-        case Node(Rule("b", _, _), "after_a", List(_, b1, b2)) =>
-          AFTER_A(Tree.to[B](b1), Tree.to[B](b2))
-        case _ => throw new Exception()
-      }
-    }
+    implicit def treeToB: TreeTo[B] = TreeTo.fromMatcher[B](
+      "b", Map(
+        "one_b" -> { case _ => ONE_B() },
+        "more_b" -> { case List(_, ab) => MORE_B(Tree.to[AB](ab)) },
+        "after_a" -> { case List(_, b1, b2) => AFTER_A(Tree.to[B](b1), Tree.to[B](b2)) },
+      ))
   }
 
 }

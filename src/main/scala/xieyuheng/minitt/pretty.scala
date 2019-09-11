@@ -1,4 +1,4 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
 object pretty {
 

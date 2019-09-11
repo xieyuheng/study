@@ -1,4 +1,4 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
 sealed trait Value
 final case class NeutralValue(neutral: Neutral) extends Value

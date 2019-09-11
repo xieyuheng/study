@@ -1,4 +1,4 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
 sealed trait Ctx
 final case class PatternCtx(pattern: Pattern, value: Value, rest: Ctx) extends Ctx

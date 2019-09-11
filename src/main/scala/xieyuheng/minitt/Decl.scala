@@ -1,4 +1,4 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
 sealed trait Decl
 final case class Let(pattern: Pattern, t: Exp, e: Exp) extends Decl

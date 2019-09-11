@@ -1,4 +1,4 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
 sealed trait Exp
 final case class Var(name: String) extends Exp

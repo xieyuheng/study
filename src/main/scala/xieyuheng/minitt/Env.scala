@@ -1,4 +1,4 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
 sealed trait Env
 final case class DeclEnv(decl: Decl, rest: Env) extends Env

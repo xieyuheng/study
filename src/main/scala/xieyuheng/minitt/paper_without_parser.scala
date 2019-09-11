@@ -1,6 +1,6 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
-import xieyuheng.mini_tt.expDSL._
+import xieyuheng.minitt.expDSL._
 
 object paper_without_parser extends Module {
 

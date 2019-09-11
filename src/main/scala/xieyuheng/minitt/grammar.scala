@@ -1,4 +1,4 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
 import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._

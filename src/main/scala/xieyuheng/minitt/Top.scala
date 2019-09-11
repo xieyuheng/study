@@ -1,4 +1,4 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
 sealed trait Top
 final case class TopDecl(decl: Decl) extends Top

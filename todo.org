@@ -1,5 +1,5 @@
 - read code from file
-* mini_tt
+* minitt
 - readback
 - [maybe] parser
   - parser.parse_exp
@@ -35,3 +35,4 @@
 - ErrMsg and Span
 - better report with ErrMsg in context
 - [important] fix equals between rules -- how ? by ruleGen with uuid ?
+- concrete syntax for rule

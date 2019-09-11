@@ -1,6 +1,6 @@
-package xieyuheng.mini_tt
+package xieyuheng.minitt
 
-import xieyuheng.mini_tt.pretty._
+import xieyuheng.minitt.pretty._
 
 object eval {
   def ap(f: Value, arg: Value): Value = {

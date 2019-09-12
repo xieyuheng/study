@@ -17,7 +17,10 @@ object minitt {
 
   def print_help(): Unit = {
     val usage = s"""
+        |minitt ${version}
         |usage:
+        |  --help
+        |  --version
         |  --eval <file_name>
         """.stripMargin
     println(usage)

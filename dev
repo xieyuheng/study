@@ -49,6 +49,21 @@ release () {
         popd
 }
 
+get_classpath () {
+    mkdir -p target
+    sbt -error "export runtime:fullClasspath" > target/classpath
+}
+
+build_minitt () {
+    get_classpath
+
+    native-image \
+        --no-server \
+        -cp $(cat target/classpath) \
+        -H:Name="target/minitt" \
+        -H:Class="xieyuheng.minitt.minitt"
+}
+
 main () {
     for TASK in $@
     do

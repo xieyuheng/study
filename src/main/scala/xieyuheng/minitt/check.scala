@@ -2,12 +2,20 @@ package xieyuheng.minitt
 
 object check {
 
-  def checkDeclExt(env: Env, ctx: Ctx, decl: Decl): Ctx = ???
+  def check_decl(i: Int, env: Env, ctx: Ctx, decl: Decl): Either[Err, Ctx] = {
+    ???
+  }
 
-  def checkUniv(env: Env, ctx: Ctx, t: Exp): Boolean = ???
+  def check_univ(i: Int, env: Env, ctx: Ctx, t: Exp): Either[Err, Unit] = {
+    ???
+  }
 
-  def checkType(env: Env, ctx: Ctx, e: Exp, t: Val): Boolean = ???
+  def check_type(i: Int, env: Env, ctx: Ctx, e: Exp, t: Val): Either[Err, Unit] = {
+    ???
+  }
 
-  def infer(env: Env, ctx: Ctx, e: Exp): Val = ???
+  def check_infer(i: Int, env: Env, ctx: Ctx, e: Exp): Either[Err, Val] = {
+    ???
+  }
 
 }

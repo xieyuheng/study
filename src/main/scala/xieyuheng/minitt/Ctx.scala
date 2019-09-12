@@ -13,7 +13,7 @@ sealed trait Ctx {
     }
   }
 
-  def ext(pat: Pat, t: Val, v: Val): Either[ErrMsg, Ctx] = {
+  def ext(pat: Pat, t: Val, v: Val): Either[Err, Ctx] = {
     pat match {
       case PatVar(name: String) =>
         Right(CtxVar(name, t, this))
@@ -25,7 +25,11 @@ sealed trait Ctx {
               ctx2 <- ctx1.ext(cdr_pat, clo_fn.ap(car), cdr)
             } yield ctx2
           case _ =>
-            Left(ErrMsg(""))
+            Left(Err(
+              s"fail to extend ctx: ${this}\n" ++
+                s"pat: ${pat}\n" ++
+                s"t: ${t}\n" ++
+                s"v: ${v}\n"))
         }
       case PatSole() =>
         Right(this)

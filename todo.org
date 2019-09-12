@@ -1,8 +1,8 @@
 * minitt
-- checkDeclExt
-- checkUniv
-- checkType
-- infer
+- check_decl
+- check_univ
+- check_type
+- check_infer
 - more examples
 - be sure about the use of Pattern
   - Norm do not use Pattern

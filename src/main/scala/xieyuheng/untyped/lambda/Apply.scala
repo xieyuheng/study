@@ -6,15 +6,15 @@ case class Apply (
 ) extends Exp {
   def eval(env: Env): Either[ErrorMsg, Value] = {
     for {
-      fun <- rator.eval(env)
+      fn <- rator.eval(env)
       arg <- rand.eval(env)
-      result <- fun match {
-        case fun: Closure =>
-          fun.body.eval(fun.env.ext(fun.name, arg))
-        case fun: Neutral =>
-          Right(NeutralApply(fun, arg))
+      result <- fn match {
+        case fn: Closure =>
+          fn.body.eval(fn.env.ext(fn.name, arg))
+        case fn: Neutral =>
+          Right(NeutralApply(fn, arg))
         case _ =>
-          Left(ErrorMsg(s"unknown fun value type: ${fun}"))
+          Left(ErrorMsg(s"unknown fn value type: ${fn}"))
       }
     } yield result
   }

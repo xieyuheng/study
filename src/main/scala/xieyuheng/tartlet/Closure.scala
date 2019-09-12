@@ -7,10 +7,10 @@ sealed trait Closure {
 
 final case class NativeClosure (
   name: String,
-  fun: Value => Either[ErrorMsg, Value],
+  fn: Value => Either[ErrorMsg, Value],
 ) extends Closure {
   def apply(value: Value): Either[ErrorMsg, Value] =
-    fun(value)
+    fn(value)
 }
 
 final case class EnvClosure (

@@ -6,9 +6,9 @@ case class Apply (
 ) extends Eliminator {
   def eval(env: Env): Either[ErrorMsg, Value] = {
     for {
-      fun <- rator.eval(env)
+      fn <- rator.eval(env)
       arg <- rand.eval(env)
-      res <- Apply.exe(fun, arg)
+      res <- Apply.exe(fn, arg)
     } yield res
   }
 
@@ -53,10 +53,10 @@ case class Apply (
 
 object Apply {
   def exe(
-    fun: Value,
+    fn: Value,
     arg: Value,
   ): Either[ErrorMsg, Value] = {
-    fun match {
+    fn match {
       case ValueLambda(closure) =>
         closure.apply(arg)
       case TheNeutral(ValuePi(argType, retType), neutral) =>
@@ -65,10 +65,10 @@ object Apply {
         } yield TheNeutral(t, NeutralApply(neutral, TheValue(argType, arg)))
       case _ =>
         Left(ErrorMsg(
-          "fun should be " +
+          "fn should be " +
             "ValueLambda(closure) | " +
             "TheNeutral(ValuePi(argType, retType), neutral): " +
-            s"${fun}"))
+            s"${fn}"))
     }
   }
 }

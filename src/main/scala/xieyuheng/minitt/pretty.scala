@@ -50,8 +50,8 @@ object pretty {
       case Var(name) => name
       case Fn(pattern, body) =>
         s"${prettyPattern(pattern)} => ${prettyExp(body)}"
-      case Ap(fun, arg) =>
-        s"${prettyExp(fun)}(${prettyExp(arg)})"
+      case Ap(fn, arg) =>
+        s"${prettyExp(fn)}(${prettyExp(arg)})"
       case Pi(pattern, argType, t) =>
         s"(${prettyPattern(pattern)}: ${prettyExp(argType)}) -> ${prettyExp(t)}"
       case cons: Cons =>

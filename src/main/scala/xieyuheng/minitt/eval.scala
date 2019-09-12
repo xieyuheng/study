@@ -7,15 +7,16 @@ object eval {
     f match {
       case FnValue(fnclo) =>
         eval(fnclo.body, PatternEnv(fnclo.pattern, arg, fnclo.env))
-      case MatValue(chclo) => arg match {
-        case DataValue(tag, body) =>
-          chclo.mats.get(tag) match {
-            case Some(exp) => ap(eval(exp, chclo.env), body)
-            case None => throw new Exception()
-          }
-        case NeutralValue(target) => NeutralValue(MatNeutral(target, chclo))
-        case _ => throw new Exception()
-      }
+      case MatValue(chclo) =>
+        arg match {
+          case DataValue(tag, body) =>
+            chclo.mats.get(tag) match {
+              case Some(exp) => ap(eval(exp, chclo.env), body)
+              case None => throw new Exception()
+            }
+          case NeutralValue(target) => NeutralValue(MatNeutral(target, chclo))
+          case _ => throw new Exception()
+        }
       case NeutralValue(target) => NeutralValue(ApNeutral(target, arg))
       case _ => throw new Exception()
     }
@@ -44,17 +45,17 @@ object eval {
   def lookup(name: String, env: Env): Value = {
     env match {
       case PatternEnv(pattern, value, rest) =>
-        projectPattern(name, pattern, value) match {
+        project_pattern(name, pattern, value) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
       case DeclEnv(Let(pattern, t, e), rest) =>
-        projectPattern(name, pattern, eval(e, rest)) match {
+        project_pattern(name, pattern, eval(e, rest)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
       case DeclEnv(Letrec(pattern, t, e), rest) =>
-        projectPattern(name, pattern, eval(e, env)) match {
+        project_pattern(name, pattern, eval(e, env)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
@@ -64,7 +65,7 @@ object eval {
     }
   }
 
-  def projectPattern(name: String, pattern: Pattern, value: Value): Option[Value] = {
+  def project_pattern(name: String, pattern: Pattern, value: Value): Option[Value] = {
     pattern match {
       case VarPattern(name2) =>
         if (name == name2) {
@@ -73,9 +74,9 @@ object eval {
           None
         }
       case ConsPattern(carPattern: Pattern, cdrPattern: Pattern) =>
-        projectPattern(name, carPattern, car(value)) match {
+        project_pattern(name, carPattern, car(value)) match {
           case Some(value) => Some(value)
-          case None => projectPattern(name, cdrPattern, cdr(value)) match {
+          case None => project_pattern(name, cdrPattern, cdr(value)) match {
             case Some(value) => Some(value)
             case None => None
           }
@@ -89,7 +90,7 @@ object eval {
       case Var(name) => lookup(name, env)
       case Fn(pattern: Pattern, body: Exp) =>
         FnValue(FnClosure(pattern, body, env))
-      case Ap(fun: Exp, arg: Exp) => ap(eval(fun, env), eval(arg, env))
+      case Ap(fn: Exp, arg: Exp) => ap(eval(fn, env), eval(arg, env))
       case Pi(pattern: Pattern, argType: Exp, t: Exp) =>
         PiValue(eval(argType, env), FnClosure(pattern, t, env))
       case Cons(car, cdr) => ConsValue(eval(car, env), eval(cdr, env))

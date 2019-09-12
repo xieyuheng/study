@@ -1,5 +1,4 @@
 * minitt
-- we need Norm, NeuNorm, NormEnv
 - be sure about the use of Pattern
 - readback
 - Ctx
@@ -8,8 +7,9 @@
 - check
 - infer
 - more examples
-* tartlet
+* pie
 - change the style to grouping by function instead of grouping by data
+* tartlet
 - better expDSL
 - better Module
 - better tests

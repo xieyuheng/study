@@ -16,20 +16,20 @@ case class Module() {
   }
 
   def env: Env = {
-    var env: Env = EmptyEnv()
+    var env: Env = EnvEmpty()
     top_list.foreach {
       case TopDecl(decl) =>
-        env = DeclEnv(decl, env)
+        env = EnvDecl(decl, env)
       case _ => {}
     }
     env
   }
 
   def run(): Unit = {
-    var env: Env = EmptyEnv()
+    var env: Env = EnvEmpty()
     top_list.foreach {
       case TopDecl(decl) =>
-        env = DeclEnv(decl, env)
+        env = EnvDecl(decl, env)
       case TopEval(exp) =>
         print_exp(exp)
       case TopEq(e1, e2) =>

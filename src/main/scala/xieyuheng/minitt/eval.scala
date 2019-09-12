@@ -26,22 +26,22 @@ object eval {
 
   def lookup(name: String, env: Env): Val = {
     env match {
-      case PatEnv(pat, value, rest) =>
+      case EnvPat(pat, value, rest) =>
         project_pat(name, pat, value) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case DeclEnv(Let(pat, t, e), rest) =>
+      case EnvDecl(Let(pat, t, e), rest) =>
         project_pat(name, pat, eval(e, rest)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case DeclEnv(Letrec(pat, t, e), rest) =>
+      case EnvDecl(Letrec(pat, t, e), rest) =>
         project_pat(name, pat, eval(e, env)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case EmptyEnv() =>
+      case EnvEmpty() =>
         println(s"can not find name: ${name}")
         throw new Exception()
     }

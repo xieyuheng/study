@@ -5,7 +5,7 @@ object exe {
   def ap_clo(clo: Clo, arg: Val): Val = {
     clo match {
       case CloFn(pat: Pat, body: Exp, env: Env) =>
-        eval(body, PatEnv(pat, arg, env))
+        eval(body, EnvPat(pat, arg, env))
       case clo_mat @ CloMat(mats: Map[String, Exp], env: Env) =>
         arg match {
           case ValData(tag, body) =>

@@ -11,6 +11,7 @@ object grammar {
   def preserved_identifiers: Set[String] = Set(
     "let", "letrec",
     "sum", "match",
+    "sole",
     "trivial",
     "univ",
   )
@@ -166,9 +167,11 @@ object grammar {
       "cons_without_last_comma" ->
         List("[", non_empty_list(exp_comma), exp, "]"),
       "sigma" -> List("(", pat, ":", exp, ")", "*", "*", exp),
+      "sigma_list" -> List("$", "[", non_empty_list(sigma_entry), exp, "]"),
       "data" -> List(identifier, exp),
       "sum" -> List("sum", "{", non_empty_list(sum_clause), "}"),
       "sole" -> List("[", "]"),
+      "lit_sole" -> List("sole"),
       "trivial" -> List("trivial"),
       "univ" -> List("univ"),
     ))
@@ -205,13 +208,39 @@ object grammar {
           Cons(head, tail) } },
       "sigma" -> { case List(_, pat, _, arg_t, _, _, _, t) =>
         Sigma(pat_matcher(pat), exp_matcher(arg_t), exp_matcher(t)) },
+      "sigma_list" -> { case List(_, _, sigma_entry_list, exp, _) =>
+        non_empty_list_matcher(sigma_entry_matcher)(sigma_entry_list)
+          .foldRight(exp_matcher(exp)) { case ((pat, exp), rest) =>
+            Sigma(pat, exp, rest)
+          } },
       "data" -> { case List(Leaf(tag), exp) =>
         Data(tag, exp_matcher(exp)) },
       "sum" -> { case List(_, _, sum_clause_list, _) =>
         Sum(non_empty_list_matcher(sum_clause_matcher)(sum_clause_list).toMap) },
       "sole" -> { case _ => Sole() },
+      "lit_sole" -> { case _ => Sole() },
       "trivial" -> { case _ => Trivial() },
       "univ" -> { case _ => Univ() },
+    ))
+
+  def sigma_entry: Rule = Rule(
+    "sigma_entry", Map(
+      "arg" -> List(exp),
+      "arg_comma" -> List(exp, ","),
+      "arg_t" -> List(pat, ":", exp),
+      "arg_t_comma" -> List(pat, ":", exp, ","),
+    ))
+
+  def sigma_entry_matcher = Tree.matcher[(Pat, Exp)](
+    "sigma_entry", Map(
+      "arg" -> { case List(exp) =>
+        (PatSole(), exp_matcher(exp)) },
+      "arg_comma" -> { case List(exp, _) =>
+        (PatSole(), exp_matcher(exp)) },
+      "arg_t" -> { case List(pat, _, exp) =>
+        (pat_matcher(pat), exp_matcher(exp)) },
+      "arg_t_comma" -> { case List(pat, _, exp, _) =>
+        (pat_matcher(pat), exp_matcher(exp)) },
     ))
 
   def exp_comma = Rule(
@@ -226,18 +255,17 @@ object grammar {
 
   def sum_clause = Rule(
     "sum_clause", Map(
+      "sum_trivial" -> List(identifier, ";"),
       "sum_clause" -> List(identifier, exp, ";"),
     ))
 
   def sum_clause_matcher: Tree => (String, Exp) = Tree.matcher[(String, Exp)](
     "sum_clause", Map(
+      "sum_trivial" -> { case List(Leaf(name), _) =>
+        (name, Trivial())
+      },
       "sum_clause" -> { case List(Leaf(name), t, _) =>
-        val exp = exp_matcher(t)
-        if (exp == Sole()) {
-          (name, Trivial())
-        } else {
-          (name, exp)
-        }
+        (name, exp_matcher(t))
       },
     ))
 

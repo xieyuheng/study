@@ -12,8 +12,8 @@ object paper_test extends App {
   let id: (A: univ, A) -> A = (A, x) => x
 
   let bool_t: univ = sum {
-    true[];
-    false[];
+    true;
+    false;
   }
 
   let true: bool_t = true[]
@@ -34,8 +34,8 @@ object paper_test extends App {
   }
 
   letrec nat_t: univ = sum {
-    zero[];
-    succ[nat_t];
+    zero;
+    succ nat_t;
   }
 
   let zero: nat_t = zero[]
@@ -94,7 +94,7 @@ object paper_test extends App {
 
   letrec list_t: (A: univ) -> univ =
   A => sum {
-    nil[];
+    nil;
     cons (_: A) ** list_t(A);
   }
 

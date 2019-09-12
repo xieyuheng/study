@@ -20,8 +20,8 @@ object grammar_test extends App {
 
     s"""
     let bool_t: univ = sum {
-      true[];
-      false[];
+      true;
+      false;
     }
     """,
 
@@ -50,8 +50,8 @@ object grammar_test extends App {
 
     s"""
     letrec nat_t: univ = sum {
-      zero[];
-      succ[nat_t];
+      zero;
+      succ nat_t;
     }
     """,
 
@@ -142,64 +142,49 @@ object grammar_test extends App {
 
     s"""
     let x: X = sum {
-      nil[];
+      nil;
     }
     """,
 
     s"""
     let x: X = sum {
-      nil[];
-      nil2[];
+      nil;
+      nil2;
     }
     """,
 
     s"""
     let x: X = sum {
-      nil[];
-      nil2[];
-      nil3[];
+      nil;
+      nil2;
+      nil3;
     }
     """,
 
     s"""
     let x: X = sum {
-      cons[A, list_t(A), ];
+      cons (_: A) ** list_t(A);
     }
     """,
 
     s"""
     let x: X = sum {
-      cons[A, list_t(A), ];
-      cons2[A, list_t(A), ];
+      cons (_: A) ** list_t(A);
+      cons2 (_: A) ** list_t(A);
     }
     """,
 
     s"""
     let x: X = sum {
-      nil[];
-      cons[A, list_t(A)];
+      nil;
+      cons (_: A) ** list_t(A);
     }
     """,
 
     s"""
-    let x: X = sum {
-      nil[];
-      cons[A, list_t(A)];
-    }
-    """,
-
-    s"""
-    letrec x: X = sum {
-      nil[];
-      cons[A, list_t(A), ];
-    }
-    """,
-
-    s"""
-    letrec list_t: (A: univ) -> univ =
-    A => sum {
-      nil[];
-      cons[A, list_t(A)];
+    letrec list_t: univ = sum {
+      nil;
+      cons $$[A, list_t(A)];
     }
     """,
 
@@ -258,8 +243,8 @@ object grammar_test extends App {
     assert_decl_to_tree(
       s"""
       let bool_t: univ = sum {
-        true[];
-        false[];
+        true;
+        false;
       }
       """,
       Let("bool_t", Univ(),
@@ -397,8 +382,8 @@ object grammar_test extends App {
     assert_decl_to_tree(
       s"""
       letrec nat_t: univ = sum {
-        zero[];
-        succ[nat_t];
+        zero;
+        succ nat_t;
       }
       """,
       Letrec("nat_t", Univ(),

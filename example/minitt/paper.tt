@@ -1,8 +1,8 @@
 let id: (A: univ, A) -> A = (A, x) => x
 
 let bool_t: univ = sum {
-  true[];
-  false[];
+  true;
+  false;
 }
 
 let true: bool_t = true[]
@@ -23,8 +23,8 @@ let bool_elim: (
 }
 
 letrec nat_t: univ = sum {
-  zero[];
-  succ[nat_t];
+  zero;
+  succ nat_t;
 }
 
 let zero: nat_t = zero[]
@@ -83,8 +83,8 @@ letrec nat_eq: (nat_t, nat_t) -> bool_t = match {
 
 letrec list_t: (A: univ) -> univ =
   A => sum {
-    nil[];
-    cons (_: A) ** list_t(A);
+    nil;
+    cons $[A, list_t(A)];
   }
 
 letrec list_append: (

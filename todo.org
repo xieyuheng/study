@@ -1,4 +1,5 @@
 * minitt
+- be sure about the use of Pattarn 
 - readback
 - Ctx
 - checkDeclAndExtend

@@ -3,20 +3,27 @@ package xieyuheng.minitt
 import xieyuheng.minitt.pretty._
 
 object eval {
-  def ap(f: Value, arg: Value): Value = {
-    f match {
-      case FnValue(fnclo) =>
-        eval(fnclo.body, PatternEnv(fnclo.pattern, arg, fnclo.env))
-      case MatValue(chclo) =>
+  def apply_closure(closure: Closure, arg: Value): Value = {
+    closure match {
+      case FnClosure(pattern: Pattern, body: Exp, env: Env) =>
+        eval(body, PatternEnv(pattern, arg, env))
+      case mat_closure @ MatClosure(mats: Map[String, Exp], env: Env) =>
         arg match {
           case DataValue(tag, body) =>
-            chclo.mats.get(tag) match {
-              case Some(exp) => ap(eval(exp, chclo.env), body)
+            mats.get(tag) match {
+              case Some(exp) => ap(eval(exp, env), body)
               case None => throw new Exception()
             }
-          case NeutralValue(target) => NeutralValue(MatNeutral(target, chclo))
+          case NeutralValue(target) => NeutralValue(MatNeutral(target, mat_closure))
           case _ => throw new Exception()
         }
+    }
+  }
+
+  def ap(f: Value, arg: Value): Value = {
+    f match {
+      case FnValue(closure) => apply_closure(closure, arg)
+      case MatValue(closure) => apply_closure(closure, arg)
       case NeutralValue(target) => NeutralValue(ApNeutral(target, arg))
       case _ => throw new Exception()
     }

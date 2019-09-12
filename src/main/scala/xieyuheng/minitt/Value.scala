@@ -13,8 +13,9 @@ final case class DataValue(tag: String, body: Value) extends Value
 final case class SumValue(chclo: MatClosure) extends Value
 final case class MatValue(chclo: MatClosure) extends Value
 
-case class FnClosure(pattern: Pattern, body: Exp, env: Env)
-case class MatClosure(mats: Map[String, Exp], env: Env)
+sealed trait Closure
+final case class FnClosure(pattern: Pattern, body: Exp, env: Env) extends Closure
+final case class MatClosure(mats: Map[String, Exp], env: Env) extends Closure
 
 sealed trait Neutral
 final case class VarNeutral(name: String) extends Neutral

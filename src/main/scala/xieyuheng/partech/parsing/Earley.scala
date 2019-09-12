@@ -210,15 +210,21 @@ case class Earley(words: List[Word], rule: Rule) {
   val recognize: Boolean = completedStarts.length > 0
 
   def parse(): Either[ErrMsg, Tree] = {
-    if (completedStarts.length != 1) {
+    if (completedStarts.length == 0) {
       Left(ErrMsg("Earley.parse",
-        s"(completedStarts.length != 1), completedStarts: ${completedStarts}",
+        s"fail to recognize",
+        Span(0, 0)))
+    } else if (completedStarts.length > 1) {
+      Left(ErrMsg("Earley.parse",
+        s"grammar is ambiguous, found ${completedStarts.length} parse trees",
         Span(0, 0)))
     } else {
       val startItem = completedStarts(0)
       collectNode(startItem).flatMap { case tree =>
         if (tree.children.length != 1) {
-          Left(ErrMsg("Earley.parse", "(tree.children.length != 1)", Span(0, 0)))
+          Left(ErrMsg("Earley.parse",
+            s"collected multiple nodes under start, number of nodes: ${tree.children.length}",
+            Span(0, 0)))
         } else {
           Right(tree.children(0))
         }

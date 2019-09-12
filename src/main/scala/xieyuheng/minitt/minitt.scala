@@ -53,18 +53,24 @@ object minitt {
   }
 
   def run_file(file_name: String): Unit = {
-    val code = os.read(os.Path(file_name, base = os.pwd))
+    val path = os.Path(file_name, base = os.pwd)
 
-    var module = Parser(grammar.lexer, grammar.module).parse(code) match {
-      case Right(tree) => grammar.module_matcher(tree)
-      case Left(error) =>
-        println(s"[minitt] parse error")
-        println(s"- file_name: ${file_name}")
-        println(s"- code: ${code}")
-        println(s"- error: ${error}")
-        throw new Exception()
+    if (!os.isFile(path)) {
+      println(s"not a file: ${path}")
+      System.exit(1)
     }
-    module.run()
+
+    val code = os.read(path)
+
+    Parser(grammar.lexer, grammar.module).parse(code) match {
+      case Right(tree) =>
+        val module = grammar.module_matcher(tree)
+        module.run()
+      case Left(error) =>
+        println(s"[parse_error] ${error.msg}")
+        println(s"- file: ${file_name}")
+        System.exit(1)
+    }
   }
 
 }

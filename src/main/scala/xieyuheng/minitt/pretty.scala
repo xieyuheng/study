@@ -107,15 +107,27 @@ object pretty {
     }
   }
 
+
+  def prettyClo(clo: Clo): String = {
+    clo match {
+      case CloFn(pat: Pat, body: Exp, env: Env) =>
+        s"(${prettyPat(pat)}) => ${prettyExp(body)}"
+      case CloMat(mats, env: Env) =>
+        s"match {${maybeNewline(prettyExpMap(mats))}}"
+      case CloTag(tag: String, clo: Clo) =>
+        s"${prettyClo(clo)} on ${tag}"
+    }
+  }
+
   def prettyVal(value: Val): String = {
     value match {
       case ValNeu(neu: Neu) => prettyNeu(neu)
       case ValFn(CloFn(pat: Pat, body: Exp, env: Env)) =>
         s"${prettyPat(pat)} => ${prettyExp(body)}"
-      case ValPi(arg: Val, CloFn(pat: Pat, body: Exp, env: Env)) =>
-        s"(${prettyPat(pat)}: ${prettyVal(arg)}) -> ${prettyExp(body)}"
-      case ValSigma(arg: Val, CloFn(pat: Pat, body: Exp, env: Env)) =>
-        s"(${prettyPat(pat)}: ${prettyVal(arg)}) ** ${prettyExp(body)}"
+      case ValPi(arg: Val, clo) =>
+        s"(${prettyVal(arg)}) -> ${prettyClo(clo)}"
+      case ValSigma(arg: Val, clo) =>
+        s"(${prettyVal(arg)}) ** ${prettyClo(clo)}"
       case ValUniv() => "univ"
       case cons: ValCons =>
         val str = cons_val_to_list(cons).map(prettyVal(_)).mkString(", ")

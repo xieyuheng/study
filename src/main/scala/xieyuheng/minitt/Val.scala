@@ -3,8 +3,8 @@ package xieyuheng.minitt
 sealed trait Val
 final case class ValNeu(neu: Neu) extends Val
 final case class ValFn(clo_fn: CloFn) extends Val
-final case class ValPi(arg_t: Val, clo_fn: CloFn) extends Val
-final case class ValSigma(arg_t: Val, clo_fn: CloFn) extends Val
+final case class ValPi(arg_t: Val, clo: Clo) extends Val
+final case class ValSigma(arg_t: Val, clo: Clo) extends Val
 final case class ValUniv() extends Val
 final case class ValCons(car: Val, cdr: Val) extends Val
 final case class ValSole() extends Val
@@ -22,18 +22,23 @@ sealed trait Clo {
         arg match {
           case ValData(tag, body) =>
             mats.get(tag) match {
-              case Some(exp) => eval.ap(eval(exp, env), body)
-              case None => throw new Exception()
+              case Some(exp) =>
+                eval.ap(eval(exp, env), body)
+              case None =>
+                throw new Exception()
             }
           case ValNeu(target) => ValNeu(NeuMat(target, clo_mat))
           case _ => throw new Exception()
         }
+      case CloTag(tag: String, clo: Clo) =>
+        clo.ap(ValData(tag, arg))
     }
   }
 }
 
 final case class CloFn(pat: Pat, body: Exp, env: Env) extends Clo
 final case class CloMat(mats: Map[String, Exp], env: Env) extends Clo
+final case class CloTag(tag: String, clo: Clo) extends Clo
 
 sealed trait Neu
 final case class NeuVar(name: String) extends Neu

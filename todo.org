@@ -1,5 +1,5 @@
 * minitt
-- check
+- Block extends Exp
 - more examples
 - be sure about the use of Pattern
   - Norm do not use Pattern

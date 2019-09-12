@@ -84,7 +84,7 @@ letrec nat_eq: (nat_t, nat_t) -> bool_t = match {
 letrec list_t: (A: univ) -> univ =
   A => sum {
     nil[];
-    cons[A, list_t(A)];
+    cons (_: A) ** list_t(A);
   }
 
 letrec list_append: (

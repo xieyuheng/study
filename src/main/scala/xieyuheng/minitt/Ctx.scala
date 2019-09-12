@@ -1,5 +1,7 @@
 package xieyuheng.minitt
 
+import xieyuheng.minitt.pretty._
+
 sealed trait Ctx {
   def lookup(name: String): Option[Val] = {
     this match {
@@ -17,19 +19,19 @@ sealed trait Ctx {
     pat match {
       case PatVar(name: String) =>
         Right(CtxVar(name, t, this))
-      case PatCons(car_pat: Pat, cdr_pat: Pat) =>
+      case PatCons(car: Pat, cdr: Pat) =>
         (t, v) match {
-          case (ValSigma(arg_t: Val, clo_fn: CloFn), ValCons(car: Val, cdr: Val)) =>
+          case (ValSigma(arg_t: Val, clo: Clo), v) =>
             for {
-              ctx1 <- this.ext(car_pat, arg_t, car)
-              ctx2 <- ctx1.ext(cdr_pat, clo_fn.ap(car), cdr)
+              ctx1 <- this.ext(car, arg_t, eval.car(v))
+              ctx2 <- ctx1.ext(cdr, clo.ap(eval.car(v)), eval.cdr(v))
             } yield ctx2
           case _ =>
             Left(Err(
-              s"fail to extend ctx: ${this}\n" ++
-                s"pat: ${pat}\n" ++
-                s"t: ${t}\n" ++
-                s"v: ${v}\n"))
+              s"fail to extend ctx\n" ++
+                s"pat: ${prettyPat(pat)}\n" ++
+                s"t: ${prettyVal(t)}\n" ++
+                s"v: ${prettyVal(v)}\n"))
         }
       case PatSole() =>
         Right(this)

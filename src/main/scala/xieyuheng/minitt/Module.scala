@@ -1,5 +1,6 @@
 package xieyuheng.minitt
 
+import xieyuheng.minitt.check._
 import xieyuheng.minitt.pretty._
 
 case class Module() {
@@ -23,6 +24,23 @@ case class Module() {
       case _ => {}
     }
     env
+  }
+
+  def check(): Unit = {
+    var env: Env = EnvEmpty()
+    var ctx: Ctx = CtxEmpty()
+    top_list.foreach {
+      case TopDecl(decl) =>
+        check_decl(0, env, ctx, decl) match {
+          case Right(ctx2) =>
+            ctx = ctx2
+          case Left(err) =>
+            println(s"${err.msg}")
+            throw new Exception()
+        }
+        env = EnvDecl(decl, env)
+      case _ =>
+    }
   }
 
   def run(): Unit = {

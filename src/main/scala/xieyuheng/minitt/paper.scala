@@ -95,7 +95,7 @@ object paper_test extends App {
   letrec list_t: (A: univ) -> univ =
   A => sum {
     nil[];
-    cons[A, list_t(A)];
+    cons (_: A) ** list_t(A);
   }
 
   letrec list_append:
@@ -144,5 +144,6 @@ object paper_test extends App {
       throw new Exception()
   }
 
+  module.check()
   module.run()
 }

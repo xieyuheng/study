@@ -10,17 +10,17 @@ object readback {
     value match {
       case ValNeu(neu: Neu) =>
         readback_neu(i, neu)
-      case ValFn(clo_fn: CloFn) =>
+      case ValFn(clo) =>
         val name = fresh_name(i)
-        val body = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
+        val body = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name))))
         NormFn(name, body)
-      case ValPi(arg_t: Val, clo_fn: CloFn) =>
+      case ValPi(arg_t: Val, clo) =>
         val name = fresh_name(i)
-        val dep_t = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
+        val dep_t = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name))))
         NormPi(name, readback_val(i, arg_t), dep_t)
-      case ValSigma(arg_t: Val, clo_fn: CloFn) =>
+      case ValSigma(arg_t: Val, clo) =>
         val name = fresh_name(i)
-        val dep_t = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
+        val dep_t = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name))))
         NormSigma(name, readback_val(i, arg_t), dep_t)
       case ValUniv() => NormUniv()
       case ValCons(car: Val, cdr: Val) =>

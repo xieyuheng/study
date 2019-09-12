@@ -14,12 +14,12 @@ object grammar_test extends App {
     """,
 
     s"""
-    let id: (A: U) -> (_: A) -> A =
+    let id: (A: univ) -> (_: A) -> A =
     A => x => x
     """,
 
     s"""
-    let bool_t: U = sum {
+    let bool_t: univ = sum {
       true[];
       false[];
     }
@@ -27,7 +27,7 @@ object grammar_test extends App {
 
     s"""
     let bool_elim:
-      (C: (_: bool_t) -> U) ->
+      (C: (_: bool_t) -> univ) ->
       (h0: C(true)) ->
       (h1: C(false)) ->
       (b: bool_t) -> C(b) =
@@ -39,7 +39,7 @@ object grammar_test extends App {
 
     s"""
     let bool_elim:
-      (C: (_: bool_t) -> U) ->
+      (C: (_: bool_t) -> univ) ->
       (h0: C(true), h1: C(false)) ->
       (b: bool_t) -> C(b) =
     C => h0 => h1 => match {
@@ -49,7 +49,7 @@ object grammar_test extends App {
     """,
 
     s"""
-    letrec nat_t: U = sum {
+    letrec nat_t: univ = sum {
       zero[];
       succ[nat_t];
     }
@@ -101,7 +101,7 @@ object grammar_test extends App {
 
     s"""
     letrec nat_rec:
-      (C: (_: nat_t) -> U) ->
+      (C: (_: nat_t) -> univ) ->
       (a: C(zero)) ->
       (g: (n: nat_t) -> (_: C(n)) -> C(succ[n])) ->
       (n: nat_t) -> C(n) =
@@ -137,7 +137,7 @@ object grammar_test extends App {
     """,
 
     s"""
-    let x: (_: X) -> U = A => cons[A, list_t(A), ]
+    let x: (_: X) -> univ = A => cons[A, list_t(A), ]
     """,
 
     s"""
@@ -196,7 +196,7 @@ object grammar_test extends App {
     """,
 
     s"""
-    letrec list_t: (A: U) -> U =
+    letrec list_t: (A: univ) -> univ =
     A => sum {
       nil[];
       cons[A, list_t(A)];
@@ -204,7 +204,7 @@ object grammar_test extends App {
     """,
 
     s"""
-    letrec list_append: (A: U) -> (x: list_t(A)) -> (y: list_t(A)) -> list_t(A) =
+    letrec list_append: (A: univ) -> (x: list_t(A)) -> (y: list_t(A)) -> list_t(A) =
     A => match {
       nil[] => y => y;
       cons[head, tail] => y => cons[head, list_append(A, tail, y)];
@@ -247,25 +247,25 @@ object grammar_test extends App {
   val test_decl_to_tree = {
     assert_decl_to_tree(
       s"""
-      let id: (A: U, A) -> A =
+      let id: (A: univ, A) -> A =
       A => x => x
       """,
       Let("id",
-        pi("A" :: U) { "A" ->: "A" },
+        pi("A" :: Univ()) { "A" ->: "A" },
         fn("A", "x") { "x" })
     )
 
     assert_decl_to_tree(
       s"""
-      let bool_t: U = sum {
+      let bool_t: univ = sum {
         true[];
         false[];
       }
       """,
-      Let("bool_t", U,
+      Let("bool_t", Univ(),
         sum(
-          "true" -> Trivial,
-          "false" -> Trivial))
+          "true" -> Trivial(),
+          "false" -> Trivial()))
     )
 
     assert_decl_to_tree(
@@ -285,7 +285,7 @@ object grammar_test extends App {
     assert_decl_to_tree(
       s"""
       let bool_elim:
-        (C: (bool_t) -> U) ->
+        (C: (bool_t) -> univ) ->
         (h0: C(true)) ->
         (h1: C(false)) ->
         (b: bool_t) -> C(b) =
@@ -295,7 +295,7 @@ object grammar_test extends App {
       }
       """,
       Let("bool_elim",
-        pi("C" :: "bool_t" ->: U) {
+        pi("C" :: "bool_t" ->: Univ()) {
           pi("h0" :: ("C" $ "true")) {
             pi("h1" :: ("C" $ "false")) {
               pi("b" :: "bool_t") { "C" $ "b" }
@@ -308,7 +308,7 @@ object grammar_test extends App {
     assert_decl_to_tree(
       s"""
       let bool_elim:
-        (C: (bool_t) -> U) ->
+        (C: (bool_t) -> univ) ->
         (h0: C(true), h1: C(false)) ->
         (b: bool_t) -> C(b) =
       C => h0 => h1 => match {
@@ -317,7 +317,7 @@ object grammar_test extends App {
       }
       """,
       Let("bool_elim",
-        pi("C" :: "bool_t" ->: U) {
+        pi("C" :: "bool_t" ->: Univ()) {
           pi("h0" :: ("C" $ "true")) {
             pi("h1" :: ("C" $ "false")) {
               pi("b" :: "bool_t") { "C" $ "b" }
@@ -330,7 +330,7 @@ object grammar_test extends App {
     assert_decl_to_tree(
       s"""
       let bool_elim: (
-        C: (bool_t) -> U,
+        C: (bool_t) -> univ,
         h0: C(true),
         h1: C(false),
         b: bool_t,
@@ -340,7 +340,7 @@ object grammar_test extends App {
       }
       """,
       Let("bool_elim",
-        pi("C" :: "bool_t" ->: U) {
+        pi("C" :: "bool_t" ->: Univ()) {
           pi("h0" :: ("C" $ "true")) {
             pi("h1" :: ("C" $ "false")) {
               pi("b" :: "bool_t") { "C" $ "b" }
@@ -353,7 +353,7 @@ object grammar_test extends App {
     assert_decl_to_tree(
       s"""
       let bool_elim: (
-        C: (bool_t) -> U,
+        C: (bool_t) -> univ,
         C(true),
         C(false),
         b: bool_t,
@@ -363,7 +363,7 @@ object grammar_test extends App {
       }
       """,
       Let("bool_elim",
-        pi("C" :: "bool_t" ->: U) {
+        pi("C" :: "bool_t" ->: Univ()) {
           ("C" $ "true") ->:
           ("C" $ "false") ->:
           pi("b" :: "bool_t") { "C" $ "b" } },
@@ -375,7 +375,7 @@ object grammar_test extends App {
     assert_decl_to_tree(
       s"""
       let bool_elim: (
-        C: (bool_t) -> U,
+        C: (bool_t) -> univ,
         C(true),
         C(false),
         b: bool_t,
@@ -385,7 +385,7 @@ object grammar_test extends App {
       }
       """,
       Let("bool_elim",
-        pi("C" :: "bool_t" ->: U) {
+        pi("C" :: "bool_t" ->: Univ()) {
           ("C" $ "true") ->:
           ("C" $ "false") ->:
           pi("b" :: "bool_t") { "C" $ "b" } },
@@ -396,14 +396,14 @@ object grammar_test extends App {
 
     assert_decl_to_tree(
       s"""
-      letrec nat_t: U = sum {
+      letrec nat_t: univ = sum {
         zero[];
         succ[nat_t];
       }
       """,
-      Letrec("nat_t", U,
+      Letrec("nat_t", Univ(),
         sum(
-          "zero" -> Trivial,
+          "zero" -> Trivial(),
           "succ" -> "nat_t"))
     )
 

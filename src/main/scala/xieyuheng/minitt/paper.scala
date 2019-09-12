@@ -9,9 +9,9 @@ import xieyuheng.minitt.expDSL._
 object paper_test extends App {
 
   val code = s"""
-  let id: (A: U, A) -> A = (A, x) => x
+  let id: (A: univ, A) -> A = (A, x) => x
 
-  let bool_t: U = sum {
+  let bool_t: univ = sum {
     true[];
     false[];
   }
@@ -21,10 +21,10 @@ object paper_test extends App {
 
   eq! id(bool_t, true) true
   eq! id(bool_t, false) false
-  eq! id((A: U, A) -> A, id) id
+  eq! id((A: univ, A) -> A, id) id
 
   let bool_elim: (
-    C: (bool_t) -> U,
+    C: (bool_t) -> univ,
     C(true),
     C(false),
     b: bool_t,
@@ -33,7 +33,7 @@ object paper_test extends App {
     false[] => h1;
   }
 
-  letrec nat_t: U = sum {
+  letrec nat_t: univ = sum {
     zero[];
     succ[nat_t];
   }
@@ -56,7 +56,7 @@ object paper_test extends App {
   eval! three
 
   letrec nat_rec:
-    (C: (_: nat_t) -> U) ->
+    (C: (_: nat_t) -> univ) ->
     (a: C(zero)) ->
     (g: (n: nat_t) -> (_: C(n)) -> C(succ[n])) ->
     (n: nat_t) -> C(n) =
@@ -92,14 +92,14 @@ object paper_test extends App {
     };
   }
 
-  letrec list_t: (A: U) -> U =
+  letrec list_t: (A: univ) -> univ =
   A => sum {
     nil[];
     cons[A, list_t(A)];
   }
 
   letrec list_append:
-    (A: U) ->
+    (A: univ) ->
     (x: list_t(A)) ->
     (y: list_t(A)) -> list_t(A) =
   A => match {

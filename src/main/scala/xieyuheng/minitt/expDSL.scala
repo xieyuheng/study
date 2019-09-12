@@ -9,7 +9,7 @@ object expDSL {
 
   def cons(car: Pattern, cdr: Pattern): Pattern = ConsPattern(car, cdr)
 
-  def __ = SolePattern
+  def __ = SolePattern()
 
   def fn(patterns: Pattern*)(body: Exp): Exp = {
     var exp = body
@@ -24,15 +24,15 @@ object expDSL {
     Pi(pattern, arg, t)
   }
 
-  def %(tag: String, body: Exp = Sole): Data = Data(tag, body)
+  def %(tag: String, body: Exp = Sole()): Data = Data(tag, body)
 
   implicit class PatternExtension(pattern: Pattern) {
     def *(cdr: Pattern): Pattern = ConsPattern(pattern, cdr)
   }
 
   implicit class ExpExtension(exp: Exp) {
-    def ->:(arg: Exp): Exp = Pi(SolePattern, arg, exp)
-    def **(t: Exp): Exp = Sigma(SolePattern, exp, t)
+    def ->:(arg: Exp): Exp = Pi(SolePattern(), arg, exp)
+    def **(t: Exp): Exp = Sigma(SolePattern(), exp, t)
     def *(cdr: Exp): Exp = Cons(exp, cdr)
     def $(arg: Exp): Exp = Ap(exp, arg)
     def ::(pattern: Pattern): (Pattern, Exp) = (pattern, exp)

@@ -5,19 +5,19 @@ import xieyuheng.minitt.expDSL._
 object paper_without_parser extends Module {
 
   let("id",
-    pi("A" :: U) { "A" ->: "A" },
+    pi("A" :: Univ()) { "A" ->: "A" },
     fn("A", "x") { "x" })
 
-  let("bool_t", U,
+  let("bool_t", Univ(),
     sum(
-      "true" -> Trivial,
-      "false" -> Trivial))
+      "true" -> Trivial(),
+      "false" -> Trivial()))
 
   let("true", "bool_t", %("true"))
   let("false", "bool_t", %("false"))
 
   let("bool_elim",
-    pi("C" :: "bool_t" ->: U) {
+    pi("C" :: "bool_t" ->: Univ()) {
       ("C" $ %("true")) ->:
       ("C" $ %("false")) ->:
       pi("b" :: "bool_t") { "C" $ "b" } },
@@ -25,9 +25,9 @@ object paper_without_parser extends Module {
       "true" -> fn("_") { "h0" },
       "false" -> fn("_") { "h1" }) })
 
-  letrec("nat_t", U,
+  letrec("nat_t", Univ(),
     sum(
-      "zero" -> Trivial,
+      "zero" -> Trivial(),
       "succ" -> "nat_t"))
 
   let("zero", "nat_t", %("zero"))
@@ -43,7 +43,7 @@ object paper_without_parser extends Module {
   let("ten", "nat_t", %("succ", "nine"))
 
   letrec("nat_rec",
-    pi("C" :: "nat_t" ->: U) {
+    pi("C" :: "nat_t" ->: Univ()) {
       ("C" $ %("zero")) ->:
       pi("n" :: "nat_t") { ("C" $ "n") ->: ("C" $ %("succ", "n")) } ->:
       pi("n" :: "nat_t") { ("C" $ "n") } },
@@ -76,13 +76,13 @@ object paper_without_parser extends Module {
         "zero" -> fn("_") { %("false") },
         "succ" -> fn("y") { "nat_eq" $ "x" $ "y" }) }))
 
-  letrec("list_t", U ->: U,
+  letrec("list_t", Univ() ->: Univ(),
     fn("A") { sum(
-      "nil" -> Trivial,
+      "nil" -> Trivial(),
       "cons" -> "A" * ("list_t" $ "A")) })
 
   letrec("list_append",
-    pi("A" :: U) {
+    pi("A" :: Univ()) {
       "list_t" $ "A" ->: "list_t" $ "A" ->: "list_t" $ "A" },
     fn("A") { mat(
       "nil" -> fn("_") { fn("y") { "y" } },

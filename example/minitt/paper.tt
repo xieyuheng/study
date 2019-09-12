@@ -1,6 +1,6 @@
-let id: (A: U, A) -> A = (A, x) => x
+let id: (A: univ, A) -> A = (A, x) => x
 
-let bool_t: U = sum {
+let bool_t: univ = sum {
   true[];
   false[];
 }
@@ -10,10 +10,10 @@ let false: bool_t = false[]
 
 eq! id(bool_t, true) true
 eq! id(bool_t, false) false
-eq! id((A: U, A) -> A, id) id
+eq! id((A: univ, A) -> A, id) id
 
 let bool_elim: (
-  C: (bool_t) -> U,
+  C: (bool_t) -> univ,
   C(true),
   C(false),
   b: bool_t,
@@ -22,7 +22,7 @@ let bool_elim: (
   false[] => h1;
 }
 
-letrec nat_t: U = sum {
+letrec nat_t: univ = sum {
   zero[];
   succ[nat_t];
 }
@@ -45,7 +45,7 @@ eval! two
 eval! three
 
 letrec nat_rec: (
-  C: (nat_t) -> U,
+  C: (nat_t) -> univ,
   C(zero),
   (n: nat_t, C(n)) -> C(succ[n]),
   n: nat_t) -> C(n) =
@@ -81,14 +81,14 @@ letrec nat_eq: (nat_t, nat_t) -> bool_t = match {
   };
 }
 
-letrec list_t: (A: U) -> U =
+letrec list_t: (A: univ) -> univ =
   A => sum {
     nil[];
     cons[A, list_t(A)];
   }
 
 letrec list_append: (
-  A: U,
+  A: univ,
   list_t(A),
   list_t(A)) -> list_t(A) =
 A => match {

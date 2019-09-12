@@ -12,7 +12,7 @@ object grammar {
     "let", "letrec",
     "sum", "match",
     "trivial",
-    "U",
+    "univ",
   )
 
   def identifier: WordPred = WordPred(
@@ -122,19 +122,19 @@ object grammar {
     "multi_pi_arg", Map(
       "arg" -> List(exp),
       "arg_comma" -> List(exp, ","),
-      "arg_type" -> List(pattern, ":", exp),
-      "arg_type_comma" -> List(pattern, ":", exp, ","),
+      "arg_t" -> List(pattern, ":", exp),
+      "arg_t_comma" -> List(pattern, ":", exp, ","),
     ))
 
   def multi_pi_arg_matcher = Tree.matcher[(Pattern, Exp)](
     "multi_pi_arg", Map(
       "arg" -> { case List(exp) =>
-        (SolePattern, exp_matcher(exp)) },
+        (SolePattern(), exp_matcher(exp)) },
       "arg_comma" -> { case List(exp, _) =>
-        (SolePattern, exp_matcher(exp)) },
-      "arg_type" -> { case List(pattern, _, exp) =>
+        (SolePattern(), exp_matcher(exp)) },
+      "arg_t" -> { case List(pattern, _, exp) =>
         (pattern_matcher(pattern), exp_matcher(exp)) },
-      "arg_type_comma" -> { case List(pattern, _, exp, _) =>
+      "arg_t_comma" -> { case List(pattern, _, exp, _) =>
         (pattern_matcher(pattern), exp_matcher(exp)) },
     ))
 
@@ -170,18 +170,18 @@ object grammar {
       "sum" -> List("sum", "{", non_empty_list(sum_clause), "}"),
       "sole" -> List("[", "]"),
       "trivial" -> List("trivial"),
-      "U" -> List("U"),
+      "univ" -> List("univ"),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "non_rator", Map(
-      "pi" -> { case List(_, pattern, _, argType, _, _, _, t) =>
-        Pi(pattern_matcher(pattern), exp_matcher(argType), exp_matcher(t)) },
+      "pi" -> { case List(_, pattern, _, arg_t, _, _, _, t) =>
+        Pi(pattern_matcher(pattern), exp_matcher(arg_t), exp_matcher(t)) },
       "multi_pi" -> { case List(_, multi_pi_arg_list, _, _, _, t) =>
         var exp = exp_matcher(t)
         non_empty_list_matcher(multi_pi_arg_matcher)(multi_pi_arg_list)
-          .reverse.foreach { case (pattern, argType) =>
-            exp = Pi(pattern, argType, exp)
+          .reverse.foreach { case (pattern, arg_t) =>
+            exp = Pi(pattern, arg_t, exp)
           }
         exp },
       "fn" -> { case List(pattern, _, _, t) =>
@@ -203,15 +203,15 @@ object grammar {
         val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
         list.foldRight(exp_matcher(exp)) { case (head, tail) =>
           Cons(head, tail) } },
-      "sigma" -> { case List(_, pattern, _, argType, _, _, _, t) =>
-        Sigma(pattern_matcher(pattern), exp_matcher(argType), exp_matcher(t)) },
+      "sigma" -> { case List(_, pattern, _, arg_t, _, _, _, t) =>
+        Sigma(pattern_matcher(pattern), exp_matcher(arg_t), exp_matcher(t)) },
       "data" -> { case List(Leaf(tag), exp) =>
         Data(tag, exp_matcher(exp)) },
       "sum" -> { case List(_, _, sum_clause_list, _) =>
         Sum(non_empty_list_matcher(sum_clause_matcher)(sum_clause_list).toMap) },
-      "sole" -> { case _ => Sole },
-      "trivial" -> { case _ => Trivial },
-      "U" -> { case _ => U },
+      "sole" -> { case _ => Sole() },
+      "trivial" -> { case _ => Trivial() },
+      "univ" -> { case _ => Univ() },
     ))
 
   def exp_comma = Rule(
@@ -233,8 +233,8 @@ object grammar {
     "sum_clause", Map(
       "sum_clause" -> { case List(Leaf(name), t, _) =>
         val exp = exp_matcher(t)
-        if (exp == Sole) {
-          (name, Trivial)
+        if (exp == Sole()) {
+          (name, Trivial())
         } else {
           (name, exp)
         }
@@ -277,7 +277,7 @@ object grammar {
         val list = non_empty_list_matcher(pattern_comma_matcher)(pattern_comma_list)
         list.foldRight(pattern_matcher(pattern)) { case (head, tail) =>
           ConsPattern(head, tail) } },
-      "sole" -> { case _ => SolePattern },
+      "sole" -> { case _ => SolePattern() },
     ))
 
   def pattern_comma = Rule(

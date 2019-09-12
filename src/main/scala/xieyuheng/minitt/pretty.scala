@@ -52,18 +52,18 @@ object pretty {
         s"${prettyPattern(pattern)} => ${prettyExp(body)}"
       case Ap(fn, arg) =>
         s"${prettyExp(fn)}(${prettyExp(arg)})"
-      case Pi(pattern, argType, t) =>
-        s"(${prettyPattern(pattern)}: ${prettyExp(argType)}) -> ${prettyExp(t)}"
+      case Pi(pattern, arg_t, t) =>
+        s"(${prettyPattern(pattern)}: ${prettyExp(arg_t)}) -> ${prettyExp(t)}"
       case cons: Cons =>
         val str = cons_exp_to_list(cons).map(prettyExp(_)).mkString(", ")
         s"[${str}]"
       case Car(pair) => s"${prettyExp(pair)}.car"
       case Cdr(pair) => s"${prettyExp(pair)}.cdr"
-      case Sigma(pattern, argType, t) =>
-        s"(${prettyPattern(pattern)}: ${prettyExp(argType)}) ** ${prettyExp(t)}"
+      case Sigma(pattern, arg_t, t) =>
+        s"(${prettyPattern(pattern)}: ${prettyExp(arg_t)}) ** ${prettyExp(t)}"
       case Data(tag: String, body: Cons) =>
         s"${tag}${prettyExp(body)}"
-      case Data(tag: String, body: Sole.type) =>
+      case Data(tag: String, body: Sole) =>
         s"${tag}${prettyExp(body)}"
       case Data(tag: String, body: Exp) =>
         s"${tag}[${prettyExp(body)}]"
@@ -71,9 +71,9 @@ object pretty {
         s"match {${prettyExpMap(mats)}}"
       case Sum(mats: Map[String, Exp]) =>
         s"sum {${prettyExpMap(mats)}}"
-      case Sole => "[]"
-      case Trivial => "[]"
-      case U => "U"
+      case Sole() => "[]"
+      case Trivial() => "[]"
+      case Univ() => "univ"
     }
   }
 
@@ -81,56 +81,56 @@ object pretty {
     pattern match {
       case VarPattern(name) => name
       case ConsPattern(car, cdr) => s"${prettyPattern(car)} * ${prettyPattern(cdr)}"
-      case SolePattern => "[]"
+      case SolePattern() => "[]"
     }
   }
 
-  def prettyNeutral(neutral: Neutral): String = {
-    neutral match {
-      case VarNeutral(name: String) =>
+  def prettyNeu(neu: Neu): String = {
+    neu match {
+      case NeuVar(name: String) =>
         s"[${name}]"
-      case ApNeutral(target: Neutral, arg: Value) =>
-        s"[${prettyNeutral(target)}(${prettyValue(arg)})]"
-      case CarNeutral(target: Neutral) =>
-        s"[${prettyNeutral(target)}.car]"
-      case CdrNeutral(target: Neutral) =>
-        s"[${prettyNeutral(target)}.cdr]"
-      case MatNeutral(target: Neutral, MatClosure(mats: Map[String, Exp], env: Env)) =>
-        s"[match {${maybeNewline(prettyExpMap(mats))}} (${prettyNeutral(target)})]"
+      case NeuAp(target: Neu, arg: Val) =>
+        s"[${prettyNeu(target)}(${prettyVal(arg)})]"
+      case NeuCar(target: Neu) =>
+        s"[${prettyNeu(target)}.car]"
+      case NeuCdr(target: Neu) =>
+        s"[${prettyNeu(target)}.cdr]"
+      case NeuMat(target: Neu, CloMat(mats: Map[String, Exp], env: Env)) =>
+        s"[match {${maybeNewline(prettyExpMap(mats))}} (${prettyNeu(target)})]"
     }
   }
 
-  def cons_value_to_list(cons: ConsValue): List[Value] = {
+  def cons_val_to_list(cons: ValCons): List[Val] = {
     cons.cdr match {
-      case cdr: ConsValue => cons.car :: cons_value_to_list(cdr)
+      case cdr: ValCons => cons.car :: cons_val_to_list(cdr)
       case _ => cons.car :: List(cons.cdr)
     }
   }
 
-  def prettyValue(value: Value): String = {
+  def prettyVal(value: Val): String = {
     value match {
-      case NeutralValue(neutral: Neutral) => prettyNeutral(neutral)
-      case FnValue(FnClosure(pattern: Pattern, body: Exp, env: Env)) =>
+      case ValNeu(neu: Neu) => prettyNeu(neu)
+      case ValFn(CloFn(pattern: Pattern, body: Exp, env: Env)) =>
         s"${prettyPattern(pattern)} => ${prettyExp(body)}"
-      case PiValue(arg: Value, FnClosure(pattern: Pattern, body: Exp, env: Env)) =>
-        s"(${prettyPattern(pattern)}: ${prettyValue(arg)}) -> ${prettyExp(body)}"
-      case SigmaValue(arg: Value, FnClosure(pattern: Pattern, body: Exp, env: Env)) =>
-        s"(${prettyPattern(pattern)}: ${prettyValue(arg)}) ** ${prettyExp(body)}"
-      case UValue => "U"
-      case cons: ConsValue =>
-        val str = cons_value_to_list(cons).map(prettyValue(_)).mkString(", ")
+      case ValPi(arg: Val, CloFn(pattern: Pattern, body: Exp, env: Env)) =>
+        s"(${prettyPattern(pattern)}: ${prettyVal(arg)}) -> ${prettyExp(body)}"
+      case ValSigma(arg: Val, CloFn(pattern: Pattern, body: Exp, env: Env)) =>
+        s"(${prettyPattern(pattern)}: ${prettyVal(arg)}) ** ${prettyExp(body)}"
+      case ValUniv() => "univ"
+      case cons: ValCons =>
+        val str = cons_val_to_list(cons).map(prettyVal(_)).mkString(", ")
         s"[${str}]"
-      case SoleValue => "[]"
-      case TrivialValue => "[]"
-      case DataValue(tag: String, body: ConsValue) =>
-        s"${tag}${prettyValue(body)}"
-      case DataValue(tag: String, body: SoleValue.type) =>
-        s"${tag}${prettyValue(body)}"
-      case DataValue(tag: String, body: Value) =>
-        s"${tag}[${prettyValue(body)}]"
-      case SumValue(MatClosure(mats: Map[String, Exp], env: Env)) =>
+      case ValSole() => "[]"
+      case ValTrivial() => "[]"
+      case ValData(tag: String, body: ValCons) =>
+        s"${tag}${prettyVal(body)}"
+      case ValData(tag: String, body: ValSole) =>
+        s"${tag}${prettyVal(body)}"
+      case ValData(tag: String, body: Val) =>
+        s"${tag}[${prettyVal(body)}]"
+      case ValSum(CloMat(mats: Map[String, Exp], env: Env)) =>
         s"sum {${maybeNewline(prettyExpMap(mats))}}"
-      case MatValue(MatClosure(mats: Map[String, Exp], env: Env)) =>
+      case ValMat(CloMat(mats: Map[String, Exp], env: Env)) =>
         s"match {${maybeNewline(prettyExpMap(mats))}}"
     }
   }

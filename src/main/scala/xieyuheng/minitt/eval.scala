@@ -3,53 +3,28 @@ package xieyuheng.minitt
 import xieyuheng.minitt.pretty._
 
 object eval {
-  def apply_closure(closure: Closure, arg: Value): Value = {
-    closure match {
-      case FnClosure(pattern: Pattern, body: Exp, env: Env) =>
-        eval(body, PatternEnv(pattern, arg, env))
-      case mat_closure @ MatClosure(mats: Map[String, Exp], env: Env) =>
-        arg match {
-          case DataValue(tag, body) =>
-            mats.get(tag) match {
-              case Some(exp) => ap(eval(exp, env), body)
-              case None => throw new Exception()
-            }
-          case NeutralValue(target) => NeutralValue(MatNeutral(target, mat_closure))
-          case _ => throw new Exception()
-        }
-    }
-  }
 
-  def ap(f: Value, arg: Value): Value = {
-    f match {
-      case FnValue(closure) => apply_closure(closure, arg)
-      case MatValue(closure) => apply_closure(closure, arg)
-      case NeutralValue(target) => NeutralValue(ApNeutral(target, arg))
-      case _ => throw new Exception()
-    }
-  }
-
-  def car(value: Value): Value = {
+  def car(value: Val): Val = {
     value match {
-      case ConsValue(car: Value, cdr: Value) => car
-      case NeutralValue(target) => NeutralValue(CarNeutral(target))
+      case ValCons(car: Val, cdr: Val) => car
+      case ValNeu(target) => ValNeu(NeuCar(target))
       case _ =>
-        println(s"value is not a ConsValue: ${prettyValue(value)}")
+        println(s"value is not a ValCons: ${prettyVal(value)}")
         throw new Exception()
     }
   }
 
-  def cdr(value: Value): Value = {
+  def cdr(value: Val): Val = {
     value match {
-      case ConsValue(car: Value, cdr: Value) => cdr
-      case NeutralValue(target) => NeutralValue(CdrNeutral(target))
+      case ValCons(car: Val, cdr: Val) => cdr
+      case ValNeu(target) => ValNeu(NeuCdr(target))
       case _ =>
-        println(s"value is not a ConsValue: ${prettyValue(value)}")
+        println(s"value is not a ValCons: ${prettyVal(value)}")
         throw new Exception()
     }
   }
 
-  def lookup(name: String, env: Env): Value = {
+  def lookup(name: String, env: Env): Val = {
     env match {
       case PatternEnv(pattern, value, rest) =>
         project_pattern(name, pattern, value) match {
@@ -66,13 +41,13 @@ object eval {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case EmptyEnv =>
+      case EmptyEnv() =>
         println(s"can not find name: ${name}")
         throw new Exception()
     }
   }
 
-  def project_pattern(name: String, pattern: Pattern, value: Value): Option[Value] = {
+  def project_pattern(name: String, pattern: Pattern, value: Val): Option[Val] = {
     pattern match {
       case VarPattern(name2) =>
         if (name == name2) {
@@ -88,29 +63,29 @@ object eval {
             case None => None
           }
         }
-      case SolePattern => None
+      case SolePattern() => None
     }
   }
 
-  def apply(exp: Exp, env: Env): Value = {
+  def apply(exp: Exp, env: Env): Val = {
     exp match {
       case Var(name) => lookup(name, env)
       case Fn(pattern: Pattern, body: Exp) =>
-        FnValue(FnClosure(pattern, body, env))
-      case Ap(fn: Exp, arg: Exp) => ap(eval(fn, env), eval(arg, env))
-      case Pi(pattern: Pattern, argType: Exp, t: Exp) =>
-        PiValue(eval(argType, env), FnClosure(pattern, t, env))
-      case Cons(car, cdr) => ConsValue(eval(car, env), eval(cdr, env))
+        ValFn(CloFn(pattern, body, env))
+      case Ap(fn: Exp, arg: Exp) => exe.ap_val(eval(fn, env), eval(arg, env))
+      case Pi(pattern: Pattern, arg_t: Exp, t: Exp) =>
+        ValPi(eval(arg_t, env), CloFn(pattern, t, env))
+      case Cons(car, cdr) => ValCons(eval(car, env), eval(cdr, env))
       case Car(pair) => car(eval(pair, env))
       case Cdr(pair) => cdr(eval(pair, env))
-      case Sigma(pattern: Pattern, argType: Exp, t: Exp) =>
-        SigmaValue(eval(argType, env), FnClosure(pattern, t, env))
-      case Data(tag, body) => DataValue(tag, eval(body, env))
-      case Mat(mats) => MatValue(MatClosure(mats, env))
-      case Sum(mats) => SumValue(MatClosure(mats, env))
-      case Sole => SoleValue
-      case Trivial => TrivialValue
-      case U => UValue
+      case Sigma(pattern: Pattern, arg_t: Exp, t: Exp) =>
+        ValSigma(eval(arg_t, env), CloFn(pattern, t, env))
+      case Data(tag, body) => ValData(tag, eval(body, env))
+      case Mat(mats) => ValMat(CloMat(mats, env))
+      case Sum(mats) => ValSum(CloMat(mats, env))
+      case Sole() => ValSole()
+      case Trivial() => ValTrivial()
+      case Univ() => ValUniv()
     }
   }
 }

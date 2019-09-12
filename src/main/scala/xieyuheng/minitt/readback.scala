@@ -2,37 +2,59 @@ package xieyuheng.minitt
 
 object readback {
 
-  def readback_value(i: Int, value: Value): Value = {
+  def fresh_name(i: Int): String = {
+    s"$$${i}"
+  }
+
+  def readback_val(i: Int, value: Val): Exp = {
     value match {
-      case NeutralValue(neutral: Neutral) => NeutralValue(readback_neutral(i, neutral))
-      case FnValue(fnclo: FnClosure) => ???
-      case PiValue(arg: Value, fnclo: FnClosure) => ???
-      case SigmaValue(arg: Value, fnclo: FnClosure) => ???
-      case UValue => ???
-      case ConsValue(car: Value, cdr: Value) => ???
-      case SoleValue => ???
-      case TrivialValue => ???
-      case DataValue(tag: String, body: Value) => ???
-      case SumValue(chclo: MatClosure) => ???
-      case MatValue(chclo: MatClosure) => ???
+      case ValNeu(neu: Neu) =>
+        readback_neu(i, neu)
+      case ValFn(clo_fn: CloFn) =>
+        val name = fresh_name(i)
+        val body = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
+        Fn(VarPattern(name), body)
+      case ValPi(arg_t: Val, clo_fn: CloFn) =>
+        val name = fresh_name(i)
+        val t = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
+        Pi(VarPattern(name), readback_val(i, arg_t), t)
+      case ValSigma(arg_t: Val, clo_fn: CloFn) =>
+        val name = fresh_name(i)
+        val t = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
+        Sigma(VarPattern(name), readback_val(i, arg_t), t)
+      case ValUniv() => Univ()
+      case ValCons(car: Val, cdr: Val) =>
+        Cons(readback_val(i, car), readback_val(i, cdr))
+      case ValSole() => Sole()
+      case ValTrivial() => Trivial()
+      case ValData(tag: String, body: Val) =>
+        Data(tag, readback_val(i, body))
+      case ValSum(clo_mat: CloMat) =>
+        ???
+        // exe.ap_clo(clo_mat, )
+        // Mat(mats: Map[String, Exp])
+      case ValMat(clo_mat: CloMat) =>
+        ???
+        // Sum(mats: Map[String, Exp])
     }
   }
 
-  def readback_neutral(i: Int, neutral: Neutral): Neutral = {
-    neutral match {
-      case VarNeutral(name: String) => ???
-      case ApNeutral(target: Neutral, arg: Value) => ???
-      case CarNeutral(target: Neutral) => ???
-      case CdrNeutral(target: Neutral) => ???
-      case MatNeutral(target: Neutral, chclo: MatClosure) => ???
+  def readback_neu(i: Int, neu: Neu): Exp = {
+    neu match {
+      case NeuVar(name: String) => ???
+      case NeuAp(target: Neu, arg: Val) => ???
+      case NeuCar(target: Neu) => ???
+      case NeuCdr(target: Neu) => ???
+      case NeuMat(target: Neu, clo_mat: CloMat) => ???
     }
   }
 
   def readback_env(i: Int, env: Env): Env = {
     env match {
       case DeclEnv(decl: Decl, rest: Env) => ???
-      case PatternEnv(pattern: Pattern, value: Value, rest: Env) => ???
-      case EmptyEnv => ???
+      case PatternEnv(pattern: Pattern, value: Val, rest: Env) => ???
+      case EmptyEnv() => ???
     }
   }
+
 }

@@ -16,7 +16,7 @@ case class Module() {
   }
 
   def env: Env = {
-    var env: Env = EmptyEnv
+    var env: Env = EmptyEnv()
     top_list.foreach {
       case TopDecl(decl) =>
         env = DeclEnv(decl, env)
@@ -26,7 +26,7 @@ case class Module() {
   }
 
   def run(): Unit = {
-    var env: Env = EmptyEnv
+    var env: Env = EmptyEnv()
     top_list.foreach {
       case TopDecl(decl) =>
         env = DeclEnv(decl, env)
@@ -37,8 +37,8 @@ case class Module() {
         val v2 = eval(e2, env)
         if (v1 != v2) {
           println(s"[eq! fail]")
-          println(s"e1: ${prettyExp(e1)} ==> ${prettyValue(v1)}")
-          println(s"e2: ${prettyExp(e2)} ==> ${prettyValue(v2)}")
+          println(s"e1: ${prettyExp(e1)} ==> ${prettyVal(v1)}")
+          println(s"e2: ${prettyExp(e2)} ==> ${prettyVal(v2)}")
           throw new Exception()
         }
       case TopNotEq(e1, e2) =>
@@ -46,8 +46,8 @@ case class Module() {
         val v2 = eval(e2, env)
         if (v1 == v2) {
           println(s"[not_eq! fail]")
-          println(s"e1: ${prettyExp(e1)} ==> ${prettyValue(v1)}")
-          println(s"e2: ${prettyExp(e2)} ==> ${prettyValue(v2)}")
+          println(s"e1: ${prettyExp(e1)} ==> ${prettyVal(v1)}")
+          println(s"e2: ${prettyExp(e2)} ==> ${prettyVal(v2)}")
           throw new Exception()
         }
     }
@@ -71,8 +71,8 @@ case class Module() {
     val v1 = eval(e1, this.env)
     val v2 = eval(e2, this.env)
     if (v1 != v2) {
-      println(s"e1: ${prettyExp(e1)} ==> ${prettyValue(v1)}")
-      println(s"e2: ${prettyExp(e2)} ==> ${prettyValue(v2)}")
+      println(s"e1: ${prettyExp(e1)} ==> ${prettyVal(v1)}")
+      println(s"e2: ${prettyExp(e2)} ==> ${prettyVal(v2)}")
       throw new Exception()
     }
   }
@@ -81,7 +81,7 @@ case class Module() {
     println(prettyExp(exp))
     val value = eval(exp, this.env)
     print("==> ")
-    println(prettyValue(value))
+    println(prettyVal(value))
     println()
   }
 

@@ -1,12 +1,12 @@
 package xieyuheng.minitt
 
 sealed trait Ctx
-final case class PatternCtx(pattern: Pattern, value: Value, rest: Ctx) extends Ctx
-final case object EmptyCtx extends Ctx
+final case class PatternCtx(pattern: Pattern, value: Val, rest: Ctx) extends Ctx
+final case class EmptyCtx() extends Ctx
 
 object Ctx {
-  def extend(pattern: Pattern, value: Value, rest: Ctx): Ctx = {
+  def extend(pattern: Pattern, value: Val, rest: Ctx): Ctx = {
     // TODO
-    PatternCtx(pattern: Pattern, value: Value, rest: Ctx)
+    PatternCtx(pattern: Pattern, value: Val, rest: Ctx)
   }
 }

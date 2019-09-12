@@ -14,7 +14,7 @@ final case class ValSum(clo_mat: CloMat) extends Val
 final case class ValMat(clo_mat: CloMat) extends Val
 
 sealed trait Clo
-final case class CloFn(pattern: Pattern, body: Exp, env: Env) extends Clo
+final case class CloFn(pat: Pat, body: Exp, env: Env) extends Clo
 final case class CloMat(mats: Map[String, Exp], env: Env) extends Clo
 
 sealed trait Neu

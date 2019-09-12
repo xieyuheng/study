@@ -55,12 +55,12 @@ case class Module() {
 
   // old
 
-  def let(pattern: Pattern, t: Exp, e: Exp): Unit = {
-    declare(Let(pattern, t, e))
+  def let(pat: Pat, t: Exp, e: Exp): Unit = {
+    declare(Let(pat, t, e))
   }
 
-  def letrec(pattern: Pattern, t: Exp, e: Exp): Unit = {
-    declare(Letrec(pattern, t, e))
+  def letrec(pat: Pat, t: Exp, e: Exp): Unit = {
+    declare(Letrec(pat, t, e))
   }
 
   def import_all(module: Module): Unit = {

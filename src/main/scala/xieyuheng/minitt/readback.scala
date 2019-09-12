@@ -13,15 +13,15 @@ object readback {
       case ValFn(clo_fn: CloFn) =>
         val name = fresh_name(i)
         val body = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
-        Fn(VarPattern(name), body)
+        Fn(PatVar(name), body)
       case ValPi(arg_t: Val, clo_fn: CloFn) =>
         val name = fresh_name(i)
         val t = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
-        Pi(VarPattern(name), readback_val(i, arg_t), t)
+        Pi(PatVar(name), readback_val(i, arg_t), t)
       case ValSigma(arg_t: Val, clo_fn: CloFn) =>
         val name = fresh_name(i)
         val t = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
-        Sigma(VarPattern(name), readback_val(i, arg_t), t)
+        Sigma(PatVar(name), readback_val(i, arg_t), t)
       case ValUniv() => Univ()
       case ValCons(car: Val, cdr: Val) =>
         Cons(readback_val(i, car), readback_val(i, cdr))
@@ -52,7 +52,7 @@ object readback {
   def readback_env(i: Int, env: Env): Env = {
     env match {
       case DeclEnv(decl: Decl, rest: Env) => ???
-      case PatternEnv(pattern: Pattern, value: Val, rest: Env) => ???
+      case PatEnv(pat: Pat, value: Val, rest: Env) => ???
       case EmptyEnv() => ???
     }
   }

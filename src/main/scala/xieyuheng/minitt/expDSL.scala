@@ -7,42 +7,42 @@ object expDSL {
 
   def cons(car: Exp, cdr: Exp): Exp = Cons(car, cdr)
 
-  def cons(car: Pattern, cdr: Pattern): Pattern = ConsPattern(car, cdr)
+  def cons(car: Pat, cdr: Pat): Pat = PatCons(car, cdr)
 
-  def __ = SolePattern()
+  def __ = PatSole()
 
-  def fn(patterns: Pattern*)(body: Exp): Exp = {
+  def fn(pats: Pat*)(body: Exp): Exp = {
     var exp = body
-    patterns.reverse.foreach { case pattern =>
-      exp = Fn(pattern, exp)
+    pats.reverse.foreach { case pat =>
+      exp = Fn(pat, exp)
     }
     exp
   }
 
-  def pi(pair: (Pattern, Exp))(t: Exp): Pi = {
-    val (pattern, arg) = pair
-    Pi(pattern, arg, t)
+  def pi(pair: (Pat, Exp))(t: Exp): Pi = {
+    val (pat, arg) = pair
+    Pi(pat, arg, t)
   }
 
   def %(tag: String, body: Exp = Sole()): Data = Data(tag, body)
 
-  implicit class PatternExtension(pattern: Pattern) {
-    def *(cdr: Pattern): Pattern = ConsPattern(pattern, cdr)
+  implicit class PatExtension(pat: Pat) {
+    def *(cdr: Pat): Pat = PatCons(pat, cdr)
   }
 
   implicit class ExpExtension(exp: Exp) {
-    def ->:(arg: Exp): Exp = Pi(SolePattern(), arg, exp)
-    def **(t: Exp): Exp = Sigma(SolePattern(), exp, t)
+    def ->:(arg: Exp): Exp = Pi(PatSole(), arg, exp)
+    def **(t: Exp): Exp = Sigma(PatSole(), exp, t)
     def *(cdr: Exp): Exp = Cons(exp, cdr)
     def $(arg: Exp): Exp = Ap(exp, arg)
-    def ::(pattern: Pattern): (Pattern, Exp) = (pattern, exp)
+    def ::(pat: Pat): (Pat, Exp) = (pat, exp)
   }
 
   implicit class StringExtension(string: String) extends ExpExtension(Var(string)) {
-    def *(cdr: String): Pattern = ConsPattern(VarPattern(string), VarPattern(cdr))
+    def *(cdr: String): Pat = PatCons(PatVar(string), PatVar(cdr))
   }
 
   implicit def VarFromString(name: String) = Var(name)
 
-  implicit def VarPatternFromString(name: String) = VarPattern(name)
+  implicit def PatVarFromString(name: String) = PatVar(name)
 }

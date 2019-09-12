@@ -48,19 +48,19 @@ object pretty {
   def prettyExp(exp: Exp): String = {
     exp match {
       case Var(name) => name
-      case Fn(pattern, body) =>
-        s"${prettyPattern(pattern)} => ${prettyExp(body)}"
+      case Fn(pat, body) =>
+        s"${prettyPat(pat)} => ${prettyExp(body)}"
       case Ap(fn, arg) =>
         s"${prettyExp(fn)}(${prettyExp(arg)})"
-      case Pi(pattern, arg_t, t) =>
-        s"(${prettyPattern(pattern)}: ${prettyExp(arg_t)}) -> ${prettyExp(t)}"
+      case Pi(pat, arg_t, t) =>
+        s"(${prettyPat(pat)}: ${prettyExp(arg_t)}) -> ${prettyExp(t)}"
       case cons: Cons =>
         val str = cons_exp_to_list(cons).map(prettyExp(_)).mkString(", ")
         s"[${str}]"
       case Car(pair) => s"${prettyExp(pair)}.car"
       case Cdr(pair) => s"${prettyExp(pair)}.cdr"
-      case Sigma(pattern, arg_t, t) =>
-        s"(${prettyPattern(pattern)}: ${prettyExp(arg_t)}) ** ${prettyExp(t)}"
+      case Sigma(pat, arg_t, t) =>
+        s"(${prettyPat(pat)}: ${prettyExp(arg_t)}) ** ${prettyExp(t)}"
       case Data(tag: String, body: Cons) =>
         s"${tag}${prettyExp(body)}"
       case Data(tag: String, body: Sole) =>
@@ -77,11 +77,11 @@ object pretty {
     }
   }
 
-  def prettyPattern(pattern: Pattern): String = {
-    pattern match {
-      case VarPattern(name) => name
-      case ConsPattern(car, cdr) => s"${prettyPattern(car)} * ${prettyPattern(cdr)}"
-      case SolePattern() => "[]"
+  def prettyPat(pat: Pat): String = {
+    pat match {
+      case PatVar(name) => name
+      case PatCons(car, cdr) => s"${prettyPat(car)} * ${prettyPat(cdr)}"
+      case PatSole() => "[]"
     }
   }
 
@@ -110,12 +110,12 @@ object pretty {
   def prettyVal(value: Val): String = {
     value match {
       case ValNeu(neu: Neu) => prettyNeu(neu)
-      case ValFn(CloFn(pattern: Pattern, body: Exp, env: Env)) =>
-        s"${prettyPattern(pattern)} => ${prettyExp(body)}"
-      case ValPi(arg: Val, CloFn(pattern: Pattern, body: Exp, env: Env)) =>
-        s"(${prettyPattern(pattern)}: ${prettyVal(arg)}) -> ${prettyExp(body)}"
-      case ValSigma(arg: Val, CloFn(pattern: Pattern, body: Exp, env: Env)) =>
-        s"(${prettyPattern(pattern)}: ${prettyVal(arg)}) ** ${prettyExp(body)}"
+      case ValFn(CloFn(pat: Pat, body: Exp, env: Env)) =>
+        s"${prettyPat(pat)} => ${prettyExp(body)}"
+      case ValPi(arg: Val, CloFn(pat: Pat, body: Exp, env: Env)) =>
+        s"(${prettyPat(pat)}: ${prettyVal(arg)}) -> ${prettyExp(body)}"
+      case ValSigma(arg: Val, CloFn(pat: Pat, body: Exp, env: Env)) =>
+        s"(${prettyPat(pat)}: ${prettyVal(arg)}) ** ${prettyExp(body)}"
       case ValUniv() => "univ"
       case cons: ValCons =>
         val str = cons_val_to_list(cons).map(prettyVal(_)).mkString(", ")

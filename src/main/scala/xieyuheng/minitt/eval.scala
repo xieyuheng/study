@@ -26,18 +26,18 @@ object eval {
 
   def lookup(name: String, env: Env): Val = {
     env match {
-      case PatternEnv(pattern, value, rest) =>
-        project_pattern(name, pattern, value) match {
+      case PatEnv(pat, value, rest) =>
+        project_pat(name, pat, value) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case DeclEnv(Let(pattern, t, e), rest) =>
-        project_pattern(name, pattern, eval(e, rest)) match {
+      case DeclEnv(Let(pat, t, e), rest) =>
+        project_pat(name, pat, eval(e, rest)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case DeclEnv(Letrec(pattern, t, e), rest) =>
-        project_pattern(name, pattern, eval(e, env)) match {
+      case DeclEnv(Letrec(pat, t, e), rest) =>
+        project_pat(name, pat, eval(e, env)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
@@ -47,39 +47,39 @@ object eval {
     }
   }
 
-  def project_pattern(name: String, pattern: Pattern, value: Val): Option[Val] = {
-    pattern match {
-      case VarPattern(name2) =>
+  def project_pat(name: String, pat: Pat, value: Val): Option[Val] = {
+    pat match {
+      case PatVar(name2) =>
         if (name == name2) {
           Some(value)
         } else {
           None
         }
-      case ConsPattern(carPattern: Pattern, cdrPattern: Pattern) =>
-        project_pattern(name, carPattern, car(value)) match {
+      case PatCons(carPat: Pat, cdrPat: Pat) =>
+        project_pat(name, carPat, car(value)) match {
           case Some(value) => Some(value)
-          case None => project_pattern(name, cdrPattern, cdr(value)) match {
+          case None => project_pat(name, cdrPat, cdr(value)) match {
             case Some(value) => Some(value)
             case None => None
           }
         }
-      case SolePattern() => None
+      case PatSole() => None
     }
   }
 
   def apply(exp: Exp, env: Env): Val = {
     exp match {
       case Var(name) => lookup(name, env)
-      case Fn(pattern: Pattern, body: Exp) =>
-        ValFn(CloFn(pattern, body, env))
+      case Fn(pat: Pat, body: Exp) =>
+        ValFn(CloFn(pat, body, env))
       case Ap(fn: Exp, arg: Exp) => exe.ap_val(eval(fn, env), eval(arg, env))
-      case Pi(pattern: Pattern, arg_t: Exp, t: Exp) =>
-        ValPi(eval(arg_t, env), CloFn(pattern, t, env))
+      case Pi(pat: Pat, arg_t: Exp, t: Exp) =>
+        ValPi(eval(arg_t, env), CloFn(pat, t, env))
       case Cons(car, cdr) => ValCons(eval(car, env), eval(cdr, env))
       case Car(pair) => car(eval(pair, env))
       case Cdr(pair) => cdr(eval(pair, env))
-      case Sigma(pattern: Pattern, arg_t: Exp, t: Exp) =>
-        ValSigma(eval(arg_t, env), CloFn(pattern, t, env))
+      case Sigma(pat: Pat, arg_t: Exp, t: Exp) =>
+        ValSigma(eval(arg_t, env), CloFn(pat, t, env))
       case Data(tag, body) => ValData(tag, eval(body, env))
       case Mat(mats) => ValMat(CloMat(mats, env))
       case Sum(mats) => ValSum(CloMat(mats, env))

@@ -1,5 +1,6 @@
 * minitt
-- be sure about the use of Pattarn 
+- 
+- be sure about the use of Pattern
 - readback
 - Ctx
 - checkDeclAndExtend

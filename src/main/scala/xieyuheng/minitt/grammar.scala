@@ -62,16 +62,16 @@ object grammar {
 
   def decl = Rule(
     "decl", Map(
-      "let" -> List("let", pattern, ":", exp, "=", exp),
-      "letrec" -> List("letrec", pattern, ":", exp, "=", exp),
+      "let" -> List("let", pat, ":", exp, "=", exp),
+      "letrec" -> List("letrec", pat, ":", exp, "=", exp),
     ))
 
   def decl_matcher = Tree.matcher[Decl](
     "decl", Map(
       "let" -> { case List(_, p, _, e, _, t) =>
-        Let(pattern_matcher(p), exp_matcher(e), exp_matcher(t)) },
+        Let(pat_matcher(p), exp_matcher(e), exp_matcher(t)) },
       "letrec" -> { case List(_, p, _, e, _, t) =>
-        Letrec(pattern_matcher(p), exp_matcher(e), exp_matcher(t)) },
+        Letrec(pat_matcher(p), exp_matcher(e), exp_matcher(t)) },
     ))
 
   def exp: Rule = Rule(
@@ -122,42 +122,42 @@ object grammar {
     "multi_pi_arg", Map(
       "arg" -> List(exp),
       "arg_comma" -> List(exp, ","),
-      "arg_t" -> List(pattern, ":", exp),
-      "arg_t_comma" -> List(pattern, ":", exp, ","),
+      "arg_t" -> List(pat, ":", exp),
+      "arg_t_comma" -> List(pat, ":", exp, ","),
     ))
 
-  def multi_pi_arg_matcher = Tree.matcher[(Pattern, Exp)](
+  def multi_pi_arg_matcher = Tree.matcher[(Pat, Exp)](
     "multi_pi_arg", Map(
       "arg" -> { case List(exp) =>
-        (SolePattern(), exp_matcher(exp)) },
+        (PatSole(), exp_matcher(exp)) },
       "arg_comma" -> { case List(exp, _) =>
-        (SolePattern(), exp_matcher(exp)) },
-      "arg_t" -> { case List(pattern, _, exp) =>
-        (pattern_matcher(pattern), exp_matcher(exp)) },
-      "arg_t_comma" -> { case List(pattern, _, exp, _) =>
-        (pattern_matcher(pattern), exp_matcher(exp)) },
+        (PatSole(), exp_matcher(exp)) },
+      "arg_t" -> { case List(pat, _, exp) =>
+        (pat_matcher(pat), exp_matcher(exp)) },
+      "arg_t_comma" -> { case List(pat, _, exp, _) =>
+        (pat_matcher(pat), exp_matcher(exp)) },
     ))
 
 
   def multi_fn_arg: Rule = Rule(
     "multi_fn_arg", Map(
-      "arg" -> List(pattern),
-      "arg_comma" -> List(pattern, ","),
+      "arg" -> List(pat),
+      "arg_comma" -> List(pat, ","),
     ))
 
-  def multi_fn_arg_matcher = Tree.matcher[Pattern](
+  def multi_fn_arg_matcher = Tree.matcher[Pat](
     "multi_fn_arg", Map(
-      "arg" -> { case List(pattern) =>
-        pattern_matcher(pattern) },
-      "arg_comma" -> { case List(pattern, _) =>
-        pattern_matcher(pattern) },
+      "arg" -> { case List(pat) =>
+        pat_matcher(pat) },
+      "arg_comma" -> { case List(pat, _) =>
+        pat_matcher(pat) },
     ))
 
   def non_rator: Rule = Rule(
     "non_rator", Map(
-      "pi" -> List("(", pattern, ":", exp, ")", "-", ">", exp),
+      "pi" -> List("(", pat, ":", exp, ")", "-", ">", exp),
       "multi_pi" -> List("(", non_empty_list(multi_pi_arg), ")", "-", ">", exp),
-      "fn" -> List(pattern, "=", ">", exp),
+      "fn" -> List(pat, "=", ">", exp),
       "multi_fn" -> List("(", non_empty_list(multi_fn_arg), ")", "=", ">", exp),
       "cons" ->
         List("[", non_empty_list(exp_comma), "]"),
@@ -165,7 +165,7 @@ object grammar {
         List("[", exp, "]"),
       "cons_without_last_comma" ->
         List("[", non_empty_list(exp_comma), exp, "]"),
-      "sigma" -> List("(", pattern, ":", exp, ")", "*", "*", exp),
+      "sigma" -> List("(", pat, ":", exp, ")", "*", "*", exp),
       "data" -> List(identifier, exp),
       "sum" -> List("sum", "{", non_empty_list(sum_clause), "}"),
       "sole" -> List("[", "]"),
@@ -175,22 +175,22 @@ object grammar {
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "non_rator", Map(
-      "pi" -> { case List(_, pattern, _, arg_t, _, _, _, t) =>
-        Pi(pattern_matcher(pattern), exp_matcher(arg_t), exp_matcher(t)) },
+      "pi" -> { case List(_, pat, _, arg_t, _, _, _, t) =>
+        Pi(pat_matcher(pat), exp_matcher(arg_t), exp_matcher(t)) },
       "multi_pi" -> { case List(_, multi_pi_arg_list, _, _, _, t) =>
         var exp = exp_matcher(t)
         non_empty_list_matcher(multi_pi_arg_matcher)(multi_pi_arg_list)
-          .reverse.foreach { case (pattern, arg_t) =>
-            exp = Pi(pattern, arg_t, exp)
+          .reverse.foreach { case (pat, arg_t) =>
+            exp = Pi(pat, arg_t, exp)
           }
         exp },
-      "fn" -> { case List(pattern, _, _, t) =>
-        Fn(pattern_matcher(pattern), exp_matcher(t)) },
+      "fn" -> { case List(pat, _, _, t) =>
+        Fn(pat_matcher(pat), exp_matcher(t)) },
       "multi_fn" -> { case List(_, multi_fn_arg_list, _, _, _, t) =>
         var exp = exp_matcher(t)
         non_empty_list_matcher(multi_fn_arg_matcher)(multi_fn_arg_list)
-          .reverse.foreach { case pattern =>
-            exp = Fn(pattern, exp)
+          .reverse.foreach { case pat =>
+            exp = Fn(pat, exp)
           }
         exp },
       "cons" -> { case List(_, exp_comma_list, _) =>
@@ -203,8 +203,8 @@ object grammar {
         val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
         list.foldRight(exp_matcher(exp)) { case (head, tail) =>
           Cons(head, tail) } },
-      "sigma" -> { case List(_, pattern, _, arg_t, _, _, _, t) =>
-        Sigma(pattern_matcher(pattern), exp_matcher(arg_t), exp_matcher(t)) },
+      "sigma" -> { case List(_, pat, _, arg_t, _, _, _, t) =>
+        Sigma(pat_matcher(pat), exp_matcher(arg_t), exp_matcher(t)) },
       "data" -> { case List(Leaf(tag), exp) =>
         Data(tag, exp_matcher(exp)) },
       "sum" -> { case List(_, _, sum_clause_list, _) =>
@@ -252,41 +252,41 @@ object grammar {
         (name, exp_matcher(exp)) },
     ))
 
-  def pattern: Rule = Rule(
-    "pattern", Map(
+  def pat: Rule = Rule(
+    "pat", Map(
       "var" -> List(identifier),
       "cons" ->
-        List("[", non_empty_list(pattern_comma), "]"),
+        List("[", non_empty_list(pat_comma), "]"),
       "cons_one_without_comma" ->
-        List("[", pattern, "]"),
+        List("[", pat, "]"),
       "cons_without_last_comma" ->
-        List("[", non_empty_list(pattern_comma), pattern, "]"),
+        List("[", non_empty_list(pat_comma), pat, "]"),
       "sole" -> List("[", "]"),
     ))
 
-  def pattern_matcher: Tree => Pattern = Tree.matcher[Pattern](
-    "pattern", Map(
-      "var" -> { case List(Leaf(name)) => VarPattern(name) },
-      "cons" -> { case List(_, pattern_comma_list, _) =>
-        val list = non_empty_list_matcher(pattern_comma_matcher)(pattern_comma_list)
+  def pat_matcher: Tree => Pat = Tree.matcher[Pat](
+    "pat", Map(
+      "var" -> { case List(Leaf(name)) => PatVar(name) },
+      "cons" -> { case List(_, pat_comma_list, _) =>
+        val list = non_empty_list_matcher(pat_comma_matcher)(pat_comma_list)
         list.init.foldRight(list.last) { case (head, tail) =>
-          ConsPattern(head, tail) } },
-      "cons_one_without_comma" -> { case List(_, pattern, _) =>
-        pattern_matcher(pattern) },
-      "cons_without_last_comma" -> { case List(_, pattern_comma_list, pattern, _) =>
-        val list = non_empty_list_matcher(pattern_comma_matcher)(pattern_comma_list)
-        list.foldRight(pattern_matcher(pattern)) { case (head, tail) =>
-          ConsPattern(head, tail) } },
-      "sole" -> { case _ => SolePattern() },
+          PatCons(head, tail) } },
+      "cons_one_without_comma" -> { case List(_, pat, _) =>
+        pat_matcher(pat) },
+      "cons_without_last_comma" -> { case List(_, pat_comma_list, pat, _) =>
+        val list = non_empty_list_matcher(pat_comma_matcher)(pat_comma_list)
+        list.foldRight(pat_matcher(pat)) { case (head, tail) =>
+          PatCons(head, tail) } },
+      "sole" -> { case _ => PatSole() },
     ))
 
-  def pattern_comma = Rule(
-    "pattern_comma", Map(
-      "pattern_comma" -> List(pattern, ","),
+  def pat_comma = Rule(
+    "pat_comma", Map(
+      "pat_comma" -> List(pat, ","),
     ))
 
-  def pattern_comma_matcher = Tree.matcher[Pattern](
-    "pattern_comma", Map(
-      "pattern_comma" -> { case List(pattern, _) => pattern_matcher(pattern) },
+  def pat_comma_matcher = Tree.matcher[Pat](
+    "pat_comma", Map(
+      "pat_comma" -> { case List(pat, _) => pat_matcher(pat) },
     ))
 }

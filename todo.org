@@ -1,5 +1,5 @@
 * minitt
-- 
+- we need Norm, NeuNorm, NormEnv
 - be sure about the use of Pattern
 - readback
 - Ctx

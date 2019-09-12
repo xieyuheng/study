@@ -4,38 +4,46 @@ import xieyuheng.partech.Parser
 
 object minitt {
 
+  def version: String = "0.0.1"
+
+  def get_args(args: Array[String], name: String, arity: Int): Option[Array[String]] = {
+    val i = args.indexOf(name)
+    if (i == -1) {
+      None
+    } else {
+      Some(args.slice(i + 1, i + 1 + arity))
+    }
+  }
+
+  def print_help(): Unit = {
+    val usage = s"""
+        |usage:
+        |  --eval <file_name>
+        """.stripMargin
+    println(usage)
+  }
+
   def main(args: Array[String]): Unit = {
 
-    object maybe {
-      var file_name: Option[String] = None
+    get_args(args, "--help", 0).foreach {
+      case _ =>
+        print_help()
+        System.exit(0)
     }
 
-    args match {
+    get_args(args, "--version", 0).foreach {
+      case _ =>
+        println(version)
+        System.exit(0)
+    }
+
+    get_args(args, "--eval", 1).foreach {
       case Array(file_name) =>
-        maybe.file_name = Some(file_name)
-      case _ => {
-        args.grouped(2).toList.foreach {
-          case Array("--eval", file_name) =>
-            maybe.file_name = Some(file_name)
-          case Array(arg1, arg2) =>
-            println(s"unknown argument pair: ${arg1} ${arg2}")
-          case Array(arg) =>
-            println(s"unknown argument: ${arg}")
-        }
-      }
+        run_file(file_name)
+        System.exit(0)
     }
 
-    maybe.file_name match {
-      case Some(file_name) => run_file(file_name)
-      case None =>
-        val usage = s"""
-        |usage:
-        |  <file_name>
-        |  --eval <file_name> [default]
-        """.stripMargin
-
-        println(usage)
-    }
+    print_help()
 
     System.exit(0)
   }

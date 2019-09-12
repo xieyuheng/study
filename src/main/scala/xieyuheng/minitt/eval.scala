@@ -10,13 +10,13 @@ object eval {
       case Fn(pat: Pat, body: Exp) =>
         ValFn(CloFn(pat, body, env))
       case Ap(fn: Exp, arg: Exp) => ap(eval(fn, env), eval(arg, env))
-      case Pi(pat: Pat, arg_t: Exp, t: Exp) =>
-        ValPi(eval(arg_t, env), CloFn(pat, t, env))
+      case Pi(pat: Pat, arg_t: Exp, dep_t: Exp) =>
+        ValPi(eval(arg_t, env), CloFn(pat, dep_t, env))
+      case Sigma(pat: Pat, arg_t: Exp, dep_t: Exp) =>
+        ValSigma(eval(arg_t, env), CloFn(pat, dep_t, env))
       case Cons(car, cdr) => ValCons(eval(car, env), eval(cdr, env))
       case Car(pair) => car(eval(pair, env))
       case Cdr(pair) => cdr(eval(pair, env))
-      case Sigma(pat: Pat, arg_t: Exp, t: Exp) =>
-        ValSigma(eval(arg_t, env), CloFn(pat, t, env))
       case Data(tag, body) => ValData(tag, eval(body, env))
       case Mat(mats) => ValMat(CloMat(mats, env))
       case Sum(mats) => ValSum(CloMat(mats, env))

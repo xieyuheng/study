@@ -16,12 +16,12 @@ object readback {
         NormFn(name, body)
       case ValPi(arg_t: Val, clo_fn: CloFn) =>
         val name = fresh_name(i)
-        val t = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
-        NormPi(name, readback_val(i, arg_t), t)
+        val dep_t = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
+        NormPi(name, readback_val(i, arg_t), dep_t)
       case ValSigma(arg_t: Val, clo_fn: CloFn) =>
         val name = fresh_name(i)
-        val t = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
-        NormSigma(name, readback_val(i, arg_t), t)
+        val dep_t = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
+        NormSigma(name, readback_val(i, arg_t), dep_t)
       case ValUniv() => NormUniv()
       case ValCons(car: Val, cdr: Val) =>
         NormCons(readback_val(i, car), readback_val(i, cdr))

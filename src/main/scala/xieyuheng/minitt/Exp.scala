@@ -4,11 +4,11 @@ sealed trait Exp
 final case class Var(name: String) extends Exp
 final case class Fn(pat: Pat, body: Exp) extends Exp
 final case class Ap(fn: Exp, arg: Exp) extends Exp
-final case class Pi(pat: Pat, arg_t: Exp, t: Exp) extends Exp
+final case class Pi(pat: Pat, arg_t: Exp, dep_t: Exp) extends Exp
+final case class Sigma(pat: Pat, arg_t: Exp, dep_t: Exp) extends Exp
 final case class Cons(car: Exp, cdr: Exp) extends Exp
 final case class Car(pair: Exp) extends Exp
 final case class Cdr(pair: Exp) extends Exp
-final case class Sigma(pat: Pat, arg_t: Exp, t: Exp) extends Exp
 final case class Data(tag: String, body: Exp) extends Exp
 final case class Mat(mats: Map[String, Exp]) extends Exp
 final case class Sum(mats: Map[String, Exp]) extends Exp

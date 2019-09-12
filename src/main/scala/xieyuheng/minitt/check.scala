@@ -1,5 +1,7 @@
 package xieyuheng.minitt
 
+import xieyuheng.minitt.pretty._
+
 object check {
 
   def check_decl(i: Int, env: Env, ctx: Ctx, decl: Decl): Either[Err, Ctx] = {
@@ -24,7 +26,24 @@ object check {
   }
 
   def check_type(i: Int, env: Env, ctx: Ctx, t: Exp): Either[Err, Unit] = {
-    ???
+    t match {
+      case Pi(pat: Pat, arg_t: Exp, dep_t: Exp) =>
+        for {
+          _ <- check_type(i, env, ctx, arg_t)
+          fresh = ValNeu(NeuVar(readback.fresh_name(i)))
+          ctx1 <- ctx.ext(pat, eval(arg_t, env), fresh)
+          _ <- check_type(i + 1, EnvPat(pat, fresh, env), ctx1, dep_t)
+        } yield ()
+      case Sigma(pat: Pat, arg_t: Exp, dep_t: Exp) =>
+        for {
+          _ <- check_type(i, env, ctx, arg_t)
+          fresh = ValNeu(NeuVar(readback.fresh_name(i)))
+          ctx1 <- ctx.ext(pat, eval(arg_t, env), fresh)
+          _ <- check_type(i + 1, EnvPat(pat, fresh, env), ctx1, dep_t)
+        } yield ()
+      case Univ() => Right(())
+      case _ => check(i, env, ctx, t, ValUniv())
+    }
   }
 
   def check(i: Int, env: Env, ctx: Ctx, e: Exp, t: Val): Either[Err, Unit] = {

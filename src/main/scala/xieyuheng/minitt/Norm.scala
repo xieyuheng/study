@@ -2,8 +2,8 @@ package xieyuheng.minitt
 
 sealed trait Norm
 final case class NormFn(name: String, body: Norm) extends Norm
-final case class NormPi(name: String, arg_t: Norm, t: Norm) extends Norm
-final case class NormSigma(name: String, arg_t: Norm, t: Norm) extends Norm
+final case class NormPi(name: String, arg_t: Norm, dep_t: Norm) extends Norm
+final case class NormSigma(name: String, arg_t: Norm, dep_t: Norm) extends Norm
 final case class NormCons(car: Norm, cdr: Norm) extends Norm
 final case class NormData(tag: String, body: Norm) extends Norm
 final case class NormMat(mats: Map[String, Exp], env: NormEnv) extends Norm

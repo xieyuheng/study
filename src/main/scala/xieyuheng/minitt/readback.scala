@@ -9,7 +9,7 @@ object readback {
   def readback_val(i: Int, value: Val): Norm = {
     value match {
       case ValNeu(neu: Neu) =>
-        NormNeu(readback_neu(i, neu))
+        readback_neu(i, neu)
       case ValFn(clo_fn: CloFn) =>
         val name = fresh_name(i)
         val body = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
@@ -36,21 +36,29 @@ object readback {
     }
   }
 
-  def readback_neu(i: Int, neu: Neu): NeuNorm = {
+  def readback_neu(i: Int, neu: Neu): NormNeu = {
     neu match {
-      case NeuVar(name: String) => ???
-      case NeuAp(target: Neu, arg: Val) => ???
-      case NeuCar(target: Neu) => ???
-      case NeuCdr(target: Neu) => ???
-      case NeuMat(target: Neu, clo_mat: CloMat) => ???
+      case NeuVar(name: String) =>
+        NormNeuVar(name)
+      case NeuAp(target: Neu, arg: Val) =>
+        NormNeuAp(readback_neu(i, target), readback_val(i, arg))
+      case NeuCar(target: Neu) =>
+        NormNeuCar(readback_neu(i, target))
+      case NeuCdr(target: Neu) =>
+        NormNeuCdr(readback_neu(i, target))
+      case NeuMat(target: Neu, CloMat(mats: Map[String, Exp], env: Env)) =>
+        NormNeuMat(readback_neu(i, target), mats, readback_env(i, env))
     }
   }
 
   def readback_env(i: Int, env: Env): NormEnv = {
     env match {
-      case EnvDecl(decl: Decl, rest: Env) => ???
-      case EnvPat(pat: Pat, value: Val, rest: Env) => ???
-      case EnvEmpty() => ???
+      case EnvDecl(decl: Decl, rest: Env) =>
+        NormEnvDecl(decl, readback_env(i, rest))
+      case EnvPat(pat: Pat, value: Val, rest: Env) =>
+        NormEnvPat(pat, readback_val(i, value), readback_env(i, rest))
+      case EnvEmpty() =>
+        NormEnvEmpty()
     }
   }
 

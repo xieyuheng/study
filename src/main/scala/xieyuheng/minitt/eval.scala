@@ -4,6 +4,37 @@ import xieyuheng.minitt.pretty._
 
 object eval {
 
+  def apply(exp: Exp, env: Env): Val = {
+    exp match {
+      case Var(name) => lookup(name, env)
+      case Fn(pat: Pat, body: Exp) =>
+        ValFn(CloFn(pat, body, env))
+      case Ap(fn: Exp, arg: Exp) => ap(eval(fn, env), eval(arg, env))
+      case Pi(pat: Pat, arg_t: Exp, t: Exp) =>
+        ValPi(eval(arg_t, env), CloFn(pat, t, env))
+      case Cons(car, cdr) => ValCons(eval(car, env), eval(cdr, env))
+      case Car(pair) => car(eval(pair, env))
+      case Cdr(pair) => cdr(eval(pair, env))
+      case Sigma(pat: Pat, arg_t: Exp, t: Exp) =>
+        ValSigma(eval(arg_t, env), CloFn(pat, t, env))
+      case Data(tag, body) => ValData(tag, eval(body, env))
+      case Mat(mats) => ValMat(CloMat(mats, env))
+      case Sum(mats) => ValSum(CloMat(mats, env))
+      case Sole() => ValSole()
+      case Trivial() => ValTrivial()
+      case Univ() => ValUniv()
+    }
+  }
+
+  def ap(f: Val, arg: Val): Val = {
+    f match {
+      case ValFn(clo) => clo.ap(arg)
+      case ValMat(clo) => clo.ap(arg)
+      case ValNeu(target) => ValNeu(NeuAp(target, arg))
+      case _ => throw new Exception()
+    }
+  }
+
   def car(value: Val): Val = {
     value match {
       case ValCons(car: Val, cdr: Val) => car
@@ -67,25 +98,4 @@ object eval {
     }
   }
 
-  def apply(exp: Exp, env: Env): Val = {
-    exp match {
-      case Var(name) => lookup(name, env)
-      case Fn(pat: Pat, body: Exp) =>
-        ValFn(CloFn(pat, body, env))
-      case Ap(fn: Exp, arg: Exp) => exe.ap_val(eval(fn, env), eval(arg, env))
-      case Pi(pat: Pat, arg_t: Exp, t: Exp) =>
-        ValPi(eval(arg_t, env), CloFn(pat, t, env))
-      case Cons(car, cdr) => ValCons(eval(car, env), eval(cdr, env))
-      case Car(pair) => car(eval(pair, env))
-      case Cdr(pair) => cdr(eval(pair, env))
-      case Sigma(pat: Pat, arg_t: Exp, t: Exp) =>
-        ValSigma(eval(arg_t, env), CloFn(pat, t, env))
-      case Data(tag, body) => ValData(tag, eval(body, env))
-      case Mat(mats) => ValMat(CloMat(mats, env))
-      case Sum(mats) => ValSum(CloMat(mats, env))
-      case Sole() => ValSole()
-      case Trivial() => ValTrivial()
-      case Univ() => ValUniv()
-    }
-  }
 }

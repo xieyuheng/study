@@ -12,15 +12,15 @@ object readback {
         readback_neu(i, neu)
       case ValFn(clo_fn: CloFn) =>
         val name = fresh_name(i)
-        val body = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
+        val body = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
         NormFn(name, body)
       case ValPi(arg_t: Val, clo_fn: CloFn) =>
         val name = fresh_name(i)
-        val t = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
+        val t = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
         NormPi(name, readback_val(i, arg_t), t)
       case ValSigma(arg_t: Val, clo_fn: CloFn) =>
         val name = fresh_name(i)
-        val t = readback_val(i + 1, exe.ap_clo(clo_fn, ValNeu(NeuVar(name))))
+        val t = readback_val(i + 1, clo_fn.ap(ValNeu(NeuVar(name))))
         NormSigma(name, readback_val(i, arg_t), t)
       case ValUniv() => NormUniv()
       case ValCons(car: Val, cdr: Val) =>

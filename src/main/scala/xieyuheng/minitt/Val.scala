@@ -13,7 +13,25 @@ final case class ValData(tag: String, body: Val) extends Val
 final case class ValSum(clo_mat: CloMat) extends Val
 final case class ValMat(clo_mat: CloMat) extends Val
 
-sealed trait Clo
+sealed trait Clo {
+  def ap(arg: Val): Val = {
+    this match {
+      case CloFn(pat: Pat, body: Exp, env: Env) =>
+        eval(body, EnvPat(pat, arg, env))
+      case clo_mat @ CloMat(mats: Map[String, Exp], env: Env) =>
+        arg match {
+          case ValData(tag, body) =>
+            mats.get(tag) match {
+              case Some(exp) => eval.ap(eval(exp, env), body)
+              case None => throw new Exception()
+            }
+          case ValNeu(target) => ValNeu(NeuMat(target, clo_mat))
+          case _ => throw new Exception()
+        }
+    }
+  }
+}
+
 final case class CloFn(pat: Pat, body: Exp, env: Env) extends Clo
 final case class CloMat(mats: Map[String, Exp], env: Env) extends Clo
 

@@ -1,11 +1,11 @@
 * minitt
-- be sure about the use of Pattern
-- Ctx
-- checkDeclAndExtend
-- checkTypeOfType
-- check
+- checkDeclExt
+- checkUniv
+- checkType
 - infer
 - more examples
+- be sure about the use of Pattern
+  - Norm do not use Pattern
 * pie
 - change the style to grouping by function instead of grouping by data
 * tartlet

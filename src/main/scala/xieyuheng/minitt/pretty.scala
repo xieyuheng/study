@@ -68,9 +68,9 @@ object pretty {
       case Data(tag: String, body: Exp) =>
         s"${tag}[${prettyExp(body)}]"
       case Mat(mats: Map[String, Exp]) =>
-        s"match {${prettyExpMap(mats)}}"
+        s"match {${maybeNewline(prettyExpMap(mats))}}"
       case Sum(mats: Map[String, Exp]) =>
-        s"sum {${prettyExpMap(mats)}}"
+        s"sum {${maybeNewline(prettyExpMap(mats))}}"
       case Sole() => "[]"
       case Trivial() => "[]"
       case Univ() => "univ"
@@ -88,15 +88,15 @@ object pretty {
   def prettyNeu(neu: Neu): String = {
     neu match {
       case NeuVar(name: String) =>
-        s"[${name}]"
+        s"#[${name}]"
       case NeuAp(target: Neu, arg: Val) =>
-        s"[${prettyNeu(target)}(${prettyVal(arg)})]"
+        s"#[${prettyNeu(target)}(${prettyVal(arg)})]"
       case NeuCar(target: Neu) =>
-        s"[${prettyNeu(target)}.car]"
+        s"#[${prettyNeu(target)}.car]"
       case NeuCdr(target: Neu) =>
-        s"[${prettyNeu(target)}.cdr]"
+        s"#[${prettyNeu(target)}.cdr]"
       case NeuMat(target: Neu, CloMat(mats: Map[String, Exp], env: Env)) =>
-        s"[match {${maybeNewline(prettyExpMap(mats))}} (${prettyNeu(target)})]"
+        s"#[match {${maybeNewline(prettyExpMap(mats))}} (${prettyNeu(target)})]"
     }
   }
 

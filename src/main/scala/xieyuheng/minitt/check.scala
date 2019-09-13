@@ -11,6 +11,7 @@ object check {
         for {
           _ <- check_type(i, env, ctx, t_exp)
           t = eval(t_exp, env)
+          _ <- check(i, env, ctx, e, t)
           ctx1 <- ctx.ext(pat, t, eval(e, env))
         } yield ctx1
       case decl @ Letrec(pat, t_exp, e) =>
@@ -108,17 +109,20 @@ object check {
       case (Sole(), ValTrivial()) => Right(())
       case (Trivial(), ValUniv()) => Right(())
       case (e, t) =>
-        for (u <- check_infer(i, env, ctx, e)) yield {
-          if (readback_val(i, t) == readback_val(i, u)) {
-            Right(())
-          } else {
-            Left(Err(
-              s"check fail\n" ++
-                s"expect type: ${prettyVal(t)}\n" ++
-                s"exp: ${prettyExp(e)}\n" ++
-                s"actual type: ${prettyVal(u)}\n"))
+        for {
+          u <- check_infer(i, env, ctx, e)
+          results <- {
+            if (readback_val(i, t) == readback_val(i, u)) {
+              Right(())
+            } else {
+              Left(Err(
+                s"check fail\n" ++
+                  s"expect type: ${prettyVal(t)}\n" ++
+                  s"exp: ${prettyExp(e)}\n" ++
+                  s"actual type: ${prettyVal(u)}\n"))
+            }
           }
-        }
+        } yield results
     }
   }
 
@@ -175,7 +179,8 @@ object check {
           }
           ValSigma(arg_t: Val, clo: Clo) = t
         } yield clo.ap(eval.car(eval(pair, env)))
-      case _ => Left(Err(s"can not check_infer: ${prettyExp(e)}"))
+      case _ => Left(Err(
+        s"can not check_infer: ${prettyExp(e)}"))
     }
   }
 

@@ -113,11 +113,3 @@ let one_two_three: list_t(nat_t) =
   cons[one, cons[two, cons[three, nil[]]]]
 
 // eval! list_append(nat_t, one_two_three, one_two_three)
-
-letrec vec_t: (A: univ, n: nat_t) -> univ =
-  (A, n) => sum {
-    vec_nil;
-    vec_cons $[A, vec_t(A, n)];
-  }
-
-let y: vec_t(nat_t, zero) = vec_cons[one, vec_cons[one, vec_nil[]]]

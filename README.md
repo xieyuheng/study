@@ -7,6 +7,10 @@
 - Install: `sbt publishLocal`
 - Dependency: `"xieyuheng" %% "cicada" % "0.0.1"`
 
+## Release
+
+- https://github.com/xieyuheng/cicada-release
+
 ## Docs
 
 - [API Docs](https://cicada.xieyuheng.now.sh/xieyuheng/cicada/index.html)

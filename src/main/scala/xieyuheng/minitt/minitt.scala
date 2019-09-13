@@ -20,18 +20,30 @@ object minitt {
         |minitt ${version}
         |
         |usage:
-        |  --help
-        |  --version
-        |  --eval <file_name>
+        |  -e, --eval <file_name> [default]
+        |  -v, --version
+        |  -h, --help
         """.stripMargin
     println(usage)
   }
 
   def main(args: Array[String]): Unit = {
 
+    opt(args, "-h", 0).foreach {
+      case _ =>
+        print_help()
+        System.exit(0)
+    }
+
     opt(args, "--help", 0).foreach {
       case _ =>
         print_help()
+        System.exit(0)
+    }
+
+    opt(args, "-v", 0).foreach {
+      case _ =>
+        println(version)
         System.exit(0)
     }
 
@@ -45,6 +57,12 @@ object minitt {
       case Array(file_name) =>
         run_file(file_name)
         System.exit(0)
+    }
+
+    if (args.length == 1) {
+      val file_name = args(0)
+      run_file(file_name)
+      System.exit(0)
     }
 
     print_help()

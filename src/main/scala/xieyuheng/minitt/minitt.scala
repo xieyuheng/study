@@ -83,6 +83,7 @@ object minitt {
     Parser(grammar.lexer, grammar.module).parse(code) match {
       case Right(tree) =>
         val module = grammar.module_matcher(tree)
+        module.check()
         module.run()
       case Left(error) =>
         println(s"[parse_error] ${error.msg}")

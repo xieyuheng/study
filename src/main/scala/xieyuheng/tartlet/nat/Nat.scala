@@ -1,8 +1,8 @@
 package xieyuheng.tartlet
 
 case object Nat extends Type {
-  def eval(env: Env): Either[Err, Value] =
-    Right(ValueNat)
+  def eval(env: Env): Either[Err, Val] =
+    Right(ValNat)
 
   def alphaEq(
     that: Exp,

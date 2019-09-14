@@ -1,9 +1,9 @@
 package xieyuheng.tartlet
 
-case class NeutralApply (
-  fn: Neutral,
-  arg: TheValue,
-) extends Neutral {
+case class NeuApply (
+  fn: Neu,
+  arg: TheVal,
+) extends Neu {
   def readback_neu (ctx: Ctx): Either[Err, Exp] = {
     for {
       rator <- fn.readback_neu(ctx)

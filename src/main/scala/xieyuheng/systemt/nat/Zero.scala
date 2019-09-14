@@ -1,8 +1,8 @@
 package xieyuheng.systemt
 
 case object Zero extends Constructor {
-  def eval(env: Env): Either[Err, Value] = {
-    Right(ValueZero)
+  def eval(env: Env): Either[Err, Val] = {
+    Right(ValZero)
   }
 
   /*

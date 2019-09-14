@@ -6,7 +6,7 @@ import xieyuheng.cicada.with_logic_variable.pretty._
 //   because a value pre its type.
 
 object pre {
-  def apply(x: Value, y: Value, bind: Bind, env: Env): Boolean = {
+  def apply(x: Val, y: Val, bind: Bind, env: Env): Boolean = {
     val (z, newBind) = join.yieldBind(x, y, bind, env)
     z == walk.deep(y, newBind)
   }

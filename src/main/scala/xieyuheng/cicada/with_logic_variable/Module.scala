@@ -7,9 +7,9 @@ case class Module() {
 
   def define_value(
     name: String,
-    value: Value,
+    value: Val,
   ): Unit = {
-    env = env.extend(name -> DefineValue(name, value))
+    env = env.extend(name -> DefineVal(name, value))
   }
 
   def define(
@@ -18,7 +18,7 @@ case class Module() {
   ): Unit = {
     eval(exp, env) match {
       case Right(value) =>
-        env = env.extend(name -> DefineValue(name, value))
+        env = env.extend(name -> DefineVal(name, value))
       case Left(errorMsg) =>
         println(errorMsg)
     }
@@ -78,13 +78,13 @@ case class Module() {
   def eval_print(exp: Exp): Unit = {
     eval(exp, env) match {
       case Right(value) =>
-        println(s"=> ${prettyValue(value)}")
+        println(s"=> ${prettyVal(value)}")
       case Left(errorMsg) =>
         println(s"?> ${errorMsg}")
     }
   }
 
-  def eval_on_right[A](exp: Exp)(f: Value => A): A = {
+  def eval_on_right[A](exp: Exp)(f: Val => A): A = {
     eval(exp, env) match {
       case Right(value) => f(value)
       case Left(errorMsg) =>

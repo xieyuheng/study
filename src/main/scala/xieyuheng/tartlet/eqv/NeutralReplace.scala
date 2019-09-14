@@ -1,10 +1,10 @@
 package xieyuheng.tartlet
 
-case class NeutralReplace (
-  target: Neutral,
-  motive: TheValue,
-  base: TheValue,
-) extends Neutral {
+case class NeuReplace (
+  target: Neu,
+  motive: TheVal,
+  base: TheVal,
+) extends Neu {
   def readback_neu(ctx: Ctx): Either[Err, Exp] = {
     for {
       target <- target.readback_neu(ctx)

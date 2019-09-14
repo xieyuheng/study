@@ -6,7 +6,7 @@ import scala.collection.immutable.ListMap
 
 object walk {
   @tailrec
-  def apply(x: Value, bind: Bind): Value = {
+  def apply(x: Val, bind: Bind): Val = {
     x match {
       case t: TypeOfType => {
         val id = t.id
@@ -15,7 +15,7 @@ object walk {
           case None => x
         }
       }
-      case t: ValueOfType => {
+      case t: ValOfType => {
         val id = t.id
         bind.get(id) match {
           case Some(y) => walk(y, bind)
@@ -27,42 +27,42 @@ object walk {
   }
 
   // TODO prune the bind
-  def deep(x: Value, bind: Bind): Value = {
+  def deep(x: Val, bind: Bind): Val = {
     walk(x, bind) match {
       case t: TypeOfType =>
         t
-      case t: ValueOfType =>
+      case t: ValOfType =>
         t.copy(t = deep(t.t, bind))
-      case memberType: MemberTypeValue =>
+      case memberType: MemberTypeVal =>
         memberType.copy(map = deepOnMap(memberType.map, bind))
-      case sumType: SumTypeValue =>
+      case sumType: SumTypeVal =>
         sumType.copy(map = deepOnMap(sumType.map, bind))
-      case pi: PiValue =>
+      case pi: PiVal =>
         pi.copy(
           args = deepOnMap(pi.args, bind),
           ret = deep(pi.ret, bind))
-      case fn: FnValue =>
+      case fn: FnVal =>
         fn.copy(
           args = deepOnMap(fn.args, bind),
           ret = deep(fn.ret, bind))
-      case neu: NeutralValue =>
+      case neu: NeuVal =>
         neu
-      case v: Value =>
+      case v: Val =>
         v
     }
   }
 
-  def deepOnMap(map: ListMap[String, Value], bind: Bind): ListMap[String, Value] = {
+  def deepOnMap(map: ListMap[String, Val], bind: Bind): ListMap[String, Val] = {
     ListMap(map.mapValues(deep(_, bind)).toList: _*)
   }
 
-  def deepSelf(x: Value): Value = {
+  def deepSelf(x: Val): Val = {
     x match {
-      case memberType: MemberTypeValue =>
+      case memberType: MemberTypeVal =>
         memberType.copy(map = deepOnMap(memberType.map, memberType.bind))
-      case sumType: SumTypeValue =>
+      case sumType: SumTypeVal =>
         sumType.copy(map = deepOnMap(sumType.map, sumType.bind))
-      case v: Value =>
+      case v: Val =>
         v
     }
   }

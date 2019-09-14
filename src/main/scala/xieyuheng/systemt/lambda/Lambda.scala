@@ -4,7 +4,7 @@ case class Lambda (
   name: String,
   body: Exp,
 ) extends Constructor {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     Right(Closure(env, name, body))
   }
 

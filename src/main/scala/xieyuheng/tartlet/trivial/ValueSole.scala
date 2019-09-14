@@ -1,6 +1,6 @@
 package xieyuheng.tartlet
 
-case object ValueSole extends Value {
-  def readback (ctx: Ctx, t: Value): Either[Err, Exp] =
+case object ValSole extends Val {
+  def readback (ctx: Ctx, t: Val): Either[Err, Exp] =
     Right(Sole)
 }

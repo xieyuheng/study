@@ -1,11 +1,11 @@
 package xieyuheng.systemt
 
-case class NeutralRecNat (
+case class NeuRecNat (
   t: Type,
-  target: Neutral,
-  base: TheValue,
-  step: TheValue,
-) extends Neutral {
+  target: Neu,
+  base: TheVal,
+  step: TheVal,
+) extends Neu {
   def readback_neu(usedNames: Set[String]): Either[Err, Exp] = {
     for {
       targetExp <- target.readback_neu(usedNames)

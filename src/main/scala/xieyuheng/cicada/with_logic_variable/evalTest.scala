@@ -10,11 +10,11 @@ object evalTest extends App {
     } assert(t.isInstanceOf[TypeOfType])
   }
 
-  val `eval should eval undefined Var to NeutralValue` = {
+  val `eval should eval undefined Var to NeuVal` = {
     val env = Env()
     for {
       neu <- eval(Var("x"), env)
-    } assert(neu == NeutralValue(VarNeutral("x")))
+    } assert(neu == NeuVal(VarNeu("x")))
   }
 
   val `eval should eval defined Var to value` = {
@@ -22,8 +22,8 @@ object evalTest extends App {
     val yId = Id("y")
 
     val env = Env()
-      .extend("x" -> DefineValue("x", TypeOfType(xId)))
-      .extend("y" -> DefineValue("y", TypeOfType(yId)))
+      .extend("x" -> DefineVal("x", TypeOfType(xId)))
+      .extend("y" -> DefineVal("y", TypeOfType(yId)))
 
     for {
       x <- eval("x", env)

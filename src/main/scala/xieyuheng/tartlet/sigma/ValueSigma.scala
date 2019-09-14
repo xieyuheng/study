@@ -1,17 +1,17 @@
 package xieyuheng.tartlet
 
-case class ValueSigma (
-  carType: Value,
+case class ValSigma (
+  carType: Val,
   cdrType: Closure,
-) extends Value {
-  def readback (ctx: Ctx, t: Value): Either[Err, Exp] = {
-    val freshName = Util.freshen(ctx.names, cdrType.name)
+) extends Val {
+  def readback (ctx: Ctx, t: Val): Either[Err, Exp] = {
+    val freshName = util.freshen(ctx.names, cdrType.name)
     for {
-      carTypeExp <- carType.readback(ctx, ValueUniverse)
-      cdrTypeExpValue <- cdrType.apply(
-        TheNeutral(carType, NeutralVar(freshName)))
-      cdrTypeExp <- cdrTypeExpValue.readback(
-        ctx.ext(freshName, Bind(carType)), ValueUniverse)
+      carTypeExp <- carType.readback(ctx, ValUniverse)
+      cdrTypeExpVal <- cdrType.apply(
+        TheNeu(carType, NeuVar(freshName)))
+      cdrTypeExp <- cdrTypeExpVal.readback(
+        ctx.ext(freshName, Bind(carType)), ValUniverse)
     } yield Sigma(freshName, carTypeExp, cdrTypeExp)
   }
 }

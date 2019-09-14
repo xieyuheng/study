@@ -59,7 +59,7 @@ object json {
     implicit def rwId: RW[Id] = macroRW
 
     implicit def rwBind: RW[Bind] =
-      readwriter[Map[Id, Value]]
+      readwriter[Map[Id, Val]]
         .bimap[Bind](_.map, Bind(_))
 
     implicit def rwEnv: RW[Env] =
@@ -67,49 +67,49 @@ object json {
         .bimap[Env](_.map, Env(_))
 
     // Define
-    implicit def rwDefineValue: RW[DefineValue] = macroRW
+    implicit def rwDefineVal: RW[DefineVal] = macroRW
     implicit def rwDefineMemberType: RW[DefineMemberType] = macroRW
     implicit def rwDefineSumType: RW[DefineSumType] = macroRW
     implicit def rwDefineFn: RW[DefineFn] = macroRW
     implicit def rwDefine: RW[Define] = RW.merge(
-      rwDefineValue,
+      rwDefineVal,
       rwDefineMemberType,
       rwDefineSumType,
       rwDefineFn,
     )
 
-    // Value
+    // Val
     implicit def rwTypeOfType: RW[TypeOfType] = macroRW
-    implicit def rwValueOfType: RW[ValueOfType] = macroRW
-    implicit def rwSumTypeValue: RW[SumTypeValue] = macroRW
-    implicit def rwMemberTypeValue: RW[MemberTypeValue] = macroRW
-    implicit def rwPiValue: RW[PiValue] = macroRW
-    implicit def rwFnValue: RW[FnValue] = macroRW
-    implicit def rwNeutralValue: RW[NeutralValue] = macroRW
-    implicit def rwTopValue: RW[TopValue] = macroRW
-    implicit def rwBottomValue: RW[BottomValue] = macroRW
-    implicit def rwValue: RW[Value] = RW.merge(
+    implicit def rwValOfType: RW[ValOfType] = macroRW
+    implicit def rwSumTypeVal: RW[SumTypeVal] = macroRW
+    implicit def rwMemberTypeVal: RW[MemberTypeVal] = macroRW
+    implicit def rwPiVal: RW[PiVal] = macroRW
+    implicit def rwFnVal: RW[FnVal] = macroRW
+    implicit def rwNeuVal: RW[NeuVal] = macroRW
+    implicit def rwTopVal: RW[TopVal] = macroRW
+    implicit def rwBottomVal: RW[BottomVal] = macroRW
+    implicit def rwVal: RW[Val] = RW.merge(
       rwTypeOfType,
-      rwValueOfType,
-      rwSumTypeValue,
-      rwMemberTypeValue,
-      rwPiValue,
-      rwFnValue,
-      rwNeutralValue,
-      rwTopValue,
-      rwBottomValue,
+      rwValOfType,
+      rwSumTypeVal,
+      rwMemberTypeVal,
+      rwPiVal,
+      rwFnVal,
+      rwNeuVal,
+      rwTopVal,
+      rwBottomVal,
     )
 
-    // Neutral
-    implicit def rwVarNeutral: RW[VarNeutral] = macroRW
-    implicit def rwChoiceNeutral: RW[ChoiceNeutral] = macroRW
-    implicit def rwDotNeutral: RW[DotNeutral] = macroRW
-    implicit def rwApNeutral: RW[ApNeutral] = macroRW
-    implicit def rwNeutral: RW[Neutral] = RW.merge(
-      rwVarNeutral,
-      rwChoiceNeutral,
-      rwDotNeutral,
-      rwApNeutral,
+    // Neu
+    implicit def rwVarNeu: RW[VarNeu] = macroRW
+    implicit def rwChoiceNeu: RW[ChoiceNeu] = macroRW
+    implicit def rwDotNeu: RW[DotNeu] = macroRW
+    implicit def rwApNeu: RW[ApNeu] = macroRW
+    implicit def rwNeu: RW[Neu] = RW.merge(
+      rwVarNeu,
+      rwChoiceNeu,
+      rwDotNeu,
+      rwApNeu,
     )
   }
 }

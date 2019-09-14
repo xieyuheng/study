@@ -6,16 +6,16 @@ case class RecNat (
   base: Exp,
   step: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
-      targetValue <- target.eval (env)
-      baseValue <- base.eval (env)
-      stepValue <- step.eval (env)
+      targetVal <- target.eval (env)
+      baseVal <- base.eval (env)
+      stepVal <- step.eval (env)
       res <- RecNat.exe(
         t,
-        targetValue,
-        baseValue,
-        stepValue)
+        targetVal,
+        baseVal,
+        stepVal)
     } yield res
   }
 
@@ -38,33 +38,33 @@ case class RecNat (
 case object RecNat {
   def exe(
     t: Type,
-    target: Value,
-    base: Value,
-    step: Value,
-  ): Either[Err, Value] = {
+    target: Val,
+    base: Val,
+    step: Val,
+  ): Either[Err, Val] = {
     target match {
-      case ValueZero =>
+      case ValZero =>
         Right(base)
-      case ValueAdd1(prev) =>
+      case ValAdd1(prev) =>
         for {
           f <- Apply.exe(step, prev)
           almost <- RecNat.exe(t, prev, base, step)
           res <- Apply.exe(f, almost)
         } yield res
-      case TheNeutral(theType, neutral) =>
+      case TheNeu(theType, neutral) =>
         theType match {
           case Nat =>
-            Right(TheNeutral(t, NeutralRecNat(
+            Right(TheNeu(t, NeuRecNat(
               t,
               neutral,
-              TheValue(t, base),
-              TheValue(Arrow(Nat, Arrow(t, t)), step))))
+              TheVal(t, base),
+              TheVal(Arrow(Nat, Arrow(t, t)), step))))
           case _ =>
             Left(Err(s"type of the neutral target is not Nat: ${theType}"))
         }
       case _ =>
         Left(Err(
-          s"target of RecNat is not ValueZero or ValueAdd1: ${target}"))
+          s"target of RecNat is not ValZero or ValAdd1: ${target}"))
     }
   }
 }

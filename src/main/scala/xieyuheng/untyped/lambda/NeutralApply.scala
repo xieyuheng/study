@@ -1,9 +1,9 @@
 package xieyuheng.untyped
 
-case class NeutralApply (
-  fn: Neutral,
-  arg: Value,
-) extends Neutral {
+case class NeuApply (
+  fn: Neu,
+  arg: Val,
+) extends Neu {
   def readback(usedNames: Set[String]): Either[Err, Exp] = {
     for {
       rator <- fn.readback (usedNames)

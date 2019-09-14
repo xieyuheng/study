@@ -1,7 +1,7 @@
 package xieyuheng.cicada.with_logic_variable
 
 object check {
-  def check(exp: Exp, t: Value) = {
+  def check(exp: Exp, t: Val) = {
     ???
 
     // - target must be SumType,
@@ -12,7 +12,7 @@ object check {
     //   instead of pattern matching)
 
     //   foreach name and body in clauses {
-    //     sub <- ctx.loopupValue(name)
+    //     sub <- ctx.loopupVal(name)
     //     ctx :- target :> sub
     //     ctx.unify(target, sub) :- body <: t
     //   }

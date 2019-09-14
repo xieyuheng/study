@@ -2,47 +2,47 @@ package xieyuheng.cicada.with_logic_variable
 
 import scala.collection.immutable.ListMap
 
-sealed trait Value
+sealed trait Val
 
 final case class TypeOfType(
   id: Id,
-) extends Value
+) extends Val
 
-final case class ValueOfType(
+final case class ValOfType(
   id: Id,
-  t: Value,
-) extends Value
+  t: Val,
+) extends Val
 
-final case class SumTypeValue(
+final case class SumTypeVal(
   name: String,
-  map: ListMap[String, Value],
+  map: ListMap[String, Val],
   memberNames: List[String],
   bind: Bind,
-) extends Value
+) extends Val
 
-final case class MemberTypeValue(
+final case class MemberTypeVal(
   name: String,
-  map: ListMap[String, Value],
+  map: ListMap[String, Val],
   superName: String,
   bind: Bind,
-) extends Value
+) extends Val
 
-final case class PiValue(
-  args: ListMap[String, Value],
-  ret: Value,
-) extends Value
+final case class PiVal(
+  args: ListMap[String, Val],
+  ret: Val,
+) extends Val
 
-final case class FnValue(
-  args: ListMap[String, Value],
-  ret: Value,
+final case class FnVal(
+  args: ListMap[String, Val],
+  ret: Val,
   body: Exp,
   env: Env,
-) extends Value
+) extends Val
 
-final case class NeutralValue(
-  neutral: Neutral,
-) extends Value
+final case class NeuVal(
+  neutral: Neu,
+) extends Val
 
-final case class TopValue() extends Value
+final case class TopVal() extends Val
 
-final case class BottomValue() extends Value
+final case class BottomVal() extends Val

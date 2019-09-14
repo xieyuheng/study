@@ -1,5 +1,5 @@
 package xieyuheng.tartlet
 
-trait Neutral {
+trait Neu {
   def readback_neu (ctx: Ctx): Either[Err, Exp]
 }

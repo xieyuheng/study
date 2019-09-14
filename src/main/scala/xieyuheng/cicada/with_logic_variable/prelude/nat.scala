@@ -66,7 +66,7 @@ object nat extends Module {
         "succ_t" -> ("nat_even_p" ap %("x" -> ("x" dot "prev" dot "prev"))))))))
 
 
-  def to_int(value: Value): Int = {
+  def to_int(value: Val): Int = {
     val json = writeJs(walk.deepSelf(value))
     json_to_int(json)
   }

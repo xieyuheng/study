@@ -1,12 +1,12 @@
 package xieyuheng.tartlet
 
-case class TheNeutral (
-  t: Value,
-  neutral: Neutral,
-) extends Value {
-  def readback (ctx: Ctx, t: Value): Either[Err, Exp] = {
+case class TheNeu (
+  t: Val,
+  neutral: Neu,
+) extends Val {
+  def readback (ctx: Ctx, t: Val): Either[Err, Exp] = {
     t match {
-      case ValueAbsurd =>
+      case ValAbsurd =>
         for {
           normal <- neutral.readback_neu(ctx)
         } yield The(Absurd, normal)

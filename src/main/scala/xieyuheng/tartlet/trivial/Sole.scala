@@ -1,8 +1,8 @@
 package xieyuheng.tartlet
 
 case object Sole extends Constructor {
-  def eval(env: Env): Either[Err, Value] =
-    Right(ValueSole)
+  def eval(env: Env): Either[Err, Val] =
+    Right(ValSole)
 
   def alphaEq(
     that: Exp,
@@ -19,12 +19,12 @@ case object Sole extends Constructor {
    ---------------------
    ctx :- Sole <= Trivial
    */
-  def check(ctx: Ctx, t: Value): Either[Err, Exp] =
+  def check(ctx: Ctx, t: Val): Either[Err, Exp] =
     t match {
-      case ValueTrivial =>
+      case ValTrivial =>
         Right(this)
       case _ =>
         Left(Err(
-          s"expected ValueTrivial, found: ${t}"))
+          s"expected ValTrivial, found: ${t}"))
     }
 }

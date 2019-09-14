@@ -7,10 +7,10 @@ case class Pi (
   argType: Exp,
   retType: Exp,
 ) extends Type {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
-      argTypeValue <- argType.eval(env)
-    } yield ValuePi(argTypeValue, EnvClosure(env, name, retType))
+      argTypeVal <- argType.eval(env)
+    } yield ValPi(argTypeVal, EnvClosure(env, name, retType))
   }
 
   def alphaEq(
@@ -36,9 +36,9 @@ case class Pi (
    */
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
-      argType <- argType.check(ctx, ValueUniverse)
-      argTypeValue <- argType.eval(ctx.toEnv)
-      retType <- retType.check(ctx.ext(name, Bind(argTypeValue)), ValueUniverse)
+      argType <- argType.check(ctx, ValUniverse)
+      argTypeVal <- argType.eval(ctx.toEnv)
+      retType <- retType.check(ctx.ext(name, Bind(argTypeVal)), ValUniverse)
     } yield The(Universe, Pi(name, argType, retType))
   }
 }

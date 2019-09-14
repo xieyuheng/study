@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
-case class ValueCons (car: Value, cdr: Value) extends Value {
-  def readback (ctx: Ctx, t: Value): Either[Err, Exp] =
+case class ValCons (car: Val, cdr: Val) extends Val {
+  def readback (ctx: Ctx, t: Val): Either[Err, Exp] =
     for {
       car <- car.readback(ctx, t)
       cdr <- cdr.readback(ctx, t)

@@ -1,11 +1,11 @@
 package xieyuheng.tartlet
 
-case class NeutralIndNat (
-  target: Neutral,
-  motive: TheValue,
-  base: TheValue,
-  step: TheValue,
-) extends Neutral {
+case class NeuIndNat (
+  target: Neu,
+  motive: TheVal,
+  base: TheVal,
+  step: TheVal,
+) extends Neu {
   def readback_neu(ctx: Ctx): Either[Err, Exp] = {
     for {
       target <- target.readback_neu(ctx)

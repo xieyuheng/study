@@ -6,17 +6,17 @@ object unifyTest extends App {
   val `unify should not make bind weaker` = {
     val id = Id()
     val bind = Bind(Map(
-      id -> SumTypeValue(
+      id -> SumTypeVal(
         "nat_t",
         ListMap(),
         List("zero_t", "succ_t"),
         Bind())))
 
-    val srcValue = MemberTypeValue("zero_t", ListMap(), "list_t", Bind())
+    val srcVal = MemberTypeVal("zero_t", ListMap(), "list_t", Bind())
 
-    val tarValue = TypeOfType(id)
+    val tarVal = TypeOfType(id)
 
-    unify(srcValue, tarValue, bind, Env()) match {
+    unify(srcVal, tarVal, bind, Env()) match {
       case Right(newBind) =>
         assert(bind.toSet.subsetOf(newBind.toSet))
       case Left(errorMsg) =>

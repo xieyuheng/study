@@ -1,8 +1,8 @@
 package xieyuheng.tartlet
 
 case object Trivial extends Type {
-  def eval(env: Env): Either[Err, Value] =
-    Right(ValueTrivial)
+  def eval(env: Env): Either[Err, Val] =
+    Right(ValTrivial)
 
   def alphaEq(
     that: Exp,

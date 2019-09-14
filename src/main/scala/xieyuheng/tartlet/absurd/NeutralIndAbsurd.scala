@@ -1,9 +1,9 @@
 package xieyuheng.tartlet
 
-case class NeutralIndAbsurd (
-  target: Neutral,
-  motive: TheValue,
-) extends Neutral {
+case class NeuIndAbsurd (
+  target: Neu,
+  motive: TheVal,
+) extends Neu {
   def readback_neu (ctx: Ctx): Either[Err, Exp] = {
     for {
       target <- target.readback_neu(ctx)

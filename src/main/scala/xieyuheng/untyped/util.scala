@@ -1,8 +1,8 @@
-package xieyuheng.systemt
+package xieyuheng.untyped
 
 import scala.annotation.tailrec
 
-object Util {
+object util {
   @tailrec
   def freshen(
     usedNames: Set[String],

@@ -4,7 +4,7 @@ case class Apply (
   rator: Exp,
   rand: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
       fn <- rator.eval (env)
       arg <- rand.eval (env)
@@ -33,14 +33,14 @@ case class Apply (
 }
 
 case object Apply {
-  def exe(fn: Value, arg: Value): Either[Err, Value] = {
+  def exe(fn: Val, arg: Val): Either[Err, Val] = {
     fn match {
       case Closure(env, name, body) =>
         body.eval (env.ext (name, arg))
-      case TheNeutral(theType, neutral) =>
+      case TheNeu(theType, neutral) =>
         theType match {
           case Arrow(argType, retType) =>
-            Right(TheNeutral(retType, NeutralApply(neutral, TheValue(argType, arg))))
+            Right(TheNeu(retType, NeuApply(neutral, TheVal(argType, arg))))
           case _ =>
             Left(Err(s"type of neutral fn is not Arrow: ${fn}"))
         }

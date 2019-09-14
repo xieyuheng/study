@@ -4,7 +4,7 @@ case class Ctx (map: Map[String, Den] = Map()) {
   def lookupDen(name: String): Option[Den] =
     map.get (name)
 
-  def lookupType(name: String): Option[Value] =
+  def lookupType(name: String): Option[Val] =
     map.get (name) match {
       case Some(Def(t, value)) =>
         Some(t)
@@ -14,7 +14,7 @@ case class Ctx (map: Map[String, Den] = Map()) {
         None
     }
 
-  def lookupValue(name: String): Option[Value] =
+  def lookupVal(name: String): Option[Val] =
     map.get (name) match {
       case Some(Def(t, value)) =>
         Some(t)
@@ -32,7 +32,7 @@ case class Ctx (map: Map[String, Den] = Map()) {
   def toEnv: Env = {
     val valueMap = map.map {
       case (name, Def(t, value)) => (name, value)
-      case (name, Bind(t)) => (name, TheNeutral(t, NeutralVar(name)))
+      case (name, Bind(t)) => (name, TheNeu(t, NeuVar(name)))
     }
     Env(valueMap)
   }

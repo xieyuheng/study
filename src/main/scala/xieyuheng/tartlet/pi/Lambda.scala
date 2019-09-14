@@ -6,8 +6,8 @@ case class Lambda (
   name: String,
   body: Exp,
 ) extends Constructor {
-  def eval(env: Env): Either[Err, Value] =
-    Right(ValueLambda(EnvClosure(env, name, body)))
+  def eval(env: Env): Either[Err, Val] =
+    Right(ValLambda(EnvClosure(env, name, body)))
 
   def alphaEq(
     that: Exp,
@@ -28,17 +28,17 @@ case class Lambda (
     ------------------------------
     ctx :- Lambda(x, body) <= Pi
    */
-  def check(ctx: Ctx, t: Value): Either[Err, Exp] =
+  def check(ctx: Ctx, t: Val): Either[Err, Exp] =
     t match {
-      case ValuePi(argType, retType) => {
-        val varValue = TheNeutral(argType, NeutralVar(name))
+      case ValPi(argType, retType) => {
+        val varVal = TheNeu(argType, NeuVar(name))
         for {
-          realRetType <- retType.apply(varValue)
+          realRetType <- retType.apply(varVal)
           body <- body.check(ctx.ext(name, Bind(argType)), realRetType)
         } yield Lambda(name, body)
       }
       case _ =>
         Left(Err(
-          s"expected ValuePi(argType, retType), found: ${t}"))
+          s"expected ValPi(argType, retType), found: ${t}"))
     }
 }

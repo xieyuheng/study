@@ -1,15 +1,15 @@
 package xieyuheng.tartlet
 
-case class ValueLambda(closure: Closure) extends Value {
-  def readback (ctx: Ctx, t: Value): Either[Err, Exp] =
+case class ValLambda(closure: Closure) extends Val {
+  def readback (ctx: Ctx, t: Val): Either[Err, Exp] =
     t match {
-      case ValuePi(argType, retType) => {
-        val freshName = Util.freshen(ctx.names, retType.name)
-        val arg = TheNeutral(argType, NeutralVar(freshName))
+      case ValPi(argType, retType) => {
+        val freshName = util.freshen(ctx.names, retType.name)
+        val arg = TheNeu(argType, NeuVar(freshName))
         for {
-          bodyValue <- Apply.exe(this, arg)
+          bodyVal <- Apply.exe(this, arg)
           realRetType <- retType.apply(arg)
-          body <- bodyValue.readback(
+          body <- bodyVal.readback(
             ctx.ext(freshName, Bind(argType)),
             realRetType)
         } yield Lambda(freshName, body)

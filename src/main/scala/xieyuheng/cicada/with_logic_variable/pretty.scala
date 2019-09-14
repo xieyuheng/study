@@ -66,72 +66,72 @@ object pretty {
     }
   }
 
-  def prettyValueMapWithDelimiter(
-    map: ListMap[String, Value],
+  def prettyValMapWithDelimiter(
+    map: ListMap[String, Val],
     bind: Bind,
     delimiter: String,
   ): String = {
     walk.deepOnMap(map, bind)
-      .map { case (name, value) => s"${name}: ${prettyValue(value)}" }
+      .map { case (name, value) => s"${name}: ${prettyVal(value)}" }
       .mkString(delimiter)
   }
 
-  def prettyValueMap(map: ListMap[String, Value], bind: Bind): String = {
-    prettyValueMapWithDelimiter(map, bind, "\n")
+  def prettyValMap(map: ListMap[String, Val], bind: Bind): String = {
+    prettyValMapWithDelimiter(map, bind, "\n")
   }
 
-  def prettyValueArgs(map: ListMap[String, Value], bind: Bind): String = {
-    prettyValueMapWithDelimiter(map, bind, ", ")
+  def prettyValArgs(map: ListMap[String, Val], bind: Bind): String = {
+    prettyValMapWithDelimiter(map, bind, ", ")
   }
 
-  def prettyNeutral(neutral: Neutral, bind: Bind): String = {
+  def prettyNeu(neutral: Neu, bind: Bind): String = {
     neutral match {
-      case VarNeutral(name) =>
+      case VarNeu(name) =>
         name
-      case ChoiceNeutral(target, map) =>
-        val mapString = maybeNewline(prettyValueMap(map, bind))
-        s"${prettyNeutral(target, bind)} case {${mapString}}"
-      case DotNeutral(target, fieldName) =>
-        s"${prettyNeutral(target, bind)}.${fieldName}"
-      case ApNeutral(target, args) =>
-        s"${prettyNeutral(target, bind)}(${prettyValueArgs(args, bind)})"
+      case ChoiceNeu(target, map) =>
+        val mapString = maybeNewline(prettyValMap(map, bind))
+        s"${prettyNeu(target, bind)} case {${mapString}}"
+      case DotNeu(target, fieldName) =>
+        s"${prettyNeu(target, bind)}.${fieldName}"
+      case ApNeu(target, args) =>
+        s"${prettyNeu(target, bind)}(${prettyValArgs(args, bind)})"
     }
   }
 
-  def prettyValue(value: Value): String = {
+  def prettyVal(value: Val): String = {
     value match {
       case TypeOfType(id) =>
         s"type(${id})"
-      case ValueOfType(id, t) =>
-        s"the(${id}, ${prettyValue(t)})"
-      case SumTypeValue(name, map, memberNames, bind) =>
-        val mapString = maybeNewline(prettyValueMap(map, bind))
+      case ValOfType(id, t) =>
+        s"the(${id}, ${prettyVal(t)})"
+      case SumTypeVal(name, map, memberNames, bind) =>
+        val mapString = maybeNewline(prettyValMap(map, bind))
         s"${name} {${mapString}}"
-      case MemberTypeValue(name, map, superName, bind) =>
-        val mapString = maybeNewline(prettyValueMap(map, bind))
+      case MemberTypeVal(name, map, superName, bind) =>
+        val mapString = maybeNewline(prettyValMap(map, bind))
         s"${name} {${mapString}}"
-      case PiValue(args, ret) =>
+      case PiVal(args, ret) =>
         val bind = Bind()
-        s"pi (${prettyValueArgs(args, bind)}): ${prettyValue(ret)}"
-      case FnValue(args, ret, body, env) =>
+        s"pi (${prettyValArgs(args, bind)}): ${prettyVal(ret)}"
+      case FnVal(args, ret, body, env) =>
         val bind = Bind()
         val bodyString = maybeNewline(prettyExp(body))
-        s"fn (${prettyValueArgs(args, bind)}): ${prettyValue(ret)} = {${bodyString}}"
-      case NeutralValue(neutral) =>
+        s"fn (${prettyValArgs(args, bind)}): ${prettyVal(ret)} = {${bodyString}}"
+      case NeuVal(neutral) =>
         val bind = Bind()
-        val neutralString = maybeNewline(prettyNeutral(neutral, bind))
+        val neutralString = maybeNewline(prettyNeu(neutral, bind))
         s"neutral {${neutralString}}"
-      case TopValue() =>
+      case TopVal() =>
         s"top"
-      case BottomValue() =>
+      case BottomVal() =>
         s"bottom"
     }
   }
 
   def prettyDefine(definition: Define): String = {
     definition match {
-      case DefineValue(name, value) =>
-        s"define_value ${name} = ${prettyValue(value)}"
+      case DefineVal(name, value) =>
+        s"define_value ${name} = ${prettyVal(value)}"
 
       case DefineMemberType(name, map, superName) =>
         val mapString = maybeNewline(prettyExpMap(map))
@@ -151,7 +151,7 @@ object pretty {
   }
 
   def prettyBind(bind: Bind): String = {
-    bind.map.mapValues { value => prettyValue(value) }
+    bind.map.mapValues { value => prettyVal(value) }
       .mkString("\n")
   }
 }

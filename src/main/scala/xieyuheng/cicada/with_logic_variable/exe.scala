@@ -4,25 +4,25 @@ import scala.collection.immutable.ListMap
 
 object exe {
   def apply(
-    target: Value,
-    args: ListMap[String, Value],
+    target: Val,
+    args: ListMap[String, Val],
     env: Env,
-  ): Either[Err, Value] = {
+  ): Either[Err, Val] = {
     target match {
-      case sumType: SumTypeValue =>
+      case sumType: SumTypeVal =>
         for {
           newBind <- unify.onMap(args, sumType.map, sumType.bind, env)
         } yield sumType.copy(bind = newBind)
 
-      case memberType: MemberTypeValue =>
+      case memberType: MemberTypeVal =>
         for {
           newBind <- unify.onMap(args, memberType.map, memberType.bind, env)
         } yield memberType.copy(bind = newBind)
 
-      case pi: PiValue =>
-        Left(Err(s"can not apply a PiValue: ${pi}"))
+      case pi: PiVal =>
+        Left(Err(s"can not apply a PiVal: ${pi}"))
 
-      case fn: FnValue =>
+      case fn: FnVal =>
         for {
           bind <- unify.onMap(args, fn.args, Bind(), env)
           // TODO why the following is not right for `list_map_succ(exp: Exp)` ?
@@ -30,14 +30,14 @@ object exe {
           // - it means unification is not effective here
           // - we need to test unification separately
           newArgs = walk.deepOnMap(args, bind)
-          value <- eval(fn.body, fn.env.extendByValueMap(newArgs))
+          value <- eval(fn.body, fn.env.extendByValMap(newArgs))
           bind <- unify(value, fn.ret, bind, env)
         } yield walk.deep(value, bind)
 
-      case neu: NeutralValue =>
-        Right(NeutralValue(ApNeutral(neu.neutral, args)))
+      case neu: NeuVal =>
+        Right(NeuVal(ApNeu(neu.neutral, args)))
 
-      case v: Value =>
+      case v: Val =>
         Left(Err(s"can not apply: ${v}"))
     }
   }

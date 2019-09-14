@@ -4,7 +4,7 @@ case class The (
   t: Type,
   exp: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     exp.eval(env)
   }
 

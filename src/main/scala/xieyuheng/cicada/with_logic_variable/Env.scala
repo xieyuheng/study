@@ -17,9 +17,9 @@ case class Env(map: Map[String, Define] = Map()) {
     Env(map + kv)
   }
 
-  def extendByValueMap(valueMap: ListMap[String, Value]): Env = {
+  def extendByValMap(valueMap: ListMap[String, Val]): Env = {
     valueMap.foldLeft(this) { case (env, (name, value)) =>
-      env.extend(name -> DefineValue(name, value))
+      env.extend(name -> DefineVal(name, value))
     }
   }
 }

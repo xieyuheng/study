@@ -1,8 +1,8 @@
 package xieyuheng.tartlet
 
 case object Universe extends Type {
-  def eval(env: Env): Either[Err, Value] =
-    Right(ValueUniverse)
+  def eval(env: Env): Either[Err, Val] =
+    Right(ValUniverse)
 
   def alphaEq(
     that: Exp,

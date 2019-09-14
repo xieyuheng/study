@@ -1,6 +1,6 @@
 package xieyuheng.systemt
 
-case class ValueAdd1(prev: Value) extends Value {
+case class ValAdd1(prev: Val) extends Val {
   def readback(usedNames: Set[String], t: Type): Either[Err, Exp] = {
     t match {
       case Nat =>
@@ -8,7 +8,7 @@ case class ValueAdd1(prev: Value) extends Value {
           prevExp <- prev.readback(usedNames, t)
         } yield Add1(prevExp)
       case _ => Left(Err(
-        s"type of ValueAdd1 should be Nat: ${t}"))
+        s"type of ValAdd1 should be Nat: ${t}"))
     }
   }
 }

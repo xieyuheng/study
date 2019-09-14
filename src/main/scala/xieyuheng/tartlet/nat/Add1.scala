@@ -1,10 +1,10 @@
 package xieyuheng.tartlet
 
 case class Add1 (prev: Exp) extends Constructor {
-  def eval(env: Env): Either[Err, Value] =
+  def eval(env: Env): Either[Err, Val] =
     for {
-      prevValue <- prev.eval(env)
-    } yield ValueAdd1(prevValue)
+      prevVal <- prev.eval(env)
+    } yield ValAdd1(prevVal)
 
   def alphaEq(
     that: Exp,
@@ -23,14 +23,14 @@ case class Add1 (prev: Exp) extends Constructor {
    ---------------------
    ctx :- Add1(prev) <= Nat
    */
-  def check(ctx: Ctx, t: Value): Either[Err, Exp] =
+  def check(ctx: Ctx, t: Val): Either[Err, Exp] =
     t match {
-      case ValueNat =>
+      case ValNat =>
         for {
           prev <- prev.check(ctx, t)
         } yield Add1(prev)
       case _ =>
         Left(Err(
-          s"expected ValueAdd1, found: ${t}"))
+          s"expected ValAdd1, found: ${t}"))
     }
 }

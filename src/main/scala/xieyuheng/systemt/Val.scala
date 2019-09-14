@@ -1,5 +1,5 @@
 package xieyuheng.systemt
 
-trait Value {
+trait Val {
   def readback (usedNames: Set[String], t: Type): Either[Err, Exp]
 }

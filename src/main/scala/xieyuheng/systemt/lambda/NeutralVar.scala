@@ -1,8 +1,8 @@
 package xieyuheng.systemt
 
-case class NeutralVar (
+case class NeuVar (
   name: String,
-) extends Neutral {
+) extends Neu {
   def readback_neu(usedNames: Set[String]): Either[Err, Exp] = {
     Right(Var(name))
   }

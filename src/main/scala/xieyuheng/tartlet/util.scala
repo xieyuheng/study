@@ -2,7 +2,7 @@ package xieyuheng.tartlet
 
 import scala.annotation.tailrec
 
-object Util {
+object util {
   @tailrec
   def freshen(
     usedNames: Set[String],
@@ -17,9 +17,9 @@ object Util {
 
   def conversionCheck(
     ctx: Ctx,
-    t: Value,
-    v1: Value,
-    v2: Value,
+    t: Val,
+    v1: Val,
+    v2: Val,
   ): Either[Err, Unit] = {
     for {
       e1 <- v1.readback (ctx, t)

@@ -2,9 +2,9 @@ package xieyuheng.cicada.with_logic_variable
 
 sealed trait Define
 
-final case class DefineValue(
+final case class DefineVal(
   name: String,
-  value: Value,
+  value: Val,
 ) extends Define
 
 final case class DefineMemberType(

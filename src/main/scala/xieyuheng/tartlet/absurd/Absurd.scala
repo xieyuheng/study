@@ -1,8 +1,8 @@
 package xieyuheng.tartlet
 
 case object Absurd extends Type {
-  def eval(env: Env): Either[Err, Value] =
-    Right(ValueAbsurd)
+  def eval(env: Env): Either[Err, Val] =
+    Right(ValAbsurd)
 
   def alphaEq(
     that: Exp,

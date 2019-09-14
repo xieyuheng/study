@@ -3,22 +3,22 @@ package xieyuheng.cicada.with_logic_variable
 import scala.collection.immutable.ListMap
 
 object eval {
-  def apply(exp: Exp, env: Env): Either[Err, Value] = {
+  def apply(exp: Exp, env: Env): Either[Err, Val] = {
     exp match {
       case Var(name) => {
         env.get(name) match {
-          case Some(DefineValue(name, value)) =>
+          case Some(DefineVal(name, value)) =>
             Right(value)
           case Some(DefineMemberType(name, map, superName)) =>
             eval.yieldBind(map, env).flatMap { case (map, bind) =>
-              Right(MemberTypeValue(name, map, superName, bind)) }
+              Right(MemberTypeVal(name, map, superName, bind)) }
           case Some(DefineSumType(name, map, memberNames)) =>
             eval.yieldBind(map, env).flatMap { case (map, bind) =>
-              Right(SumTypeValue(name, map, memberNames, bind)) }
+              Right(SumTypeVal(name, map, memberNames, bind)) }
           case Some(DefineFn(name, args, ret, body)) =>
             eval(Fn(args, ret, body), env)
           case None =>
-            Right(NeutralValue(VarNeutral(name)))
+            Right(NeuVal(VarNeu(name)))
         }
       }
 
@@ -29,48 +29,48 @@ object eval {
       case The(t) => {
         for {
           t <- eval(t, env)
-        } yield ValueOfType(Id(), t)
+        } yield ValOfType(Id(), t)
       }
 
       case Choice(target, map) => {
         for {
-          targetValue <- eval(target, env)
-          result <- targetValue match {
-            case memberType: MemberTypeValue =>
+          targetVal <- eval(target, env)
+          result <- targetVal match {
+            case memberType: MemberTypeVal =>
               map.get(memberType.name) match {
                 case Some(exp) => eval(exp, env)
                 case None => Left(Err(s"no clause: ${memberType.name}, on case: ${map}"))
               }
-            case NeutralValue(neutral) =>
+            case NeuVal(neutral) =>
               for {
                 map <- eval.onMap(map, env)
-              } yield NeutralValue(ChoiceNeutral(neutral, map))
+              } yield NeuVal(ChoiceNeu(neutral, map))
             case _ =>
-              Left(Err("targetValue of Dot should be MemberTypeValue or NeutralValue, " +
-                s"instead of: ${targetValue}"))
+              Left(Err("targetVal of Dot should be MemberTypeVal or NeuVal, " +
+                s"instead of: ${targetVal}"))
           }
         } yield result
       }
 
       case Dot(target, fieldName) => {
         for {
-          targetValue <- eval(target, env)
-          result <- targetValue match {
-            case sumType: SumTypeValue =>
+          targetVal <- eval(target, env)
+          result <- targetVal match {
+            case sumType: SumTypeVal =>
               sumType.map.get(fieldName) match {
                 case Some(value) => Right(walk.deep(value, sumType.bind))
                 case None => Left(Err(s"no field: ${fieldName}, on sumType: ${sumType}"))
               }
-            case memberType: MemberTypeValue =>
+            case memberType: MemberTypeVal =>
               memberType.map.get(fieldName) match {
                 case Some(value) => Right(walk.deep(value, memberType.bind))
                 case None => Left(Err(s"no field: ${fieldName}, on memberType: ${memberType}"))
               }
-            case NeutralValue(neutral) =>
-              Right(NeutralValue(DotNeutral(neutral, fieldName)))
+            case NeuVal(neutral) =>
+              Right(NeuVal(DotNeu(neutral, fieldName)))
             case _ =>
-              Left(Err("targetValue of Dot should be SumTypeValue, MemberTypeValue or NeutralValue, " +
-                s"instead of: ${targetValue}"))
+              Left(Err("targetVal of Dot should be SumTypeVal, MemberTypeVal or NeuVal, " +
+                s"instead of: ${targetVal}"))
           }
         } yield result
       }
@@ -79,21 +79,21 @@ object eval {
         for {
           (args, env) <- eval.yieldEnv(args, env)
           ret <- eval(ret, env)
-        } yield PiValue(args, ret)
+        } yield PiVal(args, ret)
       }
 
       case Fn(args, ret, body) => {
         for {
           (args, env) <- eval.yieldEnv(args, env)
           ret <- eval(ret, env)
-        } yield FnValue(args, ret, body, env)
+        } yield FnVal(args, ret, body, env)
       }
 
       case Ap(target, args) => {
         for {
-          targetValue <- eval(target, env)
-          argsValue <- eval.onMap(args, env)
-          value <- exe(targetValue, argsValue, env)
+          targetVal <- eval(target, env)
+          argsVal <- eval.onMap(args, env)
+          value <- exe(targetVal, argsVal, env)
         } yield value
       }
     }
@@ -102,22 +102,22 @@ object eval {
   def onMap(
     map: MultiMap[String, Exp],
     env: Env,
-  ): Either[Err, ListMap[String, Value]] = {
-    val initResult: Either[Err, ListMap[String, Value]] =
+  ): Either[Err, ListMap[String, Val]] = {
+    val initResult: Either[Err, ListMap[String, Val]] =
       Right(ListMap())
 
-    def updateValueMap(
-      map: ListMap[String, Value],
+    def updateValMap(
+      map: ListMap[String, Val],
       name: String,
       exp: Exp,
-    ): Either[Err, ListMap[String, Value]] = {
+    ): Either[Err, ListMap[String, Val]] = {
       for {
         value <- eval(exp, env)
       } yield map + (name -> value)
     }
 
     map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
-      result.flatMap { case (valueMap) => updateValueMap(valueMap, name, exp) }
+      result.flatMap { case (valueMap) => updateValMap(valueMap, name, exp) }
     }
   }
 
@@ -143,41 +143,41 @@ object eval {
   def yieldEnv(
     map: MultiMap[String, Exp],
     env: Env,
-  ): Either[Err, (ListMap[String, Value], Env)] = {
-    val initResult: Either[Err, (ListMap[String, Value], Env)] =
+  ): Either[Err, (ListMap[String, Val], Env)] = {
+    val initResult: Either[Err, (ListMap[String, Val], Env)] =
       Right(ListMap(), env)
 
-    def updateValueMap(
-      map: ListMap[String, Value],
+    def updateValMap(
+      map: ListMap[String, Val],
       name: String,
       exp: Exp,
       env: Env,
-    ): Either[Err, (ListMap[String, Value], Env)] = {
+    ): Either[Err, (ListMap[String, Val], Env)] = {
       for {
         value <- eval(exp, env)
-      } yield (map + (name -> value), env.extend(name -> DefineValue(name, value)))
+      } yield (map + (name -> value), env.extend(name -> DefineVal(name, value)))
     }
 
     map.entries.foldLeft(initResult) { case (result, (name, exp)) =>
-      result.flatMap { case (valueMap, env) => updateValueMap(valueMap, name, exp, env) }
+      result.flatMap { case (valueMap, env) => updateValMap(valueMap, name, exp, env) }
     }
   }
 
   def yieldBind(
     map: MultiMap[String, Exp],
     env: Env,
-  ): Either[Err, (ListMap[String, Value], Bind)] = {
-    val initResult: Either[Err, (ListMap[String, Value], Bind)] =
+  ): Either[Err, (ListMap[String, Val], Bind)] = {
+    val initResult: Either[Err, (ListMap[String, Val], Bind)] =
       Right((ListMap(), Bind()))
 
     def updateBind(
-      valueMap: ListMap[String, Value],
+      valueMap: ListMap[String, Val],
       bind: Bind,
       name: String,
-      value: Value,
+      value: Val,
     ): Either[Err, Bind] = {
       valueMap.get(name) match {
-        case Some(oldValue) => unify(value, oldValue, bind, env)
+        case Some(oldVal) => unify(value, oldVal, bind, env)
         case None => Right(bind)
       }
     }
@@ -186,7 +186,7 @@ object eval {
       for {
         valueMapAndbind <- result
         (valueMap, bind) = valueMapAndbind
-        value <- eval(exp, env.extendByValueMap(valueMap))
+        value <- eval(exp, env.extendByValMap(valueMap))
         newBind <- updateBind(valueMap, bind, name, value)
       } yield ((valueMap + (name -> value), newBind))
     }

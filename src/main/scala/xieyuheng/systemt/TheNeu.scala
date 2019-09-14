@@ -1,6 +1,6 @@
 package xieyuheng.systemt
 
-case class TheNeutral(t: Type, neutral: Neutral) extends Value {
+case class TheNeu(t: Type, neutral: Neu) extends Val {
   def readback (usedNames: Set [String], t: Type): Either[Err, Exp] = {
     neutral.readback_neu (usedNames)
   }

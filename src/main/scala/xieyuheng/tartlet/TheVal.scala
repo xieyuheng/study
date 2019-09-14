@@ -1,6 +1,6 @@
 package xieyuheng.tartlet
 
-case class TheValue (t: Value, value: Value) {
+case class TheVal (t: Val, value: Val) {
   def readback_the_val(ctx: Ctx): Either[Err, Exp] = {
     value.readback(ctx, t)
   }

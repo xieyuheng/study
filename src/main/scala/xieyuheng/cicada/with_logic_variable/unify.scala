@@ -5,7 +5,7 @@ import scala.collection.immutable.ListMap
 import xieyuheng.cicada.with_logic_variable.pretty._
 
 object unify {
-  def apply(src: Value, tar: Value, bind: Bind, env: Env): Either[Err, Bind] = {
+  def apply(src: Val, tar: Val, bind: Bind, env: Env): Either[Err, Bind] = {
     (walk(src, bind), walk(tar, bind)) match {
       case (src, tar) if {
         src == tar
@@ -17,47 +17,47 @@ object unify {
         Right(bind.extend(t1.id -> t2))
       }
 
-      case (sumType: SumTypeValue, t: TypeOfType) => {
+      case (sumType: SumTypeVal, t: TypeOfType) => {
         Right(bind.extend(t.id -> sumType))
       }
 
-      case (t: TypeOfType, sumType: SumTypeValue) => {
+      case (t: TypeOfType, sumType: SumTypeVal) => {
         Right(bind.extend(t.id -> sumType))
       }
 
-      case (memberType: MemberTypeValue, t: TypeOfType) => {
+      case (memberType: MemberTypeVal, t: TypeOfType) => {
         for {
           sumType <- eval(Var(memberType.superName), env)
         } yield bind.extend(t.id -> sumType)
       }
 
-      case (t: TypeOfType, memberType: MemberTypeValue) => {
+      case (t: TypeOfType, memberType: MemberTypeVal) => {
         for {
           sumType <- eval(Var(memberType.superName), env)
         } yield bind.extend(t.id -> sumType)
       }
 
-      case (pi: PiValue, t: TypeOfType) => {
+      case (pi: PiVal, t: TypeOfType) => {
         Right(bind.extend(t.id -> pi))
       }
 
-      case (t: TypeOfType, pi: PiValue) => {
+      case (t: TypeOfType, pi: PiVal) => {
         Right(bind.extend(t.id -> pi))
       }
 
-      case (value, ValueOfType(id, t)) => {
+      case (value, ValOfType(id, t)) => {
         for {
           bind <- unify(value, t, bind, env)
         } yield bind.extend(id -> value)
       }
 
-      case (ValueOfType(id, t), value) => {
+      case (ValOfType(id, t), value) => {
         for {
           bind <- unify(value, t, bind, env)
         } yield bind.extend(id -> value)
       }
 
-      case (fn: FnValue, pi: PiValue) => {
+      case (fn: FnVal, pi: PiVal) => {
         for {
           /** contravariant at args */
           bind <- unify.onMap(pi.args, fn.args, bind, env)
@@ -65,7 +65,7 @@ object unify {
         } yield bind
       }
 
-      case (pi: PiValue, fn: FnValue) => {
+      case (pi: PiVal, fn: FnVal) => {
         for {
           /** contravariant at args */
           bind <- unify.onMap(pi.args, fn.args, bind, env)
@@ -73,7 +73,7 @@ object unify {
         } yield bind
       }
 
-      case (memberType: MemberTypeValue, sumType: SumTypeValue) if {
+      case (memberType: MemberTypeVal, sumType: SumTypeVal) if {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
@@ -83,7 +83,7 @@ object unify {
         } yield bind
       }
 
-      case (sumType: SumTypeValue, memberType: MemberTypeValue) if {
+      case (sumType: SumTypeVal, memberType: MemberTypeVal) if {
         sumType.memberNames.contains(memberType.name)
       } => {
         for {
@@ -93,7 +93,7 @@ object unify {
         } yield bind
       }
 
-      case (src: SumTypeValue, tar: SumTypeValue) if {
+      case (src: SumTypeVal, tar: SumTypeVal) if {
         src.name == tar.name
       } => {
         for {
@@ -103,7 +103,7 @@ object unify {
         } yield bind
       }
 
-      case (src: MemberTypeValue, tar: MemberTypeValue) if {
+      case (src: MemberTypeVal, tar: MemberTypeVal) if {
         src.name == tar.name
       } => {
         for {
@@ -113,7 +113,7 @@ object unify {
         } yield bind
       }
 
-      case (src: PiValue, tar: PiValue) => {
+      case (src: PiVal, tar: PiVal) => {
         for {
           bind <- unify.onMap(tar.args, src.args, bind, env)
           bind <- unify(src.ret, tar.ret, bind, env)
@@ -123,16 +123,16 @@ object unify {
       case _ => {
         Left(Err(
           "fail to unify\n" ++
-            s"src: ${prettyValue(walk(src, bind))}\n" ++
-            s"tar: ${prettyValue(walk(tar, bind))}\n" ++
+            s"src: ${prettyVal(walk(src, bind))}\n" ++
+            s"tar: ${prettyVal(walk(tar, bind))}\n" ++
             s"bind: ${prettyBind(bind)}\n"))
       }
     }
   }
 
   def onMap(
-    srcMap: ListMap[String, Value],
-    tarMap: ListMap[String, Value],
+    srcMap: ListMap[String, Val],
+    tarMap: ListMap[String, Val],
     bind: Bind,
     env: Env,
   ): Either[Err, Bind] = {
@@ -142,18 +142,18 @@ object unify {
     def updateBind(
       bind: Bind,
       name: String,
-      tarValue: Value,
+      tarVal: Val,
     ): Either[Err, Bind] = {
       srcMap.get(name) match {
-        case Some(srcValue) =>
-          unify(srcValue, tarValue, bind, env)
+        case Some(srcVal) =>
+          unify(srcVal, tarVal, bind, env)
         case None =>
           Right(bind)
       }
     }
 
-    tarMap.foldLeft(initResult) { case (result, (name, tarValue)) =>
-      result.flatMap { bind => updateBind(bind, name, tarValue) }
+    tarMap.foldLeft(initResult) { case (result, (name, tarVal)) =>
+      result.flatMap { bind => updateBind(bind, name, tarVal) }
     }
   }
 
@@ -171,7 +171,7 @@ object unify {
     val initResult: Either[Err, Bind] =
       Right(initBind)
 
-    def updateBind(bind: Bind, id: Id, v: Value): Either[Err, Bind] = {
+    def updateBind(bind: Bind, id: Id, v: Val): Either[Err, Bind] = {
       bind.get(id) match {
         case Some(v1) =>
           unify(v1, v, bind, env)

@@ -5,12 +5,12 @@ case class Eqv(
   from: Exp,
   to: Exp,
 ) extends Type {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
       t <- t.eval(env)
       from <- from.eval(env)
       to <- to.eval(env)
-    } yield ValueEqv(t, from, to)
+    } yield ValEqv(t, from, to)
   }
 
   def alphaEq(
@@ -37,10 +37,10 @@ case class Eqv(
    */
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
-      t <- t.check(ctx, ValueUniverse)
-      typeValue <- t.eval(ctx.toEnv)
-      from <- from.check(ctx, typeValue)
-      to <- to.check(ctx, typeValue)
+      t <- t.check(ctx, ValUniverse)
+      typeVal <- t.eval(ctx.toEnv)
+      from <- from.check(ctx, typeVal)
+      to <- to.check(ctx, typeVal)
     } yield The(Universe, Eqv(t, from, to))
   }
 }

@@ -3,10 +3,10 @@ package xieyuheng.tartlet
 case class Cdr (
   pair: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
-      pairValue <- pair.eval(env)
-      res <- Cdr.exe(pairValue)
+      pairVal <- pair.eval(env)
+      res <- Cdr.exe(pairVal)
     } yield res
   }
 
@@ -32,12 +32,12 @@ case class Cdr (
       the <- pair.infer(ctx)
       value <- the.t.eval(ctx.toEnv)
       res <- value match {
-        case ValueSigma(carType, cdrType) =>
+        case ValSigma(carType, cdrType) =>
           for {
-            pairValue <- the.value.eval(ctx.toEnv)
-            carValue <- Car.exe(pairValue)
-            realCdrType <- cdrType.apply(carValue)
-            cdrTypeExp <- realCdrType.readback(ctx, ValueUniverse)
+            pairVal <- the.value.eval(ctx.toEnv)
+            carVal <- Car.exe(pairVal)
+            realCdrType <- cdrType.apply(carVal)
+            cdrTypeExp <- realCdrType.readback(ctx, ValUniverse)
           } yield The(cdrTypeExp, the.value)
         case _ =>
           Left(Err(
@@ -49,22 +49,22 @@ case class Cdr (
 
 object Cdr {
   def exe(
-    pair: Value,
-  ): Either[Err, Value] = {
+    pair: Val,
+  ): Either[Err, Val] = {
     pair match {
-      case ValueCons(car, cdr) =>
+      case ValCons(car, cdr) =>
         Right(cdr)
-      case TheNeutral(ValueSigma(carType, cdrType), neutral) => {
+      case TheNeu(ValSigma(carType, cdrType), neutral) => {
         for {
-          carValue <- Car.exe(pair)
-          realCdrType <- cdrType.apply(carValue)
-        } yield TheNeutral(realCdrType, NeutralCar(neutral))
+          carVal <- Car.exe(pair)
+          realCdrType <- cdrType.apply(carVal)
+        } yield TheNeu(realCdrType, NeuCar(neutral))
       }
       case _ =>
         Left(Err(
           "pair should be " +
-            "ValueCons(car, cdr) | " +
-            "TheNeutral(ValueSigma(carType, cdrType), neutral): " +
+            "ValCons(car, cdr) | " +
+            "TheNeu(ValSigma(carType, cdrType), neutral): " +
             s"${pair}"))
     }
   }

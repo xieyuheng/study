@@ -7,10 +7,10 @@ case class Sigma (
   carType: Exp,
   cdrType: Exp,
 ) extends Type {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
-      carTypeValue <- carType.eval(env)
-    } yield ValueSigma(carTypeValue, EnvClosure(env, name, cdrType))
+      carTypeVal <- carType.eval(env)
+    } yield ValSigma(carTypeVal, EnvClosure(env, name, cdrType))
   }
 
   def alphaEq(
@@ -36,9 +36,9 @@ case class Sigma (
    */
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
-      carType <- carType.check(ctx, ValueUniverse)
-      carTypeValue <- carType.eval(ctx.toEnv)
-      cdrType <- cdrType.check(ctx.ext(name, Bind(carTypeValue)), ValueUniverse)
+      carType <- carType.check(ctx, ValUniverse)
+      carTypeVal <- carType.eval(ctx.toEnv)
+      cdrType <- cdrType.check(ctx.ext(name, Bind(carTypeVal)), ValUniverse)
     } yield The(Universe, Pi(name, carType, cdrType))
   }
 }

@@ -3,10 +3,10 @@ package xieyuheng.tartlet
 case class Car (
   pair: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
-      pairValue <- pair.eval(env)
-      res <- Car.exe(pairValue)
+      pairVal <- pair.eval(env)
+      res <- Car.exe(pairVal)
     } yield res
   }
 
@@ -33,8 +33,8 @@ case class Car (
       res <- the.t match {
         case Sigma(name, carType, cdrType) =>
           for {
-            carTypeValue <- carType.eval(ctx.toEnv)
-            carTypeExp <- carTypeValue.readback(ctx, ValueUniverse)
+            carTypeVal <- carType.eval(ctx.toEnv)
+            carTypeExp <- carTypeVal.readback(ctx, ValUniverse)
           } yield The(carTypeExp, the.value)
         case _ =>
           Left(Err(
@@ -46,19 +46,19 @@ case class Car (
 
 object Car {
   def exe(
-    pair: Value,
-  ): Either[Err, Value] = {
+    pair: Val,
+  ): Either[Err, Val] = {
     pair match {
-      case ValueCons(car, cdr) =>
+      case ValCons(car, cdr) =>
         Right(car)
-      case TheNeutral(ValueSigma(carType, cdrType), neutral) => {
-        Right(TheNeutral(carType, NeutralCar(neutral)))
+      case TheNeu(ValSigma(carType, cdrType), neutral) => {
+        Right(TheNeu(carType, NeuCar(neutral)))
       }
       case _ =>
         Left(Err(
           "pair should be " +
-            "ValueCons(car, cdr) | " +
-            "TheNeutral(ValueSigma(carType, cdrType), neutral): " +
+            "ValCons(car, cdr) | " +
+            "TheNeu(ValSigma(carType, cdrType), neutral): " +
             s"${pair}"))
     }
   }

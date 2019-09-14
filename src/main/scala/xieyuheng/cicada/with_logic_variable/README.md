@@ -11,4 +11,4 @@
 ------
 - todo
   - check
-  - [test] MemberTypeValue can be used as type, just by using `the`
+  - [test] MemberTypeVal can be used as type, just by using `the`

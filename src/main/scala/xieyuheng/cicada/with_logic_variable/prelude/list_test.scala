@@ -71,17 +71,17 @@ object list_test extends Module with App {
 
     eval_on_right(list_map_succ("three_zeros")) {
       case value =>
-        println(prettyValue(walk.deepSelf(value)))
+        println(prettyVal(walk.deepSelf(value)))
     }
 
     eval_on_right(list_map_succ(list_map_succ("three_zeros"))) {
       case value =>
-        println(prettyValue(walk.deepSelf(value)))
+        println(prettyVal(walk.deepSelf(value)))
     }
 
     eval_on_right(list_map_succ(list_map_succ(list_map_succ("three_zeros")))) {
       case value =>
-        println(prettyValue(walk.deepSelf(value)))
+        println(prettyVal(walk.deepSelf(value)))
     }
   }
 

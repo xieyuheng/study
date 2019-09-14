@@ -10,11 +10,11 @@ trait Type extends Exp {
    -----------------
    ctx :- exp <= T
    */
-  def check(ctx: Ctx, t: Value): Either[Err, Exp] = {
+  def check(ctx: Ctx, t: Val): Either[Err, Exp] = {
     for {
       the <- infer(ctx)
       t2 <- the.t.eval(ctx.toEnv)
-      _ok <- Util.conversionCheck(ctx, ValueUniverse, t, t2)
+      _ok <- util.conversionCheck(ctx, ValUniverse, t, t2)
     } yield the.value
   }
 }

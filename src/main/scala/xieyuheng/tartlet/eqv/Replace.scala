@@ -5,15 +5,15 @@ case class Replace (
   motive: Exp,
   base: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
-      targetValue <- target.eval(env)
-      motiveValue <- motive.eval(env)
-      baseValue <- base.eval(env)
+      targetVal <- target.eval(env)
+      motiveVal <- motive.eval(env)
+      baseVal <- base.eval(env)
       res <- Replace.exe(
-        targetValue,
-        motiveValue,
-        baseValue)
+        targetVal,
+        motiveVal,
+        baseVal)
     } yield res
   }
 
@@ -44,16 +44,16 @@ case class Replace (
       res <- the.t match {
         case Eqv(t, from, to) =>
           for {
-            typeValue <- t.eval(ctx.toEnv)
-            motive <- motive.check(ctx, ValuePi(typeValue,
-              NativeClosure("_", _ => Right(ValueUniverse))))
-            motiveValue <- motive.eval(ctx.toEnv)
-            fromValue <- from.eval(ctx.toEnv)
-            baseType <- Apply.exe(motiveValue, fromValue)
+            typeVal <- t.eval(ctx.toEnv)
+            motive <- motive.check(ctx, ValPi(typeVal,
+              NativeClosure("_", _ => Right(ValUniverse))))
+            motiveVal <- motive.eval(ctx.toEnv)
+            fromVal <- from.eval(ctx.toEnv)
+            baseType <- Apply.exe(motiveVal, fromVal)
             base <- base.check(ctx, baseType)
-            toValue <- to.eval(ctx.toEnv)
-            typeValue <- Apply.exe(motiveValue, toValue)
-            typeExp <- typeValue.readback(ctx, ValueUniverse)
+            toVal <- to.eval(ctx.toEnv)
+            typeVal <- Apply.exe(motiveVal, toVal)
+            typeExp <- typeVal.readback(ctx, ValUniverse)
           } yield The(typeExp, Replace(the.value, motive, base))
         case _ =>
           Left(Err(
@@ -65,28 +65,28 @@ case class Replace (
 
 object Replace {
   def exe(
-    target: Value,
-    motive: Value,
-    base: Value,
-  ): Either[Err, Value] = {
+    target: Val,
+    motive: Val,
+    base: Val,
+  ): Either[Err, Val] = {
     target match {
-      case ValueSame =>
+      case ValSame =>
         Right(base)
-      case TheNeutral(ValueEqv(t, from, to), neutral) => {
+      case TheNeu(ValEqv(t, from, to), neutral) => {
         for {
-          typeValue <- Apply.exe(motive, to)
+          typeVal <- Apply.exe(motive, to)
           baseType <- Apply.exe(motive, from)
-        } yield TheNeutral(typeValue,
-          NeutralReplace(
+        } yield TheNeu(typeVal,
+          NeuReplace(
             neutral,
-            TheValue(ValuePi(t, NativeClosure("x", _ => Right(ValueUniverse))), motive),
-            TheValue(baseType, base)))
+            TheVal(ValPi(t, NativeClosure("x", _ => Right(ValUniverse))), motive),
+            TheVal(baseType, base)))
       }
       case _ =>
         Left(Err(
           "target should be " +
-            "ValueSame | " +
-            "TheNeutral(ValueEqv(t, from, to), neutral): " +
+            "ValSame | " +
+            "TheNeu(ValEqv(t, from, to), neutral): " +
             s"${target}"))
     }
   }

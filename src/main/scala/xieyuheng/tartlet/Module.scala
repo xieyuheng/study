@@ -7,7 +7,7 @@ case class Module(
     if (ctx.lookupType(name).isDefined) {
       println(s"name: ${name} is alreay claimed")
     } else {
-      t.check(ctx, ValueUniverse) match {
+      t.check(ctx, ValUniverse) match {
         case Right(checkedTypeExp) =>
           for {
             checkedType <- checkedTypeExp.eval(ctx.toEnv)
@@ -21,17 +21,17 @@ case class Module(
 
   def define(name: String, exp: Exp): Module = {
     ctx.lookupDen(name) match {
-      case Some(Bind(typeValue)) =>
-        exp.check(ctx, typeValue) match {
+      case Some(Bind(typeVal)) =>
+        exp.check(ctx, typeVal) match {
           case Right(exp) =>
             for {
               value <- exp.eval(ctx.toEnv)
-            } ctx = ctx.ext(name, Def(typeValue, value))
+            } ctx = ctx.ext(name, Def(typeVal, value))
           case Left(errorMsg) =>
             println(s"type check fail for name: ${name}, errorMsg: ${errorMsg}")
         }
-      case Some(Def(typeValue, value)) =>
-        println(s"name: ${name} is already defined, type: ${typeValue}, value: ${value}")
+      case Some(Def(typeVal, value)) =>
+        println(s"name: ${name} is already defined, type: ${typeVal}, value: ${value}")
       case None =>
         println(s"name: ${name} is not claimed before define")
     }
@@ -42,9 +42,9 @@ case class Module(
     val env = ctx.toEnv
     val result = for {
       the <- exp.infer(ctx)
-      typeValue <- the.t.eval(env)
+      typeVal <- the.t.eval(env)
       value <- exp.eval(env)
-      norm <- value.readback(ctx, typeValue)
+      norm <- value.readback(ctx, typeVal)
     } yield The(the.t, norm)
 
     result match {

@@ -1,7 +1,7 @@
 package xieyuheng.cicada.with_logic_variable
 
-case class Bind(map: Map[Id, Value] = Map()) {
-  def get(id: Id): Option[Value] = {
+case class Bind(map: Map[Id, Val] = Map()) {
+  def get(id: Id): Option[Val] = {
     map.get(id)
   }
 
@@ -9,7 +9,7 @@ case class Bind(map: Map[Id, Value] = Map()) {
     get(id).isDefined
   }
 
-  def extend(kv: (Id, Value)): Bind = {
+  def extend(kv: (Id, Val)): Bind = {
     Bind(map + kv)
   }
 
@@ -23,11 +23,11 @@ case class Bind(map: Map[Id, Value] = Map()) {
     Bind(map ++ that.map)
   }
 
-  def filter(p: ((Id, Value)) => Boolean): Bind = {
+  def filter(p: ((Id, Val)) => Boolean): Bind = {
     Bind(map.filter(p))
   }
 
-  def filterNot(p: ((Id, Value)) => Boolean): Bind = {
+  def filterNot(p: ((Id, Val)) => Boolean): Bind = {
     Bind(map.filterNot(p))
   }
 }

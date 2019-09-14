@@ -3,13 +3,13 @@ package xieyuheng.systemt
 object test extends App {
   val `freshen should generate new name not used` = {
     val usedNames = Set("x", "x*")
-    val freshName = Util.freshen(usedNames, "x")
+    val freshName = util.freshen(usedNames, "x")
     assert(!usedNames.contains(freshName))
   }
 
   val `it should add * to the end of name` = {
     val usedNames = Set("x", "x*")
-    val freshName = Util.freshen(usedNames, "x")
+    val freshName = util.freshen(usedNames, "x")
     assert(freshName == "x**")
   }
 

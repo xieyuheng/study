@@ -2,8 +2,8 @@ package xieyuheng.cicada.with_logic_variable
 
 import scala.collection.immutable.ListMap
 
-sealed trait Neutral
-final case class VarNeutral(name: String) extends Neutral
-final case class ChoiceNeutral(target: Neutral, map: ListMap[String, Value]) extends Neutral
-final case class DotNeutral(target: Neutral, fieldName: String) extends Neutral
-final case class ApNeutral(target: Neutral, args: ListMap[String, Value]) extends Neutral
+sealed trait Neu
+final case class VarNeu(name: String) extends Neu
+final case class ChoiceNeu(target: Neu, map: ListMap[String, Val]) extends Neu
+final case class DotNeu(target: Neu, fieldName: String) extends Neu
+final case class ApNeu(target: Neu, args: ListMap[String, Val]) extends Neu

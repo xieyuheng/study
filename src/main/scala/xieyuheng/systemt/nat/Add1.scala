@@ -1,10 +1,10 @@
 package xieyuheng.systemt
 
 case class Add1(prev: Exp) extends Constructor {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
-      prevValue <- prev.eval(env)
-    } yield ValueAdd1(prevValue)
+      prevVal <- prev.eval(env)
+    } yield ValAdd1(prevVal)
   }
 
   /*

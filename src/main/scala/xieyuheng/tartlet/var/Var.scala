@@ -1,8 +1,8 @@
 package xieyuheng.tartlet
 
 case class Var (name: String) extends Eliminator {
-  def eval(env: Env): Either[Err, Value] = {
-    env.lookupValue(name) match {
+  def eval(env: Env): Either[Err, Val] = {
+    env.lookupVal(name) match {
       case Some(value) =>
         Right(value)
       case None =>
@@ -37,9 +37,9 @@ case class Var (name: String) extends Eliminator {
    */
   def infer(ctx: Ctx): Either[Err, The] = {
     ctx.lookupType(name) match {
-      case Some(typeValue) => {
+      case Some(typeVal) => {
         for {
-          typeExp <- typeValue.readback(ctx, ValueUniverse)
+          typeExp <- typeVal.readback(ctx, ValUniverse)
         } yield The(typeExp, this)
       }
       case None =>

@@ -1,17 +1,17 @@
 package xieyuheng.tartlet
 
-case class ValuePi (
-  argType: Value,
+case class ValPi (
+  argType: Val,
   retType: Closure,
-) extends Value {
-  def readback (ctx: Ctx, t: Value): Either[Err, Exp] = {
-    val freshName = Util.freshen(ctx.names, retType.name)
+) extends Val {
+  def readback (ctx: Ctx, t: Val): Either[Err, Exp] = {
+    val freshName = util.freshen(ctx.names, retType.name)
     for {
-      argTypeExp <- argType.readback(ctx, ValueUniverse)
-      retTypeExpValue <- retType.apply(
-        TheNeutral(argType, NeutralVar(freshName)))
-      retTypeExp <- retTypeExpValue.readback(
-        ctx.ext(freshName, Bind(argType)), ValueUniverse)
+      argTypeExp <- argType.readback(ctx, ValUniverse)
+      retTypeExpVal <- retType.apply(
+        TheNeu(argType, NeuVar(freshName)))
+      retTypeExp <- retTypeExpVal.readback(
+        ctx.ext(freshName, Bind(argType)), ValUniverse)
     } yield Pi(freshName, argTypeExp, retTypeExp)
   }
 }

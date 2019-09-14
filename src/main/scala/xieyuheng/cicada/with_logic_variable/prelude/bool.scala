@@ -47,7 +47,7 @@ object bool extends Module {
         "false_t" -> "false_t")))))
 
 
-  def to_boolean(value: Value): Boolean = {
+  def to_boolean(value: Val): Boolean = {
     val json = writeJs(walk.deepSelf(value))
     json_to_boolean(json)
   }

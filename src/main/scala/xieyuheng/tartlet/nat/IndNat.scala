@@ -6,17 +6,17 @@ case class IndNat (
   base: Exp,
   step: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
-      targetValue <- target.eval(env)
-      motiveValue <- motive.eval(env)
-      baseValue <- base.eval(env)
-      stepValue <- step.eval(env)
+      targetVal <- target.eval(env)
+      motiveVal <- motive.eval(env)
+      baseVal <- base.eval(env)
+      stepVal <- step.eval(env)
       res <- IndNat.exe(
-        targetValue,
-        motiveValue,
-        baseValue,
-        stepValue)
+        targetVal,
+        motiveVal,
+        baseVal,
+        stepVal)
     } yield res
   }
 
@@ -47,64 +47,64 @@ case class IndNat (
    */
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
-      target <- target.check(ctx, ValueNat)
-      motive <- motive.check(ctx, ValuePi(ValueNat,
-        NativeClosure("n", _ => Right(ValueUniverse))))
-      motiveValue <- motive.eval(ctx.toEnv)
-      targetValue <- target.eval(ctx.toEnv)
-      baseType <- Apply.exe(motiveValue, ValueZero)
+      target <- target.check(ctx, ValNat)
+      motive <- motive.check(ctx, ValPi(ValNat,
+        NativeClosure("n", _ => Right(ValUniverse))))
+      motiveVal <- motive.eval(ctx.toEnv)
+      targetVal <- target.eval(ctx.toEnv)
+      baseType <- Apply.exe(motiveVal, ValZero)
       base <- base.check(ctx, baseType)
-      step <- step.check(ctx, IndNat.stepType(motiveValue))
-      typeValue <- Apply.exe(motiveValue, targetValue)
-      t <- typeValue.readback(ctx, ValueUniverse)
+      step <- step.check(ctx, IndNat.stepType(motiveVal))
+      typeVal <- Apply.exe(motiveVal, targetVal)
+      t <- typeVal.readback(ctx, ValUniverse)
     } yield The(t, IndNat(target, motive, base, step))
    }
  }
 
 object IndNat {
-  def stepType(motive: Value): ValuePi = {
-    ValuePi(ValueNat,
+  def stepType(motive: Val): ValPi = {
+    ValPi(ValNat,
       NativeClosure("prev", prev =>
         for {
           almostType <- Apply.exe(motive, prev)
-        } yield ValuePi(almostType,
+        } yield ValPi(almostType,
           NativeClosure("almost", almost =>
-            Apply.exe(motive, ValueAdd1(prev))))))
+            Apply.exe(motive, ValAdd1(prev))))))
   }
 
   def exe(
-    target: Value,
-    motive: Value,
-    base: Value,
-    step: Value,
-  ): Either[Err, Value] = {
+    target: Val,
+    motive: Val,
+    base: Val,
+    step: Val,
+  ): Either[Err, Val] = {
     target match {
-      case ValueZero =>
+      case ValZero =>
         Right(base)
-      case ValueAdd1(prev) => {
+      case ValAdd1(prev) => {
         for {
           f <- Apply.exe(step, prev)
           almost <- IndNat.exe(prev, motive, base, step)
           res <- Apply.exe(f, almost)
         } yield res
       }
-      case TheNeutral(ValueNat, neutral) => {
+      case TheNeu(ValNat, neutral) => {
         for {
           t <- Apply.exe(motive, target)
-          baseType <- Apply.exe(motive, ValueZero)
-        } yield TheNeutral(t,
-          NeutralIndNat(
+          baseType <- Apply.exe(motive, ValZero)
+        } yield TheNeu(t,
+          NeuIndNat(
             neutral,
-            TheValue(ValuePi(ValueNat, NativeClosure("k", k => Right(ValueUniverse))), motive),
-            TheValue(baseType, base),
-            TheValue(IndNat.stepType(motive), step)))
+            TheVal(ValPi(ValNat, NativeClosure("k", k => Right(ValUniverse))), motive),
+            TheVal(baseType, base),
+            TheVal(IndNat.stepType(motive), step)))
       }
       case _ =>
         Left(Err(
           "target should be " +
-            "ValueZero | " +
-            "ValueAdd1(prev) | " +
-            "TheNeutral(ValueNat, neutral): " +
+            "ValZero | " +
+            "ValAdd1(prev) | " +
+            "TheNeu(ValNat, neutral): " +
             s"${target}"))
     }
   }

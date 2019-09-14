@@ -1,8 +1,8 @@
 package xieyuheng.tartlet
 
-case class NeutralCar (
-  pair: Neutral,
-) extends Neutral {
+case class NeuCar (
+  pair: Neu,
+) extends Neu {
   def readback_neu(ctx: Ctx): Either[Err, Exp] = {
     for {
       pair <- pair.readback_neu(ctx)

@@ -1,8 +1,8 @@
 package xieyuheng.tartlet
 
 case object Atom extends Type {
-  def eval(env: Env): Either[Err, Value] =
-    Right(ValueAtom)
+  def eval(env: Env): Either[Err, Val] =
+    Right(ValAtom)
 
   def alphaEq(
     that: Exp,

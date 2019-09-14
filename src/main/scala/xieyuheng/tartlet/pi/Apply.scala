@@ -4,7 +4,7 @@ case class Apply (
   rator: Exp,
   rand: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[Err, Value] = {
+  def eval(env: Env): Either[Err, Val] = {
     for {
       fn <- rator.eval(env)
       arg <- rand.eval(env)
@@ -36,12 +36,12 @@ case class Apply (
       the <- rator.infer(ctx)
       t <- the.t.eval(ctx.toEnv)
       res <- t match {
-        case ValuePi(argType, retType) => {
+        case ValPi(argType, retType) => {
           for {
             rand <- rand.check(ctx, argType)
-            argValue <- rand.eval(ctx.toEnv)
-            retValue <- retType.apply(argValue)
-            retExp <- retValue.readback(ctx, ValueUniverse)
+            argVal <- rand.eval(ctx.toEnv)
+            retVal <- retType.apply(argVal)
+            retExp <- retVal.readback(ctx, ValUniverse)
           } yield The(retExp, Apply(the.value, rand))
         }
         case _ =>
@@ -53,21 +53,21 @@ case class Apply (
 
 object Apply {
   def exe(
-    fn: Value,
-    arg: Value,
-  ): Either[Err, Value] = {
+    fn: Val,
+    arg: Val,
+  ): Either[Err, Val] = {
     fn match {
-      case ValueLambda(closure) =>
+      case ValLambda(closure) =>
         closure.apply(arg)
-      case TheNeutral(ValuePi(argType, retType), neutral) =>
+      case TheNeu(ValPi(argType, retType), neutral) =>
         for {
           t <- retType.apply(arg)
-        } yield TheNeutral(t, NeutralApply(neutral, TheValue(argType, arg)))
+        } yield TheNeu(t, NeuApply(neutral, TheVal(argType, arg)))
       case _ =>
         Left(Err(
           "fn should be " +
-            "ValueLambda(closure) | " +
-            "TheNeutral(ValuePi(argType, retType), neutral): " +
+            "ValLambda(closure) | " +
+            "TheNeu(ValPi(argType, retType), neutral): " +
             s"${fn}"))
     }
   }

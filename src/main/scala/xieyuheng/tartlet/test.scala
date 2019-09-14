@@ -3,26 +3,26 @@ package xieyuheng.tartlet
 object test extends App {
   val `freshen should generate new name not used` = {
     val usedNames = Set("x", "x*")
-    val freshName = Util.freshen(usedNames, "x")
+    val freshName = util.freshen(usedNames, "x")
     assert(!usedNames.contains(freshName))
   }
 
   val `it should add * to the end of name` = {
     val usedNames = Set("x", "x*")
-    val freshName = Util.freshen(usedNames, "x")
+    val freshName = util.freshen(usedNames, "x")
     assert(freshName == "x**")
   }
 
   val `eval should eval Lambda` = {
     val exp = Lambda("x", Lambda("y", Var("y")))
     assert(exp.eval(Env()) ==
-      Right(ValueLambda(EnvClosure(Env(), "x", Lambda("y", Var("y"))))))
+      Right(ValLambda(EnvClosure(Env(), "x", Lambda("y", Var("y"))))))
   }
 
   val `it should eval Apply` = {
     val exp = Apply(Lambda("x", Var("x")), Lambda("x", Var("x")))
     assert(exp.eval(Env()) ==
-      Right(ValueLambda(EnvClosure(Env(), "x", Var("x")))))
+      Right(ValLambda(EnvClosure(Env(), "x", Var("x")))))
   }
 
   val `Module can define` = {

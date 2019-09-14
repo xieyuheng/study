@@ -1,11 +1,11 @@
 package xieyuheng.tartlet
 
 case class Cons (car: Exp, cdr: Exp) extends Constructor {
-  def eval(env: Env): Either[Err, Value] =
+  def eval(env: Env): Either[Err, Val] =
     for {
       car <- car.eval(env)
       cdr <- cdr.eval(env)
-    } yield ValueCons(car, cdr)
+    } yield ValCons(car, cdr)
 
   def alphaEq(
     that: Exp,
@@ -26,17 +26,17 @@ case class Cons (car: Exp, cdr: Exp) extends Constructor {
    -----------------
    ctx :- Cons(car, cdr) <= Sigma(x: A, D)
    */
-  def check(ctx: Ctx, t: Value): Either[Err, Exp] =
+  def check(ctx: Ctx, t: Val): Either[Err, Exp] =
     t match {
-      case ValueSigma(carType, cdrType) =>
+      case ValSigma(carType, cdrType) =>
         for {
           car <- car.check(ctx, carType)
-          carValue <- car.eval(ctx.toEnv)
-          realCdrType <- cdrType.apply(carValue)
+          carVal <- car.eval(ctx.toEnv)
+          realCdrType <- cdrType.apply(carVal)
           cdr <- cdr.check(ctx, realCdrType)
         } yield Cons(car, cdr)
       case _ =>
         Left(Err(
-          s"expected ValueSigma(carType, cdrType), found: ${t}"))
+          s"expected ValSigma(carType, cdrType), found: ${t}"))
     }
 }

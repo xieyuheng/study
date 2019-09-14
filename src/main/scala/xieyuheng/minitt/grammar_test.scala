@@ -361,8 +361,8 @@ object grammar_test extends App {
       s"""
       let bool_elim: (
         C: (bool_t) -> univ,
-        C(true),
-        C(false),
+        C(true[]),
+        C(false[]),
         b: bool_t,
       ) -> C(b) = (C, h0, h1) => match {
         true[] => h0;
@@ -371,8 +371,8 @@ object grammar_test extends App {
       """,
       Let("bool_elim",
         pi("C" :: "bool_t" ->: Univ()) {
-          ("C" $ "true") ->:
-          ("C" $ "false") ->:
+          ("C" $ %("true")) ->:
+          ("C" $ %("false")) ->:
           pi("b" :: "bool_t") { "C" $ "b" } },
         fn("C", "h0", "h1") { mat(
           "true" -> fn(__) { "h0" },
@@ -391,6 +391,14 @@ object grammar_test extends App {
           "zero" -> Trivial(),
           "succ" -> "nat_t"))
     )
+
+    assert_decl_to_tree(
+      s"""
+      let zero: nat_t = zero[]
+      """,
+      Let("zero", "nat_t", %("zero"))
+    )
+
 
     assert_decl_to_tree(
       s"""

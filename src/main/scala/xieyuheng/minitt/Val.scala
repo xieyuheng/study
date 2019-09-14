@@ -1,5 +1,7 @@
 package xieyuheng.minitt
 
+import xieyuheng.minitt.pretty._
+
 sealed trait Val
 final case class ValNeu(neu: Neu) extends Val
 final case class ValFn(clo_fn: CloFn) extends Val

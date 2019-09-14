@@ -5,6 +5,17 @@ import xieyuheng.minitt.readback._
 
 object check {
 
+  def gen_fresh(i: Int): Val = {
+    ValNeu(NeuVar(fresh_name(i)))
+  }
+
+  def gen_fresh_for(i: Int, t: Val): Val = {
+    t match {
+      case ValTrivial() => ValSole()
+      case _ => gen_fresh(i)
+    }
+  }
+
   def check_decl(i: Int, env: Env, ctx: Ctx, decl: Decl): Either[Err, Ctx] = {
     decl match {
       case Let(pat, t_exp, e) =>
@@ -18,7 +29,7 @@ object check {
         for {
           _ <- check_type(i, env, ctx, t_exp)
           t = eval(t_exp, env)
-          fresh = ValNeu(NeuVar(fresh_name(i)))
+          fresh = gen_fresh_for(i, t)
           ctx1 <- ctx.ext(pat, t, fresh)
           _ <- check(i + 1, EnvPat(pat, fresh, env), ctx1, e, t)
           v = eval(e, EnvDecl(decl, env))
@@ -32,14 +43,14 @@ object check {
       case Pi(pat: Pat, arg_t: Exp, dep_t: Exp) =>
         for {
           _ <- check_type(i, env, ctx, arg_t)
-          fresh = ValNeu(NeuVar(fresh_name(i)))
+          fresh = gen_fresh(i)
           ctx1 <- ctx.ext(pat, eval(arg_t, env), fresh)
           _ <- check_type(i + 1, EnvPat(pat, fresh, env), ctx1, dep_t)
         } yield ()
       case Sigma(pat: Pat, arg_t: Exp, dep_t: Exp) =>
         for {
           _ <- check_type(i, env, ctx, arg_t)
-          fresh = ValNeu(NeuVar(fresh_name(i)))
+          fresh = gen_fresh(i)
           ctx1 <- ctx.ext(pat, eval(arg_t, env), fresh)
           _ <- check_type(i + 1, EnvPat(pat, fresh, env), ctx1, dep_t)
         } yield ()
@@ -51,7 +62,7 @@ object check {
   def check(i: Int, env: Env, ctx: Ctx, e: Exp, t: Val): Either[Err, Unit] = {
     (e, t) match {
       case (Fn(pat: Pat, body: Exp), ValPi(arg_t: Val, clo)) =>
-        val fresh = ValNeu(NeuVar(fresh_name(i)))
+        val fresh = gen_fresh_for(i, arg_t)
         for {
           ctx1 <- ctx.ext(pat, arg_t, fresh)
           _ <- check(i + 1, EnvPat(pat, fresh, env), ctx1, body, clo.ap(fresh))
@@ -64,15 +75,17 @@ object check {
       case (Pi(pat: Pat, arg_t: Exp, dep_t: Exp), ValUniv()) =>
         for {
           _ <- check(i, env, ctx, arg_t, ValUniv())
-          fresh = ValNeu(NeuVar(fresh_name(i)))
-          ctx1 <- ctx.ext(pat, eval(arg_t, env), fresh)
+          arg_t_value = eval(arg_t, env)
+          fresh = gen_fresh_for(i, arg_t_value)
+          ctx1 <- ctx.ext(pat, arg_t_value, fresh)
           _ <- check(i + 1, EnvPat(pat, fresh, env), ctx1, dep_t, ValUniv())
         } yield ()
       case (Sigma(pat: Pat, arg_t: Exp, dep_t: Exp), ValUniv()) =>
         for {
           _ <- check(i, env, ctx, arg_t, ValUniv())
-          fresh = ValNeu(NeuVar(fresh_name(i)))
-          ctx1 <- ctx.ext(pat, eval(arg_t, env), fresh)
+          arg_t_value = eval(arg_t, env)
+          fresh = gen_fresh_for(i, arg_t_value)
+          ctx1 <- ctx.ext(pat, arg_t_value, fresh)
           _ <- check(i + 1, EnvPat(pat, fresh, env), ctx1, dep_t, ValUniv())
         } yield ()
       case (Data(tag, body), ValSum(CloMat(mats, env2))) =>
@@ -117,9 +130,9 @@ object check {
             } else {
               Left(Err(
                 s"check fail\n" ++
-                  s"expect type: ${prettyVal(t)}\n" ++
+                  s"expect type: ${prettyVal(t)}, ${t}, ${readback_val(i, t)}\n" ++
                   s"exp: ${prettyExp(e)}\n" ++
-                  s"actual type: ${prettyVal(u)}\n"))
+                  s"infered type: ${prettyVal(u)}, ${u}, ${readback_val(i, u)}\n"))
             }
           }
         } yield results

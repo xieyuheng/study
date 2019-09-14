@@ -10,8 +10,6 @@ A dependently typed language
 
 - Compile: `sbt compile`
 - Test: `./dev t`
-- Install: `sbt publishLocal`
-- Dependency: `"xieyuheng" %% "cicada" % "0.0.1"`
 
 ## Release
 

@@ -1,0 +1,51 @@
+package xieyuheng.systemt
+
+case class Apply (
+  rator: Exp,
+  rand: Exp,
+) extends Eliminator {
+  def eval(env: Env): Either[Err, Value] = {
+    for {
+      fn <- rator.eval (env)
+      arg <- rand.eval (env)
+      value <- Apply.exe(fn, arg)
+    } yield value
+  }
+
+  /*
+   ctx :- rator => A -> R
+   ctx :- rand <= A
+   ---------------
+   ctx :- Apply (rator, rand) => R
+   */
+  def infer(ctx: Ctx): Either[Err, Type] = {
+    rator.infer(ctx) match {
+      case Right(Arrow(argType, retType)) =>
+        for {
+          _ok <- rand.check(ctx, argType)
+        } yield retType
+      case Left(errorMsg) =>
+        Left(errorMsg)
+      case _ =>
+        Left(Err(s"the type of rator: ${rator} is not Arrow"))
+    }
+  }
+}
+
+case object Apply {
+  def exe(fn: Value, arg: Value): Either[Err, Value] = {
+    fn match {
+      case Closure(env, name, body) =>
+        body.eval (env.ext (name, arg))
+      case TheNeutral(theType, neutral) =>
+        theType match {
+          case Arrow(argType, retType) =>
+            Right(TheNeutral(retType, NeutralApply(neutral, TheValue(argType, arg))))
+          case _ =>
+            Left(Err(s"type of neutral fn is not Arrow: ${fn}"))
+        }
+      case _ =>
+        Left(Err(s"fn is not a closure: ${fn}"))
+    }
+  }
+}

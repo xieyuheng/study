@@ -1,12 +1,12 @@
 package xieyuheng.tartlet
 
 case class Var (name: String) extends Eliminator {
-  def eval(env: Env): Either[ErrorMsg, Value] = {
+  def eval(env: Env): Either[Err, Value] = {
     env.lookupValue(name) match {
       case Some(value) =>
         Right(value)
       case None =>
-        Left(ErrorMsg(s"can not find var: ${this} in env: ${env}"))
+        Left(Err(s"can not find var: ${this} in env: ${env}"))
     }
   }
 
@@ -35,7 +35,7 @@ case class Var (name: String) extends Eliminator {
    --------------------------
    ctx :- Var(x) => T
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] = {
+  def infer(ctx: Ctx): Either[Err, The] = {
     ctx.lookupType(name) match {
       case Some(typeValue) => {
         for {
@@ -43,7 +43,7 @@ case class Var (name: String) extends Eliminator {
         } yield The(typeExp, this)
       }
       case None =>
-        Left(ErrorMsg(s"can not find var: ${this} in ctx"))
+        Left(Err(s"can not find var: ${this} in ctx"))
     }
   }
 }

@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 case object Universe extends Type {
-  def eval(env: Env): Either[ErrorMsg, Value] =
+  def eval(env: Env): Either[Err, Value] =
     Right(ValueUniverse)
 
   def alphaEq(
@@ -19,6 +19,6 @@ case object Universe extends Type {
    -----------------
    ctx :- Universe => Universe
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] =
+  def infer(ctx: Ctx): Either[Err, The] =
     Right(The(Universe, Universe))
 }

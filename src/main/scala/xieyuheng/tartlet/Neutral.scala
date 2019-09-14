@@ -1,5 +1,5 @@
 package xieyuheng.tartlet
 
 trait Neutral {
-  def readbackNeutral (ctx: Ctx): Either[ErrorMsg, Exp]
+  def readback_neu (ctx: Ctx): Either[Err, Exp]
 }

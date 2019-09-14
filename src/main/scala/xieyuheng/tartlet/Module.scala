@@ -38,7 +38,7 @@ case class Module(
     this
   }
 
-  def run(exp: Exp): Either[ErrorMsg, Exp] = {
+  def run(exp: Exp): Either[Err, Exp] = {
     val env = ctx.toEnv
     val result = for {
       the <- exp.infer(ctx)
@@ -50,7 +50,7 @@ case class Module(
     result match {
       case Right(exp) =>
         println(s"==> ${exp}")
-      case Left(ErrorMsg(msg)) =>
+      case Left(Err(msg)) =>
         println(s"error: ${msg}")
     }
 

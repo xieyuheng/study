@@ -4,10 +4,10 @@ case class NeutralIndAbsurd (
   target: Neutral,
   motive: TheValue,
 ) extends Neutral {
-  def readbackNeutral (ctx: Ctx): Either[ErrorMsg, Exp] = {
+  def readback_neu (ctx: Ctx): Either[Err, Exp] = {
     for {
-      target <- target.readbackNeutral(ctx)
-      motive <- motive.readbackTheValue(ctx)
+      target <- target.readback_neu(ctx)
+      motive <- motive.readback_the_val(ctx)
     } yield IndAbsurd(The(Absurd, target), motive)
   }
 }

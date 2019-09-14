@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 case class Quote (sym: String) extends Constructor {
-  def eval(env: Env): Either[ErrorMsg, Value] =
+  def eval(env: Env): Either[Err, Value] =
     Right(ValueQuote(sym))
 
   def alphaEq(
@@ -19,13 +19,13 @@ case class Quote (sym: String) extends Constructor {
    ---------------------
    ctx :- Quote(sym) <= Atom
    */
-  def check(ctx: Ctx, t: Value): Either[ErrorMsg, The] =
+  def check(ctx: Ctx, t: Value): Either[Err, The] =
     t match {
       case ValueAtom =>
         Right(
           The(Atom, this))
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           s"expected ValueAtom, found: ${t}"))
     }
 }

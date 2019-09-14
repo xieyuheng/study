@@ -3,9 +3,9 @@ package xieyuheng.tartlet
 case class NeutralCdr (
   pair: Neutral,
 ) extends Neutral {
-  def readbackNeutral(ctx: Ctx): Either[ErrorMsg, Exp] = {
+  def readback_neu(ctx: Ctx): Either[Err, Exp] = {
     for {
-      pair <- pair.readbackNeutral(ctx)
+      pair <- pair.readback_neu(ctx)
     } yield Cdr(pair)
   }
 }

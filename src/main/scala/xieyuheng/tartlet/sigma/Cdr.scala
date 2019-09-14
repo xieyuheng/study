@@ -3,7 +3,7 @@ package xieyuheng.tartlet
 case class Cdr (
   pair: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[ErrorMsg, Value] = {
+  def eval(env: Env): Either[Err, Value] = {
     for {
       pairValue <- pair.eval(env)
       res <- Cdr.exe(pairValue)
@@ -27,7 +27,7 @@ case class Cdr (
    ----------------
    ctx :- Cdr(p) => D subst (x, Car(p))
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] = {
+  def infer(ctx: Ctx): Either[Err, The] = {
     for {
       the <- pair.infer(ctx)
       value <- the.t.eval(ctx.toEnv)
@@ -40,7 +40,7 @@ case class Cdr (
             cdrTypeExp <- realCdrType.readback(ctx, ValueUniverse)
           } yield The(cdrTypeExp, the.value)
         case _ =>
-          Left(ErrorMsg(
+          Left(Err(
             s"expected the type to be Sigma(carType, cdrType), found: ${the.t}"))
       }
     } yield res
@@ -50,7 +50,7 @@ case class Cdr (
 object Cdr {
   def exe(
     pair: Value,
-  ): Either[ErrorMsg, Value] = {
+  ): Either[Err, Value] = {
     pair match {
       case ValueCons(car, cdr) =>
         Right(cdr)
@@ -61,7 +61,7 @@ object Cdr {
         } yield TheNeutral(realCdrType, NeutralCar(neutral))
       }
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           "pair should be " +
             "ValueCons(car, cdr) | " +
             "TheNeutral(ValueSigma(carType, cdrType), neutral): " +

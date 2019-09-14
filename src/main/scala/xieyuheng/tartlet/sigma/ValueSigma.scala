@@ -4,7 +4,7 @@ case class ValueSigma (
   carType: Value,
   cdrType: Closure,
 ) extends Value {
-  def readback (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] = {
+  def readback (ctx: Ctx, t: Value): Either[Err, Exp] = {
     val freshName = Util.freshen(ctx.names, cdrType.name)
     for {
       carTypeExp <- carType.readback(ctx, ValueUniverse)

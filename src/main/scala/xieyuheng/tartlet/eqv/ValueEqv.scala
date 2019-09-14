@@ -5,7 +5,7 @@ case class ValueEqv (
   from: Value,
   to: Value,
 ) extends Value {
-  def readback(ctx: Ctx, _t: Value): Either[ErrorMsg, Exp] = {
+  def readback(ctx: Ctx, _t: Value): Either[Err, Exp] = {
     for {
       t <- this.t.readback(ctx, ValueUniverse)
       from <- from.readback(ctx, this.t)

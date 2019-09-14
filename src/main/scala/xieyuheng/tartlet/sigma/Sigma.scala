@@ -7,7 +7,7 @@ case class Sigma (
   carType: Exp,
   cdrType: Exp,
 ) extends Type {
-  def eval(env: Env): Either[ErrorMsg, Value] = {
+  def eval(env: Env): Either[Err, Value] = {
     for {
       carTypeValue <- carType.eval(env)
     } yield ValueSigma(carTypeValue, EnvClosure(env, name, cdrType))
@@ -34,7 +34,7 @@ case class Sigma (
    -----------------
    ctx :- Sigma(x: A, B) => Universe
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] = {
+  def infer(ctx: Ctx): Either[Err, The] = {
     for {
       carType <- carType.check(ctx, ValueUniverse)
       carTypeValue <- carType.eval(ctx.toEnv)

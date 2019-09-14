@@ -20,14 +20,14 @@ object Util {
     t: Value,
     v1: Value,
     v2: Value,
-  ): Either[ErrorMsg, Unit] = {
+  ): Either[Err, Unit] = {
     for {
       e1 <- v1.readback (ctx, t)
       e2 <- v2.readback (ctx, t)
     } yield if (e1.alphaEq (e2, Map(), Map())) {
       ()
     } else {
-      ErrorMsg("conversionCheck fail")
+      Err("conversionCheck fail")
     }
   }
 }

@@ -4,7 +4,7 @@ case class The (
   t: Exp,
   value: Exp,
 ) extends Exp {
-  def eval(env: Env): Either[ErrorMsg, Value] =
+  def eval(env: Env): Either[Err, Value] =
     value.eval(env)
 
   def alphaEq(
@@ -36,14 +36,14 @@ case class The (
    -----------------
    ctx :- e: T => T
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] =
+  def infer(ctx: Ctx): Either[Err, The] =
     for {
       t <- t.check(ctx, ValueUniverse)
       tValue <- t.eval(ctx.toEnv)
       value <- value.check(ctx, tValue)
     } yield The(t, value)
 
-  def check(ctx: Ctx, t: Value): Either[ErrorMsg, Exp] = {
+  def check(ctx: Ctx, t: Value): Either[Err, Exp] = {
     for {
       the <- infer(ctx)
       t2 <- the.t.eval(ctx.toEnv)

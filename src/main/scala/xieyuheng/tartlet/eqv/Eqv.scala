@@ -5,7 +5,7 @@ case class Eqv(
   from: Exp,
   to: Exp,
 ) extends Type {
-  def eval(env: Env): Either[ErrorMsg, Value] = {
+  def eval(env: Env): Either[Err, Value] = {
     for {
       t <- t.eval(env)
       from <- from.eval(env)
@@ -35,7 +35,7 @@ case class Eqv(
     --------------------
     ctx :- Eqv(T, from, to) => Universe
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] = {
+  def infer(ctx: Ctx): Either[Err, The] = {
     for {
       t <- t.check(ctx, ValueUniverse)
       typeValue <- t.eval(ctx.toEnv)

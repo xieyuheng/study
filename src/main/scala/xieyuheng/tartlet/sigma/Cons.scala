@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 case class Cons (car: Exp, cdr: Exp) extends Constructor {
-  def eval(env: Env): Either[ErrorMsg, Value] =
+  def eval(env: Env): Either[Err, Value] =
     for {
       car <- car.eval(env)
       cdr <- cdr.eval(env)
@@ -26,7 +26,7 @@ case class Cons (car: Exp, cdr: Exp) extends Constructor {
    -----------------
    ctx :- Cons(car, cdr) <= Sigma(x: A, D)
    */
-  def check(ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =
+  def check(ctx: Ctx, t: Value): Either[Err, Exp] =
     t match {
       case ValueSigma(carType, cdrType) =>
         for {
@@ -36,7 +36,7 @@ case class Cons (car: Exp, cdr: Exp) extends Constructor {
           cdr <- cdr.check(ctx, realCdrType)
         } yield Cons(car, cdr)
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           s"expected ValueSigma(carType, cdrType), found: ${t}"))
     }
 }

@@ -1,3 +1,3 @@
 package xieyuheng.tartlet
 
-case class ErrorMsg (msg: String)
+case class Err (msg: String)

@@ -4,14 +4,14 @@ case class TheNeutral (
   t: Value,
   neutral: Neutral,
 ) extends Value {
-  def readback (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] = {
+  def readback (ctx: Ctx, t: Value): Either[Err, Exp] = {
     t match {
       case ValueAbsurd =>
         for {
-          normal <- neutral.readbackNeutral(ctx)
+          normal <- neutral.readback_neu(ctx)
         } yield The(Absurd, normal)
       case _ =>
-        neutral.readbackNeutral(ctx)
+        neutral.readback_neu(ctx)
     }
   }
 }

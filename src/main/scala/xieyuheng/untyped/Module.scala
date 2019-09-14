@@ -5,13 +5,13 @@ case class Module(var env: Env = Env()) {
     exp.eval(env) match {
       case Right(value) =>
         env = env.ext(name, value)
-      case Left(ErrorMsg(msg)) =>
+      case Left(Err(msg)) =>
         println(msg)
     }
     this
   }
 
-  def run(exp: Exp): Either[ErrorMsg, Exp] = {
+  def run(exp: Exp): Either[Err, Exp] = {
     val result = for {
       value <- exp.eval(env)
       norm <- value.readback(Set())
@@ -20,7 +20,7 @@ case class Module(var env: Env = Env()) {
     result match {
       case Right(exp) =>
         println(s"exp: ${exp}")
-      case Left(ErrorMsg(msg)) =>
+      case Left(Err(msg)) =>
         println(s"error: ${msg}")
     }
 

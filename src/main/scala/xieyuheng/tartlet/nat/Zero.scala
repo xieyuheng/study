@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 case object Zero extends Constructor {
-  def eval(env: Env): Either[ErrorMsg, Value] =
+  def eval(env: Env): Either[Err, Value] =
     Right(ValueZero)
 
   def alphaEq(
@@ -19,12 +19,12 @@ case object Zero extends Constructor {
    ---------------------
    ctx :- Zero <= Nat
    */
-  def check(ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =
+  def check(ctx: Ctx, t: Value): Either[Err, Exp] =
     t match {
       case ValueNat =>
         Right(this)
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           s"expected ValueNat, found: ${t}"))
     }
 }

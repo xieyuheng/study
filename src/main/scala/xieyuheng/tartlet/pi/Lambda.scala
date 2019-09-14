@@ -6,7 +6,7 @@ case class Lambda (
   name: String,
   body: Exp,
 ) extends Constructor {
-  def eval(env: Env): Either[ErrorMsg, Value] =
+  def eval(env: Env): Either[Err, Value] =
     Right(ValueLambda(EnvClosure(env, name, body)))
 
   def alphaEq(
@@ -28,7 +28,7 @@ case class Lambda (
     ------------------------------
     ctx :- Lambda(x, body) <= Pi
    */
-  def check(ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =
+  def check(ctx: Ctx, t: Value): Either[Err, Exp] =
     t match {
       case ValuePi(argType, retType) => {
         val varValue = TheNeutral(argType, NeutralVar(name))
@@ -38,7 +38,7 @@ case class Lambda (
         } yield Lambda(name, body)
       }
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           s"expected ValuePi(argType, retType), found: ${t}"))
     }
 }

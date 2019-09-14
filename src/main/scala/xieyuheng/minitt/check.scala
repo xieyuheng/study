@@ -75,17 +75,17 @@ object check {
       case (Pi(pat: Pat, arg_t: Exp, dep_t: Exp), ValUniv()) =>
         for {
           _ <- check(i, env, ctx, arg_t, ValUniv())
-          arg_t_value = eval(arg_t, env)
-          fresh = gen_fresh_for(i, arg_t_value)
-          ctx1 <- ctx.ext(pat, arg_t_value, fresh)
+          arg_t_val = eval(arg_t, env)
+          fresh = gen_fresh_for(i, arg_t_val)
+          ctx1 <- ctx.ext(pat, arg_t_val, fresh)
           _ <- check(i + 1, EnvPat(pat, fresh, env), ctx1, dep_t, ValUniv())
         } yield ()
       case (Sigma(pat: Pat, arg_t: Exp, dep_t: Exp), ValUniv()) =>
         for {
           _ <- check(i, env, ctx, arg_t, ValUniv())
-          arg_t_value = eval(arg_t, env)
-          fresh = gen_fresh_for(i, arg_t_value)
-          ctx1 <- ctx.ext(pat, arg_t_value, fresh)
+          arg_t_val = eval(arg_t, env)
+          fresh = gen_fresh_for(i, arg_t_val)
+          ctx1 <- ctx.ext(pat, arg_t_val, fresh)
           _ <- check(i + 1, EnvPat(pat, fresh, env), ctx1, dep_t, ValUniv())
         } yield ()
       case (Data(tag, body), ValSum(CloMat(mats, env2))) =>

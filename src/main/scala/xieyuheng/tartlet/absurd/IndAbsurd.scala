@@ -4,7 +4,7 @@ case class IndAbsurd (
   target: Exp,
   motive: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[ErrorMsg, Value] =
+  def eval(env: Env): Either[Err, Value] =
     for {
       targetValue <- target.eval(env)
       motiveValue <- motive.eval(env)
@@ -30,7 +30,7 @@ case class IndAbsurd (
    -----------------
    ctx :- IndAbsurd (target, motive) => Universe
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] = {
+  def infer(ctx: Ctx): Either[Err, The] = {
     for {
       target <- target.check(ctx, ValueAbsurd)
       motive <- motive.check(ctx, ValueUniverse)
@@ -42,14 +42,14 @@ object IndAbsurd {
   def exe(
     target: Value,
     motive: Value,
-  ): Either[ErrorMsg, Value] = {
+  ): Either[Err, Value] = {
     target match {
       case TheNeutral(ValueAbsurd, neutral) =>
         Right(
           TheNeutral(motive,
             NeutralIndAbsurd(neutral, TheValue(ValueUniverse, motive))))
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           s"target should be TheNeutral(ValueAbsurd, neutral): ${target}"))
     }
   }

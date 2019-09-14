@@ -4,7 +4,7 @@ case class Apply (
   rator: Exp,
   rand: Exp,
 ) extends Exp {
-  def eval(env: Env): Either[ErrorMsg, Value] = {
+  def eval(env: Env): Either[Err, Value] = {
     for {
       fn <- rator.eval(env)
       arg <- rand.eval(env)
@@ -14,7 +14,7 @@ case class Apply (
         case fn: Neutral =>
           Right(NeutralApply(fn, arg))
         case _ =>
-          Left(ErrorMsg(s"unknown fn value type: ${fn}"))
+          Left(Err(s"unknown fn value type: ${fn}"))
       }
     } yield result
   }

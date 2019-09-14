@@ -1,18 +1,20 @@
-* minitt
-- Block extends Exp
-- more examples
-- be sure about the use of Pattern
-  - Norm do not use Pattern
+- ready to pie
+* lambda
+* systemt
 * pie
 - change the style to grouping by function instead of grouping by data
-* tartlet
 - better expDSL
 - better Module
 - better tests
 - the little typer as test
 - how to extend tartlet to define new types?
-  - keep tartlet subrecursive
+  - keep it subrecursive
     but be generic about data and ind, rec and iter
+* minitt
+- Block extends Exp
+- more examples
+- be sure about the use of Pattern
+  - Norm do not use Pattern
 * cicada
 - subtype relation between club and members and class and supers
   recursively extended to fields in record and pi and si

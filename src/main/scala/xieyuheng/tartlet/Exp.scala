@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 trait Exp {
-  def eval(env: Env): Either[ErrorMsg, Value]
+  def eval(env: Env): Either[Err, Value]
 
   def alphaEq(
     that: Exp,
@@ -9,7 +9,7 @@ trait Exp {
     thatMap: Map[String, String],
   ): Boolean
 
-  def infer(ctx: Ctx): Either[ErrorMsg, The]
+  def infer(ctx: Ctx): Either[Err, The]
 
-  def check(ctx: Ctx, t: Value): Either[ErrorMsg, Exp]
+  def check(ctx: Ctx, t: Value): Either[Err, Exp]
 }

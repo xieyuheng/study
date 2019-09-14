@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 case object Same extends Constructor {
-  def eval(env: Env): Either[ErrorMsg, Value] = {
+  def eval(env: Env): Either[Err, Value] = {
     Right(ValueSame)
   }
 
@@ -21,14 +21,14 @@ case object Same extends Constructor {
     ---------------------
     ctx :- Same <= Eqv(T, from, to)
    */
-  def check(ctx: Ctx, t: Value): Either[ErrorMsg, Exp] = {
+  def check(ctx: Ctx, t: Value): Either[Err, Exp] = {
     t match {
       case ValueEqv(typeValue, from, to) =>
         for {
           _ok <- Util.conversionCheck(ctx, typeValue, from, to)
         } yield this
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           s"expected ValueEqv(typeValue, from, to), found: ${t}"))
     }
   }

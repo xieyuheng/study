@@ -5,7 +5,7 @@ case class Replace (
   motive: Exp,
   base: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[ErrorMsg, Value] = {
+  def eval(env: Env): Either[Err, Value] = {
     for {
       targetValue <- target.eval(env)
       motiveValue <- motive.eval(env)
@@ -38,7 +38,7 @@ case class Replace (
    --------------------
    ctx :- Replace(target, motive, base) => motive(to)
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] = {
+  def infer(ctx: Ctx): Either[Err, The] = {
     for {
       the <- target.infer(ctx)
       res <- the.t match {
@@ -56,7 +56,7 @@ case class Replace (
             typeExp <- typeValue.readback(ctx, ValueUniverse)
           } yield The(typeExp, Replace(the.value, motive, base))
         case _ =>
-          Left(ErrorMsg(
+          Left(Err(
             s"expected the type to be Eqv(t, from, to), found: ${the.t}"))
       }
     } yield res
@@ -68,7 +68,7 @@ object Replace {
     target: Value,
     motive: Value,
     base: Value,
-  ): Either[ErrorMsg, Value] = {
+  ): Either[Err, Value] = {
     target match {
       case ValueSame =>
         Right(base)
@@ -83,7 +83,7 @@ object Replace {
             TheValue(baseType, base)))
       }
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           "target should be " +
             "ValueSame | " +
             "TheNeutral(ValueEqv(t, from, to), neutral): " +

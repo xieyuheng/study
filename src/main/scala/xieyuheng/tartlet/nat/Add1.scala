@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 case class Add1 (prev: Exp) extends Constructor {
-  def eval(env: Env): Either[ErrorMsg, Value] =
+  def eval(env: Env): Either[Err, Value] =
     for {
       prevValue <- prev.eval(env)
     } yield ValueAdd1(prevValue)
@@ -23,14 +23,14 @@ case class Add1 (prev: Exp) extends Constructor {
    ---------------------
    ctx :- Add1(prev) <= Nat
    */
-  def check(ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =
+  def check(ctx: Ctx, t: Value): Either[Err, Exp] =
     t match {
       case ValueNat =>
         for {
           prev <- prev.check(ctx, t)
         } yield Add1(prev)
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           s"expected ValueAdd1, found: ${t}"))
     }
 }

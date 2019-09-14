@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 case class ValueLambda(closure: Closure) extends Value {
-  def readback (ctx: Ctx, t: Value): Either[ErrorMsg, Exp] =
+  def readback (ctx: Ctx, t: Value): Either[Err, Exp] =
     t match {
       case ValuePi(argType, retType) => {
         val freshName = Util.freshen(ctx.names, retType.name)
@@ -15,6 +15,6 @@ case class ValueLambda(closure: Closure) extends Value {
         } yield Lambda(freshName, body)
       }
       case _ =>
-        Left(ErrorMsg(s"type of Lambda should be Pi: ${t}"))
+        Left(Err(s"type of Lambda should be Pi: ${t}"))
     }
 }

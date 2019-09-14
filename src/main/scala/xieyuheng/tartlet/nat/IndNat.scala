@@ -6,7 +6,7 @@ case class IndNat (
   base: Exp,
   step: Exp,
 ) extends Eliminator {
-  def eval(env: Env): Either[ErrorMsg, Value] = {
+  def eval(env: Env): Either[Err, Value] = {
     for {
       targetValue <- target.eval(env)
       motiveValue <- motive.eval(env)
@@ -45,7 +45,7 @@ case class IndNat (
    --------------------
    ctx :- IndNat(target, motive, base, step) => motive(target)
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] = {
+  def infer(ctx: Ctx): Either[Err, The] = {
     for {
       target <- target.check(ctx, ValueNat)
       motive <- motive.check(ctx, ValuePi(ValueNat,
@@ -77,7 +77,7 @@ object IndNat {
     motive: Value,
     base: Value,
     step: Value,
-  ): Either[ErrorMsg, Value] = {
+  ): Either[Err, Value] = {
     target match {
       case ValueZero =>
         Right(base)
@@ -100,7 +100,7 @@ object IndNat {
             TheValue(IndNat.stepType(motive), step)))
       }
       case _ =>
-        Left(ErrorMsg(
+        Left(Err(
           "target should be " +
             "ValueZero | " +
             "ValueAdd1(prev) | " +

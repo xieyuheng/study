@@ -10,7 +10,7 @@ trait Type extends Exp {
    -----------------
    ctx :- exp <= T
    */
-  def check(ctx: Ctx, t: Value): Either[ErrorMsg, Exp] = {
+  def check(ctx: Ctx, t: Value): Either[Err, Exp] = {
     for {
       the <- infer(ctx)
       t2 <- the.t.eval(ctx.toEnv)

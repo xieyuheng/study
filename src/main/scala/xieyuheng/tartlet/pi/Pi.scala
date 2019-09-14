@@ -7,7 +7,7 @@ case class Pi (
   argType: Exp,
   retType: Exp,
 ) extends Type {
-  def eval(env: Env): Either[ErrorMsg, Value] = {
+  def eval(env: Env): Either[Err, Value] = {
     for {
       argTypeValue <- argType.eval(env)
     } yield ValuePi(argTypeValue, EnvClosure(env, name, retType))
@@ -34,7 +34,7 @@ case class Pi (
    -----------------
    ctx :- Pi(x: A, B) => Universe
    */
-  def infer(ctx: Ctx): Either[ErrorMsg, The] = {
+  def infer(ctx: Ctx): Either[Err, The] = {
     for {
       argType <- argType.check(ctx, ValueUniverse)
       argTypeValue <- argType.eval(ctx.toEnv)

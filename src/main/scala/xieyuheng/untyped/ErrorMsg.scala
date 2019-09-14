@@ -1,3 +1,3 @@
 package xieyuheng.untyped
 
-case class ErrorMsg (msg: String)
+case class Err (msg: String)

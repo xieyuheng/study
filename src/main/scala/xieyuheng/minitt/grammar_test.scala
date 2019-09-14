@@ -31,7 +31,7 @@ object grammar_test extends App {
       (h0: C(true)) ->
       (h1: C(false)) ->
       (b: bool_t) -> C(b) =
-    C => h0 => h1 => @ => {
+    C => h0 => h1 => case {
       true[] => h0;
       false[] => h1;
     }
@@ -42,7 +42,7 @@ object grammar_test extends App {
       (C: (_: bool_t) -> type_t) ->
       (h0: C(true), h1: C(false)) ->
       (b: bool_t) -> C(b) =
-    C => h0 => h1 => @ => {
+    C => h0 => h1 => case {
       true[] => h0;
       false[] => h1;
     }
@@ -105,14 +105,14 @@ object grammar_test extends App {
       (a: C(zero)) ->
       (g: (n: nat_t) -> (_: C(n)) -> C(succ[n])) ->
       (n: nat_t) -> C(n) =
-    C => a => g => @ => {
+    C => a => g => case {
       zero [] => a;
       succ [prev] => g(prev, nat_rec(C, a, g, prev));
     }
     """,
 
     s"""
-    letrec add: (x: nat_t) -> (y: nat_t) -> nat_t = @ => {
+    letrec add: (x: nat_t) -> (y: nat_t) -> nat_t = case {
       zero[] => y => y;
       succ[prev] => y => succ[add(prev, y)];
     }
@@ -120,12 +120,12 @@ object grammar_test extends App {
 
     s"""
     letrec nat_eq: (x: nat_t) -> (y: nat_t) -> bool_t =
-    @ => {
-      zero[] => @ => {
+    case {
+      zero[] => case {
         zero[] => true;
         succ[_] => false;
       };
-      succ[x_prev] => @ => {
+      succ[x_prev] => case {
         zero[] => false;
         succ[y_prev] => nat_eq(x_prev, y_prev);
       };
@@ -190,7 +190,7 @@ object grammar_test extends App {
 
     s"""
     letrec list_append: (A: type_t) -> (x: list_t(A)) -> (y: list_t(A)) -> list_t(A) =
-    A => @ => {
+    A => case {
       nil[] => y => y;
       cons[head, tail] => y => cons[head, list_append(A, tail, y)];
     }
@@ -274,7 +274,7 @@ object grammar_test extends App {
         (h0: C(true)) ->
         (h1: C(false)) ->
         (b: bool_t) -> C(b) =
-      C => h0 => h1 => @ => {
+      C => h0 => h1 => case {
         true[] => h0;
         false[] => h1;
       }
@@ -296,7 +296,7 @@ object grammar_test extends App {
         (C: (bool_t) -> type_t) ->
         (h0: C(true), h1: C(false)) ->
         (b: bool_t) -> C(b) =
-      C => h0 => h1 => @ => {
+      C => h0 => h1 => case {
         true[] => h0;
         false[] => h1;
       }
@@ -319,7 +319,7 @@ object grammar_test extends App {
         h0: C(true),
         h1: C(false),
         b: bool_t,
-      ) -> C(b) = C => h0 => h1 => @ => {
+      ) -> C(b) = C => h0 => h1 => case {
         true[] => h0;
         false[] => h1;
       }
@@ -342,7 +342,7 @@ object grammar_test extends App {
         C(true),
         C(false),
         b: bool_t,
-      ) -> C(b) = C => h0 => h1 => @ => {
+      ) -> C(b) = C => h0 => h1 => case {
         true[] => h0;
         false[] => h1;
       }
@@ -364,7 +364,7 @@ object grammar_test extends App {
         C(true[]),
         C(false[]),
         b: bool_t,
-      ) -> C(b) = (C, h0, h1) => @ => {
+      ) -> C(b) = (C, h0, h1) => case {
         true[] => h0;
         false[] => h1;
       }

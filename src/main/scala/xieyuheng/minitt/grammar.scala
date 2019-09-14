@@ -11,7 +11,7 @@ object grammar {
   def preserved_identifiers: Set[String] = Set(
     "let", "letrec",
     "car", "cdr",
-    "type", "type_t",
+    "type", "case", "type_t",
     "sole", "trivial",
     "return",
   )
@@ -98,7 +98,7 @@ object grammar {
         List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "car" -> List("car", "(", exp, ")"),
       "cdr" -> List("cdr", "(", exp, ")"),
-      "match" -> List("@", "=", ">", "{", non_empty_list(mat_clause), "}"),
+      "match" -> List("case", "{", non_empty_list(mat_clause), "}"),
       "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
       "block_of_one_exp" -> List("{", exp, "}"),
     ))
@@ -117,7 +117,7 @@ object grammar {
         Ap(fn, exp_matcher(exp)) },
       "car" -> { case List(_, _, exp, _) => Car(exp_matcher(exp)) },
       "cdr" -> { case List(_, _, exp, _) => Cdr(exp_matcher(exp)) },
-      "match" -> { case List(_, _, _, _, mat_clause_list, _) =>
+      "match" -> { case List(_, _, mat_clause_list, _) =>
         Mat(non_empty_list_matcher(mat_clause_matcher)(mat_clause_list).toMap) },
       "block" -> { case List(_, decl_list, _, exp, _) =>
         non_empty_list_matcher(decl_matcher)(decl_list)

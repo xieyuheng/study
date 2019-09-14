@@ -135,9 +135,9 @@ object check {
             } else {
               Left(Err(
                 s"check fail\n" ++
-                  s"expect type: ${prettyVal(t)}, ${t}, ${readback_val(i, t)}\n" ++
+                  s"expect type: ${prettyVal(t)}\n" ++
                   s"exp: ${prettyExp(e)}\n" ++
-                  s"infered type: ${prettyVal(u)}, ${u}, ${readback_val(i, u)}\n"))
+                  s"infered type: ${prettyVal(u)}\n"))
             }
           }
         } yield results

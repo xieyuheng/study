@@ -10,6 +10,7 @@ object grammar {
 
   def preserved_identifiers: Set[String] = Set(
     "let", "letrec",
+    "car", "cdr",
     "sum", "match",
     "sole", "trivial",
     "return",
@@ -96,8 +97,8 @@ object grammar {
         List(rator, "(", exp, ")"),
       "ap_without_last_comma" ->
         List(rator, "(", non_empty_list(exp_comma), exp, ")"),
-      "car" -> List(exp, ".", "car"),
-      "cdr" -> List(exp, ".", "cdr"),
+      "car" -> List("car", "(", exp, ")"),
+      "cdr" -> List("cdr", "(", exp, ")"),
       "match" -> List("match", "{", non_empty_list(mat_clause), "}"),
       "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
       "block_of_one_exp" -> List("{", exp, "}"),
@@ -115,8 +116,8 @@ object grammar {
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
-      "car" -> { case List(exp, _, _) => Car(exp_matcher(exp)) },
-      "cdr" -> { case List(exp, _, _) => Cdr(exp_matcher(exp)) },
+      "car" -> { case List(_, _, exp, _) => Car(exp_matcher(exp)) },
+      "cdr" -> { case List(_, _, exp, _) => Cdr(exp_matcher(exp)) },
       "match" -> { case List(_, _, mat_clause_list, _) =>
         Mat(non_empty_list_matcher(mat_clause_matcher)(mat_clause_list).toMap) },
       "block" -> { case List(_, decl_list, _, exp, _) =>

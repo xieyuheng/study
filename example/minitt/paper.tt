@@ -10,10 +10,16 @@ eq! id(bool_t, true[]) true[]
 eq! id(bool_t, false[]) false[]
 eq! id((A: univ, A) -> A, id) id
 
+let true: bool_t = true[]
+let false: bool_t = false[]
+
+eq! id(bool_t, true) true
+eq! id(bool_t, false) false
+
 let bool_elim: (
   C: (bool_t) -> univ,
-  C(true[]),
-  C(false[]),
+  C(true),
+  C(false),
   b: bool_t,
 ) -> C(b) = {
   (C, h0, h1) => match {
@@ -27,7 +33,8 @@ letrec nat_t: univ = sum {
   succ nat_t;
 }
 
-let one: nat_t = succ[zero[]]
+let zero: nat_t = zero[]
+let one: nat_t = succ[zero]
 let two: nat_t = succ[one]
 let three: nat_t = succ[two]
 let four: nat_t = succ[three]
@@ -43,19 +50,19 @@ let bool_to_nat: (bool_t) -> nat_t = {
   x => {
     let y: bool_t = x
     let f: (bool_t) -> nat_t = match {
-      true[] => succ[zero[]];
+      true[] => succ[zero];
       false[] => zero[];
     }
     return f(y)
   }
 }
 
-eq! bool_to_nat(true[]) succ[zero[]]
-eq! bool_to_nat(false[]) zero[]
+eq! bool_to_nat(true) succ[zero]
+eq! bool_to_nat(false) zero
 
 letrec nat_rec: (
   C: (nat_t) -> univ,
-  C(zero[]),
+  C(zero),
   (n: nat_t, C(n)) -> C(succ[n]),
   n: nat_t,
 ) -> C(n) = {
@@ -83,7 +90,7 @@ eq! double(three) six
 
 letrec mul: (nat_t, nat_t) -> nat_t = {
   match {
-    zero[] => y => zero[];
+    zero[] => y => zero;
     succ[prev] => y => add(y, mul(prev, y));
   }
 }
@@ -98,20 +105,20 @@ eq! square(three) nine
 letrec nat_eq: (nat_t, nat_t) -> bool_t = {
   match {
     zero[] => match {
-      zero[] => true[];
-      succ[_] => false[];
+      zero[] => true;
+      succ[_] => false;
     };
     succ[x_prev] => match {
-      zero[] => false[];
+      zero[] => false;
       succ[y_prev] => nat_eq(x_prev, y_prev);
     };
   }
 }
 
-eq! nat_eq(one, one) true[]
-eq! nat_eq(two, two) true[]
-eq! nat_eq(one, two) false[]
-eq! nat_eq(two, one) false[]
+eq! nat_eq(one, one) true
+eq! nat_eq(two, two) true
+eq! nat_eq(one, two) false
+eq! nat_eq(two, one) false
 
 letrec list_t: (A: univ) -> univ = {
   A => sum {
@@ -119,6 +126,8 @@ letrec list_t: (A: univ) -> univ = {
     cons $[A, list_t(A)];
   }
 }
+
+let nil: list_t = nil[]
 
 letrec list_append: (
   A: univ,
@@ -132,9 +141,14 @@ letrec list_append: (
 }
 
 let two_zeros: list_t(nat_t) =
-  cons[zero[], cons[zero[], nil[]]]
+  cons[zero, cons[zero, nil[]]]
 
 let four_zeros: list_t(nat_t) =
-  cons[zero[], cons[zero[], cons[zero[], cons[zero[], nil[]]]]]
+  cons[zero, cons[zero, cons[zero, cons[zero, nil[]]]]]
 
 eq! list_append(nat_t, two_zeros, two_zeros) four_zeros
+
+let one_cons_zero: $[nat_t, nat_t] = [one, zero]
+
+eq! car(one_cons_zero) one
+eq! cdr(one_cons_zero) zero

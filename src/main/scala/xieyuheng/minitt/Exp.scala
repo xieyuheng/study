@@ -15,6 +15,7 @@ final case class Sum(mats: Map[String, Exp]) extends Exp
 final case class Sole() extends Exp
 final case class Trivial() extends Exp
 final case class Univ() extends Exp
+final case class Block(decl: Decl, body: Exp) extends Exp
 
 sealed trait Pat
 final case class PatVar(name: String) extends Pat

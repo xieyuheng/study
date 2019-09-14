@@ -74,6 +74,17 @@ object pretty {
       case Sole() => "[]"
       case Trivial() => "[]"
       case Univ() => "univ"
+      case Block(decl, body) =>
+        s"{ ${prettyDecl(decl)}; ${prettyExp(body)} }"
+    }
+  }
+
+  def prettyDecl(decl: Decl): String = {
+    decl match {
+      case DeclLet(pat: Pat, t: Exp, e: Exp) =>
+        s"let ${prettyPat(pat)}: ${prettyExp(t)} = ${prettyExp(e)}"
+      case DeclLetrec(pat: Pat, t: Exp, e: Exp) =>
+        s"letrec ${prettyPat(pat)}: ${prettyExp(t)} = ${prettyExp(e)}"
     }
   }
 

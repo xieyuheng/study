@@ -14,9 +14,9 @@
   - keep it subrecursive
     but be generic about data and ind, rec and iter
 * minitt
-- Block extends Exp
 - more examples
 - be sure about the use of Pattern
+  - write some notes
   - Norm do not use Pattern
 * cicada
 - subtype relation between club and members and class and supers

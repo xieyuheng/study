@@ -23,6 +23,8 @@ object eval {
       case Sole() => ValSole()
       case Trivial() => ValTrivial()
       case Univ() => ValUniv()
+      case Block(decl, body) =>
+        eval(body, EnvDecl(decl, env))
     }
   }
 

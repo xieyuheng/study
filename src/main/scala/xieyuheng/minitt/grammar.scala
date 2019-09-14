@@ -11,8 +11,8 @@ object grammar {
   def preserved_identifiers: Set[String] = Set(
     "let", "letrec",
     "sum", "match",
-    "sole",
-    "trivial",
+    "sole", "trivial",
+    "return",
     "univ",
   )
 
@@ -99,6 +99,8 @@ object grammar {
       "car" -> List(exp, ".", "car"),
       "cdr" -> List(exp, ".", "cdr"),
       "match" -> List("match", "{", non_empty_list(mat_clause), "}"),
+      "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
+      "block_of_one_exp" -> List("{", exp, "}"),
     ))
 
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -117,6 +119,12 @@ object grammar {
       "cdr" -> { case List(exp, _, _) => Cdr(exp_matcher(exp)) },
       "match" -> { case List(_, _, mat_clause_list, _) =>
         Mat(non_empty_list_matcher(mat_clause_matcher)(mat_clause_list).toMap) },
+      "block" -> { case List(_, decl_list, _, exp, _) =>
+        non_empty_list_matcher(decl_matcher)(decl_list)
+          .foldRight(exp_matcher(exp)) { case (decl, body) =>
+            Block(decl, body) } },
+      "block_of_one_exp" -> { case List(_, exp, _) =>
+        exp_matcher(exp) },
     ))
 
   def multi_pi_arg: Rule = Rule(

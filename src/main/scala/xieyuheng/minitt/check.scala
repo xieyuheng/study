@@ -121,6 +121,11 @@ object check {
         }
       case (Sole(), ValTrivial()) => Right(())
       case (Trivial(), ValUniv()) => Right(())
+      case (Block(decl, body), t) =>
+        for {
+          ctx1 <- check_decl(i, env, ctx, decl)
+          _<- check(i, EnvDecl(decl, env), ctx1, body, t)
+        } yield ()
       case (e, t) =>
         for {
           u <- check_infer(i, env, ctx, e)

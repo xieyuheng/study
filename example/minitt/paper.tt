@@ -122,12 +122,10 @@ eq! nat_eq(two, one) false
 
 letrec list_t: (A: univ) -> univ = {
   A => sum {
-    nil;
+    null;
     cons $[A, list_t(A)];
   }
 }
-
-let nil: list_t = nil[]
 
 letrec list_append: (
   A: univ,
@@ -135,16 +133,16 @@ letrec list_append: (
   list_t(A),
 ) -> list_t(A) = {
   A => match {
-    nil[] => y => y;
+    null[] => y => y;
     cons[head, tail] => y => cons[head, list_append(A, tail, y)];
   }
 }
 
 let two_zeros: list_t(nat_t) =
-  cons[zero, cons[zero, nil[]]]
+  cons[zero, cons[zero, null[]]]
 
 let four_zeros: list_t(nat_t) =
-  cons[zero, cons[zero, cons[zero, cons[zero, nil[]]]]]
+  cons[zero, cons[zero, cons[zero, cons[zero, null[]]]]]
 
 eq! list_append(nat_t, two_zeros, two_zeros) four_zeros
 

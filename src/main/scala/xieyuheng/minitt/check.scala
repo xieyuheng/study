@@ -93,14 +93,16 @@ object check {
           case Some(t) => check(i, env, ctx, body, eval(t, env2))
           case None =>
             Left(Err(
-              s"fail to find tag: ${tag}"))
+              s"[check fail]\n" ++
+                s"fail to find tag: ${tag}\n"))
         }
       case (Mat(mats: Map[String, Exp]), ValPi(ValSum(clo_mat), clo)) =>
         val mat_tags = mats.keys.toSet
         val sum_tags = clo_mat.mats.keys.toSet
         if (mat_tags != sum_tags) {
           Left(Err(
-            s"sum type miss match\n" ++
+            s"[check fail]\n" ++
+              s"sum type miss match\n" ++
               s"mat_tags: ${mat_tags}\n" ++
               s"sum_tags: ${sum_tags}\n"))
         } else {
@@ -129,20 +131,25 @@ object check {
           _<- check(i, EnvDecl(decl, env), ctx1, body, t)
         } yield ()
       case (e, t) =>
-        for {
-          u <- check_infer(i, env, ctx, e)
-          results <- {
+        check_infer(i, env, ctx, e) match {
+          case Right(u) =>
             if (readback_val(i, t) == readback_val(i, u)) {
               Right(())
             } else {
               Left(Err(
-                s"check fail\n" ++
-                  s"expect type: ${prettyVal(t)}\n" ++
+                s"[check fail]\n" ++
                   s"exp: ${prettyExp(e)}\n" ++
+                  s"expect type: ${prettyVal(t)}\n" ++
                   s"infered type: ${prettyVal(u)}\n"))
             }
-          }
-        } yield results
+          case Left(error) =>
+            Left(Err(
+              s"[check fail]\n" ++
+                s"exp: ${prettyExp(e)}\n" ++
+                s"expect type: ${prettyVal(t)}\n" ++
+                s"due to:\n" ++
+                error.msg))
+        }
     }
   }
 
@@ -151,7 +158,9 @@ object check {
       case Var(name: String) =>
         ctx.lookup(name) match {
           case Some(t) => Right(t)
-          case None => Left(Err(s"can not find var: ${name} in ctx"))
+          case None => Left(Err(
+            s"[check_infer fail]\n" ++
+              s"can not find type of variable: ${name} in ctx\n"))
         }
       case Ap(fn: Exp, arg: Exp) =>
         for {
@@ -161,9 +170,10 @@ object check {
               case ValPi(arg_t: Val, clo: Clo) => Right(t)
               case _ =>
                 Left(Err(
-                  s"expect pi\n" ++
-                    s"e: ${prettyExp(e)}\n" ++
-                    s"actual: ${prettyVal(t)}\n"))
+                  s"[check_infer fail]\n" ++
+                    s"exp: ${prettyExp(e)}\n" ++
+                    s"expect pi type\n" ++
+                    s"actual type: ${prettyVal(t)}\n"))
             }
           }
           ValPi(arg_t: Val, clo: Clo) = t
@@ -177,9 +187,10 @@ object check {
               case ValSigma(arg_t: Val, clo: Clo) => Right(t)
               case _ =>
                 Left(Err(
-                  s"expect sigma\n" ++
-                    s"e: ${prettyExp(e)}\n" ++
-                    s"actual: ${prettyVal(t)}\n"))
+                  s"[check_infer fail]\n" ++
+                    s"exp: ${prettyExp(e)}\n" ++
+                    s"expect sigma type\n" ++
+                    s"actual type: ${prettyVal(t)}\n"))
             }
           }
           ValSigma(arg_t: Val, clo: Clo) = t
@@ -192,9 +203,10 @@ object check {
               case ValSigma(arg_t: Val, clo: Clo) => Right(t)
               case _ =>
                 Left(Err(
-                  s"expect sigma\n" ++
-                    s"e: ${prettyExp(e)}\n" ++
-                    s"actual: ${prettyVal(t)}\n"))
+                  s"[check_infer fail]\n" ++
+                    s"exp: ${prettyExp(e)}\n" ++
+                    s"expect sigma type\n" ++
+                    s"actual type: ${prettyVal(t)}\n"))
             }
           }
           ValSigma(arg_t: Val, clo: Clo) = t
@@ -202,7 +214,8 @@ object check {
       // NOTE this is universe in universe
       case Univ() => Right(ValUniv())
       case _ => Left(Err(
-        s"can not check_infer: ${prettyExp(e)}"))
+        s"[check_infer fail]\n" ++
+          s"can not infer type of exp: ${prettyExp(e)}\n"))
     }
   }
 

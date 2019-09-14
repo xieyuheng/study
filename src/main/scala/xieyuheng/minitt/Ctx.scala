@@ -28,10 +28,10 @@ sealed trait Ctx {
             } yield ctx2
           case _ =>
             Left(Err(
-              s"fail to extend ctx\n" ++
-                s"pat: ${prettyPat(pat)}\n" ++
-                s"t: ${prettyVal(t)}\n" ++
-                s"v: ${prettyVal(v)}\n"))
+              s"[fail to extend ctx]\n" ++
+                s"pattern: ${prettyPat(pat)}\n" ++
+                s"type: ${prettyVal(t)}\n" ++
+                s"value: ${prettyVal(v)}\n"))
         }
       case PatSole() =>
         Right(this)

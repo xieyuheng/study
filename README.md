@@ -6,12 +6,13 @@ A dependently typed language
 - for interactive theorem proving
 - and practical verification tasks
 
-------
-
-- Release: https://github.com/xieyuheng/cicada-release
-- [API Docs](https://cicada.xieyuheng.now.sh/xieyuheng/cicada/index.html)
+- Release: [cicada-release](https://github.com/xieyuheng/cicada-release)
 - CI: [travis-ci](https://travis-ci.org/xieyuheng/cicada)
 - IRC: [#cicada-language](https://kiwiirc.com/nextclient/irc.freenode.net/#cicada-language)
+
+## Docs
+
+- [API Docs](https://cicada.xieyuheng.now.sh/xieyuheng/cicada/index.html)
 
 ## Contributing
 

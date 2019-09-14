@@ -11,10 +11,9 @@ object grammar {
   def preserved_identifiers: Set[String] = Set(
     "let", "letrec",
     "car", "cdr",
-    "sum", "match",
+    "type", "type_t",
     "sole", "trivial",
     "return",
-    "univ",
   )
 
   def identifier: WordPred = WordPred(
@@ -99,7 +98,7 @@ object grammar {
         List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "car" -> List("car", "(", exp, ")"),
       "cdr" -> List("cdr", "(", exp, ")"),
-      "match" -> List("match", "{", non_empty_list(mat_clause), "}"),
+      "match" -> List("@", "=", ">", "{", non_empty_list(mat_clause), "}"),
       "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
       "block_of_one_exp" -> List("{", exp, "}"),
     ))
@@ -118,7 +117,7 @@ object grammar {
         Ap(fn, exp_matcher(exp)) },
       "car" -> { case List(_, _, exp, _) => Car(exp_matcher(exp)) },
       "cdr" -> { case List(_, _, exp, _) => Cdr(exp_matcher(exp)) },
-      "match" -> { case List(_, _, mat_clause_list, _) =>
+      "match" -> { case List(_, _, _, _, mat_clause_list, _) =>
         Mat(non_empty_list_matcher(mat_clause_matcher)(mat_clause_list).toMap) },
       "block" -> { case List(_, decl_list, _, exp, _) =>
         non_empty_list_matcher(decl_matcher)(decl_list)
@@ -178,11 +177,11 @@ object grammar {
       "sigma" -> List("(", pat, ":", exp, ")", "*", "*", exp),
       "sigma_list" -> List("$", "[", non_empty_list(sigma_entry), exp, "]"),
       "data" -> List(identifier, exp),
-      "sum" -> List("sum", "{", non_empty_list(sum_clause), "}"),
+      "sum" -> List("type", "{", non_empty_list(sum_clause), "}"),
       "sole" -> List("[", "]"),
       "lit_sole" -> List("sole"),
       "trivial" -> List("trivial"),
-      "univ" -> List("univ"),
+      "univ" -> List("type_t"),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](

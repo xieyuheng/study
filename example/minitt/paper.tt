@@ -1,14 +1,14 @@
-let id: (A: univ, A) -> A =
+let id: (A: type_t, A) -> A =
   (A, x) => x
 
-let bool_t: univ = sum {
+let bool_t: type_t = type {
   true;
   false;
 }
 
 eq! id(bool_t, true[]) true[]
 eq! id(bool_t, false[]) false[]
-eq! id((A: univ, A) -> A, id) id
+eq! id((A: type_t, A) -> A, id) id
 
 let true: bool_t = true[]
 let false: bool_t = false[]
@@ -17,18 +17,18 @@ eq! id(bool_t, true) true
 eq! id(bool_t, false) false
 
 let bool_elim: (
-  C: (bool_t) -> univ,
+  C: (bool_t) -> type_t,
   C(true),
   C(false),
   b: bool_t,
 ) -> C(b) = {
-  (C, h0, h1) => match {
+  (C, h0, h1) => @ => {
     true[] => h0;
     false[] => h1;
   }
 }
 
-letrec nat_t: univ = sum {
+letrec nat_t: type_t = type {
   zero;
   succ nat_t;
 }
@@ -49,7 +49,7 @@ let bool_to_nat: (bool_t) -> nat_t = {
   // testing the use of let in block
   x => {
     let y: bool_t = x
-    let f: (bool_t) -> nat_t = match {
+    let f: (bool_t) -> nat_t = @ => {
       true[] => succ[zero];
       false[] => zero[];
     }
@@ -61,54 +61,54 @@ eq! bool_to_nat(true) succ[zero]
 eq! bool_to_nat(false) zero
 
 letrec nat_rec: (
-  C: (nat_t) -> univ,
+  C: (nat_t) -> type_t,
   C(zero),
   (n: nat_t, C(n)) -> C(succ[n]),
   n: nat_t,
 ) -> C(n) = {
-  (C, a, g) => match {
+  (C, a, g) => @ => {
     zero[] => a;
     succ[prev] => g(prev, nat_rec(C, a, g, prev));
   }
 }
 
-letrec add: (nat_t, nat_t) -> nat_t = {
-  match {
+letrec nat_add: (nat_t, nat_t) -> nat_t = {
+  @ => {
     zero[] => y => y;
-    succ[prev] => y => succ[add(prev, y)];
+    succ[prev] => y => succ[nat_add(prev, y)];
   }
 }
 
-eq! add(two, two) four
+eq! nat_add(two, two) four
 
-let double: (nat_t) -> nat_t =
-  x => add(x, x)
+let nat_double: (nat_t) -> nat_t =
+  x => nat_add(x, x)
 
-eq! double(one) two
-eq! double(two) four
-eq! double(three) six
+eq! nat_double(one) two
+eq! nat_double(two) four
+eq! nat_double(three) six
 
-letrec mul: (nat_t, nat_t) -> nat_t = {
-  match {
+letrec nat_mul: (nat_t, nat_t) -> nat_t = {
+  @ => {
     zero[] => y => zero;
-    succ[prev] => y => add(y, mul(prev, y));
+    succ[prev] => y => nat_add(y, nat_mul(prev, y));
   }
 }
 
-let square: (nat_t) -> nat_t =
-  x => mul(x, x)
+let nat_square: (nat_t) -> nat_t =
+  x => nat_mul(x, x)
 
-eq! square(one) one
-eq! square(two) four
-eq! square(three) nine
+eq! nat_square(one) one
+eq! nat_square(two) four
+eq! nat_square(three) nine
 
 letrec nat_eq: (nat_t, nat_t) -> bool_t = {
-  match {
-    zero[] => match {
+  @ => {
+    zero[] => @ => {
       zero[] => true;
       succ[_] => false;
     };
-    succ[x_prev] => match {
+    succ[x_prev] => @ => {
       zero[] => false;
       succ[y_prev] => nat_eq(x_prev, y_prev);
     };
@@ -120,19 +120,19 @@ eq! nat_eq(two, two) true
 eq! nat_eq(one, two) false
 eq! nat_eq(two, one) false
 
-letrec list_t: (A: univ) -> univ = {
-  A => sum {
+letrec list_t: (A: type_t) -> type_t = {
+  A => type {
     null;
     cons $[A, list_t(A)];
   }
 }
 
 letrec list_append: (
-  A: univ,
+  A: type_t,
   list_t(A),
   list_t(A),
 ) -> list_t(A) = {
-  A => match {
+  A => @ => {
     null[] => y => y;
     cons[head, tail] => y => cons[head, list_append(A, tail, y)];
   }

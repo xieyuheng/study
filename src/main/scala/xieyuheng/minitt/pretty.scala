@@ -57,8 +57,8 @@ object pretty {
       case cons: Cons =>
         val str = cons_exp_to_list(cons).map(prettyExp(_)).mkString(", ")
         s"[${str}]"
-      case Car(pair) => s"${prettyExp(pair)}.car"
-      case Cdr(pair) => s"${prettyExp(pair)}.cdr"
+      case Car(pair) => s"car(${prettyExp(pair)})"
+      case Cdr(pair) => s"cdr(${prettyExp(pair)})"
       case Sigma(pat, arg_t, t) =>
         s"(${prettyPat(pat)}: ${prettyExp(arg_t)}) ** ${prettyExp(t)}"
       case Data(tag: String, body: Cons) =>
@@ -103,9 +103,9 @@ object pretty {
       case NeuAp(target: Neu, arg: Val) =>
         s"#[${prettyNeu(target)}(${prettyVal(arg)})]"
       case NeuCar(target: Neu) =>
-        s"#[${prettyNeu(target)}.car]"
+        s"#[car(${prettyNeu(target)})]"
       case NeuCdr(target: Neu) =>
-        s"#[${prettyNeu(target)}.cdr]"
+        s"#[cdr(${prettyNeu(target)})]"
       case NeuMat(target: Neu, CloMat(mats: Map[String, Exp], env: Env)) =>
         s"#[match {${maybeNewline(prettyExpMap(mats))}} (${prettyNeu(target)})]"
     }

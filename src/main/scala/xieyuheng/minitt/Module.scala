@@ -51,27 +51,11 @@ case class Module() {
       case TopEval(exp) =>
         print_exp(exp)
       case TopEq(e1, e2) =>
-        val v1 = eval(e1, env)
-        val v2 = eval(e2, env)
-        if (v1 != v2) {
-          println(s"[eq! fail]")
-          println(s"e1: ${prettyExp(e1)} ==> ${prettyVal(v1)}")
-          println(s"e2: ${prettyExp(e2)} ==> ${prettyVal(v2)}")
-          throw new Exception()
-        }
+        assert_eq(e1)(e2)
       case TopNotEq(e1, e2) =>
-        val v1 = eval(e1, env)
-        val v2 = eval(e2, env)
-        if (v1 == v2) {
-          println(s"[not_eq! fail]")
-          println(s"e1: ${prettyExp(e1)} ==> ${prettyVal(v1)}")
-          println(s"e2: ${prettyExp(e2)} ==> ${prettyVal(v2)}")
-          throw new Exception()
-        }
+        assert_not_eq(e1)(e2)
     }
   }
-
-  // old
 
   def let(pat: Pat, t: Exp, e: Exp): Unit = {
     declare(DeclLet(pat, t, e))
@@ -85,20 +69,39 @@ case class Module() {
     top_list = top_list ++ module.top_list
   }
 
+  def assert_not_eq(e1: Exp)(e2: Exp): Unit = {
+    val v1 = eval(e1, this.env)
+    val v2 = eval(e2, this.env)
+    if (v1 == v2) {
+      println(s"[assertion fail]")
+      println(s"the following two expressions are asserted to be not equal")
+      println(s">>> ${prettyExp(e1)}")
+      println(s"=== ${prettyVal(v1)}")
+      println(s">>> ${prettyExp(e2)}")
+      println(s"=== ${prettyVal(v2)}")
+      throw new Exception()
+    }
+  }
+
   def assert_eq(e1: Exp)(e2: Exp): Unit = {
     val v1 = eval(e1, this.env)
     val v2 = eval(e2, this.env)
     if (v1 != v2) {
-      println(s"e1: ${prettyExp(e1)} ==> ${prettyVal(v1)}")
-      println(s"e2: ${prettyExp(e2)} ==> ${prettyVal(v2)}")
+      println(s"[assertion fail]")
+      println(s"the following two expressions are asserted to be equal")
+      println(s">>> ${prettyExp(e1)}")
+      println(s"=== ${prettyVal(v1)}")
+      println(s">>> ${prettyExp(e2)}")
+      println(s"=== ${prettyVal(v2)}")
       throw new Exception()
     }
   }
 
   def print_exp(exp: Exp): Unit = {
+    print(">>> ")
     println(prettyExp(exp))
     val value = eval(exp, this.env)
-    print("==> ")
+    print("=== ")
     println(prettyVal(value))
     println()
   }

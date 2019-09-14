@@ -54,7 +54,7 @@ let bool_to_nat: (bool_t) -> nat_t = {
     let y: bool_t = x
     let f: (bool_t) -> nat_t = {
       case true[] => succ[zero]
-      case false[] => zero[]
+      case false[] => zero
     }
     return f(y)
   }

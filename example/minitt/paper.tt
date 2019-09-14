@@ -6,9 +6,12 @@ let bool_t: type_t = type {
   case false
 }
 
+let id_on_id: (A: type_t, A) -> A =
+  id((A: type_t, A) -> A)(id)
+
 eq! id(bool_t, true[]) true[]
 eq! id(bool_t, false[]) false[]
-eq! id((A: type_t, A) -> A, id) id
+eq! id_on_id id
 
 let true: bool_t = true[]
 let false: bool_t = false[]

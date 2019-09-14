@@ -121,6 +121,8 @@ object check {
         }
       case (Sole(), ValTrivial()) => Right(())
       case (Trivial(), ValUniv()) => Right(())
+      // NOTE this is universe in universe
+      case (ValUniv(), ValUniv()) => Right(())
       case (Block(decl, body), t) =>
         for {
           ctx1 <- check_decl(i, env, ctx, decl)
@@ -197,6 +199,8 @@ object check {
           }
           ValSigma(arg_t: Val, clo: Clo) = t
         } yield clo.ap(eval.car(eval(pair, env)))
+      // NOTE this is universe in universe
+      case Univ() => Right(ValUniv())
       case _ => Left(Err(
         s"can not check_infer: ${prettyExp(e)}"))
     }

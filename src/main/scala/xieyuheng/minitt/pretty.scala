@@ -73,7 +73,7 @@ object pretty {
         s"sum {${maybeNewline(prettyExpMap(mats))}}"
       case Sole() => "[]"
       case Trivial() => "[]"
-      case Univ() => "univ"
+      case Univ() => "type_t"
       case Block(decl, body) =>
         s"{ ${prettyDecl(decl)}; ${prettyExp(body)} }"
     }
@@ -139,7 +139,7 @@ object pretty {
         s"(${prettyVal(arg)}) -> ${prettyClo(clo)}"
       case ValSigma(arg: Val, clo) =>
         s"(${prettyVal(arg)}) ** ${prettyClo(clo)}"
-      case ValUniv() => "univ"
+      case ValUniv() => "type_t"
       case cons: ValCons =>
         val str = cons_val_to_list(cons).map(prettyVal(_)).mkString(", ")
         s"[${str}]"

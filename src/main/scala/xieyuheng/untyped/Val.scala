@@ -1,5 +1,5 @@
 package xieyuheng.untyped
 
 trait Val {
-  def readback(usedNames: Set[String]): Either[Err, Exp]
+  def readback(used_names: Set[String]): Either[Err, Exp]
 }

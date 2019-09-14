@@ -5,14 +5,14 @@ case class Closure (
   name: String,
   body: Exp,
 ) extends Val {
-  def readback(usedNames: Set[String], t: Type): Either[Err, Exp] = {
+  def readback(used_names: Set[String], t: Type): Either[Err, Exp] = {
     t match {
       case Arrow(argType, retType) =>
-        val freshName = util.freshen (usedNames, name)
+        val fresh_name = util.freshen (used_names, name)
         for {
-          value <- Apply.exe(this, TheNeu(argType, NeuVar(freshName)))
-          body2 <- value.readback(usedNames + freshName, retType)
-        } yield Lambda(freshName, body2)
+          value <- Apply.exe(this, TheNeu(argType, NeuVar(fresh_name)))
+          body2 <- value.readback(used_names + fresh_name, retType)
+        } yield Lambda(fresh_name, body2)
       case _ => Left(Err(
         s"type of lambda should be arrow: ${t}"))
     }

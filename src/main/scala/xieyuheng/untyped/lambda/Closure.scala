@@ -5,11 +5,11 @@ case class Closure (
   name: String,
   body: Exp,
 ) extends Val {
-  def readback(usedNames: Set[String]): Either[Err, Exp] = {
-    val freshName = util.freshen (usedNames, name)
+  def readback(used_names: Set[String]): Either[Err, Exp] = {
+    val fresh_name = util.freshen (used_names, name)
     for {
-      value <- body.eval(env.ext(name, NeuVar(freshName)))
-      body2 <- value.readback(usedNames + freshName)
-    } yield Lambda(freshName, body2)
+      value <- body.eval(env.ext(name, NeuVar(fresh_name)))
+      body2 <- value.readback(used_names + fresh_name)
+    } yield Lambda(fresh_name, body2)
   }
 }

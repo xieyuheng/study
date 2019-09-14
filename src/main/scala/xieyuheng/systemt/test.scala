@@ -2,15 +2,15 @@ package xieyuheng.systemt
 
 object test extends App {
   val `freshen should generate new name not used` = {
-    val usedNames = Set("x", "x*")
-    val freshName = util.freshen(usedNames, "x")
-    assert(!usedNames.contains(freshName))
+    val used_names = Set("x", "x*")
+    val fresh_name = util.freshen(used_names, "x")
+    assert(!used_names.contains(fresh_name))
   }
 
   val `it should add * to the end of name` = {
-    val usedNames = Set("x", "x*")
-    val freshName = util.freshen(usedNames, "x")
-    assert(freshName == "x**")
+    val used_names = Set("x", "x*")
+    val fresh_name = util.freshen(used_names, "x")
+    assert(fresh_name == "x**")
   }
 
   val `eval should eval Lambda` = {

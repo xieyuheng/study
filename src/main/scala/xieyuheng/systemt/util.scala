@@ -5,11 +5,11 @@ import scala.annotation.tailrec
 object util {
   @tailrec
   def freshen(
-    usedNames: Set[String],
+    used_names: Set[String],
     name: String,
   ): String = {
-    if (usedNames.contains(name)) {
-      freshen(usedNames, name + "*")
+    if (used_names.contains(name)) {
+      freshen(used_names, name + "*")
     } else {
       name
     }

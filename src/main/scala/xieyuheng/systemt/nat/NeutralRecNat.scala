@@ -6,11 +6,11 @@ case class NeuRecNat (
   base: TheVal,
   step: TheVal,
 ) extends Neu {
-  def readback_neu(usedNames: Set[String]): Either[Err, Exp] = {
+  def readback_neu(used_names: Set[String]): Either[Err, Exp] = {
     for {
-      targetExp <- target.readback_neu(usedNames)
-      baseExp <- base.readback_the_val(usedNames)
-      stepExp <- step.readback_the_val(usedNames)
+      targetExp <- target.readback_neu(used_names)
+      baseExp <- base.readback_the_val(used_names)
+      stepExp <- step.readback_the_val(used_names)
     } yield RecNat(t, targetExp, baseExp, stepExp)
   }
 }

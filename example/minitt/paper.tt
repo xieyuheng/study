@@ -2,8 +2,8 @@ let id: (A: type_t, A) -> A =
   (A, x) => x
 
 let bool_t: type_t = type {
-  true;
-  false;
+  case true
+  case false
 }
 
 eq! id(bool_t, true[]) true[]
@@ -22,15 +22,15 @@ let bool_elim: (
   C(false),
   b: bool_t,
 ) -> C(b) = {
-  (C, h0, h1) => case {
-    true[] => h0;
-    false[] => h1;
+  (C, h0, h1) => {
+    case true[] => h0
+    case false[] => h1
   }
 }
 
 letrec nat_t: type_t = type {
-  zero;
-  succ nat_t;
+  case zero
+  case succ[nat_t]
 }
 
 let zero: nat_t = zero[]
@@ -49,9 +49,9 @@ let bool_to_nat: (bool_t) -> nat_t = {
   // testing the use of let in block
   x => {
     let y: bool_t = x
-    let f: (bool_t) -> nat_t = case {
-      true[] => succ[zero];
-      false[] => zero[];
+    let f: (bool_t) -> nat_t = {
+      case true[] => succ[zero]
+      case false[] => zero[]
     }
     return f(y)
   }
@@ -66,17 +66,15 @@ letrec nat_rec: (
   (n: nat_t, C(n)) -> C(succ[n]),
   n: nat_t,
 ) -> C(n) = {
-  (C, a, g) => case {
-    zero[] => a;
-    succ[prev] => g(prev, nat_rec(C, a, g, prev));
+  (C, a, g) => {
+    case zero[] => a
+    case succ[prev] => g(prev, nat_rec(C, a, g, prev))
   }
 }
 
 letrec nat_add: (nat_t, nat_t) -> nat_t = {
-  case {
-    zero[] => y => y;
-    succ[prev] => y => succ[nat_add(prev, y)];
-  }
+  case zero[] => y => y
+  case succ[prev] => y => succ[nat_add(prev, y)]
 }
 
 eq! nat_add(two, two) four
@@ -89,10 +87,8 @@ eq! nat_double(two) four
 eq! nat_double(three) six
 
 letrec nat_mul: (nat_t, nat_t) -> nat_t = {
-  case {
-    zero[] => y => zero;
-    succ[prev] => y => nat_add(y, nat_mul(prev, y));
-  }
+  case zero[] => y => zero
+  case succ[prev] => y => nat_add(y, nat_mul(prev, y))
 }
 
 let nat_square: (nat_t) -> nat_t =
@@ -103,15 +99,13 @@ eq! nat_square(two) four
 eq! nat_square(three) nine
 
 letrec nat_eq: (nat_t, nat_t) -> bool_t = {
-  case {
-    zero[] => case {
-      zero[] => true;
-      succ[_] => false;
-    };
-    succ[x_prev] => case {
-      zero[] => false;
-      succ[y_prev] => nat_eq(x_prev, y_prev);
-    };
+  case zero[] => {
+    case zero[] => true
+    case succ[_] => false
+  }
+  case succ[x_prev] => {
+    case zero[] => false
+    case succ[y_prev] => nat_eq(x_prev, y_prev)
   }
 }
 
@@ -122,8 +116,8 @@ eq! nat_eq(two, one) false
 
 letrec list_t: (A: type_t) -> type_t = {
   A => type {
-    null;
-    cons $[A, list_t(A)];
+    case null
+    case cons $[A, list_t(A)]
   }
 }
 
@@ -132,9 +126,9 @@ letrec list_append: (
   list_t(A),
   list_t(A),
 ) -> list_t(A) = {
-  A => case {
-    null[] => y => y;
-    cons[head, tail] => y => cons[head, list_append(A, tail, y)];
+  A => {
+    case null[] => y => y
+    case cons[head, tail] => y => cons[head, list_append(A, tail, y)]
   }
 }
 

@@ -11,7 +11,8 @@ object grammar {
   def preserved_identifiers: Set[String] = Set(
     "let", "letrec",
     "car", "cdr",
-    "type", "case", "type_t",
+    "type", "type_t",
+    "case",
     "sole", "trivial",
     "return",
   )
@@ -98,7 +99,7 @@ object grammar {
         List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "car" -> List("car", "(", exp, ")"),
       "cdr" -> List("cdr", "(", exp, ")"),
-      "match" -> List("case", "{", non_empty_list(mat_clause), "}"),
+      "match" -> List("{", non_empty_list(mat_clause), "}"),
       "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
       "block_of_one_exp" -> List("{", exp, "}"),
     ))
@@ -117,7 +118,7 @@ object grammar {
         Ap(fn, exp_matcher(exp)) },
       "car" -> { case List(_, _, exp, _) => Car(exp_matcher(exp)) },
       "cdr" -> { case List(_, _, exp, _) => Cdr(exp_matcher(exp)) },
-      "match" -> { case List(_, _, mat_clause_list, _) =>
+      "match" -> { case List(_, mat_clause_list, _) =>
         Mat(non_empty_list_matcher(mat_clause_matcher)(mat_clause_list).toMap) },
       "block" -> { case List(_, decl_list, _, exp, _) =>
         non_empty_list_matcher(decl_matcher)(decl_list)
@@ -263,28 +264,28 @@ object grammar {
 
   def sum_clause = Rule(
     "sum_clause", Map(
-      "sum_trivial" -> List(identifier, ";"),
-      "sum_clause" -> List(identifier, exp, ";"),
+      "sum_trivial" -> List("case", identifier),
+      "sum_clause" -> List("case", identifier, exp),
     ))
 
   def sum_clause_matcher: Tree => (String, Exp) = Tree.matcher[(String, Exp)](
     "sum_clause", Map(
-      "sum_trivial" -> { case List(Leaf(name), _) =>
+      "sum_trivial" -> { case List(_, Leaf(name)) =>
         (name, Trivial())
       },
-      "sum_clause" -> { case List(Leaf(name), t, _) =>
+      "sum_clause" -> { case List(_, Leaf(name), t) =>
         (name, exp_matcher(t))
       },
     ))
 
   def mat_clause = Rule(
     "mat_clause", Map(
-      "mat_clause" -> List(identifier, exp, ";"),
+      "mat_clause" -> List("case", identifier, exp),
     ))
 
   def mat_clause_matcher: Tree => (String, Exp) = Tree.matcher[(String, Exp)](
     "mat_clause", Map(
-      "mat_clause" -> { case List(Leaf(name), exp, _) =>
+      "mat_clause" -> { case List(_, Leaf(name), exp) =>
         (name, exp_matcher(exp)) },
     ))
 

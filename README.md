@@ -1,5 +1,11 @@
 # cicada
 
+A dependently typed language
+- with fulfilling type system
+- based on game semantics
+- for interactive theorem proving
+- and practical verification tasks
+
 ## Contributing
 
 - Compile: `sbt compile`

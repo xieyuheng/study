@@ -1,9 +1,9 @@
-package xieyuheng.untyped.example
+package xieyuheng.untyped
 
 import scala.annotation.tailrec
 import xieyuheng.untyped._
 
-object Church {
+object church_encoding {
   var m = Module()
 
   m.define("church_zero",
@@ -21,11 +21,11 @@ object Church {
         Apply(Apply(Var("k"), Var("f")),
           Var("x"))))))))
 
-  def fromInt(n: Int): Exp = {
+  def from_int(n: Int): Exp = {
     if (n <= 0) {
       Var("church_zero")
     } else {
-      Apply(Var("church_add1"), fromInt(n - 1))
+      Apply(Var("church_add1"), from_int(n - 1))
     }
   }
 }

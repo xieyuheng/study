@@ -1,6 +1,6 @@
 package xieyuheng.tartlet
 
-case class Apply (
+case class Ap (
   rator: Exp,
   rand: Exp,
 ) extends Eliminator {
@@ -8,7 +8,7 @@ case class Apply (
     for {
       fn <- rator.eval(env)
       arg <- rand.eval(env)
-      res <- Apply.exe(fn, arg)
+      res <- Ap.exe(fn, arg)
     } yield res
   }
 
@@ -18,7 +18,7 @@ case class Apply (
     thatMap: Map[String, String],
   ): Boolean = {
     that match {
-      case Apply(rator2, rand2) =>
+      case Ap(rator2, rand2) =>
         rator.alphaEq(rator2, thisMap, thatMap) &&
         rand.alphaEq(rand2, thisMap, thatMap)
       case _ => false
@@ -29,7 +29,7 @@ case class Apply (
    ctx :- rator => Pi(x: A, R)
    ctx :- rand <= A
    -----------------
-   ctx :- Apply(rator, rand) => R
+   ctx :- Ap(rator, rand) => R
    */
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
@@ -42,7 +42,7 @@ case class Apply (
             argVal <- rand.eval(ctx.toEnv)
             retVal <- retType.apply(argVal)
             retExp <- retVal.readback(ctx, ValUniverse)
-          } yield The(retExp, Apply(the.value, rand))
+          } yield The(retExp, Ap(the.value, rand))
         }
         case _ =>
           Left(Err("expected Pi, " + "found: ${t}"))
@@ -51,7 +51,7 @@ case class Apply (
   }
 }
 
-object Apply {
+object Ap {
   def exe(
     fn: Val,
     arg: Val,
@@ -62,7 +62,7 @@ object Apply {
       case TheNeu(ValPi(argType, retType), neutral) =>
         for {
           t <- retType.apply(arg)
-        } yield TheNeu(t, NeuApply(neutral, TheVal(argType, arg)))
+        } yield TheNeu(t, NeuAp(neutral, TheVal(argType, arg)))
       case _ =>
         Left(Err(
           "fn should be " +

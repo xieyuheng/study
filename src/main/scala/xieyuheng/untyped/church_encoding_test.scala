@@ -7,6 +7,6 @@ object church_encoding_test extends App {
     m.run(church_encoding.from_int(1))
     m.run(church_encoding.from_int(2))
     m.run(church_encoding.from_int(3))
-    m.run(Apply(Apply(Var("church_add"), church_encoding.from_int(2)), church_encoding.from_int(2)))
+    m.run(Ap(Ap(Var("church_add"), church_encoding.from_int(2)), church_encoding.from_int(2)))
   }
 }

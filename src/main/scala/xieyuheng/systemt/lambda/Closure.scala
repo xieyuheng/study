@@ -10,7 +10,7 @@ case class Closure (
       case Arrow(argType, retType) =>
         val fresh_name = util.freshen (used_names, name)
         for {
-          value <- Apply.exe(this, TheNeu(argType, NeuVar(fresh_name)))
+          value <- Ap.exe(this, TheNeu(argType, NeuVar(fresh_name)))
           body2 <- value.readback(used_names + fresh_name, retType)
         } yield Lambda(fresh_name, body2)
       case _ => Left(Err(

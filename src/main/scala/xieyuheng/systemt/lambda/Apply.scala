@@ -1,6 +1,6 @@
 package xieyuheng.systemt
 
-case class Apply (
+case class Ap (
   rator: Exp,
   rand: Exp,
 ) extends Eliminator {
@@ -8,7 +8,7 @@ case class Apply (
     for {
       fn <- rator.eval (env)
       arg <- rand.eval (env)
-      value <- Apply.exe(fn, arg)
+      value <- Ap.exe(fn, arg)
     } yield value
   }
 
@@ -16,7 +16,7 @@ case class Apply (
    ctx :- rator => A -> R
    ctx :- rand <= A
    ---------------
-   ctx :- Apply (rator, rand) => R
+   ctx :- Ap (rator, rand) => R
    */
   def infer(ctx: Ctx): Either[Err, Type] = {
     rator.infer(ctx) match {
@@ -32,7 +32,7 @@ case class Apply (
   }
 }
 
-case object Apply {
+case object Ap {
   def exe(fn: Val, arg: Val): Either[Err, Val] = {
     fn match {
       case Closure(env, name, body) =>
@@ -40,7 +40,7 @@ case object Apply {
       case TheNeu(theType, neutral) =>
         theType match {
           case Arrow(argType, retType) =>
-            Right(TheNeu(retType, NeuApply(neutral, TheVal(argType, arg))))
+            Right(TheNeu(retType, NeuAp(neutral, TheVal(argType, arg))))
           case _ =>
             Left(Err(s"type of neutral fn is not Arrow: ${fn}"))
         }

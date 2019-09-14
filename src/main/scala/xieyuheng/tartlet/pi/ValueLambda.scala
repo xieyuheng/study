@@ -7,7 +7,7 @@ case class ValLambda(closure: Closure) extends Val {
         val fresh_name = util.freshen(ctx.names, retType.name)
         val arg = TheNeu(argType, NeuVar(fresh_name))
         for {
-          bodyVal <- Apply.exe(this, arg)
+          bodyVal <- Ap.exe(this, arg)
           realRetType <- retType.apply(arg)
           body <- bodyVal.readback(
             ctx.ext(fresh_name, Bind(argType)),

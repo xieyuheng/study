@@ -19,8 +19,8 @@ object test extends App {
       Right(Closure(Env(), "x", Lambda("y", Var("y")))))
   }
 
-  val `it should eval Apply` = {
-    val exp = Apply(Lambda("x", Var("x")), Lambda("x", Var("x")))
+  val `it should eval Ap` = {
+    val exp = Ap(Lambda("x", Var("x")), Lambda("x", Var("x")))
     assert(exp.eval(Env()) ==
       Right(Closure(Env(), "x", Var("x"))))
   }
@@ -62,8 +62,8 @@ object test extends App {
           Lambda("prev", Lambda("almost",
             Add1(Var("almost"))))))))
 
-    m.run(Apply(Var("+"), Var("three")))
+    m.run(Ap(Var("+"), Var("three")))
 
-    m.run(Apply(Apply(Var("+"), Var("three")), Var("three")))
+    m.run(Ap(Ap(Var("+"), Var("three")), Var("three")))
   }
 }

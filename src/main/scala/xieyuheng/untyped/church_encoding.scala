@@ -11,21 +11,21 @@ object church_encoding {
 
   m.define("church_add1",
     Lambda("prev", Lambda("f", Lambda("x",
-      Apply(Var("f"),
-        Apply(Apply(Var("prev"), Var("f")),
+      Ap(Var("f"),
+        Ap(Ap(Var("prev"), Var("f")),
           Var("x")))))))
 
   m.define("church_add",
     Lambda("j", Lambda("k", Lambda("f", Lambda("x",
-      Apply(Apply(Var("j"), Var("f")),
-        Apply(Apply(Var("k"), Var("f")),
+      Ap(Ap(Var("j"), Var("f")),
+        Ap(Ap(Var("k"), Var("f")),
           Var("x"))))))))
 
   def from_int(n: Int): Exp = {
     if (n <= 0) {
       Var("church_zero")
     } else {
-      Apply(Var("church_add1"), from_int(n - 1))
+      Ap(Var("church_add1"), from_int(n - 1))
     }
   }
 }

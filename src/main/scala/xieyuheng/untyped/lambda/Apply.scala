@@ -1,6 +1,6 @@
 package xieyuheng.untyped
 
-case class Apply (
+case class Ap (
   rator: Exp,
   rand: Exp,
 ) extends Exp {
@@ -12,7 +12,7 @@ case class Apply (
         case fn: Closure =>
           fn.body.eval(fn.env.ext(fn.name, arg))
         case fn: Neu =>
-          Right(NeuApply(fn, arg))
+          Right(NeuAp(fn, arg))
         case _ =>
           Left(Err(s"unknown fn value type: ${fn}"))
       }

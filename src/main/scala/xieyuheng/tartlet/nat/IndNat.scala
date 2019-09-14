@@ -52,10 +52,10 @@ case class IndNat (
         NativeClosure("n", _ => Right(ValUniverse))))
       motiveVal <- motive.eval(ctx.toEnv)
       targetVal <- target.eval(ctx.toEnv)
-      baseType <- Apply.exe(motiveVal, ValZero)
+      baseType <- Ap.exe(motiveVal, ValZero)
       base <- base.check(ctx, baseType)
       step <- step.check(ctx, IndNat.stepType(motiveVal))
-      typeVal <- Apply.exe(motiveVal, targetVal)
+      typeVal <- Ap.exe(motiveVal, targetVal)
       t <- typeVal.readback(ctx, ValUniverse)
     } yield The(t, IndNat(target, motive, base, step))
    }
@@ -66,10 +66,10 @@ object IndNat {
     ValPi(ValNat,
       NativeClosure("prev", prev =>
         for {
-          almostType <- Apply.exe(motive, prev)
+          almostType <- Ap.exe(motive, prev)
         } yield ValPi(almostType,
           NativeClosure("almost", almost =>
-            Apply.exe(motive, ValAdd1(prev))))))
+            Ap.exe(motive, ValAdd1(prev))))))
   }
 
   def exe(
@@ -83,15 +83,15 @@ object IndNat {
         Right(base)
       case ValAdd1(prev) => {
         for {
-          f <- Apply.exe(step, prev)
+          f <- Ap.exe(step, prev)
           almost <- IndNat.exe(prev, motive, base, step)
-          res <- Apply.exe(f, almost)
+          res <- Ap.exe(f, almost)
         } yield res
       }
       case TheNeu(ValNat, neutral) => {
         for {
-          t <- Apply.exe(motive, target)
-          baseType <- Apply.exe(motive, ValZero)
+          t <- Ap.exe(motive, target)
+          baseType <- Ap.exe(motive, ValZero)
         } yield TheNeu(t,
           NeuIndNat(
             neutral,

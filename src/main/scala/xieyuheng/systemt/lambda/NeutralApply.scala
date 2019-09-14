@@ -1,6 +1,6 @@
 package xieyuheng.systemt
 
-case class NeuApply (
+case class NeuAp (
   fn: Neu,
   arg: TheVal,
 ) extends Neu {
@@ -8,6 +8,6 @@ case class NeuApply (
     for {
       rator <- fn.readback_neu (used_names)
       rand <- arg.readback_the_val (used_names)
-    } yield Apply(rator, rand)
+    } yield Ap(rator, rand)
   }
 }

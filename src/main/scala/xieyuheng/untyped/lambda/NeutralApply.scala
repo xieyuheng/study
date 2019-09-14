@@ -1,6 +1,6 @@
 package xieyuheng.untyped
 
-case class NeuApply (
+case class NeuAp (
   fn: Neu,
   arg: Val,
 ) extends Neu {
@@ -8,6 +8,6 @@ case class NeuApply (
     for {
       rator <- fn.readback (used_names)
       rand <- arg.readback (used_names)
-    } yield Apply(rator, rand)
+    } yield Ap(rator, rand)
   }
 }

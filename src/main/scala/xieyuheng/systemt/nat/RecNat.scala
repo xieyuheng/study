@@ -47,9 +47,9 @@ case object RecNat {
         Right(base)
       case ValAdd1(prev) =>
         for {
-          f <- Apply.exe(step, prev)
+          f <- Ap.exe(step, prev)
           almost <- RecNat.exe(t, prev, base, step)
-          res <- Apply.exe(f, almost)
+          res <- Ap.exe(f, almost)
         } yield res
       case TheNeu(theType, neutral) =>
         theType match {

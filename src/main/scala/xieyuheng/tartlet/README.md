@@ -29,9 +29,9 @@ m.define("+",
 m.run(Var("three"))
 // The(Nat,Add1(Add1(Add1(Zero))))
 
-m.run(Apply(Var("+"), Var("three")))
+m.run(Ap(Var("+"), Var("three")))
 // The(Pi(_*,Nat,Nat),Lambda(_*,Add1(Add1(Add1(Var(_*))))))
 
-m.run(Apply(Apply(Var("+"), Var("three")), Var("three")))
+m.run(Ap(Ap(Var("+"), Var("three")), Var("three")))
 // The(Nat,Add1(Add1(Add1(Add1(Add1(Add1(Zero)))))))
 ```

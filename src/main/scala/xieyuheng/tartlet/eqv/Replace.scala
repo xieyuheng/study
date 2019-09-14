@@ -49,10 +49,10 @@ case class Replace (
               NativeClosure("_", _ => Right(ValUniverse))))
             motiveVal <- motive.eval(ctx.toEnv)
             fromVal <- from.eval(ctx.toEnv)
-            baseType <- Apply.exe(motiveVal, fromVal)
+            baseType <- Ap.exe(motiveVal, fromVal)
             base <- base.check(ctx, baseType)
             toVal <- to.eval(ctx.toEnv)
-            typeVal <- Apply.exe(motiveVal, toVal)
+            typeVal <- Ap.exe(motiveVal, toVal)
             typeExp <- typeVal.readback(ctx, ValUniverse)
           } yield The(typeExp, Replace(the.value, motive, base))
         case _ =>
@@ -74,8 +74,8 @@ object Replace {
         Right(base)
       case TheNeu(ValEqv(t, from, to), neutral) => {
         for {
-          typeVal <- Apply.exe(motive, to)
-          baseType <- Apply.exe(motive, from)
+          typeVal <- Ap.exe(motive, to)
+          baseType <- Ap.exe(motive, from)
         } yield TheNeu(typeVal,
           NeuReplace(
             neutral,

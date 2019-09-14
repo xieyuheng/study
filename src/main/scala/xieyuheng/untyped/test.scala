@@ -19,16 +19,16 @@ object test extends App {
       Right(Closure(Env(), "x", Lambda("y", Var("y")))))
   }
 
-  val `it should eval Apply` = {
-    val exp = Apply(Lambda("x", Var("x")), Lambda("x", Var("x")))
+  val `it should eval Ap` = {
+    val exp = Ap(Lambda("x", Var("x")), Lambda("x", Var("x")))
     assert(exp.eval(Env()) ==
       Right(Closure(Env(), "x", Var("x"))))
   }
 
   val `readback should readback normal form` = {
     for {
-      value <- Apply(
-        Lambda("x", Lambda("y", Apply(Var("x"), Var("y")))),
+      value <- Ap(
+        Lambda("x", Lambda("y", Ap(Var("x"), Var("y")))),
         Lambda("x", Var("x")))
       .eval(Env())
       norm <- value.readback(Set())

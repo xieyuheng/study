@@ -122,7 +122,7 @@ object check {
       case (Sole(), ValTrivial()) => Right(())
       case (Trivial(), ValUniv()) => Right(())
       // NOTE this is universe in universe
-      case (ValUniv(), ValUniv()) => Right(())
+      case (Univ(), ValUniv()) => Right(())
       case (Block(decl, body), t) =>
         for {
           ctx1 <- check_decl(i, env, ctx, decl)

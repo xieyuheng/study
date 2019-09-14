@@ -1,0 +1,38 @@
+#+title: language implementation tricks
+
+* closure and lexical scope
+
+  - we need lexical scope for lambda
+
+  - the closure trick says:
+    closure = lambda expression + env
+
+* keep the model of expression and value simple
+
+  - the expression is already simple
+
+  - value is also simple if
+    the only difference between exp and value is the env closure
+
+  - the keep it simple trick says: keep it simple
+
+* implementation of inference rule
+
+  - type system is specified by logic inference rules
+
+  - such specification make it possible to prove e: T
+    but might not provide algorithm for checking e: T
+    i.e. might not generating a proof of e: T for you
+
+  - the bidirectional trick says:
+    we can turn a set of inference rules
+    to a type checking algorithm,
+    by sometime do infer sometime do check.
+
+* comparing equivalence between expressions
+
+  - we can comparing equivalence if we can normalize
+
+  - the normalization by evaluation trick says:
+    eval the expressions to values,
+    can read them back to normal form.

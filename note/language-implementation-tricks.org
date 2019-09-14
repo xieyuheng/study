@@ -19,7 +19,7 @@
 
   - the keep it simple trick says: keep it simple
 
-* implementation of inference rule
+* implementation of inference rules
 
   - type system is specified by logic inference rules
 
@@ -59,10 +59,16 @@
     we can not possibly infer the type of a bound variable x.
     thus we do check for the rule of function abstraction.
 
+    function abstraction is the constructor of function type,
+    function application is the eliminator of function type,
+    and since the rules about function are core of type systems,
+    we propagate the property "we need to check instead of infer"
+    to all rules about constructor.
+
   - can we just provide enough information in the syntax.
     for example, use church's typed lambda calculus instead of curry's typed lambda calculus ?
-
     in church's typed lambda calculus, can we infer all the way done ?
+    is this true for all the rules about constructor ?
 
   - a sub-trick is that,
     the argument type of type check function

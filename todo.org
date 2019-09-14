@@ -1,7 +1,11 @@
-- ready to pie
-* lambda
+* untyped
+- [untyped] change the style to grouping by function instead of grouping by data
+- [untyped] concrete syntax
 * systemt
+- [systemt] change the style to grouping by function instead of grouping by data
+- [systemt] concrete syntax
 * pie
+- ready to pie
 - change the style to grouping by function instead of grouping by data
 - better expDSL
 - better Module

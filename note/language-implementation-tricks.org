@@ -7,6 +7,9 @@
   - the closure trick says:
     closure = lambda expression + env
 
+  - this is the most basic trick for writing
+    simple call-by-value eval function
+
 * keep the model of expression and value simple
 
   - the expression is already simple
@@ -24,15 +27,67 @@
     but might not provide algorithm for checking e: T
     i.e. might not generating a proof of e: T for you
 
+    why not?
+    just because we are not providing enough information in the syntax.
+
+    for example,
+    curry's typed lambda calculus has less information in syntax
+    comparing church's typed lambda calculus.
+
   - the bidirectional trick says:
-    we can turn a set of inference rules
-    to a type checking algorithm,
-    by sometime do infer sometime do check.
+    we can turn a set of inference rules to a type checking algorithm,
+    by sometimes view a rule as infer sometimes as check.
+
+    for example, the rule of function application:
+    ctx -- f: A -> B
+    ctx -- x: A
+    ------------
+    ctx -- f(x): B
+
+    we need infer to check function application,
+    and if we have infer, we can also infer the type of function application.
+    thus for rule of function application we use infer.
+
+    we examine our rules recursively and do infer as far as possible.
+    and for those left we do check.
+
+    but the rule of (curry's) function abstraction:
+    ctx, x: A -- e: B
+    ------------
+    ctx -- λ x. e : A -> B
+
+    we can not possibly infer the type of a bound variable x.
+    thus we do check for the rule of function abstraction.
+
+  - can we just provide enough information in the syntax.
+    for example, use church's typed lambda calculus instead of curry's typed lambda calculus ?
+
+    in church's typed lambda calculus, can we infer all the way done ?
+
+  - a sub-trick is that,
+    the argument type of type check function
+    should be (e: Exp, T: Val)
+    instead of (e: Exp, T: Exp)
+
+    the dependent version of the rule of function application
+    ctx -- f: A -> B
+    ctx -- x: A
+    val_eq(val_apply(B, x), T)
+    // B is a value that can apply to x
+    //   thus it must be value (with closure)
+    //   to maintain lexical scope
+    ------------
+    ctx -- f(x): T
 
 * comparing equivalence between expressions
 
   - we can comparing equivalence if we can normalize
 
-  - the normalization by evaluation trick says:
+  - the normalization by evaluation (aka. nbe) trick says:
     eval the expressions to values,
     can read them back to normal form.
+
+  - we can also make comparing equivalence faster,
+    by nbe the two expressions together,
+    and know that they are not equal as soon as
+    they start to appear to be not equal.

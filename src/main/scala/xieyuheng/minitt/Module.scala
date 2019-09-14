@@ -74,11 +74,11 @@ case class Module() {
   // old
 
   def let(pat: Pat, t: Exp, e: Exp): Unit = {
-    declare(Let(pat, t, e))
+    declare(DeclLet(pat, t, e))
   }
 
   def letrec(pat: Pat, t: Exp, e: Exp): Unit = {
-    declare(Letrec(pat, t, e))
+    declare(DeclLetrec(pat, t, e))
   }
 
   def import_all(module: Module): Unit = {

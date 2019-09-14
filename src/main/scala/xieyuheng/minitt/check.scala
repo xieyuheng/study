@@ -18,14 +18,14 @@ object check {
 
   def check_decl(i: Int, env: Env, ctx: Ctx, decl: Decl): Either[Err, Ctx] = {
     decl match {
-      case Let(pat, t_exp, e) =>
+      case DeclLet(pat, t_exp, e) =>
         for {
           _ <- check_type(i, env, ctx, t_exp)
           t = eval(t_exp, env)
           _ <- check(i, env, ctx, e, t)
           ctx1 <- ctx.ext(pat, t, eval(e, env))
         } yield ctx1
-      case decl @ Letrec(pat, t_exp, e) =>
+      case decl @ DeclLetrec(pat, t_exp, e) =>
         for {
           _ <- check_type(i, env, ctx, t_exp)
           t = eval(t_exp, env)

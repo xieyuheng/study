@@ -235,7 +235,7 @@ object grammar_test extends App {
       let id: (A: univ, A) -> A =
       A => x => x
       """,
-      Let("id",
+      DeclLet("id",
         pi("A" :: Univ()) { "A" ->: "A" },
         fn("A", "x") { "x" })
     )
@@ -247,7 +247,7 @@ object grammar_test extends App {
         false;
       }
       """,
-      Let("bool_t", Univ(),
+      DeclLet("bool_t", Univ(),
         sum(
           "true" -> Trivial(),
           "false" -> Trivial()))
@@ -257,14 +257,14 @@ object grammar_test extends App {
       s"""
       let true: bool_t = true[]
       """,
-      Let("true", "bool_t", %("true"))
+      DeclLet("true", "bool_t", %("true"))
     )
 
     assert_decl_to_tree(
       s"""
       let false: bool_t = false[]
       """,
-      Let("false", "bool_t", %("false"))
+      DeclLet("false", "bool_t", %("false"))
     )
 
     assert_decl_to_tree(
@@ -279,7 +279,7 @@ object grammar_test extends App {
         false[] => h1;
       }
       """,
-      Let("bool_elim",
+      DeclLet("bool_elim",
         pi("C" :: "bool_t" ->: Univ()) {
           pi("h0" :: ("C" $ "true")) {
             pi("h1" :: ("C" $ "false")) {
@@ -301,7 +301,7 @@ object grammar_test extends App {
         false[] => h1;
       }
       """,
-      Let("bool_elim",
+      DeclLet("bool_elim",
         pi("C" :: "bool_t" ->: Univ()) {
           pi("h0" :: ("C" $ "true")) {
             pi("h1" :: ("C" $ "false")) {
@@ -324,7 +324,7 @@ object grammar_test extends App {
         false[] => h1;
       }
       """,
-      Let("bool_elim",
+      DeclLet("bool_elim",
         pi("C" :: "bool_t" ->: Univ()) {
           pi("h0" :: ("C" $ "true")) {
             pi("h1" :: ("C" $ "false")) {
@@ -347,7 +347,7 @@ object grammar_test extends App {
         false[] => h1;
       }
       """,
-      Let("bool_elim",
+      DeclLet("bool_elim",
         pi("C" :: "bool_t" ->: Univ()) {
           ("C" $ "true") ->:
           ("C" $ "false") ->:
@@ -369,7 +369,7 @@ object grammar_test extends App {
         false[] => h1;
       }
       """,
-      Let("bool_elim",
+      DeclLet("bool_elim",
         pi("C" :: "bool_t" ->: Univ()) {
           ("C" $ %("true")) ->:
           ("C" $ %("false")) ->:
@@ -386,7 +386,7 @@ object grammar_test extends App {
         succ nat_t;
       }
       """,
-      Letrec("nat_t", Univ(),
+      DeclLetrec("nat_t", Univ(),
         sum(
           "zero" -> Trivial(),
           "succ" -> "nat_t"))
@@ -396,7 +396,7 @@ object grammar_test extends App {
       s"""
       let zero: nat_t = zero[]
       """,
-      Let("zero", "nat_t", %("zero"))
+      DeclLet("zero", "nat_t", %("zero"))
     )
 
 
@@ -404,7 +404,7 @@ object grammar_test extends App {
       s"""
       let zero: nat_t = zero[]
       """,
-      Let("zero", "nat_t", %("zero"))
+      DeclLet("zero", "nat_t", %("zero"))
     )
   }
 

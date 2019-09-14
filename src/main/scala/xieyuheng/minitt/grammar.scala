@@ -70,9 +70,9 @@ object grammar {
   def decl_matcher = Tree.matcher[Decl](
     "decl", Map(
       "let" -> { case List(_, p, _, e, _, t) =>
-        Let(pat_matcher(p), exp_matcher(e), exp_matcher(t)) },
+        DeclLet(pat_matcher(p), exp_matcher(e), exp_matcher(t)) },
       "letrec" -> { case List(_, p, _, e, _, t) =>
-        Letrec(pat_matcher(p), exp_matcher(e), exp_matcher(t)) },
+        DeclLetrec(pat_matcher(p), exp_matcher(e), exp_matcher(t)) },
     ))
 
   def exp: Rule = Rule(

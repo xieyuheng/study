@@ -62,12 +62,12 @@ object eval {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case EnvDecl(Let(pat, t, e), rest) =>
+      case EnvDecl(DeclLet(pat, t, e), rest) =>
         project_pat(name, pat, eval(e, rest)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
-      case EnvDecl(Letrec(pat, t, e), rest) =>
+      case EnvDecl(DeclLetrec(pat, t, e), rest) =>
         project_pat(name, pat, eval(e, env)) match {
           case Some(value) => value
           case None => lookup(name, rest)

@@ -39,6 +39,7 @@ let nine: nat_t = succ[eight]
 let ten: nat_t = succ[nine]
 
 let bool_to_nat: (bool_t) -> nat_t = {
+  // testing the use of let in block
   x => {
     let y: bool_t = x
     let f: (bool_t) -> nat_t = match {

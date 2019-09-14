@@ -2,7 +2,7 @@ package xieyuheng.systemt
 
 case class Var (name: String) extends Eliminator {
   def eval(env: Env): Either[Err, Val] = {
-    env.lookupVal(name) match {
+    env.lookup_val(name) match {
       case Some(value) =>
         Right(value)
       case None =>

@@ -36,6 +36,13 @@ sealed trait Clo {
         clo.ap(ValData(tag, arg))
     }
   }
+
+  def maybe_arg_name(): Option[String] = {
+    this match {
+      case CloFn(pat, _body, _env) => pat.maybe_name()
+      case _ => None
+    }
+  }
 }
 
 final case class CloFn(pat: Pat, body: Exp, env: Env) extends Clo
@@ -43,7 +50,18 @@ final case class CloMat(mats: Map[String, Exp], env: Env) extends Clo
 final case class CloTag(tag: String, clo: Clo) extends Clo
 
 sealed trait Neu
-final case class NeuVar(name: String) extends Neu
+final case class NeuVar(name: String, aka: Option[String] = None) extends Neu {
+  val matters = name
+
+  override def equals(that: Any): Boolean = {
+    that match {
+      case that: NeuVar => this.matters == that.matters
+      case _ => false
+    }
+  }
+
+  override def hashCode = matters.hashCode
+}
 final case class NeuAp(target: Neu, arg: Val) extends Neu
 final case class NeuCar(target: Neu) extends Neu
 final case class NeuCdr(target: Neu) extends Neu

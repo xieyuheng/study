@@ -3,7 +3,7 @@ package xieyuheng.minitt
 object readback {
 
   def fresh_name(i: Int): String = {
-    s"$$${i}"
+    s"#${i}"
   }
 
   def readback_val(i: Int, value: Val): Norm = {
@@ -12,15 +12,15 @@ object readback {
         readback_neu(i, neu)
       case ValFn(clo) =>
         val name = fresh_name(i)
-        val body = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name))))
+        val body = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name, clo.maybe_arg_name()))))
         NormFn(name, body)
       case ValPi(arg_t: Val, clo) =>
         val name = fresh_name(i)
-        val dep_t = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name))))
+        val dep_t = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name, clo.maybe_arg_name()))))
         NormPi(name, readback_val(i, arg_t), dep_t)
       case ValSigma(arg_t: Val, clo) =>
         val name = fresh_name(i)
-        val dep_t = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name))))
+        val dep_t = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name, clo.maybe_arg_name()))))
         NormSigma(name, readback_val(i, arg_t), dep_t)
       case ValUniv() => NormUniv()
       case ValCons(car: Val, cdr: Val) =>
@@ -38,7 +38,7 @@ object readback {
 
   def readback_neu(i: Int, neu: Neu): NormNeu = {
     neu match {
-      case NeuVar(name: String) =>
+      case NeuVar(name: String, _aka) =>
         NormNeuVar(name)
       case NeuAp(target: Neu, arg: Val) =>
         NormNeuAp(readback_neu(i, target), readback_val(i, arg))

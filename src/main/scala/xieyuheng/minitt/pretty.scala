@@ -98,16 +98,19 @@ object pretty {
 
   def prettyNeu(neu: Neu): String = {
     neu match {
-      case NeuVar(name: String) =>
-        s"#[${name}]"
+      case NeuVar(name: String, aka: Option[String]) =>
+        aka match {
+          case Some(alias) => s"${alias}${name}"
+          case None => name
+        }
       case NeuAp(target: Neu, arg: Val) =>
-        s"#[${prettyNeu(target)}(${prettyVal(arg)})]"
+        s"${prettyNeu(target)}(${prettyVal(arg)})"
       case NeuCar(target: Neu) =>
-        s"#[car(${prettyNeu(target)})]"
+        s"car(${prettyNeu(target)})"
       case NeuCdr(target: Neu) =>
-        s"#[cdr(${prettyNeu(target)})]"
+        s"cdr(${prettyNeu(target)})"
       case NeuMat(target: Neu, CloMat(mats: Map[String, Exp], env: Env)) =>
-        s"#[match {${maybeNewline(prettyExpMap(mats))}} (${prettyNeu(target)})]"
+        s"match {${maybeNewline(prettyExpMap(mats))}} (${prettyNeu(target)})"
     }
   }
 

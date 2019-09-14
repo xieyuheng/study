@@ -17,7 +17,14 @@ final case class Trivial() extends Exp
 final case class Univ() extends Exp
 final case class Block(decl: Decl, body: Exp) extends Exp
 
-sealed trait Pat
+sealed trait Pat {
+  def maybe_name(): Option[String] = {
+    this match {
+      case PatVar(name) => Some(name)
+      case _ => None
+    }
+  }
+}
 final case class PatVar(name: String) extends Pat
 final case class PatCons(car: Pat, cdr: Pat) extends Pat
 final case class PatSole() extends Pat

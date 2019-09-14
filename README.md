@@ -6,11 +6,6 @@ A dependently typed language
 - for interactive theorem proving
 - and practical verification tasks
 
-## Contributing
-
-- Compile: `sbt compile`
-- Test: `./dev t`
-
 ## Release
 
 - https://github.com/xieyuheng/cicada-release
@@ -18,6 +13,11 @@ A dependently typed language
 ## Docs
 
 - [API Docs](https://cicada.xieyuheng.now.sh/xieyuheng/cicada/index.html)
+
+## Contributing
+
+- Compile: `sbt compile`
+- Test: `./dev t`
 
 ## Community
 

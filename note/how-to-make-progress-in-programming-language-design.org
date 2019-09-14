@@ -1,3 +1,5 @@
+#+title: How to make progress in programming language design
+
 - newton observes phenomenon in nature,
   and only try to give theory to explain the phenomenon.
   the theory is always ready to be improved.

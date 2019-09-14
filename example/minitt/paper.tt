@@ -148,18 +148,60 @@ let one_cons_zero: $[nat_t, nat_t] = [one, zero]
 eq! car(one_cons_zero) one
 eq! cdr(one_cons_zero) zero
 
-// church encoding of bool
+// church encoding of "and"
 
-let and: (type_t, type_t) -> type_t = {
+let and_t: (type_t, type_t) -> type_t = {
   (P, Q) =>
     (R: type_t) -> ((P, Q) -> R) -> R
 }
+
+// conjunction
+// - like "remembering x, y of type P, Q for later"
+// - like pattern matching on pair
 
 let conj: (
   P: type_t,
   Q: type_t,
   P, Q,
-) -> and(P, Q) = {
+) -> and_t(P, Q) = {
   (P, Q, x, y) =>
-    (z) => (f) => f(y, x)
+    (z) => (f) => f(x, y)
+}
+
+let conj_project_left: (
+  P: type_t,
+  Q: type_t,
+  and_t(P, Q),
+) -> P = {
+  (P, Q, x_and_y) =>
+    x_and_y(P, (x, y) => x)
+}
+
+let conj_project_right: (
+  P: type_t,
+  Q: type_t,
+  and_t(P, Q),
+) -> Q = {
+  (P, Q, x_and_y) =>
+    x_and_y(Q, (x, y) => y)
+}
+
+let and_commute: (
+  P: type_t,
+  Q: type_t,
+  and_t(P, Q),
+) -> and_t(Q, P) = {
+  (P, Q, x_and_y) =>
+    conj(Q, P,
+      conj_project_right(P, Q, x_and_y),
+      conj_project_left(P, Q, x_and_y))
+}
+
+let and_commute_2: (
+  P: type_t,
+  Q: type_t,
+  and_t(P, Q),
+) -> and_t(Q, P) = {
+  (P, Q, x_and_y) =>
+    x_and_y(and_t(Q, P), (x, y) => conj(Q, P, y, x))
 }

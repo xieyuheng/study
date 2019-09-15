@@ -1,6 +1,6 @@
 package xieyuheng.tartlet
 
-object test extends App {
+object tartlet_test extends App {
   val `freshen should generate new name not used` = {
     val used_names = Set("x", "x*")
     val fresh_name = util.freshen(used_names, "x")

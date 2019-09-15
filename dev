@@ -84,7 +84,7 @@ build_lambda () {
 }
 
 release () {
-    cp -r target/linux/bin/ ~/proj/cicada-release/ && \
+    cp -r target/linux/ ~/proj/cicada-release/ && \
         pushd ~/proj/cicada-release/ && \
         git add . && \
         git commit -m "up" && \

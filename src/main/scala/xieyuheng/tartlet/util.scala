@@ -22,8 +22,8 @@ object util {
     v2: Val,
   ): Either[Err, Unit] = {
     for {
-      e1 <- v1.readback (ctx, t)
-      e2 <- v2.readback (ctx, t)
+      e1 <- v1.readback_val(ctx, t)
+      e2 <- v2.readback_val(ctx, t)
     } yield if (e1.alphaEq (e2, Map(), Map())) {
       ()
     } else {

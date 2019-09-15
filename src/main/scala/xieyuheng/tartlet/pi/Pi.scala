@@ -10,7 +10,7 @@ case class Pi (
   def eval(env: Env): Either[Err, Val] = {
     for {
       argTypeVal <- argType.eval(env)
-    } yield ValPi(argTypeVal, EnvClosure(env, name, retType))
+    } yield ValPi(argTypeVal, EnvClo(env, name, retType))
   }
 
   def alphaEq(

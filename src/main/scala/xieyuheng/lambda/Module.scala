@@ -1,7 +1,7 @@
 package xieyuheng.lambda
 
-import xieyuheng.lambda.pretty._
-import xieyuheng.lambda.readback._
+import pretty._
+import readback._
 
 case class Module() {
 

@@ -4,7 +4,7 @@ case class Module(
   var ctx: Ctx = Ctx(),
 ) {
   def claim(name: String, t: Exp): Module = {
-    if (ctx.lookupType(name).isDefined) {
+    if (ctx.lookup_type(name).isDefined) {
       println(s"name: ${name} is alreay claimed")
     } else {
       t.check(ctx, ValUniverse) match {
@@ -44,7 +44,7 @@ case class Module(
       the <- exp.infer(ctx)
       typeVal <- the.t.eval(env)
       value <- exp.eval(env)
-      norm <- value.readback(ctx, typeVal)
+      norm <- value.readback_val(ctx, typeVal)
     } yield The(the.t, norm)
 
     result match {

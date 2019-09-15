@@ -7,7 +7,7 @@ case class Lambda (
   body: Exp,
 ) extends Constructor {
   def eval(env: Env): Either[Err, Val] =
-    Right(ValLambda(EnvClosure(env, name, body)))
+    Right(ValLambda(EnvClo(env, name, body)))
 
   def alphaEq(
     that: Exp,

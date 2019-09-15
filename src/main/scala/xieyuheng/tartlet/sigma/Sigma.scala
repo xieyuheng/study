@@ -10,7 +10,7 @@ case class Sigma (
   def eval(env: Env): Either[Err, Val] = {
     for {
       carTypeVal <- carType.eval(env)
-    } yield ValSigma(carTypeVal, EnvClosure(env, name, cdrType))
+    } yield ValSigma(carTypeVal, EnvClo(env, name, cdrType))
   }
 
   def alphaEq(

@@ -1,0 +1,61 @@
+package xieyuheng.systemt
+
+object readback {
+
+  def readback_val(value: Val, used_names: Set[String], t: Type): Either[Err, Exp] = {
+    value match {
+      case TheNeu(t: Type, neu: Neu) =>
+        readback_neu(neu, used_names)
+      case ValSucc(prev: Val) =>
+        t match {
+          case Nat =>
+            for {
+              prev_exp <- readback_val(prev, used_names, t)
+            } yield Succ(prev_exp)
+          case _ => Left(Err(
+            s"type of ValSucc should be Nat: ${t}"))
+        }
+      case ValZero =>
+        t match {
+          case Nat =>
+            Right(Zero)
+          case _ => Left(Err(
+            s"type of ValZero should be Nat: ${t}"))
+        }
+      case ValFn(env: Env, name: String, body: Exp) =>
+        t match {
+          case Arrow(argType, retType) =>
+            val fresh_name = util.freshen (used_names, name)
+            val value2 = eval.exe_ap(value, TheNeu(argType, NeuVar(fresh_name)))
+            for {
+              body2 <- readback_val(value2, used_names + fresh_name, retType)
+            } yield Fn(fresh_name, body2)
+          case _ => Left(Err(
+            s"type of lambda should be arrow: ${t}"))
+        }
+    }
+  }
+
+  def readback_neu(neu: Neu, used_names: Set[String]): Either[Err, Exp] = {
+    neu match {
+      case NeuRecNat(t: Type, target: Neu, base: TheVal, step: TheVal) =>
+        for {
+          targetExp <- readback_neu(target, used_names)
+          baseExp <- readback_the_val(base, used_names)
+          stepExp <- readback_the_val(step, used_names)
+        } yield RecNat(t, targetExp, baseExp, stepExp)
+      case NeuAp(fn: Neu, arg: TheVal) =>
+        for {
+          rator <- readback_neu(fn, used_names)
+          rand <- readback_the_val(arg, used_names)
+        } yield Ap(rator, rand)
+      case NeuVar(name: String) => {
+        Right(Var(name))
+      }
+    }
+  }
+
+  def readback_the_val(the: TheVal, used_names: Set [String]): Either[Err, Exp] = {
+    readback_val(the.value, used_names, the.t)
+  }
+}

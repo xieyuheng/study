@@ -4,7 +4,7 @@ case class Ctx (map: Map[String, Den] = Map()) {
   def lookupDen(name: String): Option[Den] =
     map.get (name)
 
-  def lookupType(name: String): Option[Val] =
+  def lookup_type(name: String): Option[Val] =
     map.get (name) match {
       case Some(Def(t, value)) =>
         Some(t)

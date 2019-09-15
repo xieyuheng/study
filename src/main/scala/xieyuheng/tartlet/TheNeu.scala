@@ -4,7 +4,7 @@ case class TheNeu (
   t: Val,
   neutral: Neu,
 ) extends Val {
-  def readback (ctx: Ctx, t: Val): Either[Err, Exp] = {
+  def readback_val(ctx: Ctx, t: Val): Either[Err, Exp] = {
     t match {
       case ValAbsurd =>
         for {

@@ -34,7 +34,7 @@ case class Car (
         case Sigma(name, carType, cdrType) =>
           for {
             carTypeVal <- carType.eval(ctx.toEnv)
-            carTypeExp <- carTypeVal.readback(ctx, ValUniverse)
+            carTypeExp <- carTypeVal.readback_val(ctx, ValUniverse)
           } yield The(carTypeExp, the.value)
         case _ =>
           Left(Err(

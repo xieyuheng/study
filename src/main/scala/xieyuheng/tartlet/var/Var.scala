@@ -31,15 +31,15 @@ case class Var (name: String) extends Eliminator {
   }
 
   /*
-   ctx.lookupType(x) == T
+   ctx.lookup_type(x) == T
    --------------------------
    ctx :- Var(x) => T
    */
   def infer(ctx: Ctx): Either[Err, The] = {
-    ctx.lookupType(name) match {
+    ctx.lookup_type(name) match {
       case Some(typeVal) => {
         for {
-          typeExp <- typeVal.readback(ctx, ValUniverse)
+          typeExp <- typeVal.readback_val(ctx, ValUniverse)
         } yield The(typeExp, this)
       }
       case None =>

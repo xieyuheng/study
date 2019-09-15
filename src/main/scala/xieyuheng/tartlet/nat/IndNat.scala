@@ -49,14 +49,14 @@ case class IndNat (
     for {
       target <- target.check(ctx, ValNat)
       motive <- motive.check(ctx, ValPi(ValNat,
-        NativeClosure("n", _ => Right(ValUniverse))))
+        NativeClo("n", _ => Right(ValUniverse))))
       motiveVal <- motive.eval(ctx.toEnv)
       targetVal <- target.eval(ctx.toEnv)
       baseType <- Ap.exe(motiveVal, ValZero)
       base <- base.check(ctx, baseType)
       step <- step.check(ctx, IndNat.stepType(motiveVal))
       typeVal <- Ap.exe(motiveVal, targetVal)
-      t <- typeVal.readback(ctx, ValUniverse)
+      t <- typeVal.readback_val(ctx, ValUniverse)
     } yield The(t, IndNat(target, motive, base, step))
    }
  }
@@ -64,11 +64,11 @@ case class IndNat (
 object IndNat {
   def stepType(motive: Val): ValPi = {
     ValPi(ValNat,
-      NativeClosure("prev", prev =>
+      NativeClo("prev", prev =>
         for {
           almostType <- Ap.exe(motive, prev)
         } yield ValPi(almostType,
-          NativeClosure("almost", almost =>
+          NativeClo("almost", almost =>
             Ap.exe(motive, ValAdd1(prev))))))
   }
 
@@ -95,7 +95,7 @@ object IndNat {
         } yield TheNeu(t,
           NeuIndNat(
             neutral,
-            TheVal(ValPi(ValNat, NativeClosure("k", k => Right(ValUniverse))), motive),
+            TheVal(ValPi(ValNat, NativeClo("k", k => Right(ValUniverse))), motive),
             TheVal(baseType, base),
             TheVal(IndNat.stepType(motive), step)))
       }

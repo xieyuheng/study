@@ -1,5 +1,4 @@
 * systemt
-- [systemt] change the style to grouping by function instead of grouping by data
 - [systemt] concrete syntax
 * tartlet
 - [tartlet] change the style to grouping by function instead of grouping by data
@@ -33,5 +32,5 @@
 - better report with ErrMsg in context
 - [important] fix equals between rules -- how ? by ruleGen with uuid ?
 - concrete syntax for rule
-  - to use partech as more general tool out side scala 
+  - to use partech as more general tool out side scala
     (like the rosie pattern language)

@@ -16,13 +16,13 @@ object tartlet_test extends App {
   val `eval should eval Lambda` = {
     val exp = Lambda("x", Lambda("y", Var("y")))
     assert(exp.eval(Env()) ==
-      Right(ValLambda(EnvClosure(Env(), "x", Lambda("y", Var("y"))))))
+      Right(ValLambda(EnvClo(Env(), "x", Lambda("y", Var("y"))))))
   }
 
   val `it should eval Ap` = {
     val exp = Ap(Lambda("x", Var("x")), Lambda("x", Var("x")))
     assert(exp.eval(Env()) ==
-      Right(ValLambda(EnvClosure(Env(), "x", Var("x")))))
+      Right(ValLambda(EnvClo(Env(), "x", Var("x")))))
   }
 
   val `Module can define` = {

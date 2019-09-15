@@ -41,7 +41,7 @@ case class Ap (
             rand <- rand.check(ctx, argType)
             argVal <- rand.eval(ctx.toEnv)
             retVal <- retType.apply(argVal)
-            retExp <- retVal.readback(ctx, ValUniverse)
+            retExp <- retVal.readback_val(ctx, ValUniverse)
           } yield The(retExp, Ap(the.value, rand))
         }
         case _ =>
@@ -57,8 +57,8 @@ object Ap {
     arg: Val,
   ): Either[Err, Val] = {
     fn match {
-      case ValLambda(closure) =>
-        closure.apply(arg)
+      case ValLambda(clo) =>
+        clo.apply(arg)
       case TheNeu(ValPi(argType, retType), neutral) =>
         for {
           t <- retType.apply(arg)
@@ -66,7 +66,7 @@ object Ap {
       case _ =>
         Left(Err(
           "fn should be " +
-            "ValLambda(closure) | " +
+            "ValLambda(clo) | " +
             "TheNeu(ValPi(argType, retType), neutral): " +
             s"${fn}"))
     }

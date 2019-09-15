@@ -5,11 +5,11 @@ case class ValEqv (
   from: Val,
   to: Val,
 ) extends Val {
-  def readback(ctx: Ctx, _t: Val): Either[Err, Exp] = {
+  def readback_val(ctx: Ctx, _t: Val): Either[Err, Exp] = {
     for {
-      t <- this.t.readback(ctx, ValUniverse)
-      from <- from.readback(ctx, this.t)
-      to <- to.readback(ctx, this.t)
+      t <- this.t.readback_val(ctx, ValUniverse)
+      from <- from.readback_val(ctx, this.t)
+      to <- to.readback_val(ctx, this.t)
     } yield Eqv(t, from, to)
   }
 }

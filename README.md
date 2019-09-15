@@ -8,8 +8,10 @@ A dependently typed language
 
 ## Contains
 
+- [partech](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech):
+  A parser generator with different parsing techniques.
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):
-  The untyped lambda calculus with norm-by-eval norm-by-eval (normalization by evaluation).
+  The untyped lambda calculus with norm-by-eval (normalization by evaluation).
 - [minitt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/minitt):
   The dependently typed Mini-TT language
   described in paper: "A simple type-theoretic language: Mini-TT",

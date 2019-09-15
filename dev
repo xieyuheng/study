@@ -83,6 +83,15 @@ build_lambda () {
         -H:Class="xieyuheng.lambda.lambda"
 }
 
+release () {
+    cp -r target/bin/ ~/proj/cicada-release/ && \
+        pushd ~/proj/cicada-release/ && \
+        git add . && \
+        git commit -m "up" && \
+        git push && \
+        popd
+}
+
 main () {
     for TASK in $@
     do

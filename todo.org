@@ -5,7 +5,8 @@
 - [systemt] change the style to grouping by function instead of grouping by data
 - [systemt] concrete syntax
 * tartlet
-- change the style to grouping by function instead of grouping by data
+- [tartlet] change the style to grouping by function instead of grouping by data
+- [tartlet] concrete syntax
 - better expDSL
 - better Module
 - better tests

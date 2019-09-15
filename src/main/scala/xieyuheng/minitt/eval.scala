@@ -42,6 +42,7 @@ object eval {
       case ValCons(car: Val, cdr: Val) => car
       case ValNeu(target) => ValNeu(NeuCar(target))
       case _ =>
+        println(s"[eval fail]")
         println(s"value is not a ValCons: ${prettyVal(value)}")
         throw new Exception()
     }
@@ -52,6 +53,7 @@ object eval {
       case ValCons(car: Val, cdr: Val) => cdr
       case ValNeu(target) => ValNeu(NeuCdr(target))
       case _ =>
+        println(s"[eval fail]")
         println(s"value is not a ValCons: ${prettyVal(value)}")
         throw new Exception()
     }
@@ -75,6 +77,7 @@ object eval {
           case None => lookup(name, rest)
         }
       case EnvEmpty() =>
+        println(s"[eval fail]")
         println(s"can not find name: ${name}")
         throw new Exception()
     }

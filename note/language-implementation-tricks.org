@@ -92,7 +92,7 @@
 
   - we can comparing equivalence if we can normalize
 
-  - the normalization by evaluation (aka. nbe) trick says:
+  - the normalization by evaluation (aka. nbe, or norm-by-eval) trick says:
     eval the expressions to values,
     can read them back to normal form.
 

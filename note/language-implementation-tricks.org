@@ -105,3 +105,5 @@
     by nbe the two expressions together,
     and know that they are not equal as soon as
     they start to appear to be not equal.
+
+    comparing weak head normal form step by step.

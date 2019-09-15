@@ -16,6 +16,10 @@ A dependently typed language
   The dependently typed Mini-TT language
   described in paper: "A simple type-theoretic language: Mini-TT",
   by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
+- [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet)
+  The tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",
+  by David Thrane Christiansen.
+  ([origin tutorial](http://davidchristiansen.dk/tutorials/nbe))
 
 **... cicada emerging ...**
 

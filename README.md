@@ -12,14 +12,16 @@ A dependently typed language
   A parser generator with different parsing techniques.
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):
   The untyped lambda calculus with norm-by-eval (normalization by evaluation).
-- [minitt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/minitt):
-  The dependently typed Mini-TT language
-  described in paper: "A simple type-theoretic language: Mini-TT",
-  by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
+- [systemt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/systemt):
+  Kurt Gödel's System T with norm-by-eval, (a step toward tartlet and pie).
 - [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet)
   The tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",
   by David Thrane Christiansen.
   ([the original tutorial](http://davidchristiansen.dk/tutorials/nbe))
+- [minitt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/minitt):
+  The dependently typed Mini-TT language
+  described in paper: "A simple type-theoretic language: Mini-TT",
+  by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
 
 **... cicada emerging ...**
 

@@ -43,7 +43,7 @@ object eval {
       case ValNeu(target) => ValNeu(NeuCar(target))
       case _ =>
         println(s"[eval fail]")
-        println(s"value is not a ValCons: ${prettyVal(value)}")
+        println(s"value is not a ValCons: ${pretty_val(value)}")
         throw new Exception()
     }
   }
@@ -54,7 +54,7 @@ object eval {
       case ValNeu(target) => ValNeu(NeuCdr(target))
       case _ =>
         println(s"[eval fail]")
-        println(s"value is not a ValCons: ${prettyVal(value)}")
+        println(s"value is not a ValCons: ${pretty_val(value)}")
         throw new Exception()
     }
   }

@@ -1,4 +1,4 @@
-package xieyuheng.systemt
+package xieyuheng.syst
 
 import pretty._
 import readback._
@@ -18,9 +18,10 @@ case class Module() {
 
   def env: Env = {
     var env: Env = Env()
+    // var ctx: Ctx = Ctx()
     top_list.foreach {
-      case TopDecl(DeclLet(name, exp)) =>
-        env = env.ext(name, eval(exp, env))
+      case TopDecl(DeclLet(name, t, e)) =>
+        env = env.ext(name, eval(e, env))
       case _ => {}
     }
     env
@@ -28,9 +29,10 @@ case class Module() {
 
   def run(): Unit = {
     var env: Env = Env()
+    // var ctx: Ctx = Ctx()
     top_list.foreach {
-      case TopDecl(DeclLet(name, exp)) =>
-        env = env.ext(name, eval(exp, env))
+      case TopDecl(DeclLet(name, t, e)) =>
+        env = env.ext(name, eval(e, env))
       case TopEval(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>
@@ -49,12 +51,12 @@ case class Module() {
     if (v1 == v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be not equal")
-      println(s">>> ${prettyExp(e1)}")
-      println(s"=== ${prettyVal(v1)}")
-      // println(s"=== ${prettyExp(n1)}")
-      println(s">>> ${prettyExp(e2)}")
-      println(s"=== ${prettyVal(v2)}")
-      // println(s"=== ${prettyExp(n2)}")
+      println(s">>> ${pretty_exp(e1)}")
+      println(s"=== ${pretty_val(v1)}")
+      // println(s"=== ${pretty_exp(n1)}")
+      println(s">>> ${pretty_exp(e2)}")
+      println(s"=== ${pretty_val(v2)}")
+      // println(s"=== ${pretty_exp(n2)}")
       throw new Exception()
     }
   }
@@ -67,12 +69,12 @@ case class Module() {
     if (v1 != v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be equal")
-      println(s">>> ${prettyExp(e1)}")
-      println(s"=== ${prettyVal(v1)}")
-      // println(s"=== ${prettyExp(n1)}")
-      println(s">>> ${prettyExp(e2)}")
-      println(s"=== ${prettyVal(v2)}")
-      // println(s"=== ${prettyExp(n2)}")
+      println(s">>> ${pretty_exp(e1)}")
+      println(s"=== ${pretty_val(v1)}")
+      // println(s"=== ${pretty_exp(n1)}")
+      println(s">>> ${pretty_exp(e2)}")
+      println(s"=== ${pretty_val(v2)}")
+      // println(s"=== ${pretty_exp(n2)}")
       throw new Exception()
     }
   }
@@ -80,16 +82,16 @@ case class Module() {
   def eval_print(exp: Exp): Unit = {
     val value = eval(exp, env)
     // val norm = readback_val(value, Set())
-    println(s">>> ${prettyExp(exp)}")
-    println(s"=== ${prettyVal(value)}")
-    // println(s"=== ${prettyExp(norm)}")
+    println(s">>> ${pretty_exp(exp)}")
+    println(s"=== ${pretty_val(value)}")
+    // println(s"=== ${pretty_exp(norm)}")
     println()
   }
 
 }
 
 
-// package xieyuheng.systemt
+// package xieyuheng.syst
 
 // case class Module(
 //   var env: Env = Env(),

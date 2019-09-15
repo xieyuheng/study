@@ -2,84 +2,84 @@ package xieyuheng.lambda
 
 object pretty {
 
-  val IndentUnit: String = "  "
+  val INDENT_UNIT: String = "  "
 
-  def getIndent(level: Int): String = {
+  def get_indent(level: Int): String = {
     assert(level >= 0)
-    IndentUnit * level
+    INDENT_UNIT * level
   }
 
-  def addIndentToBlock(block: String, level: Int): String = {
+  def add_indent_to_block(block: String, level: Int): String = {
     block
       .split("\n")
-      .map(getIndent(level) ++ _)
+      .map(get_indent(level) ++ _)
       .mkString("\n")
   }
 
-  def maybeNewline(string: String): String = {
+  def maybeln(string: String): String = {
     if (string.trim.isEmpty) {
       ""
     } else {
-      "\n" ++ addIndentToBlock(string, 1) ++ "\n"
+      "\n" ++ add_indent_to_block(string, 1) ++ "\n"
     }
   }
 
 
-  def prettyExpMapWithDelimiter(
+  def pretty_exp_map_with_delimiter(
     map: Map[String, Exp],
     delimiter: String,
   ): String = {
     map
-      .map { case (name, exp) => s"${name}: ${prettyExp(exp)}" }
+      .map { case (name, exp) => s"${name}: ${pretty_exp(exp)}" }
       .mkString(delimiter)
   }
 
-  def prettyExpMap(map: Map[String, Exp]): String = {
-    prettyExpMapWithDelimiter(map, ";\n")
+  def pretty_exp_map(map: Map[String, Exp]): String = {
+    pretty_exp_map_with_delimiter(map, ";\n")
   }
 
-  def prettyExp(exp: Exp): String = {
+  def pretty_exp(exp: Exp): String = {
     exp match {
       case Var(name) => name
       case Fn(name, body) =>
-        s"${name} => ${prettyExp(body)}"
+        s"${name} => ${pretty_exp(body)}"
       case Ap(fn, arg) =>
-        s"${prettyExp(fn)}(${prettyExp(arg)})"
+        s"${pretty_exp(fn)}(${pretty_exp(arg)})"
       case Block(decl, body) =>
-        s"{ ${prettyDecl(decl)}; ${prettyExp(body)} }"
+        s"{ ${pretty_decl(decl)}; ${pretty_exp(body)} }"
     }
   }
 
-  def prettyDecl(decl: Decl): String = {
+  def pretty_decl(decl: Decl): String = {
     decl match {
       case DeclLet(name, e) =>
-        s"let ${name} = ${prettyExp(e)}"
+        s"let ${name} = ${pretty_exp(e)}"
     }
   }
 
-  def prettyNeu(neu: Neu): String = {
+  def pretty_neu(neu: Neu): String = {
     neu match {
       case NeuVar(name: String) =>
         name
       case NeuAp(target: Neu, arg: Val) =>
-        s"${prettyNeu(target)}(${prettyVal(arg)})"
+        s"${pretty_neu(target)}(${pretty_val(arg)})"
     }
   }
 
-  def prettyVal(value: Val): String = {
+  def pretty_val(value: Val): String = {
     value match {
-      case neu: Neu => prettyNeu(neu)
+      case neu: Neu => pretty_neu(neu)
       case ValFn(name, body, env) =>
-        // val map_str = prettyEnv(env)
-        // s"${name} => ${prettyExp(body)} #env {${maybeNewline(map_str)}}"
-        s"${name} => ${prettyExp(body)}"
+        // val map_str = pretty_env(env)
+        // s"${name} => ${pretty_exp(body)} #env {${maybeln(map_str)}}"
+        s"${name} => ${pretty_exp(body)}"
     }
   }
 
-  def prettyEnv(env: Env): String = {
+  def pretty_env(env: Env): String = {
     val delimiter = ";\n"
     env.map
-      .map { case (name, value) => s"${name}: ${prettyVal(value)}" }
+      .map { case (name, value) => s"${name}: ${pretty_val(value)}" }
       .mkString(delimiter)
   }
 }

@@ -30,15 +30,15 @@ case class Lambda (
    */
   def check(ctx: Ctx, t: Val): Either[Err, Exp] =
     t match {
-      case ValPi(argType, retType) => {
-        val varVal = TheNeu(argType, NeuVar(name))
+      case ValPi(arg_t, ret_t) => {
+        val varVal = TheNeu(arg_t, NeuVar(name))
         for {
-          realRetType <- retType.apply(varVal)
-          body <- body.check(ctx.ext(name, Bind(argType)), realRetType)
+          realRetType <- ret_t.apply(varVal)
+          body <- body.check(ctx.ext(name, Bind(arg_t)), realRetType)
         } yield Lambda(name, body)
       }
       case _ =>
         Left(Err(
-          s"expected ValPi(argType, retType), found: ${t}"))
+          s"expected ValPi(arg_t, ret_t), found: ${t}"))
     }
 }

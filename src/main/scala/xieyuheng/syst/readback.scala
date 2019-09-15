@@ -1,4 +1,4 @@
-package xieyuheng.systemt
+package xieyuheng.syst
 
 object readback {
 
@@ -8,42 +8,45 @@ object readback {
         readback_neu(neu, used_names)
       case ValSucc(prev: Val) =>
         t match {
-          case Nat =>
+          case Nat() =>
             for {
               prev_exp <- readback_val(prev, used_names, t)
             } yield Succ(prev_exp)
-          case _ => Left(Err(
-            s"type of ValSucc should be Nat: ${t}"))
+          case _ =>
+            Left(Err(
+              s"type of ValSucc should be Nat: ${t}"))
         }
-      case ValZero =>
+      case ValZero() =>
         t match {
-          case Nat =>
-            Right(Zero)
-          case _ => Left(Err(
-            s"type of ValZero should be Nat: ${t}"))
+          case Nat() =>
+            Right(Zero())
+          case _ =>
+            Left(Err(
+              s"type of ValZero() should be Nat: ${t}"))
         }
       case ValFn(env: Env, name: String, body: Exp) =>
         t match {
-          case Arrow(argType, retType) =>
+          case Arrow(arg_t, ret_t) =>
             val fresh_name = util.freshen (used_names, name)
-            val value2 = eval.exe_ap(value, TheNeu(argType, NeuVar(fresh_name)))
+            val value2 = eval.exe_ap(value, TheNeu(arg_t, NeuVar(fresh_name)))
             for {
-              body2 <- readback_val(value2, used_names + fresh_name, retType)
+              body2 <- readback_val(value2, used_names + fresh_name, ret_t)
             } yield Fn(fresh_name, body2)
-          case _ => Left(Err(
-            s"type of lambda should be arrow: ${t}"))
+          case _ =>
+            Left(Err(
+              s"type of lambda should be arrow: ${t}"))
         }
     }
   }
 
   def readback_neu(neu: Neu, used_names: Set[String]): Either[Err, Exp] = {
     neu match {
-      case NeuRecNat(t: Type, target: Neu, base: TheVal, step: TheVal) =>
+      case NeuNatRec(t: Type, target: Neu, base: TheVal, step: TheVal) =>
         for {
           targetExp <- readback_neu(target, used_names)
           baseExp <- readback_the_val(base, used_names)
           stepExp <- readback_the_val(step, used_names)
-        } yield RecNat(t, targetExp, baseExp, stepExp)
+        } yield NatRec(t, targetExp, baseExp, stepExp)
       case NeuAp(fn: Neu, arg: TheVal) =>
         for {
           rator <- readback_neu(fn, used_names)

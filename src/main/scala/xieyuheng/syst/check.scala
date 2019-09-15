@@ -1,4 +1,4 @@
-package xieyuheng.systemt
+package xieyuheng.syst
 
 object check {
 
@@ -12,16 +12,16 @@ object check {
          // -------------------
          // ctx :- Succ (prev) <= Nat
         t match {
-          case Nat =>
+          case Nat() =>
             check(prev, ctx, t)
           case _ =>
             Left(Err("the type of Succ should be Nat"))
         }
-      case Zero =>
+      case Zero() =>
          // -------------------
          // ctx :- Zero <= Nat
         t match {
-          case Nat => Right(())
+          case Nat() => Right(())
           case _ =>
             Left(Err("the type of Zero should be Nat"))
         }
@@ -30,8 +30,8 @@ object check {
          // -------------------------
          // ctx :- Fn (x, e) <= A -> B
         t match {
-          case Arrow(argType, retType) =>
-            check(body, ctx.ext(name, argType), retType)
+          case Arrow(arg_t, ret_t) =>
+            check(body, ctx.ext(name, arg_t), ret_t)
           case _ =>
             Left(Err(
               s"type of Fn is not Arrow, exp: ${this}"))

@@ -1,5 +1,5 @@
-* systemt
-- [systemt] concrete syntax
+- [syst] concrete syntax
+- improve WordPred API -- WordPred(name) { ... }
 * tartlet
 - [tartlet] change the style to grouping by function instead of grouping by data
 - [tartlet] concrete syntax

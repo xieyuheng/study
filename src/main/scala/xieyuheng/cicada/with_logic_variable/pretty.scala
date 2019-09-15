@@ -4,122 +4,122 @@ import scala.collection.immutable.ListMap
 
 object pretty {
 
-  val IndentUnit: String = "  "
+  val INDENT_UNIT: String = "  "
 
-  def getIndent(level: Int): String = {
+  def get_indent(level: Int): String = {
     assert(level >= 0)
-    IndentUnit * level
+    INDENT_UNIT * level
   }
 
-  def addIndentToBlock(block: String, level: Int): String = {
+  def add_indent_to_block(block: String, level: Int): String = {
     block
       .split("\n")
-      .map(getIndent(level) ++ _)
+      .map(get_indent(level) ++ _)
       .mkString("\n")
   }
 
-  def maybeNewline(string: String): String = {
+  def maybeln(string: String): String = {
     if (string.trim.isEmpty) {
       ""
     } else {
-      "\n" ++ addIndentToBlock(string, 1) ++ "\n"
+      "\n" ++ add_indent_to_block(string, 1) ++ "\n"
     }
   }
 
-  def prettyExpMapWithDelimiter(
+  def pretty_exp_map_with_delimiter(
     map: MultiMap[String, Exp],
     delimiter: String,
   ): String = {
     map.entries
-      .map { case (name, exp) => s"${name}: ${prettyExp(exp)}" }
+      .map { case (name, exp) => s"${name}: ${pretty_exp(exp)}" }
       .mkString(delimiter)
   }
 
-  def prettyExpMap(map: MultiMap[String, Exp]): String = {
-    prettyExpMapWithDelimiter(map, "\n")
+  def pretty_exp_map(map: MultiMap[String, Exp]): String = {
+    pretty_exp_map_with_delimiter(map, "\n")
   }
 
-  def prettyExpArgs(map: MultiMap[String, Exp]): String = {
-    prettyExpMapWithDelimiter(map, ", ")
+  def pretty_expArgs(map: MultiMap[String, Exp]): String = {
+    pretty_exp_map_with_delimiter(map, ", ")
   }
 
-  def prettyExp(exp: Exp): String = {
+  def pretty_exp(exp: Exp): String = {
     exp match {
       case Var(name) =>
         name
       case Type() =>
         "Type"
       case The(t) =>
-        s"the(${prettyExp(t)})"
+        s"the(${pretty_exp(t)})"
       case Choice(target, map) =>
-        val mapString = maybeNewline(prettyExpMap(map))
-        s"${prettyExp(target)} case {${mapString}}"
+        val mapString = maybeln(pretty_exp_map(map))
+        s"${pretty_exp(target)} case {${mapString}}"
       case Dot(target, fieldName) =>
-        s"${prettyExp(target)}.${fieldName}"
+        s"${pretty_exp(target)}.${fieldName}"
       case Pi(args, ret) =>
-        s"pi (${prettyExpArgs(args)}): ${prettyExp(ret)}"
+        s"pi (${pretty_expArgs(args)}): ${pretty_exp(ret)}"
       case Fn(args, ret, body) =>
-        val bodyString = maybeNewline(prettyExp(body))
-        s"fn (${prettyExpArgs(args)}): ${prettyExp(ret)} = {${bodyString}}"
+        val bodyString = maybeln(pretty_exp(body))
+        s"fn (${pretty_expArgs(args)}): ${pretty_exp(ret)} = {${bodyString}}"
       case Ap(target, args) =>
-        s"${prettyExp(target)}(${prettyExpArgs(args)})"
+        s"${pretty_exp(target)}(${pretty_expArgs(args)})"
     }
   }
 
-  def prettyValMapWithDelimiter(
+  def pretty_valMapWithDelimiter(
     map: ListMap[String, Val],
     bind: Bind,
     delimiter: String,
   ): String = {
     walk.deepOnMap(map, bind)
-      .map { case (name, value) => s"${name}: ${prettyVal(value)}" }
+      .map { case (name, value) => s"${name}: ${pretty_val(value)}" }
       .mkString(delimiter)
   }
 
-  def prettyValMap(map: ListMap[String, Val], bind: Bind): String = {
-    prettyValMapWithDelimiter(map, bind, "\n")
+  def pretty_valMap(map: ListMap[String, Val], bind: Bind): String = {
+    pretty_valMapWithDelimiter(map, bind, "\n")
   }
 
-  def prettyValArgs(map: ListMap[String, Val], bind: Bind): String = {
-    prettyValMapWithDelimiter(map, bind, ", ")
+  def pretty_valArgs(map: ListMap[String, Val], bind: Bind): String = {
+    pretty_valMapWithDelimiter(map, bind, ", ")
   }
 
-  def prettyNeu(neutral: Neu, bind: Bind): String = {
+  def pretty_neu(neutral: Neu, bind: Bind): String = {
     neutral match {
       case VarNeu(name) =>
         name
       case ChoiceNeu(target, map) =>
-        val mapString = maybeNewline(prettyValMap(map, bind))
-        s"${prettyNeu(target, bind)} case {${mapString}}"
+        val mapString = maybeln(pretty_valMap(map, bind))
+        s"${pretty_neu(target, bind)} case {${mapString}}"
       case DotNeu(target, fieldName) =>
-        s"${prettyNeu(target, bind)}.${fieldName}"
+        s"${pretty_neu(target, bind)}.${fieldName}"
       case ApNeu(target, args) =>
-        s"${prettyNeu(target, bind)}(${prettyValArgs(args, bind)})"
+        s"${pretty_neu(target, bind)}(${pretty_valArgs(args, bind)})"
     }
   }
 
-  def prettyVal(value: Val): String = {
+  def pretty_val(value: Val): String = {
     value match {
       case TypeOfType(id) =>
         s"type(${id})"
       case ValOfType(id, t) =>
-        s"the(${id}, ${prettyVal(t)})"
+        s"the(${id}, ${pretty_val(t)})"
       case SumTypeVal(name, map, memberNames, bind) =>
-        val mapString = maybeNewline(prettyValMap(map, bind))
+        val mapString = maybeln(pretty_valMap(map, bind))
         s"${name} {${mapString}}"
       case MemberTypeVal(name, map, superName, bind) =>
-        val mapString = maybeNewline(prettyValMap(map, bind))
+        val mapString = maybeln(pretty_valMap(map, bind))
         s"${name} {${mapString}}"
       case PiVal(args, ret) =>
         val bind = Bind()
-        s"pi (${prettyValArgs(args, bind)}): ${prettyVal(ret)}"
+        s"pi (${pretty_valArgs(args, bind)}): ${pretty_val(ret)}"
       case FnVal(args, ret, body, env) =>
         val bind = Bind()
-        val bodyString = maybeNewline(prettyExp(body))
-        s"fn (${prettyValArgs(args, bind)}): ${prettyVal(ret)} = {${bodyString}}"
+        val bodyString = maybeln(pretty_exp(body))
+        s"fn (${pretty_valArgs(args, bind)}): ${pretty_val(ret)} = {${bodyString}}"
       case NeuVal(neutral) =>
         val bind = Bind()
-        val neutralString = maybeNewline(prettyNeu(neutral, bind))
+        val neutralString = maybeln(pretty_neu(neutral, bind))
         s"neutral {${neutralString}}"
       case TopVal() =>
         s"top"
@@ -131,27 +131,27 @@ object pretty {
   def prettyDefine(definition: Define): String = {
     definition match {
       case DefineVal(name, value) =>
-        s"define_value ${name} = ${prettyVal(value)}"
+        s"define_value ${name} = ${pretty_val(value)}"
 
       case DefineMemberType(name, map, superName) =>
-        val mapString = maybeNewline(prettyExpMap(map))
+        val mapString = maybeln(pretty_exp_map(map))
         s"define_member_type ${name} <: ${superName} {${mapString}}"
 
       case DefineSumType(name, map, memberNames) =>
-        val mapString = maybeNewline(prettyExpMap(map))
+        val mapString = maybeln(pretty_exp_map(map))
         val memberNamesString = memberNames.mkString(", ")
         s"define_sum_type ${name} :> { ${memberNamesString} } {${mapString}}"
 
       case DefineFn(name, args, ret, body) =>
-        val argsString = prettyExpArgs(args)
-        val retString = prettyExp(ret)
-        val bodyString = maybeNewline(prettyExp(body))
+        val argsString = pretty_expArgs(args)
+        val retString = pretty_exp(ret)
+        val bodyString = maybeln(pretty_exp(body))
         s"define_fn ${name}(${argsString}): ${retString} = {${bodyString}}"
     }
   }
 
   def prettyBind(bind: Bind): String = {
-    bind.map.mapValues { value => prettyVal(value) }
+    bind.map.mapValues { value => pretty_val(value) }
       .mkString("\n")
   }
 }

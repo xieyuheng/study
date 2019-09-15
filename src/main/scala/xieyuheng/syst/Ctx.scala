@@ -1,4 +1,4 @@
-package xieyuheng.systemt
+package xieyuheng.syst
 
 case class Ctx(map: Map[String, Type] = Map()) {
   def lookup_type(name: String): Option[Type] =

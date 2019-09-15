@@ -1,4 +1,4 @@
-package xieyuheng.systemt
+package xieyuheng.syst
 
 sealed trait Top
 final case class TopDecl(decl: Decl) extends Top

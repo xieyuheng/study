@@ -66,8 +66,8 @@ case class Module() {
         case Some(oldDefine) =>
           if (newDefine != oldDefine) {
             println("[warn]")
-            println(s"- redefining:\n${addIndentToBlock(prettyDefine(newDefine), 1)}")
-            println(s"- old definition:\n${addIndentToBlock(prettyDefine(oldDefine), 1)}")
+            println(s"- redefining:\n${add_indent_to_block(prettyDefine(newDefine), 1)}")
+            println(s"- old definition:\n${add_indent_to_block(prettyDefine(oldDefine), 1)}")
           }
         case None => {}
       }
@@ -78,7 +78,7 @@ case class Module() {
   def eval_print(exp: Exp): Unit = {
     eval(exp, env) match {
       case Right(value) =>
-        println(s"=> ${prettyVal(value)}")
+        println(s"=> ${pretty_val(value)}")
       case Left(errorMsg) =>
         println(s"?> ${errorMsg}")
     }

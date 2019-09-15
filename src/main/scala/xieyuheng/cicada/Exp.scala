@@ -8,8 +8,8 @@ final case class Var(name: String) extends Exp
 
 final case class Type() extends Exp
 
-final case class Pi(argName: String, argType: Exp, retType: Exp) extends Exp
-final case class Fn(argName: String, argType: Exp, retType: Exp, body: Exp) extends Exp
+final case class Pi(argName: String, arg_t: Exp, ret_t: Exp) extends Exp
+final case class Fn(argName: String, arg_t: Exp, ret_t: Exp, body: Exp) extends Exp
 final case class Ap(target: Exp, arg: Exp) extends Exp
 
 final case class Club(

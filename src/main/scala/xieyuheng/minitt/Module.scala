@@ -75,10 +75,10 @@ case class Module() {
     if (v1 == v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be not equal")
-      println(s">>> ${prettyExp(e1)}")
-      println(s"=== ${prettyVal(v1)}")
-      println(s">>> ${prettyExp(e2)}")
-      println(s"=== ${prettyVal(v2)}")
+      println(s">>> ${pretty_exp(e1)}")
+      println(s"=== ${pretty_val(v1)}")
+      println(s">>> ${pretty_exp(e2)}")
+      println(s"=== ${pretty_val(v2)}")
       throw new Exception()
     }
   }
@@ -89,20 +89,20 @@ case class Module() {
     if (v1 != v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be equal")
-      println(s">>> ${prettyExp(e1)}")
-      println(s"=== ${prettyVal(v1)}")
-      println(s">>> ${prettyExp(e2)}")
-      println(s"=== ${prettyVal(v2)}")
+      println(s">>> ${pretty_exp(e1)}")
+      println(s"=== ${pretty_val(v1)}")
+      println(s">>> ${pretty_exp(e2)}")
+      println(s"=== ${pretty_val(v2)}")
       throw new Exception()
     }
   }
 
   def eval_print(exp: Exp): Unit = {
     print(">>> ")
-    println(prettyExp(exp))
+    println(pretty_exp(exp))
     val value = eval(exp, this.env)
     print("=== ")
-    println(prettyVal(value))
+    println(pretty_val(value))
     println()
   }
 

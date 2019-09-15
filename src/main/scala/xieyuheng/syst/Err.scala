@@ -1,3 +1,3 @@
-package xieyuheng.systemt
+package xieyuheng.syst
 
 case class Err(msg: String)

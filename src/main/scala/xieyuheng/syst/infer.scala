@@ -1,4 +1,4 @@
-package xieyuheng.systemt
+package xieyuheng.syst
 
 object infer {
 
@@ -17,16 +17,16 @@ object infer {
           case None =>
             Left(Err(s"can not find var: ${this} in ctx"))
         }
-      case RecNat(t: Type, target: Exp, base: Exp, step: Exp) =>
+      case NatRec(t: Type, target: Exp, base: Exp, step: Exp) =>
         // ctx :- target <= Nat
         // ctx :- base <= T
         // ctx :- step <= Nat -> T -> T
         // -----------------------------------
-        // ctx :- RecNat [T] (target, base, step) => T
+        // ctx :- NatRec [T] (target, base, step) => T
         for {
-          _ok <- check(target, ctx, Nat)
+          _ok <- check(target, ctx, Nat())
           _ok <- check(base, ctx, t)
-          _ok <- check(step, ctx, Arrow(Nat, Arrow(t, t)))
+          _ok <- check(step, ctx, Arrow(Nat(), Arrow(t, t)))
         } yield t
       case The(t: Type, exp: Exp) =>
         // ctx :- e <= T
@@ -39,10 +39,10 @@ object infer {
         // ---------------
         // ctx :- Ap (rator, rand) => R
         infer(rator, ctx) match {
-          case Right(Arrow(argType, retType)) =>
+          case Right(Arrow(arg_t, ret_t)) =>
             for {
-              _ok <- check(rand, ctx, argType)
-            } yield retType
+              _ok <- check(rand, ctx, arg_t)
+            } yield ret_t
           case Left(errorMsg) =>
             Left(errorMsg)
           case _ =>

@@ -123,8 +123,8 @@ object unify {
       case _ => {
         Left(Err(
           "fail to unify\n" ++
-            s"src: ${prettyVal(walk(src, bind))}\n" ++
-            s"tar: ${prettyVal(walk(tar, bind))}\n" ++
+            s"src: ${pretty_val(walk(src, bind))}\n" ++
+            s"tar: ${pretty_val(walk(tar, bind))}\n" ++
             s"bind: ${prettyBind(bind)}\n"))
       }
     }

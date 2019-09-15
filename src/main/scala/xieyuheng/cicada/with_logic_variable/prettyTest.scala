@@ -8,11 +8,11 @@ object prettyTest extends App {
 
     println(s"------")
 
-    val t = prettyExp(Type())
+    val t = pretty_exp(Type())
 
     println(s"t: ${t}")
 
-    val three_zeros = prettyExp(
+    val three_zeros = pretty_exp(
       "cons_t" ap %(
         "A" -> "nat_t",
         "head" -> "zero_t",
@@ -26,7 +26,7 @@ object prettyTest extends App {
 
     println(s"three_zeros: ${three_zeros}")
 
-    val fn = prettyExp(
+    val fn = pretty_exp(
       Fn(
         args = %(
           "x" -> "nat_t",
@@ -36,7 +36,7 @@ object prettyTest extends App {
 
     println(s"fn: ${fn}")
 
-    val nestedFn = prettyExp(
+    val nestedFn = pretty_exp(
       Fn(
         args = %(
           "x" -> "nat_t",

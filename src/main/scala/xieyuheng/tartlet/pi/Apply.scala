@@ -36,11 +36,11 @@ case class Ap (
       the <- rator.infer(ctx)
       t <- the.t.eval(ctx.toEnv)
       res <- t match {
-        case ValPi(argType, retType) => {
+        case ValPi(arg_t, ret_t) => {
           for {
-            rand <- rand.check(ctx, argType)
+            rand <- rand.check(ctx, arg_t)
             argVal <- rand.eval(ctx.toEnv)
-            retVal <- retType.apply(argVal)
+            retVal <- ret_t.apply(argVal)
             retExp <- retVal.readback_val(ctx, ValUniverse)
           } yield The(retExp, Ap(the.value, rand))
         }
@@ -59,15 +59,15 @@ object Ap {
     fn match {
       case ValLambda(clo) =>
         clo.apply(arg)
-      case TheNeu(ValPi(argType, retType), neutral) =>
+      case TheNeu(ValPi(arg_t, ret_t), neutral) =>
         for {
-          t <- retType.apply(arg)
-        } yield TheNeu(t, NeuAp(neutral, TheVal(argType, arg)))
+          t <- ret_t.apply(arg)
+        } yield TheNeu(t, NeuAp(neutral, TheVal(arg_t, arg)))
       case _ =>
         Left(Err(
           "fn should be " +
             "ValLambda(clo) | " +
-            "TheNeu(ValPi(argType, retType), neutral): " +
+            "TheNeu(ValPi(arg_t, ret_t), neutral): " +
             s"${fn}"))
     }
   }

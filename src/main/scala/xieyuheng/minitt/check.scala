@@ -137,15 +137,15 @@ object check {
             } else {
               Left(Err(
                 s"[check fail]\n" ++
-                  s"exp: ${prettyExp(e)}\n" ++
-                  s"expect type: ${prettyVal(t)}\n" ++
-                  s"infered type: ${prettyVal(u)}\n"))
+                  s"exp: ${pretty_exp(e)}\n" ++
+                  s"expect type: ${pretty_val(t)}\n" ++
+                  s"infered type: ${pretty_val(u)}\n"))
             }
           case Left(error) =>
             Left(Err(
               s"[check fail]\n" ++
-                s"exp: ${prettyExp(e)}\n" ++
-                s"expect type: ${prettyVal(t)}\n" ++
+                s"exp: ${pretty_exp(e)}\n" ++
+                s"expect type: ${pretty_val(t)}\n" ++
                 s"due to:\n" ++
                 error.msg))
         }
@@ -170,9 +170,9 @@ object check {
               case _ =>
                 Left(Err(
                   s"[check_infer fail]\n" ++
-                    s"exp: ${prettyExp(e)}\n" ++
+                    s"exp: ${pretty_exp(e)}\n" ++
                     s"expect pi type\n" ++
-                    s"actual type: ${prettyVal(t)}\n"))
+                    s"actual type: ${pretty_val(t)}\n"))
             }
           }
           ValPi(arg_t: Val, clo: Clo) = t
@@ -187,9 +187,9 @@ object check {
               case _ =>
                 Left(Err(
                   s"[check_infer fail]\n" ++
-                    s"exp: ${prettyExp(e)}\n" ++
+                    s"exp: ${pretty_exp(e)}\n" ++
                     s"expect sigma type\n" ++
-                    s"actual type: ${prettyVal(t)}\n"))
+                    s"actual type: ${pretty_val(t)}\n"))
             }
           }
           ValSigma(arg_t: Val, clo: Clo) = t
@@ -203,9 +203,9 @@ object check {
               case _ =>
                 Left(Err(
                   s"[check_infer fail]\n" ++
-                    s"exp: ${prettyExp(e)}\n" ++
+                    s"exp: ${pretty_exp(e)}\n" ++
                     s"expect sigma type\n" ++
-                    s"actual type: ${prettyVal(t)}\n"))
+                    s"actual type: ${pretty_val(t)}\n"))
             }
           }
           ValSigma(arg_t: Val, clo: Clo) = t
@@ -214,7 +214,7 @@ object check {
       case Univ() => Right(ValUniv())
       case _ => Left(Err(
         s"[check_infer fail]\n" ++
-          s"can not infer type of exp: ${prettyExp(e)}\n"))
+          s"can not infer type of exp: ${pretty_exp(e)}\n"))
     }
   }
 

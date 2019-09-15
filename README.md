@@ -12,7 +12,7 @@ A dependently typed language
   A parser generator with different parsing techniques.
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):
   The untyped lambda calculus with norm-by-eval (normalization by evaluation).
-- [systemt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/systemt):
+- [syst](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/syst):
   Kurt Gödel's System T with norm-by-eval, (a step toward tartlet and pie).
 - [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet)
   The tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",

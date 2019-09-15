@@ -2,25 +2,25 @@ package xieyuheng.partech
 
 object pretty {
 
-  val IndentUnit: String = "  "
+  val INDENT_UNIT: String = "  "
 
-  def getIndent(level: Int): String = {
+  def get_indent(level: Int): String = {
     assert(level >= 0)
-    IndentUnit * level
+    INDENT_UNIT * level
   }
 
-  def addIndentToBlock(block: String, level: Int): String = {
+  def add_indent_to_block(block: String, level: Int): String = {
     block
       .split("\n")
-      .map(getIndent(level) ++ _)
+      .map(get_indent(level) ++ _)
       .mkString("\n")
   }
 
-  def maybeNewline(string: String): String = {
+  def maybeln(string: String): String = {
     if (string.trim.isEmpty) {
       ""
     } else {
-      "\n" ++ addIndentToBlock(string, 1) ++ "\n"
+      "\n" ++ add_indent_to_block(string, 1) ++ "\n"
     }
   }
 
@@ -40,7 +40,7 @@ object pretty {
     tree match {
       case Leaf(str) => '"' + str + '"'
       case Node(rule, choiceName, children) =>
-        val childrenStr = maybeNewline(children.map(prettyTree).mkString("\n"))
+        val childrenStr = maybeln(children.map(prettyTree).mkString("\n"))
         s"${rule.name}::${choiceName}${getArgsStr(rule)} {${childrenStr}}"
     }
   }

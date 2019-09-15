@@ -2,7 +2,7 @@ package xieyuheng.tartlet
 
 object Arrow {
   def apply(
-    argType: Exp,
-    retType: Exp,
-  ): Type = Pi("_", argType, retType)
+    arg_t: Exp,
+    ret_t: Exp,
+  ): Type = Pi("_", arg_t, ret_t)
 }

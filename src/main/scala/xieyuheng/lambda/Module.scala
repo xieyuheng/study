@@ -1,7 +1,7 @@
-package xieyuheng.minitt
+package xieyuheng.lambda
 
-import xieyuheng.minitt.check._
-import xieyuheng.minitt.pretty._
+import xieyuheng.lambda.pretty._
+import xieyuheng.lambda.readback._
 
 case class Module() {
 
@@ -17,56 +17,28 @@ case class Module() {
   }
 
   def env: Env = {
-    var env: Env = EnvEmpty()
+    var env: Env = Env()
     top_list.foreach {
-      case TopDecl(decl) =>
-        env = EnvDecl(decl, env)
+      case TopDecl(DeclLet(name, exp)) =>
+        env = env.ext(name, eval(exp, env))
       case _ => {}
     }
     env
   }
 
-  def check(): Unit = {
-    var env: Env = EnvEmpty()
-    var ctx: Ctx = CtxEmpty()
-    top_list.foreach {
-      case TopDecl(decl) =>
-        check_decl(0, env, ctx, decl) match {
-          case Right(ctx2) =>
-            ctx = ctx2
-          case Left(err) =>
-            println(s"${err.msg}")
-            throw new Exception()
-        }
-        env = EnvDecl(decl, env)
-      case _ =>
-    }
-  }
-
   def run(): Unit = {
-    var env: Env = EnvEmpty()
+    var env: Env = Env()
     top_list.foreach {
-      case TopDecl(decl) =>
-        env = EnvDecl(decl, env)
+      case TopDecl(DeclLet(name, exp)) =>
+        env = env.ext(name, eval(exp, env))
       case TopEval(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>
         assert_eq(e1)(e2)
       case TopNotEq(e1, e2) =>
         assert_not_eq(e1)(e2)
+      case _ => {}
     }
-  }
-
-  def let(pat: Pat, t: Exp, e: Exp): Unit = {
-    declare(DeclLet(pat, t, e))
-  }
-
-  def letrec(pat: Pat, t: Exp, e: Exp): Unit = {
-    declare(DeclLetrec(pat, t, e))
-  }
-
-  def import_all(module: Module): Unit = {
-    top_list = top_list ++ module.top_list
   }
 
   def assert_not_eq(e1: Exp)(e2: Exp): Unit = {
@@ -103,6 +75,9 @@ case class Module() {
     val value = eval(exp, this.env)
     print("=== ")
     println(prettyVal(value))
+    val norm = readback_val(value, Set())
+    print("=== ")
+    println(prettyExp(norm))
     println()
   }
 

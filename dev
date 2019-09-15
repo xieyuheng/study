@@ -7,12 +7,18 @@ upload_api_doc () {
         surge target/scala-2.12/api/ cicada.surge.sh
 }
 
+get_classpath () {
+    mkdir -p target
+    sbt -error "export runtime:fullClasspath" > target/classpath
+}
+
 t () {
     rm -f target/universal/stage/bin/*
 
     sbt stage && \
         run_test && \
-        run_minitt_test
+        run_minitt_test && \
+        run_lambda_test
 }
 
 run_test () {
@@ -41,19 +47,6 @@ run_minitt_test () {
     done
 }
 
-release () {
-    t && \
-        pushd target/universal && \
-        cp -r stage cicada && \
-        tar -cf cicada.tar cicada && \
-        popd
-}
-
-get_classpath () {
-    mkdir -p target
-    sbt -error "export runtime:fullClasspath" > target/classpath
-}
-
 build_minitt () {
     get_classpath
 
@@ -62,6 +55,30 @@ build_minitt () {
         -cp $(cat target/classpath) \
         -H:Name="target/minitt" \
         -H:Class="xieyuheng.minitt.minitt"
+}
+
+run_lambda_test () {
+    LAMBDA=./target/universal/stage/bin/lambda
+
+    for FILE in $(find . | grep "^\./example/lambda/" | grep "\.lambda$")
+    do
+        echo ""
+        echo "[lambda_test] $FILE"
+        if ! time $LAMBDA --eval $FILE
+        then
+            exit 1
+        fi
+    done
+}
+
+build_lambda () {
+    get_classpath
+
+    native-image \
+        --no-server \
+        -cp $(cat target/classpath) \
+        -H:Name="target/lambda" \
+        -H:Class="xieyuheng.lambda.lambda"
 }
 
 main () {

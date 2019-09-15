@@ -1,4 +1,4 @@
-package xieyuheng.untyped
+package xieyuheng.lambda
 
 import scala.annotation.tailrec
 

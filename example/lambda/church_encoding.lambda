@@ -1,0 +1,17 @@
+let zero = (f, x) => x
+
+let succ = (prev, f, x) => f(prev(f, x))
+
+let add = (j, k, f, x) => j(f, k(f, x))
+
+let one = succ(zero)
+
+eval! add(one, one)
+
+let f = {
+  let x = one
+  let y = one
+  return add(x, y)
+}
+
+eval! f

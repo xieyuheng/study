@@ -1,8 +1,8 @@
-package xieyuheng.untyped
+package xieyuheng.lambda
 
-case class Env (map: Map[String, Val] = Map()) {
+case class Env(map: Map[String, Val] = Map()) {
   def lookup_val(name: String): Option[Val] =
-    map.get (name)
+    map.get(name)
 
   def ext(name: String, value: Val): Env =
     Env(map + (name -> value))

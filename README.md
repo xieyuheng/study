@@ -19,7 +19,7 @@ A dependently typed language
 - [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet)
   The tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",
   by David Thrane Christiansen.
-  ([origin tutorial](http://davidchristiansen.dk/tutorials/nbe))
+  ([the original tutorial](http://davidchristiansen.dk/tutorials/nbe))
 
 **... cicada emerging ...**
 

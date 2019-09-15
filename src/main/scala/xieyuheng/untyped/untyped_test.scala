@@ -31,7 +31,7 @@ object untyped_test extends App {
       Lambda("x", Var("x")))
     for {
       value <- eval(exp, Env())
-      norm <- value.readback(Set())
+      norm <- readback(value, Set())
     } yield assert(norm == Lambda("y", Var("y")))
   }
 

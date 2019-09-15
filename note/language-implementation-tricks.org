@@ -98,7 +98,8 @@
 
     because there will be undefined free variables,
     during the evaluation of nbe,
-    we need neutral form for each eliminator to handle this.
+    we need neutral form for each eliminator to handle this,
+    because eliminator might be applied to variable.
 
   - we can also make comparing equivalence faster,
     by nbe the two expressions together,

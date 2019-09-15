@@ -48,12 +48,13 @@ run_minitt_test () {
 }
 
 build_minitt () {
+    mkdir -p target/bin
     get_classpath
 
     native-image \
         --no-server \
         -cp $(cat target/classpath) \
-        -H:Name="target/minitt" \
+        -H:Name="target/bin/minitt" \
         -H:Class="xieyuheng.minitt.minitt"
 }
 
@@ -72,12 +73,13 @@ run_lambda_test () {
 }
 
 build_lambda () {
+    mkdir -p target/bin
     get_classpath
 
     native-image \
         --no-server \
         -cp $(cat target/classpath) \
-        -H:Name="target/lambda" \
+        -H:Name="target/bin/lambda" \
         -H:Class="xieyuheng.lambda.lambda"
 }
 

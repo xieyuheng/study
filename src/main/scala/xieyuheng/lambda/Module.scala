@@ -42,42 +42,47 @@ case class Module() {
   }
 
   def assert_not_eq(e1: Exp)(e2: Exp): Unit = {
-    val v1 = eval(e1, this.env)
-    val v2 = eval(e2, this.env)
+    val v1 = eval(e1, env)
+    val v2 = eval(e2, env)
+    val n1 = readback_val(v1, Set())
+    val n2 = readback_val(v2, Set())
     if (v1 == v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be not equal")
       println(s">>> ${prettyExp(e1)}")
       println(s"=== ${prettyVal(v1)}")
+      println(s"=== ${prettyExp(n1)}")
       println(s">>> ${prettyExp(e2)}")
       println(s"=== ${prettyVal(v2)}")
+      println(s"=== ${prettyExp(n2)}")
       throw new Exception()
     }
   }
 
   def assert_eq(e1: Exp)(e2: Exp): Unit = {
-    val v1 = eval(e1, this.env)
-    val v2 = eval(e2, this.env)
+    val v1 = eval(e1, env)
+    val v2 = eval(e2, env)
+    val n1 = readback_val(v1, Set())
+    val n2 = readback_val(v2, Set())
     if (v1 != v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be equal")
       println(s">>> ${prettyExp(e1)}")
       println(s"=== ${prettyVal(v1)}")
+      println(s"=== ${prettyExp(n1)}")
       println(s">>> ${prettyExp(e2)}")
       println(s"=== ${prettyVal(v2)}")
+      println(s"=== ${prettyExp(n2)}")
       throw new Exception()
     }
   }
 
   def eval_print(exp: Exp): Unit = {
-    print(">>> ")
-    println(prettyExp(exp))
-    val value = eval(exp, this.env)
-    print("=== ")
-    println(prettyVal(value))
+    val value = eval(exp, env)
     val norm = readback_val(value, Set())
-    print("=== ")
-    println(prettyExp(norm))
+    println(s">>> ${prettyExp(exp)}")
+    println(s"=== ${prettyVal(value)}")
+    println(s"=== ${prettyExp(norm)}")
     println()
   }
 

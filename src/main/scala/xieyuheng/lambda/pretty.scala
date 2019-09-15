@@ -70,8 +70,16 @@ object pretty {
     value match {
       case neu: Neu => prettyNeu(neu)
       case ValFn(name, body, env) =>
+        // val map_str = prettyEnv(env)
+        // s"${name} => ${prettyExp(body)} #env {${maybeNewline(map_str)}}"
         s"${name} => ${prettyExp(body)}"
     }
   }
 
+  def prettyEnv(env: Env): String = {
+    val delimiter = ";\n"
+    env.map
+      .map { case (name, value) => s"${name}: ${prettyVal(value)}" }
+      .mkString(delimiter)
+  }
 }

@@ -6,12 +6,9 @@ A dependently typed language
 - for interactive theorem proving
 - and practical verification tasks
 
-## Develop
+## Release
 
-- Release: [cicada-release](https://github.com/xieyuheng/cicada-release)
-- CI: [travis-ci](https://travis-ci.org/xieyuheng/cicada)
-- Compile: `sbt compile`
-- Test: `./dev t`
+- https://github.com/xieyuheng/cicada-release
 
 ## Community
 

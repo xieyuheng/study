@@ -2,7 +2,7 @@
 
 - "Checking Dependent Types with Normalization by Evaluation: A Tutorial"
   - by David Thrane Christiansen
-  - origin tutorial at :: http://davidchristiansen.dk/tutorials/nbe
+  - the original tutorial at :: http://davidchristiansen.dk/tutorials/nbe
 - "The little typer"
   - by Daniel P. Friedman and David Thrane Christiansen
 

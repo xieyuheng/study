@@ -62,17 +62,17 @@ object eval {
   def lookup(name: String, env: Env): Val = {
     env match {
       case EnvPat(pat, value, rest) =>
-        project_pat(name, pat, value) match {
+        pat_proj(pat, name, value) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
       case EnvDecl(DeclLet(pat, t, e), rest) =>
-        project_pat(name, pat, eval(e, rest)) match {
+        pat_proj(pat, name, eval(e, rest)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
       case EnvDecl(DeclLetrec(pat, t, e), rest) =>
-        project_pat(name, pat, eval(e, env)) match {
+        pat_proj(pat, name, eval(e, env)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
@@ -83,7 +83,7 @@ object eval {
     }
   }
 
-  def project_pat(name: String, pat: Pat, value: Val): Option[Val] = {
+  def pat_proj(pat: Pat, name: String, value: Val): Option[Val] = {
     pat match {
       case PatVar(name2) =>
         if (name == name2) {
@@ -91,10 +91,10 @@ object eval {
         } else {
           None
         }
-      case PatCons(carPat: Pat, cdrPat: Pat) =>
-        project_pat(name, carPat, car(value)) match {
+      case PatCons(car_pat: Pat, cdr_pat: Pat) =>
+        pat_proj(car_pat, name, car(value)) match {
           case Some(value) => Some(value)
-          case None => project_pat(name, cdrPat, cdr(value)) match {
+          case None => pat_proj(cdr_pat, name, cdr(value)) match {
             case Some(value) => Some(value)
             case None => None
           }

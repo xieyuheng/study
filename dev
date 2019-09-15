@@ -47,17 +47,6 @@ run_minitt_test () {
     done
 }
 
-build_minitt () {
-    mkdir -p target/bin
-    get_classpath
-
-    native-image \
-        --no-server \
-        -cp $(cat target/classpath) \
-        -H:Name="target/bin/minitt" \
-        -H:Class="xieyuheng.minitt.minitt"
-}
-
 run_lambda_test () {
     LAMBDA=./target/universal/stage/bin/lambda
 
@@ -72,19 +61,30 @@ run_lambda_test () {
     done
 }
 
-build_lambda () {
-    mkdir -p target/bin
+build_minitt () {
+    mkdir -p target/linux/bin/
     get_classpath
 
     native-image \
         --no-server \
         -cp $(cat target/classpath) \
-        -H:Name="target/bin/lambda" \
+        -H:Name="target/linux/bin/minitt" \
+        -H:Class="xieyuheng.minitt.minitt"
+}
+
+build_lambda () {
+    mkdir -p target/linux/bin/
+    get_classpath
+
+    native-image \
+        --no-server \
+        -cp $(cat target/classpath) \
+        -H:Name="target/linux/bin/lambda" \
         -H:Class="xieyuheng.lambda.lambda"
 }
 
 release () {
-    cp -r target/bin/ ~/proj/cicada-release/ && \
+    cp -r target/linux/bin/ ~/proj/cicada-release/ && \
         pushd ~/proj/cicada-release/ && \
         git add . && \
         git commit -m "up" && \

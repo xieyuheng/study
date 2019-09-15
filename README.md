@@ -6,9 +6,19 @@ A dependently typed language
 - for interactive theorem proving
 - and practical verification tasks
 
-## Release
+## Contains
 
-- https://github.com/xieyuheng/cicada-release
+- [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):
+  The untyped lambda calculus with norm-by-eval norm-by-eval (normalization by evaluation).
+- [minitt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/minitt):
+  The dependently typed Mini-TT language
+  described in paper: "A simple type-theoretic language: Mini-TT",
+  by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
+
+## Usage
+
+- Pre-compiled binaries at: [cicada-release](https://github.com/xieyuheng/cicada-release)
+- Example code at: [example](https://github.com/xieyuheng/cicada/tree/master/example)
 
 ## Community
 

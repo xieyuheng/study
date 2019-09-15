@@ -12,7 +12,6 @@
   - keep it subrecursive
     but be generic about data and ind, rec and iter
 * minitt
-- module
 - be sure about the use of Pattern
   - write some notes
   - Norm do not use Pattern
@@ -27,8 +26,12 @@
   - this means keep Val serde-able
     - Val includes ValFn which contains Exp
       this Exp is also serde-able
+* general
+- module as value
 * partech
 - ErrMsg and Span
 - better report with ErrMsg in context
 - [important] fix equals between rules -- how ? by ruleGen with uuid ?
 - concrete syntax for rule
+  - to use partech as more general tool out side scala 
+    (like the rosie pattern language)

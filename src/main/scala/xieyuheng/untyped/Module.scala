@@ -2,7 +2,7 @@ package xieyuheng.untyped
 
 case class Module(var env: Env = Env()) {
   def define(name: String, exp: Exp): Module = {
-    exp.eval(env) match {
+    eval(exp, env) match {
       case Right(value) =>
         env = env.ext(name, value)
       case Left(Err(msg)) =>
@@ -13,7 +13,7 @@ case class Module(var env: Env = Env()) {
 
   def run(exp: Exp): Either[Err, Exp] = {
     val result = for {
-      value <- exp.eval(env)
+      value <- eval(exp, env)
       norm <- value.readback(Set())
     } yield norm
 

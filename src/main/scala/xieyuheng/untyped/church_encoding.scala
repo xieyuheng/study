@@ -1,7 +1,6 @@
 package xieyuheng.untyped
 
 import scala.annotation.tailrec
-import xieyuheng.untyped._
 
 object church_encoding {
   var m = Module()

@@ -1,6 +1,6 @@
 package xieyuheng.untyped
 
-object test extends App {
+object untyped_test extends App {
   val `freshen should generate new name not used` = {
     val used_names = Set("x", "x*")
     val fresh_name = util.freshen(used_names, "x")
@@ -15,22 +15,22 @@ object test extends App {
 
   val `eval should eval Lambda` = {
     val exp = Lambda("x", Lambda("y", Var("y")))
-    assert(exp.eval(Env()) ==
+    assert(eval(exp, Env()) ==
       Right(Closure(Env(), "x", Lambda("y", Var("y")))))
   }
 
   val `it should eval Ap` = {
     val exp = Ap(Lambda("x", Var("x")), Lambda("x", Var("x")))
-    assert(exp.eval(Env()) ==
+    assert(eval(exp, Env()) ==
       Right(Closure(Env(), "x", Var("x"))))
   }
 
   val `readback should readback normal form` = {
+    val exp = Ap(
+      Lambda("x", Lambda("y", Ap(Var("x"), Var("y")))),
+      Lambda("x", Var("x")))
     for {
-      value <- Ap(
-        Lambda("x", Lambda("y", Ap(Var("x"), Var("y")))),
-        Lambda("x", Var("x")))
-      .eval(Env())
+      value <- eval(exp, Env())
       norm <- value.readback(Set())
     } yield assert(norm == Lambda("y", Var("y")))
   }

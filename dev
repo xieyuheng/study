@@ -30,7 +30,7 @@ run_test () {
 run_minitt_test () {
     MINITT=./target/universal/stage/bin/minitt
 
-    for FILE in $(find . | grep "^\./example/minitt/" | grep "\.tt$")
+    for FILE in $(find . | grep "^\./example/minitt/" | grep "\.minitt$")
     do
         echo ""
         echo "[minitt_test] $FILE"

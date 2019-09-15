@@ -10,6 +10,9 @@
   - this is the most basic trick for writing
     simple call-by-value eval function
 
+  - whenever lexical scope is need,
+    the trick of closure must be used.
+
 * keep the model of expression and value simple
 
   - the expression is already simple
@@ -92,6 +95,10 @@
   - the normalization by evaluation (aka. nbe) trick says:
     eval the expressions to values,
     can read them back to normal form.
+
+    because there will be undefined free variables,
+    during the evaluation of nbe,
+    we need neutral form for each eliminator to handle this.
 
   - we can also make comparing equivalence faster,
     by nbe the two expressions together,

@@ -14,7 +14,7 @@
   - keep it subrecursive
     but be generic about data and ind, rec and iter
 * minitt
-- more examples
+- module
 - be sure about the use of Pattern
   - write some notes
   - Norm do not use Pattern

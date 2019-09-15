@@ -17,6 +17,8 @@ A dependently typed language
   described in paper: "A simple type-theoretic language: Mini-TT",
   by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
 
+**... cicada emerging ...**
+
 ## Usage
 
 - Pre-compiled binaries at: [cicada-release](https://github.com/xieyuheng/cicada-release)

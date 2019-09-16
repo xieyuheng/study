@@ -1,6 +1,6 @@
 package xieyuheng.tartlet
 
-case class Ctx (map: Map[String, Den] = Map()) {
+case class Ctx(map: Map[String, Den] = Map()) {
   def lookup_den(name: String): Option[Den] =
     map.get (name)
 

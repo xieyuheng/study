@@ -15,19 +15,4 @@ object util {
     }
   }
 
-  def conversion_check(
-    ctx: Ctx,
-    t: Val,
-    v1: Val,
-    v2: Val,
-  ): Either[Err, Unit] = {
-    for {
-      e1 <- v1.readback_val(ctx, t)
-      e2 <- v2.readback_val(ctx, t)
-    } yield if (e1.alpha_eq (e2, Map(), Map())) {
-      ()
-    } else {
-      Err("conversion_check fail")
-    }
-  }
 }

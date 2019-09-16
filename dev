@@ -22,11 +22,11 @@ t () {
 }
 
 run_test () {
-    for FILE in $(find . | grep "^\./target/universal/stage/bin/" | grep "test$")
+    for file in $(find . | grep "^\./target/universal/stage/bin/" | grep "test$")
     do
         echo ""
-        echo "[test] $FILE"
-        if ! time $FILE
+        echo "[test] $file"
+        if ! time $file
         then
             exit 1
         fi
@@ -34,13 +34,13 @@ run_test () {
 }
 
 run_minitt_test () {
-    MINITT=./target/universal/stage/bin/minitt
+    minitt=./target/universal/stage/bin/minitt
 
-    for FILE in $(find . | grep "^\./example/minitt/" | grep "\.minitt$")
+    for file in $(find . | grep "^\./example/minitt/" | grep "\.minitt$")
     do
         echo ""
-        echo "[minitt_test] $FILE"
-        if ! time $MINITT --eval $FILE
+        echo "[minitt_test] $file"
+        if ! time $minitt --eval $file
         then
             exit 1
         fi
@@ -48,13 +48,27 @@ run_minitt_test () {
 }
 
 run_lambda_test () {
-    LAMBDA=./target/universal/stage/bin/lambda
+    lambda=./target/universal/stage/bin/lambda
 
-    for FILE in $(find . | grep "^\./example/lambda/" | grep "\.lambda$")
+    for file in $(find . | grep "^\./example/lambda/" | grep "\.lambda$")
     do
         echo ""
-        echo "[lambda_test] $FILE"
-        if ! time $LAMBDA --eval $FILE
+        echo "[lambda_test] $file"
+        if ! time $lambda --eval $file
+        then
+            exit 1
+        fi
+    done
+}
+
+run_syst_test () {
+    syst=./target/universal/stage/bin/syst
+
+    for file in $(find . | grep "^\./example/syst/" | grep "\.syst$")
+    do
+        echo ""
+        echo "[syst_test] $file"
+        if ! time $syst --eval $file
         then
             exit 1
         fi
@@ -81,6 +95,17 @@ build_lambda () {
         -cp $(cat target/classpath) \
         -H:Name="target/linux/bin/lambda" \
         -H:Class="xieyuheng.lambda.lambda"
+}
+
+build_syst () {
+    mkdir -p target/linux/bin/
+    get_classpath
+
+    native-image \
+        --no-server \
+        -cp $(cat target/classpath) \
+        -H:Name="target/linux/bin/syst" \
+        -H:Class="xieyuheng.syst.syst"
 }
 
 release () {

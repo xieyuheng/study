@@ -1,8 +1,8 @@
-package xieyuheng.minitt
+package xieyuheng.syst
 
 import xieyuheng.partech.Parser
 
-object minitt {
+object syst {
 
   def version: String = "0.0.1"
 
@@ -17,7 +17,7 @@ object minitt {
 
   def print_help(): Unit = {
     val usage = s"""
-        |minitt ${version}
+        |syst ${version}
         |
         |usage:
         |  -e, --eval <file_name> [default]

@@ -61,7 +61,7 @@ object grammar {
 
   def decl = Rule(
     "decl", Map(
-      "let" -> List("let", identifier, ":", exp, "=", exp),
+      "let" -> List("let", identifier, ":", ty, "=", exp),
     ))
 
   def decl_matcher = Tree.matcher[Decl](
@@ -73,14 +73,28 @@ object grammar {
   def ty: Rule = Rule(
     "type", Map(
       "nat_t" -> List("nat_t"),
-      "arrow" -> List("(", ty, ")", "-", ">", ty),
+      "arrow" -> List("(", non_empty_list(arrow_arg), ")", "-", ">", ty),
     ))
 
   def ty_matcher: Tree => Type = Tree.matcher[Type](
     "type", Map(
       "nat_t" -> { case _ => Nat() },
-      "arrow" -> { case List(_, arg_t, _, _, _, ret_t) =>
-        Arrow(ty_matcher(arg_t), ty_matcher(ret_t)) },
+      "arrow" -> { case List(_, arrow_arg_list, _, _, _, ret_t) =>
+        non_empty_list_matcher(arrow_arg_matcher)(arrow_arg_list)
+          .foldRight(ty_matcher(ret_t)) { case (arg_t, t) =>
+            Arrow(arg_t, t) } },
+    ))
+
+  def arrow_arg: Rule = Rule(
+    "arrow_arg", Map(
+      "arg" -> List(ty),
+      "arg_comma" -> List(ty, ","),
+    ))
+
+  def arrow_arg_matcher: Tree => Type = Tree.matcher[Type](
+    "arrow_arg", Map(
+      "arg" -> { case List(t) => ty_matcher(t) },
+      "arg_comma" -> { case List(t, _) => ty_matcher(t) },
     ))
 
   def exp: Rule = Rule(
@@ -104,6 +118,10 @@ object grammar {
         List(rator, "(", exp, ")"),
       "ap_without_last_comma" ->
         List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "the" -> List("the", "(", ty, ",", exp, ")"),
+      "zero" -> List("zero"),
+      "succ" -> List("succ", "(", exp, ")"),
+      "nat_rec" -> List("nat_rec", "(", ty, ",", exp, ",", exp, ",", exp, ")"),
       "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
       "block_of_one_exp" -> List("{", exp, "}"),
     ))
@@ -120,6 +138,11 @@ object grammar {
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
+      "the" -> { case  List(_, _, t, _, e, _) => The(ty_matcher(t), exp_matcher(e)) },
+      "zero" -> { case _ => Zero() },
+      "succ" -> { case List(_, _, exp, _) => Succ(exp_matcher(exp)) },
+      "nat_rec" -> { case List(_, _, t, _, target, _, base, _, step, _) =>
+        NatRec(ty_matcher(t), exp_matcher(target), exp_matcher(base), exp_matcher(step)) },
       "block" -> { case List(_, decl_list, _, exp, _) =>
         non_empty_list_matcher(decl_matcher)(decl_list)
           .foldRight(exp_matcher(exp)) { case (decl, body) =>

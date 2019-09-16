@@ -27,7 +27,7 @@ object eval {
         exe_ap(
           eval(rator, env),
           eval(rand, env))
-      case Fn(name: String, body: Exp) => ValFn(env, name, body)
+      case Fn(name: String, body: Exp) => ValFn(name, body, env)
       case Block(DeclLet(name, t, e), body) =>
         eval(body, env.ext(name, eval(e, env)))
     }
@@ -35,7 +35,7 @@ object eval {
 
   def exe_ap(fn: Val, arg: Val): Val = {
     fn match {
-      case ValFn(env, name, body) =>
+      case ValFn(name, body, env) =>
         eval(body, env.ext(name, arg))
       case TheNeu(theType, neu) =>
         theType match {

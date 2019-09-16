@@ -2,6 +2,7 @@ package xieyuheng.syst
 
 import pretty._
 import readback._
+import check._
 
 case class Module() {
 
@@ -18,7 +19,6 @@ case class Module() {
 
   def env: Env = {
     var env: Env = Env()
-    // var ctx: Ctx = Ctx()
     top_list.foreach {
       case TopDecl(DeclLet(name, t, e)) =>
         env = env.ext(name, eval(e, env))
@@ -27,9 +27,41 @@ case class Module() {
     env
   }
 
+  def ctx: Ctx = {
+    var ctx: Ctx = Ctx()
+    top_list.foreach {
+      case TopDecl(DeclLet(name, t, e)) =>
+        ctx = ctx.ext(name, t)
+      case _ => {}
+    }
+    ctx
+  }
+
+  def type_check(): Unit = {
+    var env: Env = Env()
+    var ctx: Ctx = Ctx()
+    top_list.foreach {
+      case TopDecl(DeclLet(name, t, e)) =>
+        check(e, ctx, t) match {
+          case Right(()) =>
+            ctx = ctx.ext(name, t)
+            env = env.ext(name, eval(e, env))
+          case Left(err) =>
+            println(s"${err.msg}")
+            throw new Exception()
+        }
+      case TopEval(exp) =>
+        eval_print(exp)
+      case TopEq(e1, e2) =>
+        assert_eq(e1)(e2)
+      case TopNotEq(e1, e2) =>
+        assert_not_eq(e1)(e2)
+      case _ => {}
+    }
+  }
+
   def run(): Unit = {
     var env: Env = Env()
-    // var ctx: Ctx = Ctx()
     top_list.foreach {
       case TopDecl(DeclLet(name, t, e)) =>
         env = env.ext(name, eval(e, env))

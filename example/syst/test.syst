@@ -1,11 +1,14 @@
+eval! zero
+eval! succ(succ(succ(zero)))
+
 let three: nat_t = succ(succ(succ(zero)))
 
 let add: (nat_t, nat_t) -> nat_t = {
-  (n, k) =>
-    nat_rec(nat_t, n, k,
+  (x, y) =>
+    nat_rec(nat_t, x, y,
       (prev, almost) =>
         succ(almost))
 }
 
-eval! add(three)
+eval! add(the(nat_t, three))
 eval! add(three, three)

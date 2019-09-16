@@ -39,29 +39,32 @@ object pretty {
   }
 
   def pretty_exp(exp: Exp): String = {
-    s"${exp}"
-    // exp match {
-    //   case Var(name) => name
-    //   case Fn(name, body) =>
-    //     s"${name} => ${pretty_exp(body)}"
-    //   case Ap(fn, arg) =>
-    //     s"${pretty_exp(fn)}(${pretty_exp(arg)})"
-    //   case Block(decl, body) =>
-    //     s"{ ${pretty_decl(decl)}; ${pretty_exp(body)} }"
-    // }
+    exp match {
+      case Var(name) => name
+      case Fn(name, body) =>
+        s"${name} => ${pretty_exp(body)}"
+      case Ap(fn, arg) =>
+        s"${pretty_exp(fn)}(${pretty_exp(arg)})"
+      case The(t: Type, e: Exp) =>
+        s"the(${pretty_type(t)}, ${pretty_exp(e)})"
+      case Zero() =>
+        s"zero"
+      case Succ(prev: Exp) =>
+        s"succ(${pretty_exp(prev)})"
+      case NatRec(t: Type, target: Exp, base: Exp, step: Exp) =>
+        s"nat_rec(${pretty_type(t)}, ${pretty_exp(target)}, ${pretty_exp(base)}, ${pretty_exp(step)})"
+      case Block(decl, body) =>
+        s"{ ${pretty_decl(decl)}; ${pretty_exp(body)} }"
+    }
   }
 
   def pretty_type(t: Type): String = {
-    s"${t}"
-    // exp match {
-    //   case Var(name) => name
-    //   case Fn(name, body) =>
-    //     s"${name} => ${pretty_exp(body)}"
-    //   case Ap(fn, arg) =>
-    //     s"${pretty_exp(fn)}(${pretty_exp(arg)})"
-    //   case Block(decl, body) =>
-    //     s"{ ${pretty_decl(decl)}; ${pretty_exp(body)} }"
-    // }
+    t match {
+      case Nat() =>
+        s"nat_t"
+      case Arrow(arg_t: Type, ret_t: Type) =>
+        s"(${pretty_type(arg_t)}) -> ${pretty_type(ret_t)}"
+    }
   }
 
   def pretty_decl(decl: Decl): String = {
@@ -71,24 +74,34 @@ object pretty {
     }
   }
 
-  // def pretty_neu(neu: Neu): String = {
-  //   neu match {
-  //     case NeuVar(name: String) =>
-  //       name
-  //     case NeuAp(target: Neu, arg: Val) =>
-  //       s"${pretty_neu(target)}(${pretty_val(arg)})"
-  //   }
-  // }
+  def pretty_neu(neu: Neu): String = {
+    neu match {
+      case NeuVar(name: String) =>
+        name
+      case NeuAp(target: Neu, arg: TheVal) =>
+        s"${pretty_neu(target)}(${pretty_the_val(arg)})"
+      case NeuNatRec(t: Type, target: Neu, base: TheVal, step: TheVal) =>
+        s"nat_rec(${pretty_type(t)}, ${pretty_neu(target)}, ${pretty_the_val(base)}, ${pretty_the_val(step)})"
+    }
+  }
+
+  def pretty_the_val(the: TheVal): String = {
+    s"the(${pretty_type(the.t)}, ${pretty_val(the.value)})"
+  }
 
   def pretty_val(value: Val): String = {
-    s"${value}"
-    // value match {
-    //   case neu: Neu => pretty_neu(neu)
-    //   case ValFn(name, body, env) =>
-    //     // val map_str = pretty_env(env)
-    //     // s"${name} => ${pretty_exp(body)} #env {${maybeln(map_str)}}"
-    //     s"${name} => ${pretty_exp(body)}"
-    // }
+    value match {
+      case TheNeu(t: Type, neu: Neu) =>
+        s"the(${pretty_type(t)}, ${pretty_neu(neu)})"
+      case ValSucc(prev: Val) =>
+        s"succ(${pretty_val(prev)})"
+      case ValZero() =>
+        s"zero"
+      case ValFn(name, body, env) =>
+        // val map_str = pretty_env(env)
+        // s"${name} => ${pretty_exp(body)} #env {${maybeln(map_str)}}"
+        s"${name} => ${pretty_exp(body)}"
+    }
   }
 
   // def pretty_env(env: Env): String = {

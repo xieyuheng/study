@@ -24,7 +24,7 @@ object readback {
             Left(Err(
               s"type of ValZero() should be Nat: ${t}"))
         }
-      case ValFn(env: Env, name: String, body: Exp) =>
+      case ValFn(name: String, body: Exp, env: Env) =>
         t match {
           case Arrow(arg_t, ret_t) =>
             val fresh_name = util.freshen (used_names, name)

@@ -26,7 +26,7 @@ case class Module() {
     env
   }
 
-  def check(): Unit = {
+  def type_check(): Unit = {
     var env: Env = EnvEmpty()
     var ctx: Ctx = CtxEmpty()
     top_list.foreach {

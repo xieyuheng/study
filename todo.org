@@ -1,4 +1,4 @@
-- [syst] concrete syntax
+- try scala {} ap arg syntax
 - improve WordPred API -- WordPred(name) { ... }
 * tartlet
 - [tartlet] change the style to grouping by function instead of grouping by data

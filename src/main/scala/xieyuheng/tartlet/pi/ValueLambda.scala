@@ -1,6 +1,6 @@
 package xieyuheng.tartlet
 
-case class ValLambda(clo: Clo) extends Val {
+case class ValFn(clo: Clo) extends Val {
   def readback_val(ctx: Ctx, t: Val): Either[Err, Exp] =
     t match {
       case ValPi(arg_t, ret_t) => {
@@ -12,9 +12,9 @@ case class ValLambda(clo: Clo) extends Val {
           body <- bodyVal.readback_val(
             ctx.ext(fresh_name, Bind(arg_t)),
             realRetType)
-        } yield Lambda(fresh_name, body)
+        } yield Fn(fresh_name, body)
       }
       case _ =>
-        Left(Err(s"type of Lambda should be Pi: ${t}"))
+        Left(Err(s"type of Fn should be Pi: ${t}"))
     }
 }

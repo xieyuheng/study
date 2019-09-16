@@ -17,16 +17,16 @@ case class Replace (
     } yield res
   }
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Replace(target2, motive2, base2) =>
-        target.alphaEq(target2, thisMap, thatMap) &&
-        motive.alphaEq(motive2, thisMap, thatMap) &&
-        base.alphaEq(base2, thisMap, thatMap)
+        target.alpha_eq(target2, this_map, that_map) &&
+        motive.alpha_eq(motive2, this_map, that_map) &&
+        base.alpha_eq(base2, this_map, that_map)
       case _ => false
     }
   }
@@ -44,14 +44,14 @@ case class Replace (
       res <- the.t match {
         case Eqv(t, from, to) =>
           for {
-            typeVal <- t.eval(ctx.toEnv)
+            typeVal <- t.eval(ctx.to_env)
             motive <- motive.check(ctx, ValPi(typeVal,
               NativeClo("_", _ => Right(ValUniverse))))
-            motiveVal <- motive.eval(ctx.toEnv)
-            fromVal <- from.eval(ctx.toEnv)
+            motiveVal <- motive.eval(ctx.to_env)
+            fromVal <- from.eval(ctx.to_env)
             baseType <- Ap.exe(motiveVal, fromVal)
             base <- base.check(ctx, baseType)
-            toVal <- to.eval(ctx.toEnv)
+            toVal <- to.eval(ctx.to_env)
             typeVal <- Ap.exe(motiveVal, toVal)
             typeExp <- typeVal.readback_val(ctx, ValUniverse)
           } yield The(typeExp, Replace(the.value, motive, base))

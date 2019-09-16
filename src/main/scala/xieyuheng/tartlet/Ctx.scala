@@ -1,7 +1,7 @@
 package xieyuheng.tartlet
 
 case class Ctx (map: Map[String, Den] = Map()) {
-  def lookupDen(name: String): Option[Den] =
+  def lookup_den(name: String): Option[Den] =
     map.get (name)
 
   def lookup_type(name: String): Option[Val] =
@@ -29,7 +29,7 @@ case class Ctx (map: Map[String, Den] = Map()) {
 
   def names: Set[String] = map.keySet
 
-  def toEnv: Env = {
+  def to_env: Env = {
     val valueMap = map.map {
       case (name, Def(t, value)) => (name, value)
       case (name, Bind(t)) => (name, TheNeu(t, NeuVar(name)))

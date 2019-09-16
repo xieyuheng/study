@@ -4,10 +4,10 @@ case object Atom extends Type {
   def eval(env: Env): Either[Err, Val] =
     Right(ValAtom)
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Atom => true

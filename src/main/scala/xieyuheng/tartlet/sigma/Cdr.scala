@@ -10,14 +10,14 @@ case class Cdr (
     } yield res
   }
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Cdr(pair2) =>
-        pair.alphaEq(pair2, thisMap, thatMap)
+        pair.alpha_eq(pair2, this_map, that_map)
       case _ => false
     }
   }
@@ -30,11 +30,11 @@ case class Cdr (
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
       the <- pair.infer(ctx)
-      value <- the.t.eval(ctx.toEnv)
+      value <- the.t.eval(ctx.to_env)
       res <- value match {
         case ValSigma(carType, cdrType) =>
           for {
-            pairVal <- the.value.eval(ctx.toEnv)
+            pairVal <- the.value.eval(ctx.to_env)
             carVal <- Car.exe(pairVal)
             realCdrType <- cdrType.apply(carVal)
             cdrTypeExp <- realCdrType.readback_val(ctx, ValUniverse)

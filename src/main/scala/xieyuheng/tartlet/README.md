@@ -18,19 +18,19 @@ m.define("three", Add1(Add1(Add1(Zero))))
 
 m.claim("+", Arrow(Nat, Arrow(Nat, Nat)))
 m.define("+",
-  Lambda("n", Lambda("k",
-    IndNat(
+  Fn("n", Fn("k",
+    NatInd(
       Var("n"),
-      Lambda("_", Nat),
+      Fn("_", Nat),
       Var("k"),
-      Lambda("prev", Lambda("almost",
+      Fn("prev", Fn("almost",
         Add1(Var("almost"))))))))
 
 m.run(Var("three"))
 // The(Nat,Add1(Add1(Add1(Zero))))
 
 m.run(Ap(Var("+"), Var("three")))
-// The(Pi(_*,Nat,Nat),Lambda(_*,Add1(Add1(Add1(Var(_*))))))
+// The(Pi(_*,Nat,Nat),Fn(_*,Add1(Add1(Add1(Var(_*))))))
 
 m.run(Ap(Ap(Var("+"), Var("three")), Var("three")))
 // The(Nat,Add1(Add1(Add1(Add1(Add1(Add1(Zero)))))))

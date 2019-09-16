@@ -13,16 +13,16 @@ case class Eqv(
     } yield ValEqv(t, from, to)
   }
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Eqv(t2, from2, to2) => {
-        t.alphaEq(t2, thisMap, thatMap) &&
-        from.alphaEq(from2, thisMap, thatMap) &&
-        to.alphaEq(to2, thisMap, thatMap)
+        t.alpha_eq(t2, this_map, that_map) &&
+        from.alpha_eq(from2, this_map, that_map) &&
+        to.alpha_eq(to2, this_map, that_map)
       }
       case _ => false
     }
@@ -38,7 +38,7 @@ case class Eqv(
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
       t <- t.check(ctx, ValUniverse)
-      typeVal <- t.eval(ctx.toEnv)
+      typeVal <- t.eval(ctx.to_env)
       from <- from.check(ctx, typeVal)
       to <- to.check(ctx, typeVal)
     } yield The(Universe, Eqv(t, from, to))

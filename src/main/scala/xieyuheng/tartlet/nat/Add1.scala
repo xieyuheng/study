@@ -6,14 +6,14 @@ case class Add1 (prev: Exp) extends Constructor {
       prevVal <- prev.eval(env)
     } yield ValAdd1(prevVal)
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Add1(prev2) =>
-        prev.alphaEq(prev2, thisMap, thatMap)
+        prev.alpha_eq(prev2, this_map, that_map)
       case _ => false
     }
   }

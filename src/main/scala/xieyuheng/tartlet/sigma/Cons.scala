@@ -7,15 +7,15 @@ case class Cons (car: Exp, cdr: Exp) extends Constructor {
       cdr <- cdr.eval(env)
     } yield ValCons(car, cdr)
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Cons(car2, cdr2) =>
-        car.alphaEq(car2, thisMap, thatMap) &&
-        cdr.alphaEq(cdr2, thisMap, thatMap)
+        car.alpha_eq(car2, this_map, that_map) &&
+        cdr.alpha_eq(cdr2, this_map, that_map)
       case _ => false
     }
   }
@@ -31,7 +31,7 @@ case class Cons (car: Exp, cdr: Exp) extends Constructor {
       case ValSigma(carType, cdrType) =>
         for {
           car <- car.check(ctx, carType)
-          carVal <- car.eval(ctx.toEnv)
+          carVal <- car.eval(ctx.to_env)
           realCdrType <- cdrType.apply(carVal)
           cdr <- cdr.check(ctx, realCdrType)
         } yield Cons(car, cdr)

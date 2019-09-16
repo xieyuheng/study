@@ -12,15 +12,15 @@ case class Ap (
     } yield res
   }
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Ap(rator2, rand2) =>
-        rator.alphaEq(rator2, thisMap, thatMap) &&
-        rand.alphaEq(rand2, thisMap, thatMap)
+        rator.alpha_eq(rator2, this_map, that_map) &&
+        rand.alpha_eq(rand2, this_map, that_map)
       case _ => false
     }
   }
@@ -34,12 +34,12 @@ case class Ap (
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
       the <- rator.infer(ctx)
-      t <- the.t.eval(ctx.toEnv)
+      t <- the.t.eval(ctx.to_env)
       res <- t match {
         case ValPi(arg_t, ret_t) => {
           for {
             rand <- rand.check(ctx, arg_t)
-            argVal <- rand.eval(ctx.toEnv)
+            argVal <- rand.eval(ctx.to_env)
             retVal <- ret_t.apply(argVal)
             retExp <- retVal.readback_val(ctx, ValUniverse)
           } yield The(retExp, Ap(the.value, rand))
@@ -57,7 +57,7 @@ object Ap {
     arg: Val,
   ): Either[Err, Val] = {
     fn match {
-      case ValLambda(clo) =>
+      case ValFn(clo) =>
         clo.apply(arg)
       case TheNeu(ValPi(arg_t, ret_t), neutral) =>
         for {
@@ -66,7 +66,7 @@ object Ap {
       case _ =>
         Left(Err(
           "fn should be " +
-            "ValLambda(clo) | " +
+            "ValFn(clo) | " +
             "TheNeu(ValPi(arg_t, ret_t), neutral): " +
             s"${fn}"))
     }

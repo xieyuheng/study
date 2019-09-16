@@ -1,6 +1,6 @@
 package xieyuheng.tartlet
 
-case class NeuIndAbsurd (
+case class NeuAbsurdInd (
   target: Neu,
   motive: TheVal,
 ) extends Neu {
@@ -8,6 +8,6 @@ case class NeuIndAbsurd (
     for {
       target <- target.readback_neu(ctx)
       motive <- motive.readback_the_val(ctx)
-    } yield IndAbsurd(The(Absurd, target), motive)
+    } yield AbsurdInd(The(Absurd, target), motive)
   }
 }

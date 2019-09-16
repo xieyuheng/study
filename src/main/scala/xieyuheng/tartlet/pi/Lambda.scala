@@ -2,22 +2,22 @@ package xieyuheng.tartlet
 
 import java.util.UUID
 
-case class Lambda (
+case class Fn (
   name: String,
   body: Exp,
 ) extends Constructor {
   def eval(env: Env): Either[Err, Val] =
-    Right(ValLambda(EnvClo(env, name, body)))
+    Right(ValFn(EnvClo(env, name, body)))
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
-      case Lambda(name2, body2) => {
+      case Fn(name2, body2) => {
         val sym = UUID.randomUUID().toString
-        body.alphaEq(body2, thisMap + (name -> sym), thatMap + (name2 -> sym))
+        body.alpha_eq(body2, this_map + (name -> sym), that_map + (name2 -> sym))
       }
       case _ => false
     }
@@ -26,7 +26,7 @@ case class Lambda (
   /*
     ctx.ext(x, A) :- body <= R
     ------------------------------
-    ctx :- Lambda(x, body) <= Pi
+    ctx :- Fn(x, body) <= Pi
    */
   def check(ctx: Ctx, t: Val): Either[Err, Exp] =
     t match {
@@ -35,7 +35,7 @@ case class Lambda (
         for {
           realRetType <- ret_t.apply(varVal)
           body <- body.check(ctx.ext(name, Bind(arg_t)), realRetType)
-        } yield Lambda(name, body)
+        } yield Fn(name, body)
       }
       case _ =>
         Left(Err(

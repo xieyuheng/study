@@ -5,10 +5,10 @@ case object Same extends Constructor {
     Right(ValSame)
   }
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Same => true
@@ -17,7 +17,7 @@ case object Same extends Constructor {
   }
 
   /*
-    ctx :- conversionCheck(T, from, to)
+    ctx :- conversion_check(T, from, to)
     ---------------------
     ctx :- Same <= Eqv(T, from, to)
    */
@@ -25,7 +25,7 @@ case object Same extends Constructor {
     t match {
       case ValEqv(typeVal, from, to) =>
         for {
-          _ok <- util.conversionCheck(ctx, typeVal, from, to)
+          _ok <- util.conversion_check(ctx, typeVal, from, to)
         } yield this
       case _ =>
         Left(Err(

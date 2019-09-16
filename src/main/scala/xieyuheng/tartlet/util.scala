@@ -15,7 +15,7 @@ object util {
     }
   }
 
-  def conversionCheck(
+  def conversion_check(
     ctx: Ctx,
     t: Val,
     v1: Val,
@@ -24,10 +24,10 @@ object util {
     for {
       e1 <- v1.readback_val(ctx, t)
       e2 <- v2.readback_val(ctx, t)
-    } yield if (e1.alphaEq (e2, Map(), Map())) {
+    } yield if (e1.alpha_eq (e2, Map(), Map())) {
       ()
     } else {
-      Err("conversionCheck fail")
+      Err("conversion_check fail")
     }
   }
 }

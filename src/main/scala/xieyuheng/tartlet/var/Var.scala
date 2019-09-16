@@ -10,14 +10,14 @@ case class Var (name: String) extends Eliminator {
     }
   }
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Var(name2) =>
-        (thisMap.get(name), thisMap.get(name2)) match {
+        (this_map.get(name), this_map.get(name2)) match {
           case (Some(sym), Some(sym2)) =>
             sym == sym2
           case (None, None) =>

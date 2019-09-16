@@ -10,7 +10,7 @@ case class Module(
       t.check(ctx, ValUniverse) match {
         case Right(checkedTypeExp) =>
           for {
-            checkedType <- checkedTypeExp.eval(ctx.toEnv)
+            checkedType <- checkedTypeExp.eval(ctx.to_env)
           } ctx = ctx.ext(name, Bind(checkedType))
         case Left(errorMsg) =>
           println(s"type check fail, name: ${name}, errorMsg: ${errorMsg}")
@@ -20,12 +20,12 @@ case class Module(
   }
 
   def define(name: String, exp: Exp): Module = {
-    ctx.lookupDen(name) match {
+    ctx.lookup_den(name) match {
       case Some(Bind(typeVal)) =>
         exp.check(ctx, typeVal) match {
           case Right(exp) =>
             for {
-              value <- exp.eval(ctx.toEnv)
+              value <- exp.eval(ctx.to_env)
             } ctx = ctx.ext(name, Def(typeVal, value))
           case Left(errorMsg) =>
             println(s"type check fail for name: ${name}, errorMsg: ${errorMsg}")
@@ -39,7 +39,7 @@ case class Module(
   }
 
   def run(exp: Exp): Either[Err, Exp] = {
-    val env = ctx.toEnv
+    val env = ctx.to_env
     val result = for {
       the <- exp.infer(ctx)
       typeVal <- the.t.eval(env)

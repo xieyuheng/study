@@ -1,6 +1,6 @@
 package xieyuheng.tartlet
 
-case class IndAbsurd (
+case class AbsurdInd (
   target: Exp,
   motive: Exp,
 ) extends Eliminator {
@@ -8,18 +8,18 @@ case class IndAbsurd (
     for {
       targetVal <- target.eval(env)
       motiveVal <- motive.eval(env)
-      res <- IndAbsurd.exe(targetVal, motiveVal)
+      res <- AbsurdInd.exe(targetVal, motiveVal)
     } yield res
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
-      case IndAbsurd(target2, motive2) =>
-        target.alphaEq(target2, thisMap, thatMap) &&
-        motive.alphaEq(motive2, thisMap, thatMap)
+      case AbsurdInd(target2, motive2) =>
+        target.alpha_eq(target2, this_map, that_map) &&
+        motive.alpha_eq(motive2, this_map, that_map)
       case _ => false
     }
   }
@@ -28,17 +28,17 @@ case class IndAbsurd (
    ctx :- target <= Absurd
    ctx :- motive <= Universe
    -----------------
-   ctx :- IndAbsurd (target, motive) => Universe
+   ctx :- AbsurdInd (target, motive) => Universe
    */
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
       target <- target.check(ctx, ValAbsurd)
       motive <- motive.check(ctx, ValUniverse)
-    } yield The(Universe, IndAbsurd(target, motive))
+    } yield The(Universe, AbsurdInd(target, motive))
   }
 }
 
-object IndAbsurd {
+object AbsurdInd {
   def exe(
     target: Val,
     motive: Val,
@@ -47,7 +47,7 @@ object IndAbsurd {
       case TheNeu(ValAbsurd, neutral) =>
         Right(
           TheNeu(motive,
-            NeuIndAbsurd(neutral, TheVal(ValUniverse, motive))))
+            NeuAbsurdInd(neutral, TheVal(ValUniverse, motive))))
       case _ =>
         Left(Err(
           s"target should be TheNeu(ValAbsurd, neutral): ${target}"))

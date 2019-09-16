@@ -13,16 +13,16 @@ object tartlet_test extends App {
     assert(fresh_name == "x**")
   }
 
-  val `eval should eval Lambda` = {
-    val exp = Lambda("x", Lambda("y", Var("y")))
+  val `eval should eval Fn` = {
+    val exp = Fn("x", Fn("y", Var("y")))
     assert(exp.eval(Env()) ==
-      Right(ValLambda(EnvClo(Env(), "x", Lambda("y", Var("y"))))))
+      Right(ValFn(EnvClo(Env(), "x", Fn("y", Var("y"))))))
   }
 
   val `it should eval Ap` = {
-    val exp = Ap(Lambda("x", Var("x")), Lambda("x", Var("x")))
+    val exp = Ap(Fn("x", Var("x")), Fn("x", Var("x")))
     assert(exp.eval(Env()) ==
-      Right(ValLambda(EnvClo(Env(), "x", Var("x")))))
+      Right(ValFn(EnvClo(Env(), "x", Var("x")))))
   }
 
   val `Module can define` = {
@@ -33,19 +33,19 @@ object tartlet_test extends App {
 
     m.claim("+", Arrow(Nat, Arrow(Nat, Nat)))
     m.define("+",
-      Lambda("n", Lambda("k",
-        IndNat(
+      Fn("n", Fn("k",
+        NatInd(
           Var("n"),
-          Lambda("_", Nat),
+          Fn("_", Nat),
           Var("k"),
-          Lambda("prev", Lambda("almost",
+          Fn("prev", Fn("almost",
             Add1(Var("almost"))))))))
 
     m.run(Var("three"))
     // The(Nat,Add1(Add1(Add1(Zero))))
 
     m.run(Ap(Var("+"), Var("three")))
-    // The(Pi(_*,Nat,Nat),Lambda(_*,Add1(Add1(Add1(Var(_*))))))
+    // The(Pi(_*,Nat,Nat),Fn(_*,Add1(Add1(Add1(Var(_*))))))
 
     m.run(Ap(Ap(Var("+"), Var("three")), Var("three")))
     // The(Nat,Add1(Add1(Add1(Add1(Add1(Add1(Zero)))))))

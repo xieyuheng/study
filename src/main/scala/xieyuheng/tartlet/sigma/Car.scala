@@ -10,14 +10,14 @@ case class Car (
     } yield res
   }
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Car(pair2) =>
-        pair.alphaEq(pair2, thisMap, thatMap)
+        pair.alpha_eq(pair2, this_map, that_map)
       case _ => false
     }
   }
@@ -33,7 +33,7 @@ case class Car (
       res <- the.t match {
         case Sigma(name, carType, cdrType) =>
           for {
-            carTypeVal <- carType.eval(ctx.toEnv)
+            carTypeVal <- carType.eval(ctx.to_env)
             carTypeExp <- carTypeVal.readback_val(ctx, ValUniverse)
           } yield The(carTypeExp, the.value)
         case _ =>

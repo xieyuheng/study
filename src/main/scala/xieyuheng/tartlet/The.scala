@@ -7,10 +7,10 @@ case class The (
   def eval(env: Env): Either[Err, Val] =
     value.eval(env)
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case The(t2, value2) =>
@@ -18,8 +18,8 @@ case class The (
           case (Absurd, Absurd) =>
             true
           case _ =>
-            if (t.alphaEq(t2, thisMap, thatMap)
-              && value.alphaEq(value2, thisMap, thatMap)) {
+            if (t.alpha_eq(t2, this_map, that_map)
+              && value.alpha_eq(value2, this_map, that_map)) {
               true
             } else {
               false
@@ -39,15 +39,15 @@ case class The (
   def infer(ctx: Ctx): Either[Err, The] =
     for {
       t <- t.check(ctx, ValUniverse)
-      tVal <- t.eval(ctx.toEnv)
+      tVal <- t.eval(ctx.to_env)
       value <- value.check(ctx, tVal)
     } yield The(t, value)
 
   def check(ctx: Ctx, t: Val): Either[Err, Exp] = {
     for {
       the <- infer(ctx)
-      t2 <- the.t.eval(ctx.toEnv)
-      _ok <- util.conversionCheck(ctx, ValUniverse, t, t2)
+      t2 <- the.t.eval(ctx.to_env)
+      _ok <- util.conversion_check(ctx, ValUniverse, t, t2)
     } yield the.value
   }
 }

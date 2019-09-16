@@ -13,16 +13,16 @@ case class Sigma (
     } yield ValSigma(carTypeVal, EnvClo(env, name, cdrType))
   }
 
-  def alphaEq(
+  def alpha_eq(
     that: Exp,
-    thisMap: Map[String, String],
-    thatMap: Map[String, String],
+    this_map: Map[String, String],
+    that_map: Map[String, String],
   ): Boolean = {
     that match {
       case Sigma(name2, carType2, cdrType2) => {
         val sym = UUID.randomUUID().toString
-        carType.alphaEq(carType2, thisMap, thatMap) &&
-        cdrType.alphaEq(cdrType2, thisMap + (name -> sym), thatMap + (name -> sym))
+        carType.alpha_eq(carType2, this_map, that_map) &&
+        cdrType.alpha_eq(cdrType2, this_map + (name -> sym), that_map + (name -> sym))
       }
       case _ => false
     }
@@ -37,7 +37,7 @@ case class Sigma (
   def infer(ctx: Ctx): Either[Err, The] = {
     for {
       carType <- carType.check(ctx, ValUniverse)
-      carTypeVal <- carType.eval(ctx.toEnv)
+      carTypeVal <- carType.eval(ctx.to_env)
       cdrType <- cdrType.check(ctx.ext(name, Bind(carTypeVal)), ValUniverse)
     } yield The(Universe, Pi(name, carType, cdrType))
   }

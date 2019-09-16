@@ -1,9 +1,6 @@
-* tartlet
 - [tartlet] change the style to grouping by function instead of grouping by data
 - [tartlet] concrete syntax
-- better expDSL
-- better Module
-- better tests
+* tartlet
 - the little typer as test
 - how to extend tartlet to define new types?
   - keep it subrecursive

@@ -36,7 +36,7 @@ object readback {
             val arg = TheNeu(arg_t, NeuVar(fresh_name))
             for {
               body_val <- Ap.exe(value, arg)
-              real_ret_t <- ret_t.apply(arg)
+              real_ret_t <- ret_t.ap(arg)
               body <- readback_val(
                 body_val,
                 real_ret_t,
@@ -50,7 +50,7 @@ object readback {
         val fresh_name = freshen(ctx.names, ret_t.name)
         for {
           arg_t_exp <- readback_val(arg_t, ValUniverse, ctx)
-          ret_t_exp_val <- ret_t.apply(
+          ret_t_exp_val <- ret_t.ap(
             TheNeu(arg_t, NeuVar(fresh_name)))
           ret_t_exp <- readback_val(
             ret_t_exp_val,
@@ -66,7 +66,7 @@ object readback {
         val fresh_name = freshen(ctx.names, cdr_t.name)
         for {
           arg_t_exp <- readback_val(arg_t, ValUniverse, ctx)
-          cdr_t_exp_val <- cdr_t.apply(
+          cdr_t_exp_val <- cdr_t.ap(
             TheNeu(arg_t, NeuVar(fresh_name)))
           cdr_t_exp <- readback_val(
             cdr_t_exp_val,

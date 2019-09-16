@@ -1,4 +1,3 @@
-- [tartlet] change the style to grouping by function instead of grouping by data
 - [tartlet] concrete syntax
 * tartlet
 - the little typer as test

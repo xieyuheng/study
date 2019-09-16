@@ -1,6 +1,7 @@
 package xieyuheng.tartlet
 
 object check {
+
   def apply(exp: Exp, ctx: Ctx, t: Val): Either[Err, Exp] =
     apply(exp: Exp, ctx: Ctx, t: Val)
 
@@ -61,7 +62,7 @@ object check {
           case ValPi(arg_t, ret_t) => {
             val varVal = TheNeu(arg_t, NeuVar(name))
             for {
-              real_ret_t <- ret_t.apply(varVal)
+              real_ret_t <- ret_t.ap(varVal)
               body <- check(body, ctx.ext(name, Bind(arg_t)), real_ret_t)
             } yield Fn(name, body)
           }
@@ -89,7 +90,7 @@ object check {
             for {
               car <- check(car, ctx, arg_t)
               car_val <- eval(car, ctx.to_env)
-              real_cdr_t <- cdr_t.apply(car_val)
+              real_cdr_t <- cdr_t.ap(car_val)
               cdr <- check(cdr, ctx, real_cdr_t)
             } yield Cons(car, cdr)
           case _ =>

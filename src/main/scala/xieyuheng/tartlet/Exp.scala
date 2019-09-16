@@ -98,10 +98,10 @@ object Ap {
   def exe(fn: Val, arg: Val): Either[Err, Val] = {
     fn match {
       case ValFn(clo) =>
-        clo.apply(arg)
+        clo.ap(arg)
       case TheNeu(ValPi(arg_t, ret_t), neu) =>
         for {
-          t <- ret_t.apply(arg)
+          t <- ret_t.ap(arg)
         } yield TheNeu(t, NeuAp(neu, TheVal(arg_t, arg)))
       case _ =>
         Left(Err(
@@ -157,7 +157,7 @@ object Cdr {
       case TheNeu(ValSigma(arg_t, cdr_t), neu) => {
         for {
           car_val <- Car.exe(pair)
-          real_cdr_t <- cdr_t.apply(car_val)
+          real_cdr_t <- cdr_t.ap(car_val)
         } yield TheNeu(real_cdr_t, NeuCar(neu))
       }
       case _ =>

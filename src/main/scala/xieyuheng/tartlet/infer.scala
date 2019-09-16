@@ -103,7 +103,7 @@ object infer {
               for {
                 rand <- check(rand, ctx, arg_t)
                 arg_t_val <- eval(rand, ctx.to_env)
-                ret_t_val <- ret_t.apply(arg_t_val)
+                ret_t_val <- ret_t.ap(arg_t_val)
                 ret_t_exp <- readback_val(ret_t_val, ValUniverse, ctx)
               } yield The(ret_t_exp, Ap(the.value, rand))
             }
@@ -181,7 +181,7 @@ object infer {
               for {
                 pair_val <- eval(the.value, ctx.to_env)
                 car_val <- Car.exe(pair_val)
-                real_cdr_t <- cdr_t.apply(car_val)
+                real_cdr_t <- cdr_t.ap(car_val)
                 cdr_t_exp <- readback_val(real_cdr_t, ValUniverse, ctx)
               } yield The(cdr_t_exp, the.value)
             case _ =>

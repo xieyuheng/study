@@ -2,29 +2,9 @@ package xieyuheng.cicada.with_logic_variable
 
 import scala.collection.immutable.ListMap
 
+import xieyuheng.util.pretty._
+
 object pretty {
-
-  val INDENT_UNIT: String = "  "
-
-  def get_indent(level: Int): String = {
-    assert(level >= 0)
-    INDENT_UNIT * level
-  }
-
-  def add_indent_to_block(block: String, level: Int): String = {
-    block
-      .split("\n")
-      .map(get_indent(level) ++ _)
-      .mkString("\n")
-  }
-
-  def maybeln(string: String): String = {
-    if (string.trim.isEmpty) {
-      ""
-    } else {
-      "\n" ++ add_indent_to_block(string, 1) ++ "\n"
-    }
-  }
 
   def pretty_exp_map_with_delimiter(
     map: MultiMap[String, Exp],
@@ -39,7 +19,7 @@ object pretty {
     pretty_exp_map_with_delimiter(map, "\n")
   }
 
-  def pretty_expArgs(map: MultiMap[String, Exp]): String = {
+  def pretty_exp_args(map: MultiMap[String, Exp]): String = {
     pretty_exp_map_with_delimiter(map, ", ")
   }
 
@@ -57,12 +37,12 @@ object pretty {
       case Dot(target, fieldName) =>
         s"${pretty_exp(target)}.${fieldName}"
       case Pi(args, ret) =>
-        s"pi (${pretty_expArgs(args)}): ${pretty_exp(ret)}"
+        s"pi (${pretty_exp_args(args)}): ${pretty_exp(ret)}"
       case Fn(args, ret, body) =>
         val bodyString = maybeln(pretty_exp(body))
-        s"fn (${pretty_expArgs(args)}): ${pretty_exp(ret)} = {${bodyString}}"
+        s"fn (${pretty_exp_args(args)}): ${pretty_exp(ret)} = {${bodyString}}"
       case Ap(target, args) =>
-        s"${pretty_exp(target)}(${pretty_expArgs(args)})"
+        s"${pretty_exp(target)}(${pretty_exp_args(args)})"
     }
   }
 
@@ -143,7 +123,7 @@ object pretty {
         s"define_sum_type ${name} :> { ${memberNamesString} } {${mapString}}"
 
       case DefineFn(name, args, ret, body) =>
-        val argsString = pretty_expArgs(args)
+        val argsString = pretty_exp_args(args)
         val retString = pretty_exp(ret)
         val bodyString = maybeln(pretty_exp(body))
         s"define_fn ${name}(${argsString}): ${retString} = {${bodyString}}"

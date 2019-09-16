@@ -1,42 +1,13 @@
 package xieyuheng.minitt
 
+import xieyuheng.util.pretty._
+
 object pretty {
 
-  val INDENT_UNIT: String = "  "
-
-  def get_indent(level: Int): String = {
-    assert(level >= 0)
-    INDENT_UNIT * level
-  }
-
-  def add_indent_to_block(block: String, level: Int): String = {
-    block
-      .split("\n")
-      .map(get_indent(level) ++ _)
-      .mkString("\n")
-  }
-
-  def maybeln(string: String): String = {
-    if (string.trim.isEmpty) {
-      ""
-    } else {
-      "\n" ++ add_indent_to_block(string, 1) ++ "\n"
-    }
-  }
-
-
-  def pretty_exp_map_with_delimiter(
-    map: Map[String, Exp],
-    delimiter: String,
-  ): String = {
-    map
-      .map { case (name, exp) => s"${name}: ${pretty_exp(exp)}" }
-      .mkString(delimiter)
-  }
-
-  def pretty_exp_map(map: Map[String, Exp]): String = {
-    pretty_exp_map_with_delimiter(map, ";\n")
-  }
+  def pretty_exp_map(map: Map[String, Exp]) =
+    pretty_map(map) {
+      case (name, exp) =>
+        s"${name}: ${pretty_exp(exp)};" }
 
   def cons_exp_to_list(cons: Cons): List[Exp] = {
     cons.cdr match {
@@ -49,18 +20,18 @@ object pretty {
     exp match {
       case Var(name) => name
       case Fn(pat, body) =>
-        s"${prettyPat(pat)} => ${pretty_exp(body)}"
+        s"${pretty_pat(pat)} => ${pretty_exp(body)}"
       case Ap(fn, arg) =>
         s"${pretty_exp(fn)}(${pretty_exp(arg)})"
       case Pi(pat, arg_t, t) =>
-        s"(${prettyPat(pat)}: ${pretty_exp(arg_t)}) -> ${pretty_exp(t)}"
+        s"(${pretty_pat(pat)}: ${pretty_exp(arg_t)}) -> ${pretty_exp(t)}"
       case cons: Cons =>
         val str = cons_exp_to_list(cons).map(pretty_exp(_)).mkString(", ")
         s"[${str}]"
       case Car(pair) => s"car(${pretty_exp(pair)})"
       case Cdr(pair) => s"cdr(${pretty_exp(pair)})"
       case Sigma(pat, arg_t, t) =>
-        s"(${prettyPat(pat)}: ${pretty_exp(arg_t)}) ** ${pretty_exp(t)}"
+        s"(${pretty_pat(pat)}: ${pretty_exp(arg_t)}) ** ${pretty_exp(t)}"
       case Data(tag: String, body: Cons) =>
         s"${tag}${pretty_exp(body)}"
       case Data(tag: String, body: Sole) =>
@@ -82,16 +53,16 @@ object pretty {
   def pretty_decl(decl: Decl): String = {
     decl match {
       case DeclLet(pat: Pat, t: Exp, e: Exp) =>
-        s"let ${prettyPat(pat)}: ${pretty_exp(t)} = ${pretty_exp(e)}"
+        s"let ${pretty_pat(pat)}: ${pretty_exp(t)} = ${pretty_exp(e)}"
       case DeclLetrec(pat: Pat, t: Exp, e: Exp) =>
-        s"letrec ${prettyPat(pat)}: ${pretty_exp(t)} = ${pretty_exp(e)}"
+        s"letrec ${pretty_pat(pat)}: ${pretty_exp(t)} = ${pretty_exp(e)}"
     }
   }
 
-  def prettyPat(pat: Pat): String = {
+  def pretty_pat(pat: Pat): String = {
     pat match {
       case PatVar(name) => name
-      case PatCons(car, cdr) => s"${prettyPat(car)} * ${prettyPat(cdr)}"
+      case PatCons(car, cdr) => s"${pretty_pat(car)} * ${pretty_pat(cdr)}"
       case PatSole() => "[]"
     }
   }
@@ -122,14 +93,14 @@ object pretty {
   }
 
 
-  def prettyClo(clo: Clo): String = {
+  def pretty_clo(clo: Clo): String = {
     clo match {
       case CloFn(pat: Pat, body: Exp, env: Env) =>
-        s"(${prettyPat(pat)}) => ${pretty_exp(body)}"
+        s"(${pretty_pat(pat)}) => ${pretty_exp(body)}"
       case CloMat(mats, env: Env) =>
         s"match {${maybeln(pretty_exp_map(mats))}}"
       case CloTag(tag: String, clo: Clo) =>
-        s"${prettyClo(clo)} on ${tag}"
+        s"${pretty_clo(clo)} on ${tag}"
     }
   }
 
@@ -137,11 +108,11 @@ object pretty {
     value match {
       case ValNeu(neu: Neu) => pretty_neu(neu)
       case ValFn(CloFn(pat: Pat, body: Exp, env: Env)) =>
-        s"${prettyPat(pat)} => ${pretty_exp(body)}"
+        s"${pretty_pat(pat)} => ${pretty_exp(body)}"
       case ValPi(arg: Val, clo) =>
-        s"(${pretty_val(arg)}) -> ${prettyClo(clo)}"
+        s"(${pretty_val(arg)}) -> ${pretty_clo(clo)}"
       case ValSigma(arg: Val, clo) =>
-        s"(${pretty_val(arg)}) ** ${prettyClo(clo)}"
+        s"(${pretty_val(arg)}) ** ${pretty_clo(clo)}"
       case ValUniv() => "type_t"
       case cons: ValCons =>
         val str = cons_val_to_list(cons).map(pretty_val(_)).mkString(", ")

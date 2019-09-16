@@ -1,5 +1,6 @@
 package xieyuheng.cicada.with_logic_variable
 
+import xieyuheng.util.pretty._
 import xieyuheng.cicada.with_logic_variable.pretty._
 
 case class Module() {

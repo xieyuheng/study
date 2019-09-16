@@ -26,7 +26,7 @@ object ParserTest extends App {
           println(s"[ParserTest] should not parse")
           println(s"- rule: ${rule.name}")
           println(s"- text: ${text}")
-          println(s"- tree: ${prettyTree(tree)}")
+          println(s"- tree: ${pretty_tree(tree)}")
           throw new Exception()
         case Left(error) => {}
       }

@@ -29,7 +29,7 @@ object Tree {
             }
           } else {
             println(s"matcher expecting rule: ${name}, but found: ${rule.name}:${choiceName}")
-            println(s"tree: ${prettyTree(tree)}")
+            println(s"tree: ${pretty_tree(tree)}")
             throw new Exception()
           }
         case Leaf(str) =>

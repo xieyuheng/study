@@ -1,42 +1,13 @@
 package xieyuheng.lambda
 
+import xieyuheng.util.pretty._
+
 object pretty {
 
-  val INDENT_UNIT: String = "  "
-
-  def get_indent(level: Int): String = {
-    assert(level >= 0)
-    INDENT_UNIT * level
-  }
-
-  def add_indent_to_block(block: String, level: Int): String = {
-    block
-      .split("\n")
-      .map(get_indent(level) ++ _)
-      .mkString("\n")
-  }
-
-  def maybeln(string: String): String = {
-    if (string.trim.isEmpty) {
-      ""
-    } else {
-      "\n" ++ add_indent_to_block(string, 1) ++ "\n"
-    }
-  }
-
-
-  def pretty_exp_map_with_delimiter(
-    map: Map[String, Exp],
-    delimiter: String,
-  ): String = {
-    map
-      .map { case (name, exp) => s"${name}: ${pretty_exp(exp)}" }
-      .mkString(delimiter)
-  }
-
-  def pretty_exp_map(map: Map[String, Exp]): String = {
-    pretty_exp_map_with_delimiter(map, ";\n")
-  }
+  def pretty_exp_map(map: Map[String, Exp]) =
+    pretty_map(map) {
+      case (name, exp) =>
+        s"${name}: ${pretty_exp(exp)};" }
 
   def pretty_exp(exp: Exp): String = {
     exp match {

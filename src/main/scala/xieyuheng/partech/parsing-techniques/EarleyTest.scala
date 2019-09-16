@@ -18,7 +18,7 @@ object EarleyTest extends App {
   def parseShow(rule: Rule, text: String): Unit = {
     Earley.init(lex(text), rule).parse() match {
       case Right(tree) =>
-        println(prettyTree(tree))
+        println(pretty_tree(tree))
       case Left(error) => {}
         println(s"rule: ${rule.name}, fail on text: ${text}, error: ${error}")
     }

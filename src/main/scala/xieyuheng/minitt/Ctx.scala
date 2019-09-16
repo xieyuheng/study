@@ -29,7 +29,7 @@ sealed trait Ctx {
           case _ =>
             Left(Err(
               s"[fail to extend ctx]\n" ++
-                s"pattern: ${prettyPat(pat)}\n" ++
+                s"pattern: ${pretty_pat(pat)}\n" ++
                 s"type: ${pretty_val(t)}\n" ++
                 s"value: ${pretty_val(v)}\n"))
         }

@@ -63,7 +63,7 @@ object eval {
           res <- Ap.exe(fn, arg)
         } yield res
       case Fn(name: String, body: Exp) =>
-        Right(ValFn(EnvClo(env, name, body)))
+        Right(ValFn(CloEnv(env, name, body)))
       case Absurd =>
         Right(ValAbsurd)
       case AbsurdInd(target: Exp, motive: Exp) =>
@@ -75,7 +75,7 @@ object eval {
       case Sigma(name: String, arg_t: Exp, cdr_t: Exp) =>
         for {
           arg_t_val <- eval(arg_t, env)
-        } yield ValSigma(arg_t_val, EnvClo(env, name, cdr_t))
+        } yield ValSigma(arg_t_val, CloEnv(env, name, cdr_t))
       case Sole =>
         Right(ValSole)
       case Trivial =>
@@ -85,7 +85,7 @@ object eval {
       case Pi(name: String, arg_t: Exp, ret_t: Exp) =>
         for {
           arg_t_val <- eval(arg_t, env)
-        } yield ValPi(arg_t_val, EnvClo(env, name, ret_t))
+        } yield ValPi(arg_t_val, CloEnv(env, name, ret_t))
       case Car(pair: Exp) =>
         for {
           pair_val <- eval(pair, env)

@@ -34,12 +34,12 @@ sealed trait Clo {
   def ap(value: Val): Either[Err, Val]
 }
 
-final case class NativeClo(name: String, fn: Val => Either[Err, Val]) extends Clo {
+final case class CloNative(name: String, fn: Val => Either[Err, Val]) extends Clo {
   def ap(value: Val): Either[Err, Val] =
     fn(value)
 }
 
-final case class EnvClo(env: Env, name: String, body: Exp) extends Clo {
+final case class CloEnv(env: Env, name: String, body: Exp) extends Clo {
   def ap(value: Val): Either[Err, Val] =
     eval(body, env.ext (name, value))
 }

@@ -51,7 +51,7 @@ object infer {
               for {
                 t_val <- eval(t, ctx.to_env)
                 motive <- check(motive, ctx, ValPi(t_val,
-                  NativeClo("_", _ => Right(ValUniverse))))
+                  CloNative("_", _ => Right(ValUniverse))))
                 motive_val <- eval(motive, ctx.to_env)
                 from_val <- eval(from, ctx.to_env)
                 base_t <- Ap.exe(motive_val, from_val)
@@ -77,7 +77,7 @@ object infer {
         for {
           target <- check(target, ctx, ValNat)
           motive <- check(motive, ctx, ValPi(ValNat,
-            NativeClo("n", _ => Right(ValUniverse))))
+            CloNative("n", _ => Right(ValUniverse))))
           motive_val <- eval(motive, ctx.to_env)
           target_val <- eval(target, ctx.to_env)
           base_t <- Ap.exe(motive_val, ValZero)

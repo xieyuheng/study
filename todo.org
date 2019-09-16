@@ -1,9 +1,9 @@
 - [tartlet] concrete syntax
 * tartlet
+- extend tartlet to pie
 - the little typer as test
-- how to extend tartlet to define new types?
-  - keep it subrecursive
-    but be generic about data and ind, rec and iter
+- extend tartlet to define new types
+  - keep it subrecursive, but be generic about data and ind, rec and iter
 * minitt
 - be sure about the use of Pattern
   - write some notes

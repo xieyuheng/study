@@ -37,7 +37,7 @@ object Replace {
         } yield TheNeu(t_val,
           NeuReplace(
             neu,
-            TheVal(ValPi(t, NativeClo("x", _ => Right(ValUniverse))), motive),
+            TheVal(ValPi(t, CloNative("x", _ => Right(ValUniverse))), motive),
             TheVal(base_t, base)))
       }
       case _ =>
@@ -53,11 +53,11 @@ object Replace {
 object NatInd {
   def stepType(motive: Val): ValPi = {
     ValPi(ValNat,
-      NativeClo("prev", prev =>
+      CloNative("prev", prev =>
         for {
           almostType <- Ap.exe(motive, prev)
         } yield ValPi(almostType,
-          NativeClo("almost", almost =>
+          CloNative("almost", almost =>
             Ap.exe(motive, ValSucc(prev))))))
   }
 
@@ -79,7 +79,7 @@ object NatInd {
         } yield TheNeu(t,
           NeuNatInd(
             neu,
-            TheVal(ValPi(ValNat, NativeClo("k", k => Right(ValUniverse))), motive),
+            TheVal(ValPi(ValNat, CloNative("k", k => Right(ValUniverse))), motive),
             TheVal(base_t, base),
             TheVal(NatInd.stepType(motive), step)))
       }

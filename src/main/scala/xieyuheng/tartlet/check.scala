@@ -99,7 +99,7 @@ object check {
       case exp: The => {
         // TODO be sure about this
         for {
-          the <- exp.infer(ctx)
+          the <- infer(exp, ctx)
           t2 <- eval(the.t, ctx.to_env)
           _ok <- conversion_check(ctx, ValUniverse, t, t2)
         } yield the.value
@@ -110,7 +110,7 @@ object check {
         // -----------------
         // ctx :- exp <= T
         for {
-          the <- exp.infer(ctx)
+          the <- infer(exp, ctx)
           t2 <- eval(the.t, ctx.to_env)
           _ok <- conversion_check(ctx, ValUniverse, t, t2)
         } yield the.value

@@ -24,7 +24,7 @@ A dependently typed language
   The dependently typed Mini-TT language
   described in paper: "A simple type-theoretic language: Mini-TT",
   by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
-  - no termination check, thus as logic is unsound.
+  - no termination check, thus when viewed as logic it is unsound.
 
 **... cicada emerging ...**
 

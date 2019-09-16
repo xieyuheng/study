@@ -3,6 +3,7 @@ package xieyuheng.tartlet
 import readback._
 
 object conversion_check {
+
   def apply(ctx: Ctx, t: Val, v1: Val, v2: Val): Either[Err, Unit] =
     conversion_check(ctx: Ctx, t: Val, v1: Val, v2: Val)
 

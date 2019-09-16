@@ -13,15 +13,18 @@ A dependently typed language
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):
   The untyped lambda calculus with norm-by-eval (normalization by evaluation).
 - [syst](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/syst):
-  Kurt Gödel's System T with norm-by-eval, (a step toward tartlet and pie).
+  Kurt Gödel's System T (simply typed lambda calculus with natural number)
+  with typed norm-by-eval, (a step toward tartlet and pie).
 - [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet)
   The tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",
   by David Thrane Christiansen.
   ([the original tutorial](http://davidchristiansen.dk/tutorials/nbe))
+  - subrecursive, recursion is not an option.
 - [minitt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/minitt):
   The dependently typed Mini-TT language
   described in paper: "A simple type-theoretic language: Mini-TT",
   by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
+  - no termination check, thus as logic is unsound.
 
 **... cicada emerging ...**
 

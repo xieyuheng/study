@@ -30,21 +30,21 @@ object Replace {
     target match {
       case ValSame =>
         Right(base)
-      case TheNeu(ValEqv(t, from, to), neutral) => {
+      case TheNeu(ValEqv(t, from, to), neu) => {
         for {
-          typeVal <- Ap.exe(motive, to)
-          baseType <- Ap.exe(motive, from)
-        } yield TheNeu(typeVal,
+          t_val <- Ap.exe(motive, to)
+          base_t <- Ap.exe(motive, from)
+        } yield TheNeu(t_val,
           NeuReplace(
-            neutral,
+            neu,
             TheVal(ValPi(t, NativeClo("x", _ => Right(ValUniverse))), motive),
-            TheVal(baseType, base)))
+            TheVal(base_t, base)))
       }
       case _ =>
         Left(Err(
           "target should be " +
             "ValSame | " +
-            "TheNeu(ValEqv(t, from, to), neutral): " +
+            "TheNeu(ValEqv(t, from, to), neu): " +
             s"${target}"))
     }
   }
@@ -72,15 +72,15 @@ object NatInd {
           res <- Ap.exe(f, almost)
         } yield res
       }
-      case TheNeu(ValNat, neutral) => {
+      case TheNeu(ValNat, neu) => {
         for {
           t <- Ap.exe(motive, target)
-          baseType <- Ap.exe(motive, ValZero)
+          base_t <- Ap.exe(motive, ValZero)
         } yield TheNeu(t,
           NeuNatInd(
-            neutral,
+            neu,
             TheVal(ValPi(ValNat, NativeClo("k", k => Right(ValUniverse))), motive),
-            TheVal(baseType, base),
+            TheVal(base_t, base),
             TheVal(NatInd.stepType(motive), step)))
       }
       case _ =>
@@ -88,7 +88,7 @@ object NatInd {
           "target should be " +
             "ValZero | " +
             "ValSucc(prev) | " +
-            "TheNeu(ValNat, neutral): " +
+            "TheNeu(ValNat, neu): " +
             s"${target}"))
     }
   }
@@ -99,15 +99,15 @@ object Ap {
     fn match {
       case ValFn(clo) =>
         clo.apply(arg)
-      case TheNeu(ValPi(arg_t, ret_t), neutral) =>
+      case TheNeu(ValPi(arg_t, ret_t), neu) =>
         for {
           t <- ret_t.apply(arg)
-        } yield TheNeu(t, NeuAp(neutral, TheVal(arg_t, arg)))
+        } yield TheNeu(t, NeuAp(neu, TheVal(arg_t, arg)))
       case _ =>
         Left(Err(
           "fn should be " +
             "ValFn(clo) | " +
-            "TheNeu(ValPi(arg_t, ret_t), neutral): " +
+            "TheNeu(ValPi(arg_t, ret_t), neu): " +
             s"${fn}"))
     }
   }
@@ -120,13 +120,13 @@ object Arrow {
 object AbsurdInd {
   def exe(target: Val, motive: Val): Either[Err, Val] = {
     target match {
-      case TheNeu(ValAbsurd, neutral) =>
+      case TheNeu(ValAbsurd, neu) =>
         Right(
           TheNeu(motive,
-            NeuAbsurdInd(neutral, TheVal(ValUniverse, motive))))
+            NeuAbsurdInd(neu, TheVal(ValUniverse, motive))))
       case _ =>
         Left(Err(
-          s"target should be TheNeu(ValAbsurd, neutral): ${target}"))
+          s"target should be TheNeu(ValAbsurd, neu): ${target}"))
     }
   }
 }
@@ -136,14 +136,14 @@ object Car {
     pair match {
       case ValCons(car, cdr) =>
         Right(car)
-      case TheNeu(ValSigma(arg_t, cdr_t), neutral) => {
-        Right(TheNeu(arg_t, NeuCar(neutral)))
+      case TheNeu(ValSigma(arg_t, cdr_t), neu) => {
+        Right(TheNeu(arg_t, NeuCar(neu)))
       }
       case _ =>
         Left(Err(
           "pair should be " +
             "ValCons(car, cdr) | " +
-            "TheNeu(ValSigma(arg_t, cdr_t), neutral): " +
+            "TheNeu(ValSigma(arg_t, cdr_t), neu): " +
             s"${pair}"))
     }
   }
@@ -154,17 +154,17 @@ object Cdr {
     pair match {
       case ValCons(car, cdr) =>
         Right(cdr)
-      case TheNeu(ValSigma(arg_t, cdr_t), neutral) => {
+      case TheNeu(ValSigma(arg_t, cdr_t), neu) => {
         for {
-          carVal <- Car.exe(pair)
-          realCdrType <- cdr_t.apply(carVal)
-        } yield TheNeu(realCdrType, NeuCar(neutral))
+          car_val <- Car.exe(pair)
+          real_cdr_t <- cdr_t.apply(car_val)
+        } yield TheNeu(real_cdr_t, NeuCar(neu))
       }
       case _ =>
         Left(Err(
           "pair should be " +
             "ValCons(car, cdr) | " +
-            "TheNeu(ValSigma(arg_t, cdr_t), neutral): " +
+            "TheNeu(ValSigma(arg_t, cdr_t), neu): " +
             s"${pair}"))
     }
   }

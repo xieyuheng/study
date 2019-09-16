@@ -22,13 +22,13 @@ object check {
         // ---------------------
         // ctx :- Same <= Eqv(T, from, to)
         t match {
-          case ValEqv(typeVal, from, to) =>
+          case ValEqv(t_val, from, to) =>
             for {
-              _ok <- conversion_check(ctx, typeVal, from, to)
+              _ok <- conversion_check(ctx, t_val, from, to)
             } yield exp
           case _ =>
             Left(Err(
-              s"expected ValEqv(typeVal, from, to), found: ${t}"))
+              s"expected ValEqv(t_val, from, to), found: ${t}"))
         }
       case Succ(prev: Exp) =>
         // ctx :- prev <= Nat
@@ -61,8 +61,8 @@ object check {
           case ValPi(arg_t, ret_t) => {
             val varVal = TheNeu(arg_t, NeuVar(name))
             for {
-              realRetType <- ret_t.apply(varVal)
-              body <- check(body, ctx.ext(name, Bind(arg_t)), realRetType)
+              real_ret_t <- ret_t.apply(varVal)
+              body <- check(body, ctx.ext(name, Bind(arg_t)), real_ret_t)
             } yield Fn(name, body)
           }
           case _ =>
@@ -88,9 +88,9 @@ object check {
           case ValSigma(arg_t, cdr_t) =>
             for {
               car <- check(car, ctx, arg_t)
-              carVal <- eval(car, ctx.to_env)
-              realCdrType <- cdr_t.apply(carVal)
-              cdr <- check(cdr, ctx, realCdrType)
+              car_val <- eval(car, ctx.to_env)
+              real_cdr_t <- cdr_t.apply(car_val)
+              cdr <- check(cdr, ctx, real_cdr_t)
             } yield Cons(car, cdr)
           case _ =>
             Left(Err(

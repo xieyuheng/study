@@ -1,5 +1,7 @@
 package xieyuheng.tartlet
 
+import readback._
+
 object infer {
 
   def apply(exp: Exp, ctx: Ctx): Either[Err, The] =
@@ -12,10 +14,10 @@ object infer {
         // --------------------------
         // ctx :- Var(x) => T
         ctx.lookup_type(name) match {
-          case Some(typeVal) => {
+          case Some(t_val) => {
             for {
-              typeExp <- typeVal.readback_val(ctx, ValUniverse)
-            } yield The(typeExp, exp)
+              t_exp <- readback_val(t_val, ValUniverse, ctx)
+            } yield The(t_exp, exp)
           }
           case None =>
             Left(Err(s"can not find var: ${exp} in ctx"))
@@ -32,9 +34,9 @@ object infer {
         // ctx :- Eqv(T, from, to) => Universe
         for {
           t <- check(t, ctx, ValUniverse)
-          typeVal <- eval(t, ctx.to_env)
-          from <- check(from, ctx, typeVal)
-          to <- check(to, ctx, typeVal)
+          t_val <- eval(t, ctx.to_env)
+          from <- check(from, ctx, t_val)
+          to <- check(to, ctx, t_val)
         } yield The(Universe, Eqv(t, from, to))
       case Replace(target: Exp, motive: Exp, base: Exp) =>
         // ctx :- target => Eqv(T, from, to)
@@ -47,17 +49,17 @@ object infer {
           res <- the.t match {
             case Eqv(t, from, to) =>
               for {
-                typeVal <- eval(t, ctx.to_env)
-                motive <- check(motive, ctx, ValPi(typeVal,
+                t_val <- eval(t, ctx.to_env)
+                motive <- check(motive, ctx, ValPi(t_val,
                   NativeClo("_", _ => Right(ValUniverse))))
-                motiveVal <- eval(motive, ctx.to_env)
-                fromVal <- eval(from, ctx.to_env)
-                baseType <- Ap.exe(motiveVal, fromVal)
-                base <- check(base, ctx, baseType)
-                toVal <- eval(to, ctx.to_env)
-                typeVal <- Ap.exe(motiveVal, toVal)
-                typeExp <- typeVal.readback_val(ctx, ValUniverse)
-              } yield The(typeExp, Replace(the.value, motive, base))
+                motive_val <- eval(motive, ctx.to_env)
+                from_val <- eval(from, ctx.to_env)
+                base_t <- Ap.exe(motive_val, from_val)
+                base <- check(base, ctx, base_t)
+                to_val <- eval(to, ctx.to_env)
+                t_val <- Ap.exe(motive_val, to_val)
+                t_exp <- readback_val(t_val, ValUniverse, ctx)
+              } yield The(t_exp, Replace(the.value, motive, base))
             case _ =>
               Left(Err(
                 s"expected the type to be Eqv(t, from, to), found: ${the.t}"))
@@ -76,13 +78,13 @@ object infer {
           target <- check(target, ctx, ValNat)
           motive <- check(motive, ctx, ValPi(ValNat,
             NativeClo("n", _ => Right(ValUniverse))))
-          motiveVal <- eval(motive, ctx.to_env)
-          targetVal <- eval(target, ctx.to_env)
-          baseType <- Ap.exe(motiveVal, ValZero)
-          base <- check(base, ctx, baseType)
-          step <- check(step, ctx, NatInd.stepType(motiveVal))
-          typeVal <- Ap.exe(motiveVal, targetVal)
-          t <- typeVal.readback_val(ctx, ValUniverse)
+          motive_val <- eval(motive, ctx.to_env)
+          target_val <- eval(target, ctx.to_env)
+          base_t <- Ap.exe(motive_val, ValZero)
+          base <- check(base, ctx, base_t)
+          step <- check(step, ctx, NatInd.stepType(motive_val))
+          t_val <- Ap.exe(motive_val, target_val)
+          t <- readback_val(t_val, ValUniverse, ctx)
         } yield The(t, NatInd(target, motive, base, step))
       case Nat =>
         // -----------------
@@ -100,10 +102,10 @@ object infer {
             case ValPi(arg_t, ret_t) => {
               for {
                 rand <- check(rand, ctx, arg_t)
-                argVal <- eval(rand, ctx.to_env)
-                retVal <- ret_t.apply(argVal)
-                retExp <- retVal.readback_val(ctx, ValUniverse)
-              } yield The(retExp, Ap(the.value, rand))
+                arg_t_val <- eval(rand, ctx.to_env)
+                ret_t_val <- ret_t.apply(arg_t_val)
+                ret_t_exp <- readback_val(ret_t_val, ValUniverse, ctx)
+              } yield The(ret_t_exp, Ap(the.value, rand))
             }
             case _ =>
               Left(Err("expected Pi, " + "found: ${t}"))
@@ -129,8 +131,8 @@ object infer {
         // ctx :- Sigma(x: A, B) => Universe
         for {
           arg_t <- check(arg_t, ctx, ValUniverse)
-          arg_tVal <- eval(arg_t, ctx.to_env)
-          cdr_t <- check(cdr_t, ctx.ext(name, Bind(arg_tVal)), ValUniverse)
+          arg_t_val <- eval(arg_t, ctx.to_env)
+          cdr_t <- check(cdr_t, ctx.ext(name, Bind(arg_t_val)), ValUniverse)
         } yield The(Universe, Pi(name, arg_t, cdr_t))
       case Trivial =>
         // -----------------
@@ -147,8 +149,8 @@ object infer {
         // ctx :- Pi(x: A, B) => Universe
         for {
           arg_t <- check(arg_t, ctx, ValUniverse)
-          arg_tVal <- eval(arg_t, ctx.to_env)
-          ret_t <- check(ret_t, ctx.ext(name, Bind(arg_tVal)), ValUniverse)
+          arg_t_val <- eval(arg_t, ctx.to_env)
+          ret_t <- check(ret_t, ctx.ext(name, Bind(arg_t_val)), ValUniverse)
         } yield The(Universe, Pi(name, arg_t, ret_t))
       case Car(pair: Exp) =>
         // ctx: p => Sigma(x: A, D)
@@ -159,9 +161,9 @@ object infer {
           res <- the.t match {
             case Sigma(name, arg_t, cdr_t) =>
               for {
-                arg_tVal <- eval(arg_t, ctx.to_env)
-                arg_tExp <- arg_tVal.readback_val(ctx, ValUniverse)
-              } yield The(arg_tExp, the.value)
+                arg_t_val <- eval(arg_t, ctx.to_env)
+                arg_t_exp <- readback_val(arg_t_val, ValUniverse, ctx)
+              } yield The(arg_t_exp, the.value)
             case _ =>
               Left(Err(
                 s"expected the type to be Sigma(arg_t, cdr_t), found: ${the.t}"))
@@ -177,11 +179,11 @@ object infer {
           res <- value match {
             case ValSigma(arg_t, cdr_t) =>
               for {
-                pairVal <- eval(the.value, ctx.to_env)
-                carVal <- Car.exe(pairVal)
-                realCdrType <- cdr_t.apply(carVal)
-                cdr_tExp <- realCdrType.readback_val(ctx, ValUniverse)
-              } yield The(cdr_tExp, the.value)
+                pair_val <- eval(the.value, ctx.to_env)
+                car_val <- Car.exe(pair_val)
+                real_cdr_t <- cdr_t.apply(car_val)
+                cdr_t_exp <- readback_val(real_cdr_t, ValUniverse, ctx)
+              } yield The(cdr_t_exp, the.value)
             case _ =>
               Left(Err(
                 s"expected the type to be Sigma(arg_t, cdr_t), found: ${the.t}"))
@@ -194,8 +196,8 @@ object infer {
         // ctx :- e: T => T
         for {
           t <- check(t, ctx, ValUniverse)
-          tVal <- eval(t, ctx.to_env)
-          value <- check(value, ctx, tVal)
+          t_val <- eval(t, ctx.to_env)
+          value <- check(value, ctx, t_val)
         } yield The(t, value)
       case _ =>
         Left(Err(s"infer is not implemented for exp: ${exp}"))

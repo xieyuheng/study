@@ -26,12 +26,12 @@ object eval {
         } yield ValEqv(t, from, to)
       case Replace(target: Exp, motive: Exp, base: Exp) =>
         for {
-          targetVal <- eval(target, env)
-          motiveVal <- eval(motive, env)
+          target_val <- eval(target, env)
+          motive_val <- eval(motive, env)
           baseVal <- eval(base, env)
           res <- Replace.exe(
-            targetVal,
-            motiveVal,
+            target_val,
+            motive_val,
             baseVal)
         } yield res
       case Same =>
@@ -42,13 +42,13 @@ object eval {
         } yield ValSucc(prevVal)
       case NatInd(target: Exp, motive: Exp, base: Exp, step: Exp) =>
         for {
-          targetVal <- eval(target, env)
-          motiveVal <- eval(motive, env)
+          target_val <- eval(target, env)
+          motive_val <- eval(motive, env)
           baseVal <- eval(base, env)
           stepVal <- eval(step, env)
           res <- NatInd.exe(
-            targetVal,
-            motiveVal,
+            target_val,
+            motive_val,
             baseVal,
             stepVal)
         } yield res
@@ -68,14 +68,14 @@ object eval {
         Right(ValAbsurd)
       case AbsurdInd(target: Exp, motive: Exp) =>
         for {
-          targetVal <- eval(target, env)
-          motiveVal <- eval(motive, env)
-          res <- AbsurdInd.exe(targetVal, motiveVal)
+          target_val <- eval(target, env)
+          motive_val <- eval(motive, env)
+          res <- AbsurdInd.exe(target_val, motive_val)
         } yield res
       case Sigma(name: String, arg_t: Exp, cdr_t: Exp) =>
         for {
-          arg_tVal <- eval(arg_t, env)
-        } yield ValSigma(arg_tVal, EnvClo(env, name, cdr_t))
+          arg_t_val <- eval(arg_t, env)
+        } yield ValSigma(arg_t_val, EnvClo(env, name, cdr_t))
       case Sole =>
         Right(ValSole)
       case Trivial =>
@@ -84,17 +84,17 @@ object eval {
         Right(ValUniverse)
       case Pi(name: String, arg_t: Exp, ret_t: Exp) =>
         for {
-          arg_tVal <- eval(arg_t, env)
-        } yield ValPi(arg_tVal, EnvClo(env, name, ret_t))
+          arg_t_val <- eval(arg_t, env)
+        } yield ValPi(arg_t_val, EnvClo(env, name, ret_t))
       case Car(pair: Exp) =>
         for {
-          pairVal <- eval(pair, env)
-          res <- Car.exe(pairVal)
+          pair_val <- eval(pair, env)
+          res <- Car.exe(pair_val)
         } yield res
       case Cdr(pair: Exp) =>
         for {
-          pairVal <- eval(pair, env)
-          res <- Cdr.exe(pairVal)
+          pair_val <- eval(pair, env)
+          res <- Cdr.exe(pair_val)
         } yield res
       case Cons(car: Exp, cdr: Exp) =>
         for {

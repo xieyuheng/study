@@ -27,7 +27,7 @@ object readback {
       case ValFn(name: String, body: Exp, env: Env) =>
         t match {
           case Arrow(arg_t, ret_t) =>
-            val fresh_name = util.freshen (used_names, name)
+            val fresh_name = freshen (used_names, name)
             val value2 = eval.exe_ap(value, TheNeu(arg_t, NeuVar(fresh_name)))
             for {
               body2 <- readback_val(value2, used_names + fresh_name, ret_t)

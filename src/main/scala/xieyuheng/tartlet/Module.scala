@@ -21,17 +21,17 @@
 
 //   def define(name: String, exp: Exp): Module = {
 //     ctx.lookup_den(name) match {
-//       case Some(Bind(typeVal)) =>
-//         exp.check(ctx, typeVal) match {
+//       case Some(Bind(t_val)) =>
+//         exp.check(ctx, t_val) match {
 //           case Right(exp) =>
 //             for {
 //               value <- exp.eval(ctx.to_env)
-//             } ctx = ctx.ext(name, Def(typeVal, value))
+//             } ctx = ctx.ext(name, Def(t_val, value))
 //           case Left(errorMsg) =>
 //             println(s"type check fail for name: ${name}, errorMsg: ${errorMsg}")
 //         }
-//       case Some(Def(typeVal, value)) =>
-//         println(s"name: ${name} is already defined, type: ${typeVal}, value: ${value}")
+//       case Some(Def(t_val, value)) =>
+//         println(s"name: ${name} is already defined, type: ${t_val}, value: ${value}")
 //       case None =>
 //         println(s"name: ${name} is not claimed before define")
 //     }
@@ -42,9 +42,9 @@
 //     val env = ctx.to_env
 //     val result = for {
 //       the <- exp.infer(ctx)
-//       typeVal <- the.t.eval(env)
+//       t_val <- the.t.eval(env)
 //       value <- exp.eval(env)
-//       norm <- value.readback_val(ctx, typeVal)
+//       norm <- value.readback_val(ctx, t_val)
 //     } yield The(the.t, norm)
 
 //     result match {

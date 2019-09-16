@@ -1,5 +1,8 @@
-- try scala {} ap arg syntax
 - improve WordPred API -- WordPred(name) { ... }
+- try scala {} ap arg syntax
+- abstract common parts in pretty
+- abstract `default_identifier_with_preserved_list`
+- improve grammar about optional comma
 * tartlet
 - [tartlet] change the style to grouping by function instead of grouping by data
 - [tartlet] concrete syntax

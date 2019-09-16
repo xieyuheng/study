@@ -203,5 +203,7 @@ let and_commute_2: (
   and_t(P, Q),
 ) -> and_t(Q, P) = {
   (P, Q, x_and_y) =>
-    x_and_y(and_t(Q, P), (x, y) => conj(Q, P, y, x))
+    x_and_y(and_t(Q, P)) { (x, y) =>
+      conj(Q, P, y, x)
+    }
 }

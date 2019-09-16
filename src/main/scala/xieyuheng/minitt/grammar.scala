@@ -75,6 +75,22 @@ object grammar {
       "non_rator" -> { case List(non_rator) => non_rator_matcher(non_rator) },
     ))
 
+  def block: Rule = Rule(
+    "block", Map(
+      "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
+      "block_of_one_exp" -> List("{", exp, "}"),
+    ))
+
+  def block_matcher: Tree => Exp = Tree.matcher[Exp](
+    "block", Map(
+      "block" -> { case List(_, decl_list, _, exp, _) =>
+        non_empty_list_matcher(decl_matcher)(decl_list)
+          .foldRight(exp_matcher(exp)) { case (decl, body) =>
+            Block(decl, body) } },
+      "block_of_one_exp" -> { case List(_, exp, _) =>
+        exp_matcher(exp) },
+    ))
+
   def rator: Rule = Rule(
     "rator", Map(
       "var" -> List(identifier),
@@ -82,13 +98,14 @@ object grammar {
         List(rator, "(", non_empty_list(exp_comma), ")"),
       "ap_one_without_comma" ->
         List(rator, "(", exp, ")"),
+      "ap_to_block" ->
+        List(rator, block),
       "ap_without_last_comma" ->
         List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "car" -> List("car", "(", exp, ")"),
       "cdr" -> List("cdr", "(", exp, ")"),
       "match" -> List("{", non_empty_list(mat_clause), "}"),
-      "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
-      "block_of_one_exp" -> List("{", exp, "}"),
+      "block" -> List(block),
     ))
 
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -99,6 +116,8 @@ object grammar {
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) } },
       "ap_one_without_comma" -> { case List(rator, _, exp, _) =>
         Ap(rator_matcher(rator), exp_matcher(exp)) },
+      "ap_to_block" -> { case List(rator, block) =>
+        Ap(rator_matcher(rator), block_matcher(block)) },
       "ap_without_last_comma" -> { case List(rator, _, exp_comma_list, exp, _) =>
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
@@ -107,12 +126,7 @@ object grammar {
       "cdr" -> { case List(_, _, exp, _) => Cdr(exp_matcher(exp)) },
       "match" -> { case List(_, mat_clause_list, _) =>
         Mat(non_empty_list_matcher(mat_clause_matcher)(mat_clause_list).toMap) },
-      "block" -> { case List(_, decl_list, _, exp, _) =>
-        non_empty_list_matcher(decl_matcher)(decl_list)
-          .foldRight(exp_matcher(exp)) { case (decl, body) =>
-            Block(decl, body) } },
-      "block_of_one_exp" -> { case List(_, exp, _) =>
-        exp_matcher(exp) },
+      "block" -> { case List(block) => block_matcher(block) },
     ))
 
   def multi_pi_arg: Rule = Rule(

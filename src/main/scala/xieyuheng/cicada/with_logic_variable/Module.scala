@@ -78,9 +78,9 @@ case class Module() {
   def eval_print(exp: Exp): Unit = {
     eval(exp, env) match {
       case Right(value) =>
-        println(s"=> ${pretty_val(value)}")
+        println(s"==> ${pretty_val(value)}")
       case Left(errorMsg) =>
-        println(s"?> ${errorMsg}")
+        println(s"??> ${errorMsg}")
     }
   }
 

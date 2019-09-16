@@ -8,7 +8,7 @@ object grammar {
 
   val lexer = Lexer.default
 
-  def preserved_identifiers: Set[String] = Set(
+  def preserved: List[String] = List(
     "let", "letrec",
     "car", "cdr",
     "type", "type_t",
@@ -17,20 +17,7 @@ object grammar {
     "return",
   )
 
-  def identifier: WordPred = WordPred(
-    "identifier", { case word =>
-      if (preserved_identifiers.contains(word)) {
-        false
-      } else {
-        word.headOption match {
-          case Some(char) =>
-            val head_set = lower_case_char_set ++ upper_case_char_set + '_'
-            val tail_set = head_set ++ digit_char_set
-            head_set.contains(char) && wordInCharSet(tail_set)(word.tail)
-          case None => false
-        }
-      }
-    })
+  def identifier = identifier_with_preserved("identifier", preserved)
 
   def module = Rule(
     "module", Map(

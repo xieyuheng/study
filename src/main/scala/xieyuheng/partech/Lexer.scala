@@ -1,4 +1,4 @@
-package xieyuheng.partech //
+package xieyuheng.partech
 
 case class LexTable(
   wordMatcher: String => Option[(String, String)],
@@ -118,5 +118,4 @@ object Lexer {
   }
 
   def default = Lexer(LexTable(wordMatcher, ignorer))
-
 }

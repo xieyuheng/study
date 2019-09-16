@@ -48,4 +48,20 @@ object predefined {
 
   def upper_case = wordInCharSet(upper_case_char_set)
 
+  def identifier_with_preserved(
+    name: String,
+    preserved: List[String],
+  ): WordPred = WordPred(name, { case word =>
+    if (preserved.contains(word)) {
+      false
+    } else {
+      word.headOption match {
+        case Some(char) =>
+          val head_set = lower_case_char_set ++ upper_case_char_set + '_'
+          val tail_set = head_set ++ digit_char_set
+          head_set.contains(char) && wordInCharSet(tail_set)(word.tail)
+        case None => false
+      }
+    }
+  })
 }

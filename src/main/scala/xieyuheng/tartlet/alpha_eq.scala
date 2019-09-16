@@ -65,9 +65,9 @@ object alpha_eq {
           case Same => true
           case _ => false
         }
-      case Add1(prev: Exp) =>
+      case Succ(prev: Exp) =>
         that match {
-          case Add1(prev2) =>
+          case Succ(prev2) =>
             alpha_eq(prev, prev2, this_map, that_map)
           case _ => false
         }

@@ -30,18 +30,18 @@ object check {
             Left(Err(
               s"expected ValEqv(typeVal, from, to), found: ${t}"))
         }
-      case Add1(prev: Exp) =>
+      case Succ(prev: Exp) =>
         // ctx :- prev <= Nat
         // ---------------------
-        // ctx :- Add1(prev) <= Nat
+        // ctx :- Succ(prev) <= Nat
         t match {
           case ValNat =>
             for {
               prev <- check(prev, ctx, t)
-            } yield Add1(prev)
+            } yield Succ(prev)
           case _ =>
             Left(Err(
-              s"expected ValAdd1, found: ${t}"))
+              s"expected ValSucc, found: ${t}"))
         }
       case Zero =>
         // ---------------------

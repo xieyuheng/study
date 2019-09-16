@@ -7,7 +7,7 @@ final case class Quote(sym: String) extends Exp
 final case class Eqv(t: Exp, from: Exp, to: Exp) extends Exp
 final case class Replace(target: Exp, motive: Exp, base: Exp) extends Exp
 final case object Same extends Exp
-final case class Add1(prev: Exp) extends Exp
+final case class Succ(prev: Exp) extends Exp
 final case class NatInd(target: Exp, motive: Exp, base: Exp, step: Exp) extends Exp
 final case object Nat extends Exp
 final case object Zero extends Exp
@@ -58,14 +58,14 @@ object NatInd {
           almostType <- Ap.exe(motive, prev)
         } yield ValPi(almostType,
           NativeClo("almost", almost =>
-            Ap.exe(motive, ValAdd1(prev))))))
+            Ap.exe(motive, ValSucc(prev))))))
   }
 
   def exe(target: Val, motive: Val, base: Val, step: Val): Either[Err, Val] = {
     target match {
       case ValZero =>
         Right(base)
-      case ValAdd1(prev) => {
+      case ValSucc(prev) => {
         for {
           f <- Ap.exe(step, prev)
           almost <- NatInd.exe(prev, motive, base, step)
@@ -87,7 +87,7 @@ object NatInd {
         Left(Err(
           "target should be " +
             "ValZero | " +
-            "ValAdd1(prev) | " +
+            "ValSucc(prev) | " +
             "TheNeu(ValNat, neutral): " +
             s"${target}"))
     }

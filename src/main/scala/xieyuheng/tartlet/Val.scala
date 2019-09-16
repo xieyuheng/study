@@ -59,11 +59,11 @@ case object ValSame extends Val {
   }
 }
 
-case class ValAdd1 (prev: Val) extends Val {
+case class ValSucc (prev: Val) extends Val {
   def readback_val(ctx: Ctx, t: Val): Either[Err, Exp] =
     for {
       prev_exp <- prev.readback_val(ctx, t)
-    } yield Add1(prev_exp)
+    } yield Succ(prev_exp)
 }
 
 case object ValNat extends Val {

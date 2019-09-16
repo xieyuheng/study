@@ -1,7 +1,5 @@
 package xieyuheng.tartlet
 
-import java.util.UUID
-
 object eval {
 
   def apply(exp: Exp, env: Env): Either[Err, Val] =
@@ -38,10 +36,10 @@ object eval {
         } yield res
       case Same =>
         Right(ValSame)
-      case Add1(prev: Exp) =>
+      case Succ(prev: Exp) =>
         for {
           prevVal <- eval(prev, env)
-        } yield ValAdd1(prevVal)
+        } yield ValSucc(prevVal)
       case NatInd(target: Exp, motive: Exp, base: Exp, step: Exp) =>
         for {
           targetVal <- eval(target, env)

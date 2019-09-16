@@ -69,7 +69,7 @@ object infer {
         // ctx :- base <= motive(Zero)
         // ctx :- step <= Pi(
         // --          prev: Nat, Pi(
-        // --            almost: motive(prev), motive(Add1(prev))))
+        // --            almost: motive(prev), motive(Succ(prev))))
         // --------------------
         // ctx :- NatInd(target, motive, base, step) => motive(target)
         for {

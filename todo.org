@@ -20,14 +20,13 @@
   recursively extended to fields in record and pi and si
 - eval for cicada without_logic_variable
 - class and extends
-- module system
 - partially filled data can be used as type
 - compile to js with runtime type information
   - this means keep Val serde-able
     - Val includes ValFn which contains Exp
       this Exp is also serde-able
 * general
-- module as value
+- module as value with opaque module_t
 * partech
 - ErrMsg and Span
 - better report with ErrMsg in context

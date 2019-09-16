@@ -18,7 +18,8 @@ t () {
     sbt stage && \
         run_test && \
         run_minitt_test && \
-        run_lambda_test
+        run_lambda_test && \
+        run_syst_test
 }
 
 run_test () {

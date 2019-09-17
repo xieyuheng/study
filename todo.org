@@ -1,5 +1,4 @@
 * tartlet
-- pretty
 - extend tartlet to pie
 - the little typer as test
 - extend tartlet to define new types

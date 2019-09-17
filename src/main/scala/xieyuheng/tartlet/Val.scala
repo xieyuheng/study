@@ -12,7 +12,7 @@ final case class ValZero() extends Val
 final case class ValSucc(prev: Val) extends Val
 final case class ValPi(arg_t: Val, ret_t: Clo) extends Val
 final case class ValFn(clo: Clo) extends Val
-final case class ValSigma(arg_t: Val, cdr_t: Clo) extends Val
+final case class ValSigma(arg_t: Val, ret_t: Clo) extends Val
 final case class ValCons(car: Val, cdr: Val) extends Val
 final case class ValSole() extends Val
 final case class ValTrivial() extends Val
@@ -31,15 +31,15 @@ case class TheVal(t: Val, value: Val)
 
 sealed trait Clo {
   def name: String
-  def ap(value: Val): Either[Err, Val]
+  def ap(value: Val): Either[Err, Val] = {
+    this match {
+      case CloNative(name, fn) =>
+        fn(value)
+      case CloEnv(env, name, body) =>
+        eval(body, env.ext(name, value))
+    }
+  }
 }
 
-final case class CloNative(name: String, fn: Val => Either[Err, Val]) extends Clo {
-  def ap(value: Val): Either[Err, Val] =
-    fn(value)
-}
-
-final case class CloEnv(env: Env, name: String, body: Exp) extends Clo {
-  def ap(value: Val): Either[Err, Val] =
-    eval(body, env.ext(name, value))
-}
+final case class CloNative(name: String, fn: Val => Either[Err, Val]) extends Clo
+final case class CloEnv(env: Env, name: String, body: Exp) extends Clo

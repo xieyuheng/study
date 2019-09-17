@@ -62,17 +62,17 @@ object readback {
           car <- readback_val(car, t, ctx)
           cdr <- readback_val(cdr, t, ctx)
         } yield Cons(car, cdr)
-      case ValSigma(arg_t: Val, cdr_t: Clo) =>
-        val fresh_name = freshen(ctx.names, cdr_t.name)
+      case ValSigma(arg_t: Val, ret_t: Clo) =>
+        val fresh_name = freshen(ctx.names, ret_t.name)
         for {
           arg_t_exp <- readback_val(arg_t, ValUniverse(), ctx)
-          cdr_t_exp_val <- cdr_t.ap(
+          ret_t_exp_val <- ret_t.ap(
             TheNeu(arg_t, NeuVar(fresh_name)))
-          cdr_t_exp <- readback_val(
-            cdr_t_exp_val,
+          ret_t_exp <- readback_val(
+            ret_t_exp_val,
             ValUniverse(),
             ctx.ext(fresh_name, Bind(arg_t)))
-        } yield Sigma(fresh_name, arg_t_exp, cdr_t_exp)
+        } yield Sigma(fresh_name, arg_t_exp, ret_t_exp)
       case ValSole() => Right(Sole())
       case ValTrivial() => Right(Trivial())
       case ValUniverse() => Right(Universe())

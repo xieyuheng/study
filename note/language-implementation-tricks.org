@@ -70,7 +70,7 @@
 
   - can we just provide enough information in the syntax.
     for example, use church's typed lambda calculus instead of curry's typed lambda calculus ?
-    in church's typed lambda calculus, can we infer all the way done ?
+    in church's typed lambda calculus, can we infer all the way down ?
     is this true for all the rules about constructor ?
 
   - a sub-trick is that,

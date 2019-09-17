@@ -11,6 +11,7 @@ object grammar {
   def preserved: List[String] = List(
     "let", "return",
     "the",
+    "string_t",
     "eqv_t", "same", "replace",
     "nat_t", "zero", "succ", "nat_ind",
     "absurd_t", "absurd_ind",

@@ -124,7 +124,7 @@ object infer {
           target <- check(target, ctx, ValAbsurd())
           motive <- check(motive, ctx, ValUniverse())
         } yield The(Universe(), AbsurdInd(target, motive))
-      case Sigma(name: String, arg_t: Exp, cdr_t: Exp) =>
+      case Sigma(name: String, arg_t: Exp, ret_t: Exp) =>
         // ctx :- A <= Universe()
         // ctx.ext(x, A) :- B <= Universe()
         // -----------------
@@ -132,8 +132,8 @@ object infer {
         for {
           arg_t <- check(arg_t, ctx, ValUniverse())
           arg_t_val <- eval(arg_t, ctx.to_env)
-          cdr_t <- check(cdr_t, ctx.ext(name, Bind(arg_t_val)), ValUniverse())
-        } yield The(Universe(), Pi(name, arg_t, cdr_t))
+          ret_t <- check(ret_t, ctx.ext(name, Bind(arg_t_val)), ValUniverse())
+        } yield The(Universe(), Pi(name, arg_t, ret_t))
       case Trivial() =>
         // -----------------
         // ctx :- Trivial() => Universe()
@@ -159,14 +159,14 @@ object infer {
         for {
           the <- infer(pair, ctx)
           res <- the.t match {
-            case Sigma(name, arg_t, cdr_t) =>
+            case Sigma(name, arg_t, ret_t) =>
               for {
                 arg_t_val <- eval(arg_t, ctx.to_env)
                 arg_t_exp <- readback_val(arg_t_val, ValUniverse(), ctx)
               } yield The(arg_t_exp, the.value)
             case _ =>
               Left(Err(
-                s"expected the type to be Sigma(arg_t, cdr_t), found: ${the.t}"))
+                s"expected the type to be Sigma(arg_t, ret_t), found: ${the.t}"))
           }
         } yield res
       case Cdr(pair: Exp) =>
@@ -177,16 +177,16 @@ object infer {
           the <- infer(pair, ctx)
           value <- eval(the.t, ctx.to_env)
           res <- value match {
-            case ValSigma(arg_t, cdr_t) =>
+            case ValSigma(arg_t, ret_t) =>
               for {
                 pair_val <- eval(the.value, ctx.to_env)
                 car_val <- Car.exe(pair_val)
-                real_cdr_t <- cdr_t.ap(car_val)
-                cdr_t_exp <- readback_val(real_cdr_t, ValUniverse(), ctx)
-              } yield The(cdr_t_exp, the.value)
+                real_ret_t <- ret_t.ap(car_val)
+                ret_t_exp <- readback_val(real_ret_t, ValUniverse(), ctx)
+              } yield The(ret_t_exp, the.value)
             case _ =>
               Left(Err(
-                s"expected the type to be Sigma(arg_t, cdr_t), found: ${the.t}"))
+                s"expected the type to be Sigma(arg_t, ret_t), found: ${the.t}"))
           }
         } yield res
       case The(t, e) =>

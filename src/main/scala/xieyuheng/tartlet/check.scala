@@ -86,16 +86,16 @@ object check {
         // -----------------
         // ctx :- Cons(car, cdr) <= Sigma(x: A, D)
         t match {
-          case ValSigma(arg_t, cdr_t) =>
+          case ValSigma(arg_t, ret_t) =>
             for {
               car <- check(car, ctx, arg_t)
               car_val <- eval(car, ctx.to_env)
-              real_cdr_t <- cdr_t.ap(car_val)
-              cdr <- check(cdr, ctx, real_cdr_t)
+              real_ret_t <- ret_t.ap(car_val)
+              cdr <- check(cdr, ctx, real_ret_t)
             } yield Cons(car, cdr)
           case _ =>
             Left(Err(
-              s"expected ValSigma(arg_t, cdr_t), found: ${t}"))
+              s"expected ValSigma(arg_t, ret_t), found: ${t}"))
         }
       case the: The => {
         for {

@@ -16,7 +16,7 @@ final case class Fn(name: String, body: Exp) extends Exp
 final case class Ap(rator: Exp, rand: Exp) extends Exp
 final case class Absurd() extends Exp
 final case class AbsurdInd(target: Exp, motive: Exp) extends Exp
-final case class Sigma(name: String, arg_t: Exp, cdr_t: Exp) extends Exp
+final case class Sigma(name: String, arg_t: Exp, ret_t: Exp) extends Exp
 final case class Cons(car: Exp, cdr: Exp) extends Exp
 final case class Car(pair: Exp) extends Exp
 final case class Cdr(pair: Exp) extends Exp
@@ -136,14 +136,14 @@ object Car {
     pair match {
       case ValCons(car, cdr) =>
         Right(car)
-      case TheNeu(ValSigma(arg_t, cdr_t), neu) => {
+      case TheNeu(ValSigma(arg_t, ret_t), neu) => {
         Right(TheNeu(arg_t, NeuCar(neu)))
       }
       case _ =>
         Left(Err(
           "pair should be " +
             "ValCons(car, cdr) | " +
-            "TheNeu(ValSigma(arg_t, cdr_t), neu): " +
+            "TheNeu(ValSigma(arg_t, ret_t), neu): " +
             s"${pair}"))
     }
   }
@@ -154,17 +154,17 @@ object Cdr {
     pair match {
       case ValCons(car, cdr) =>
         Right(cdr)
-      case TheNeu(ValSigma(arg_t, cdr_t), neu) => {
+      case TheNeu(ValSigma(arg_t, ret_t), neu) => {
         for {
           car_val <- Car.exe(pair)
-          real_cdr_t <- cdr_t.ap(car_val)
-        } yield TheNeu(real_cdr_t, NeuCar(neu))
+          real_ret_t <- ret_t.ap(car_val)
+        } yield TheNeu(real_ret_t, NeuCar(neu))
       }
       case _ =>
         Left(Err(
           "pair should be " +
             "ValCons(car, cdr) | " +
-            "TheNeu(ValSigma(arg_t, cdr_t), neu): " +
+            "TheNeu(ValSigma(arg_t, ret_t), neu): " +
             s"${pair}"))
     }
   }

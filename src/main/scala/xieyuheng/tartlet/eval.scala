@@ -80,10 +80,10 @@ object eval {
           motive_val <- eval(motive, env)
           res <- AbsurdInd.exe(target_val, motive_val)
         } yield res
-      case Sigma(name: String, arg_t: Exp, cdr_t: Exp) =>
+      case Sigma(name: String, arg_t: Exp, ret_t: Exp) =>
         for {
           arg_t_val <- eval(arg_t, env)
-        } yield ValSigma(arg_t_val, CloEnv(env, name, cdr_t))
+        } yield ValSigma(arg_t_val, CloEnv(env, name, ret_t))
       case Sole() =>
         Right(ValSole())
       case Trivial() =>

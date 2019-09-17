@@ -1,6 +1,9 @@
 * tartlet
+- string_t
 - extend tartlet to pie
 - the little typer as test
+- use `todo` as un-implemented
+- block of let and return
 - extend tartlet to define new types
   - keep it subrecursive, but be generic about data and ind, rec and iter
 * minitt

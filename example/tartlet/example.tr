@@ -9,7 +9,6 @@ let add: (nat_t, nat_t) -> nat_t =
       n, _ => nat_t,
       k, (prev, almost) => succ(almost))
 
-
 eval! three
 eval! add(three)
 eval! add(three, three)

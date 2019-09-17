@@ -125,16 +125,16 @@ object grammar {
       "block" -> { case List(block) => block_matcher(block) },
     ))
 
-  def multi_pi_arg: Rule = Rule(
-    "multi_pi_arg", Map(
+  def bind: Rule = Rule(
+    "bind", Map(
       "arg" -> List(exp),
       "arg_comma" -> List(exp, ","),
       "arg_t" -> List(pat, ":", exp),
       "arg_t_comma" -> List(pat, ":", exp, ","),
     ))
 
-  def multi_pi_arg_matcher = Tree.matcher[(Pat, Exp)](
-    "multi_pi_arg", Map(
+  def bind_matcher = Tree.matcher[(Pat, Exp)](
+    "bind", Map(
       "arg" -> { case List(exp) =>
         (PatSole(), exp_matcher(exp)) },
       "arg_comma" -> { case List(exp, _) =>
@@ -163,7 +163,7 @@ object grammar {
   def non_rator: Rule = Rule(
     "non_rator", Map(
       "pi" -> List("(", pat, ":", exp, ")", "-", ">", exp),
-      "multi_pi" -> List("(", non_empty_list(multi_pi_arg), ")", "-", ">", exp),
+      "multi_pi" -> List("(", non_empty_list(bind), ")", "-", ">", exp),
       "fn" -> List(pat, "=", ">", exp),
       "multi_fn" -> List("(", non_empty_list(pat_entry), ")", "=", ">", exp),
       "cons" ->
@@ -173,7 +173,7 @@ object grammar {
       "cons_drop" ->
         List("[", non_empty_list(exp_comma), exp, "]"),
       "sigma" -> List("(", pat, ":", exp, ")", "*", "*", exp),
-      "sigma_list" -> List("$", "[", non_empty_list(sigma_entry), exp, "]"),
+      "sigma_list" -> List("$", "[", non_empty_list(bind), exp, "]"),
       "data" -> List(identifier, exp),
       "sum" -> List("type", "{", non_empty_list(sum_clause), "}"),
       "sole" -> List("[", "]"),
@@ -186,9 +186,9 @@ object grammar {
     "non_rator", Map(
       "pi" -> { case List(_, pat, _, arg_t, _, _, _, t) =>
         Pi(pat_matcher(pat), exp_matcher(arg_t), exp_matcher(t)) },
-      "multi_pi" -> { case List(_, multi_pi_arg_list, _, _, _, t) =>
+      "multi_pi" -> { case List(_, bind_list, _, _, _, t) =>
         var exp = exp_matcher(t)
-        non_empty_list_matcher(multi_pi_arg_matcher)(multi_pi_arg_list)
+        non_empty_list_matcher(bind_matcher)(bind_list)
           .reverse.foreach { case (pat, arg_t) =>
             exp = Pi(pat, arg_t, exp)
           }
@@ -214,8 +214,8 @@ object grammar {
           Cons(head, tail) } },
       "sigma" -> { case List(_, pat, _, arg_t, _, _, _, t) =>
         Sigma(pat_matcher(pat), exp_matcher(arg_t), exp_matcher(t)) },
-      "sigma_list" -> { case List(_, _, sigma_entry_list, exp, _) =>
-        non_empty_list_matcher(sigma_entry_matcher)(sigma_entry_list)
+      "sigma_list" -> { case List(_, _, bind_list, exp, _) =>
+        non_empty_list_matcher(bind_matcher)(bind_list)
           .foldRight(exp_matcher(exp)) { case ((pat, exp), rest) =>
             Sigma(pat, exp, rest)
           } },
@@ -227,26 +227,6 @@ object grammar {
       "lit_sole" -> { case _ => Sole() },
       "trivial" -> { case _ => Trivial() },
       "univ" -> { case _ => Univ() },
-    ))
-
-  def sigma_entry: Rule = Rule(
-    "sigma_entry", Map(
-      "arg" -> List(exp),
-      "arg_comma" -> List(exp, ","),
-      "arg_t" -> List(pat, ":", exp),
-      "arg_t_comma" -> List(pat, ":", exp, ","),
-    ))
-
-  def sigma_entry_matcher = Tree.matcher[(Pat, Exp)](
-    "sigma_entry", Map(
-      "arg" -> { case List(exp) =>
-        (PatSole(), exp_matcher(exp)) },
-      "arg_comma" -> { case List(exp, _) =>
-        (PatSole(), exp_matcher(exp)) },
-      "arg_t" -> { case List(pat, _, exp) =>
-        (pat_matcher(pat), exp_matcher(exp)) },
-      "arg_t_comma" -> { case List(pat, _, exp, _) =>
-        (pat_matcher(pat), exp_matcher(exp)) },
     ))
 
   def exp_comma = Rule(

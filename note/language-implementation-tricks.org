@@ -35,7 +35,7 @@
 
     for example,
     curry's typed lambda calculus has less information in syntax
-    comparing church's typed lambda calculus.
+    compare to church's typed lambda calculus.
 
   - the bidirectional trick says:
     we can turn a set of inference rules to a type checking algorithm,

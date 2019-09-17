@@ -100,14 +100,14 @@ object grammar {
         exp_matcher(exp) },
     ))
 
-  def multi_fn_arg: Rule = Rule(
-    "multi_fn_arg", Map(
+  def id_entry: Rule = Rule(
+    "id_entry", Map(
       "arg" -> List(identifier),
       "arg_comma" -> List(identifier, ","),
     ))
 
-  def multi_fn_arg_matcher = Tree.matcher[String](
-    "multi_fn_arg", Map(
+  def id_entry_matcher = Tree.matcher[String](
+    "id_entry", Map(
       "arg" -> { case List(Leaf(name)) =>
         name },
       "arg_comma" -> { case List(Leaf(name), _) =>
@@ -117,16 +117,16 @@ object grammar {
   def non_rator: Rule = Rule(
     "non_rator", Map(
       "fn" -> List(identifier, "=", ">", exp),
-      "multi_fn" -> List("(", non_empty_list(multi_fn_arg), ")", "=", ">", exp),
+      "multi_fn" -> List("(", non_empty_list(id_entry), ")", "=", ">", exp),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "non_rator", Map(
       "fn" -> { case List(Leaf(name), _, _, body) =>
         Fn(name, exp_matcher(body)) },
-      "multi_fn" -> { case List(_, multi_fn_arg_list, _, _, _, body) =>
+      "multi_fn" -> { case List(_, id_entry_list, _, _, _, body) =>
         var exp = exp_matcher(body)
-        non_empty_list_matcher(multi_fn_arg_matcher)(multi_fn_arg_list)
+        non_empty_list_matcher(id_entry_matcher)(id_entry_list)
           .reverse.foreach { case pat =>
             exp = Fn(pat, exp)
           }

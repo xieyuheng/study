@@ -99,18 +99,15 @@ object grammar {
   def rator: Rule = Rule(
     "rator", Map(
       "var" -> List(identifier),
-      "ap" ->
-        List(rator, "(", non_empty_list(exp_comma), ")"),
-      "ap_one_without_comma" ->
-        List(rator, "(", exp, ")"),
-      "ap_without_last_comma" ->
-        List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
+      "ap_one_without_comma" -> List(rator, "(", exp, ")"),
+      "ap_without_last_comma" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "ap_to_block" -> List(rator, block),
       "the" -> List("the", "(", ty, ",", exp, ")"),
       "zero" -> List("zero"),
       "succ" -> List("succ", "(", exp, ")"),
       "nat_rec" -> List("nat_rec", "(", ty, ",", exp, ",", exp, ",", exp, ")"),
-      "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
-      "block_of_one_exp" -> List("{", exp, "}"),
+      "block" -> List(block),
     ))
 
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -125,11 +122,24 @@ object grammar {
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
+      "ap_to_block" -> { case List(rator, block) =>
+        Ap(rator_matcher(rator), block_matcher(block)) },
       "the" -> { case  List(_, _, t, _, e, _) => The(ty_matcher(t), exp_matcher(e)) },
       "zero" -> { case _ => Zero() },
       "succ" -> { case List(_, _, exp, _) => Succ(exp_matcher(exp)) },
       "nat_rec" -> { case List(_, _, t, _, target, _, base, _, step, _) =>
         NatRec(ty_matcher(t), exp_matcher(target), exp_matcher(base), exp_matcher(step)) },
+      "block" -> { case List(block) => block_matcher(block) },
+    ))
+
+  def block: Rule = Rule(
+    "block", Map(
+      "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
+      "block_of_one_exp" -> List("{", exp, "}"),
+    ))
+
+  def block_matcher: Tree => Exp = Tree.matcher[Exp](
+    "block", Map(
       "block" -> { case List(_, decl_list, _, exp, _) =>
         non_empty_list_matcher(decl_matcher)(decl_list)
           .foldRight(exp_matcher(exp)) { case (decl, body) =>
@@ -138,14 +148,14 @@ object grammar {
         exp_matcher(exp) },
     ))
 
-  def multi_fn_arg: Rule = Rule(
-    "multi_fn_arg", Map(
+  def id_entry: Rule = Rule(
+    "id_entry", Map(
       "arg" -> List(identifier),
       "arg_comma" -> List(identifier, ","),
     ))
 
-  def multi_fn_arg_matcher = Tree.matcher[String](
-    "multi_fn_arg", Map(
+  def id_entry_matcher = Tree.matcher[String](
+    "id_entry", Map(
       "arg" -> { case List(Leaf(name)) =>
         name },
       "arg_comma" -> { case List(Leaf(name), _) =>
@@ -155,16 +165,16 @@ object grammar {
   def non_rator: Rule = Rule(
     "non_rator", Map(
       "fn" -> List(identifier, "=", ">", exp),
-      "multi_fn" -> List("(", non_empty_list(multi_fn_arg), ")", "=", ">", exp),
+      "multi_fn" -> List("(", non_empty_list(id_entry), ")", "=", ">", exp),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "non_rator", Map(
       "fn" -> { case List(Leaf(name), _, _, body) =>
         Fn(name, exp_matcher(body)) },
-      "multi_fn" -> { case List(_, multi_fn_arg_list, _, _, _, body) =>
+      "multi_fn" -> { case List(_, id_entry_list, _, _, _, body) =>
         var exp = exp_matcher(body)
-        non_empty_list_matcher(multi_fn_arg_matcher)(multi_fn_arg_list)
+        non_empty_list_matcher(id_entry_matcher)(id_entry_list)
           .reverse.foreach { case pat =>
             exp = Fn(pat, exp)
           }

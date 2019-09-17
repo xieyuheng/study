@@ -18,10 +18,7 @@
   - this means keep Val serde-able
     - Val includes ValFn which contains Exp
       this Exp is also serde-able
-* about grammar
-- improve grammar about optional comma
-- scala {} ap arg syntax for all grammars
-* general
+* module system
 - module as value with opaque module_t
 * partech
 - ErrMsg and Span

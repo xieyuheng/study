@@ -94,14 +94,9 @@ object grammar {
   def rator: Rule = Rule(
     "rator", Map(
       "var" -> List(identifier),
-      "ap" ->
-        List(rator, "(", non_empty_list(exp_comma), ")"),
-      "ap_one_without_comma" ->
-        List(rator, "(", exp, ")"),
-      "ap_to_block" ->
-        List(rator, block),
-      "ap_without_last_comma" ->
-        List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
+      "ap_one_without_comma" -> List(rator, "(", exp, ")"),
+      "ap_without_last_comma" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "car" -> List("car", "(", exp, ")"),
       "cdr" -> List("cdr", "(", exp, ")"),
       "match" -> List("{", non_empty_list(mat_clause), "}"),
@@ -116,8 +111,6 @@ object grammar {
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) } },
       "ap_one_without_comma" -> { case List(rator, _, exp, _) =>
         Ap(rator_matcher(rator), exp_matcher(exp)) },
-      "ap_to_block" -> { case List(rator, block) =>
-        Ap(rator_matcher(rator), block_matcher(block)) },
       "ap_without_last_comma" -> { case List(rator, _, exp_comma_list, exp, _) =>
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
@@ -150,14 +143,14 @@ object grammar {
     ))
 
 
-  def multi_fn_arg: Rule = Rule(
-    "multi_fn_arg", Map(
+  def pat_entry: Rule = Rule(
+    "pat_entry", Map(
       "arg" -> List(pat),
       "arg_comma" -> List(pat, ","),
     ))
 
-  def multi_fn_arg_matcher = Tree.matcher[Pat](
-    "multi_fn_arg", Map(
+  def pat_entry_matcher = Tree.matcher[Pat](
+    "pat_entry", Map(
       "arg" -> { case List(pat) =>
         pat_matcher(pat) },
       "arg_comma" -> { case List(pat, _) =>
@@ -169,7 +162,7 @@ object grammar {
       "pi" -> List("(", pat, ":", exp, ")", "-", ">", exp),
       "multi_pi" -> List("(", non_empty_list(multi_pi_arg), ")", "-", ">", exp),
       "fn" -> List(pat, "=", ">", exp),
-      "multi_fn" -> List("(", non_empty_list(multi_fn_arg), ")", "=", ">", exp),
+      "multi_fn" -> List("(", non_empty_list(pat_entry), ")", "=", ">", exp),
       "cons" ->
         List("[", non_empty_list(exp_comma), "]"),
       "cons_one_without_comma" ->
@@ -199,9 +192,9 @@ object grammar {
         exp },
       "fn" -> { case List(pat, _, _, t) =>
         Fn(pat_matcher(pat), exp_matcher(t)) },
-      "multi_fn" -> { case List(_, multi_fn_arg_list, _, _, _, t) =>
+      "multi_fn" -> { case List(_, pat_entry_list, _, _, _, t) =>
         var exp = exp_matcher(t)
-        non_empty_list_matcher(multi_fn_arg_matcher)(multi_fn_arg_list)
+        non_empty_list_matcher(pat_entry_matcher)(pat_entry_list)
           .reverse.foreach { case pat =>
             exp = Fn(pat, exp)
           }

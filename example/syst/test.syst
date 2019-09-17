@@ -6,8 +6,7 @@ let three: nat_t = succ(succ(succ(zero)))
 let add: (nat_t, nat_t) -> nat_t = {
   (x, y) =>
     nat_rec(nat_t, x, y,
-      (prev, almost) =>
-        succ(almost))
+      (prev, almost) => succ(almost))
 }
 
 eval! add(the(nat_t, three))

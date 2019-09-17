@@ -102,9 +102,10 @@ object grammar {
       "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "ap_one" -> List(rator, "(", exp, ")"),
       // "ap_to_block" -> List(rator, block),
+      // "block" -> List(block),
       "the" -> List("the", "(", exp, ",", exp, ")"),
       "nat_ind" -> List("nat_ind", "(", exp, ",", exp, ",", exp, ",", exp, ")"),
-      // "block" -> List(block),
+      "absurd_ind" -> List("absurd_ind", "(", exp, ",", exp, ")"),
     ))
 
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -123,10 +124,12 @@ object grammar {
         Ap(rator_matcher(rator), exp_matcher(exp)) },
       // "ap_to_block" -> { case List(rator, block) =>
       //   Ap(rator_matcher(rator), block_matcher(block)) },
+      // "block" -> { case List(block) => block_matcher(block) },
       "the" -> { case  List(_, _, t, _, e, _) => The(exp_matcher(t), exp_matcher(e)) },
       "nat_ind" -> { case List(_, _, target, _, motive, _, base, _, step, _) =>
         NatInd(exp_matcher(target), exp_matcher(motive), exp_matcher(base), exp_matcher(step)) },
-      // "block" -> { case List(block) => block_matcher(block) },
+      "absurd_ind" -> { case List(_, _, target, _, motive, _) =>
+        AbsurdInd(exp_matcher(target), exp_matcher(motive)) },
     ))
 
   // def block: Rule = Rule(
@@ -169,6 +172,8 @@ object grammar {
       "pi" -> List("(", non_empty_list(bind), ")", "-", ">", exp),
       "fn" -> List("(", non_empty_list(id_entry), ")", "=", ">", exp),
       "fn_one" -> List(identifier, "=", ">", exp),
+      "absurd_t" -> List("absurd_t"),
+      "sigma" -> List("$", "[", non_empty_list(bind), exp, "]"),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -189,6 +194,12 @@ object grammar {
           .foldRight(exp_matcher(body)) { case (pat, exp) => Fn(pat, exp) } },
       "fn_one" -> { case List(Leaf(name), _, _, body) =>
         Fn(name, exp_matcher(body)) },
+      "absurd_t" -> { case _ => Absurd() },
+      "sigma" -> { case List(_, _, bind_list, t, _) =>
+        non_empty_list_matcher(bind_matcher)(bind_list)
+          .foldRight(exp_matcher(t)) {
+            case ((Some(name), arg_t), exp) => Sigma(name, arg_t, exp)
+            case ((None, arg_t), exp) => Sigma("_", arg_t, exp) } },
     ))
 
   def exp_comma = Rule(

@@ -31,7 +31,7 @@ object pretty {
       case Car(pair) => s"car(${pretty_exp(pair)})"
       case Cdr(pair) => s"cdr(${pretty_exp(pair)})"
       case Sigma(pat, arg_t, t) =>
-        s"(${pretty_pat(pat)}: ${pretty_exp(arg_t)}) ** ${pretty_exp(t)}"
+        s"(${pretty_pat(pat)}: ${pretty_exp(arg_t)}) * ${pretty_exp(t)}"
       case Data(tag: String, body: Cons) =>
         s"${tag}${pretty_exp(body)}"
       case Data(tag: String, body: Sole) =>
@@ -112,7 +112,7 @@ object pretty {
       case ValPi(arg: Val, clo) =>
         s"(${pretty_val(arg)}) -> ${pretty_clo(clo)}"
       case ValSigma(arg: Val, clo) =>
-        s"(${pretty_val(arg)}) ** ${pretty_clo(clo)}"
+        s"(${pretty_val(arg)}) * ${pretty_clo(clo)}"
       case ValUniv() => "type_t"
       case cons: ValCons =>
         val str = cons_val_to_list(cons).map(pretty_val(_)).mkString(", ")

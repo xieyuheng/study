@@ -163,21 +163,21 @@ object grammar_test extends App {
 
     s"""
     let x: X = type {
-      case cons (_: A) ** list_t(A)
+      case cons $$[A, list_t(A)]
     }
     """,
 
     s"""
     let x: X = type {
-      case cons (_: A) ** list_t(A)
-      case cons2 (_: A) ** list_t(A)
+      case cons $$[A, list_t(A)]
+      case cons2 $$[A, list_t(A)]
     }
     """,
 
     s"""
     let x: X = type {
       case nil
-      case cons (_: A) ** list_t(A)
+      case cons $$[A, list_t(A)]
     }
     """,
 

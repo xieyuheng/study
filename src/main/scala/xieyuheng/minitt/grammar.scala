@@ -98,10 +98,10 @@ object grammar {
       "ap_one" -> List(rator, "(", exp, ")"),
       "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "ap_block" -> List(rator, block),
+      "block" -> List(block),
       "car" -> List("car", "(", exp, ")"),
       "cdr" -> List("cdr", "(", exp, ")"),
       "match" -> List("{", non_empty_list(mat_clause), "}"),
-      "block" -> List(block),
     ))
 
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -118,11 +118,11 @@ object grammar {
         Ap(fn, exp_matcher(exp)) },
       "ap_block" -> { case List(rator, block) =>
         Ap(rator_matcher(rator), block_matcher(block)) },
+      "block" -> { case List(block) => block_matcher(block) },
       "car" -> { case List(_, _, exp, _) => Car(exp_matcher(exp)) },
       "cdr" -> { case List(_, _, exp, _) => Cdr(exp_matcher(exp)) },
       "match" -> { case List(_, mat_clause_list, _) =>
         Mat(non_empty_list_matcher(mat_clause_matcher)(mat_clause_list).toMap) },
-      "block" -> { case List(block) => block_matcher(block) },
     ))
 
   def bind: Rule = Rule(
@@ -170,8 +170,7 @@ object grammar {
         List("[", exp, "]"),
       "cons_drop" ->
         List("[", non_empty_list(exp_comma), exp, "]"),
-      "sigma" -> List("(", pat, ":", exp, ")", "*", "*", exp),
-      "sigma_list" -> List("$", "[", non_empty_list(bind), exp, "]"),
+      "sigma" -> List("$", "[", non_empty_list(bind), exp, "]"),
       "data" -> List(identifier, exp),
       "sum" -> List("type", "{", non_empty_list(sum_clause), "}"),
       "sole" -> List("[", "]"),
@@ -202,13 +201,10 @@ object grammar {
         val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
         list.foldRight(exp_matcher(exp)) { case (head, tail) =>
           Cons(head, tail) } },
-      "sigma" -> { case List(_, pat, _, arg_t, _, _, _, t) =>
-        Sigma(pat_matcher(pat), exp_matcher(arg_t), exp_matcher(t)) },
-      "sigma_list" -> { case List(_, _, bind_list, exp, _) =>
+      "sigma" -> { case List(_, _, bind_list, t, _) =>
         non_empty_list_matcher(bind_matcher)(bind_list)
-          .foldRight(exp_matcher(exp)) { case ((pat, exp), rest) =>
-            Sigma(pat, exp, rest)
-          } },
+          .foldRight(exp_matcher(t)) {
+            case ((pat, arg_t), exp) => Sigma(pat, arg_t, exp) } },
       "data" -> { case List(Leaf(tag), exp) =>
         Data(tag, exp_matcher(exp)) },
       "sum" -> { case List(_, _, sum_clause_list, _) =>

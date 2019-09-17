@@ -97,6 +97,7 @@ object grammar {
       "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
       "ap_one" -> List(rator, "(", exp, ")"),
       "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "ap_block" -> List(rator, block),
       "car" -> List("car", "(", exp, ")"),
       "cdr" -> List("cdr", "(", exp, ")"),
       "match" -> List("{", non_empty_list(mat_clause), "}"),
@@ -115,6 +116,8 @@ object grammar {
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
+      "ap_block" -> { case List(rator, block) =>
+        Ap(rator_matcher(rator), block_matcher(block)) },
       "car" -> { case List(_, _, exp, _) => Car(exp_matcher(exp)) },
       "cdr" -> { case List(_, _, exp, _) => Cdr(exp_matcher(exp)) },
       "match" -> { case List(_, mat_clause_list, _) =>

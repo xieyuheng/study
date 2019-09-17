@@ -7,7 +7,7 @@ class pre_order_t {
   transitive(pre_t(a, b), pre_t(b, c)): pre_t(a, c)
 
   strict_pre_t(a: E, b: E): type_t =
-    (pre_t(a <= b), not_eqv(a, b))
+    (pre_t(a <= b), not_eqv_t(a, b))
 }
 
 // thin category

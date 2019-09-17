@@ -10,9 +10,9 @@ class functor_t {
   fmap_respect_then(
     f: C.morphism_t(a, b),
     g: C.morphism_t(b, c),
-  ): eqv(fmap(C.compose(f, g)), D.compose(fmap(f), fmap(g)))
+  ): eqv_t(fmap(C.compose(f, g)), D.compose(fmap(f), fmap(g)))
 
   fmap_respect_id(
     a: C.object_t
-  ): eqv(fmap(C.id(a)), D.id(map(a)))
+  ): eqv_t(fmap(C.id(a)), D.id(map(a)))
 }

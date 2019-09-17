@@ -9,14 +9,14 @@ class category_t {
 
   compose(f: morphism_t(a, b), g: morphism_t(b, c)): morphism_t(a, c)
 
-  left_id(f: morphism_t(a, b)): eqv(compose(id(a), f), f)
-  right_id(f: morphism_t(a, b)): eqv(compose(f, id(b)), f)
+  left_id(f: morphism_t(a, b)): eqv_t(compose(id(a), f), f)
+  right_id(f: morphism_t(a, b)): eqv_t(compose(f, id(b)), f)
 
   associative(
     f: morphism_t(a, b),
     g: morphism_t(b, c),
     h: morphism_t(c, d),
-  ): eqv(compose(f, compose(g, h)), compose(compose(f, g), h))
+  ): eqv_t(compose(f, compose(g, h)), compose(compose(f, g), h))
 
   /** derived types: */
 
@@ -25,8 +25,8 @@ class category_t {
     right_cancelable(
       f: morphism_t(c, a),
       g: morphism_t(c, a),
-      eqv(compose(f, mono), compose(g, mono)),
-    ): eqv(f, g)
+      eqv_t(compose(f, mono), compose(g, mono)),
+    ): eqv_t(f, g)
   }
 
   class epimorphism_t {
@@ -34,16 +34,16 @@ class category_t {
     left_cancelable(
       f: morphism_t(b, c),
       g: morphism_t(b, c),
-      eqv(compose(epi, f), compose(epi, g)),
-    ): eqv(f, g)
+      eqv_t(compose(epi, f), compose(epi, g)),
+    ): eqv_t(f, g)
   }
 
   left_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type_t = {
-    eqv(compose(f, g), id(a))
+    eqv_t(compose(f, g), id(a))
   }
 
   right_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type_t = {
-    eqv(compose(g, f), id(b))
+    eqv_t(compose(g, f), id(b))
   }
 
   class isomorphism_t {

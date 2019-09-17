@@ -11,7 +11,7 @@ class natural_transformation_t {
 
   natural(
     f: F.morphism_t(a, b)
-  ): eqv(
+  ): eqv_t(
     D.compose(component(a), G.fmap(f)),
     D.compose(F.fmap(f), component(b)))
 

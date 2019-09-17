@@ -102,8 +102,8 @@ object grammar {
       "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
       "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "ap_one" -> List(rator, "(", exp, ")"),
-      // "ap_to_block" -> List(rator, block),
-      // "block" -> List(block),
+      "ap_to_block" -> List(rator, block),
+      "block" -> List(block),
       "the" -> List("the", "(", exp, ",", exp, ")"),
       "nat_ind" -> List("nat_ind", "(", exp, ",", exp, ",", exp, ",", exp, ")"),
       "absurd_ind" -> List("absurd_ind", "(", exp, ",", exp, ")"),
@@ -126,9 +126,9 @@ object grammar {
         Ap(fn, exp_matcher(exp)) },
       "ap_one" -> { case List(rator, _, exp, _) =>
         Ap(rator_matcher(rator), exp_matcher(exp)) },
-      // "ap_to_block" -> { case List(rator, block) =>
-      //   Ap(rator_matcher(rator), block_matcher(block)) },
-      // "block" -> { case List(block) => block_matcher(block) },
+      "ap_to_block" -> { case List(rator, block) =>
+        Ap(rator_matcher(rator), block_matcher(block)) },
+      "block" -> { case List(block) => block_matcher(block) },
       "the" -> { case  List(_, _, t, _, e, _) => The(exp_matcher(t), exp_matcher(e)) },
       "nat_ind" -> { case List(_, _, target, _, motive, _, base, _, step, _) =>
         NatInd(exp_matcher(target), exp_matcher(motive), exp_matcher(base), exp_matcher(step)) },
@@ -140,21 +140,21 @@ object grammar {
         The(exp_matcher(t), exp_matcher(e)) },
     ))
 
-  // def block: Rule = Rule(
-  //   "block", Map(
-  //     "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
-  //     "block_one" -> List("{", exp, "}"),
-  //   ))
+  def block: Rule = Rule(
+    "block", Map(
+      // "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
+      "block_one" -> List("{", exp, "}"),
+    ))
 
-  // def block_matcher: Tree => Exp = Tree.matcher[Exp](
-  //   "block", Map(
-  //     "block" -> { case List(_, decl_list, _, exp, _) =>
-  //       non_empty_list_matcher(decl_matcher)(decl_list)
-  //         .foldRight(exp_matcher(exp)) { case (decl, body) =>
-  //           Block(decl, body) } },
-  //     "block_one" -> { case List(_, exp, _) =>
-  //       exp_matcher(exp) },
-  //   ))
+  def block_matcher: Tree => Exp = Tree.matcher[Exp](
+    "block", Map(
+      // "block" -> { case List(_, decl_list, _, exp, _) =>
+      //   non_empty_list_matcher(decl_matcher)(decl_list)
+      //     .foldRight(exp_matcher(exp)) { case (decl, body) =>
+      //       Block(decl, body) } },
+      "block_one" -> { case List(_, exp, _) =>
+        exp_matcher(exp) },
+    ))
 
   def id_entry: Rule = Rule(
     "id_entry", Map(

@@ -3,11 +3,11 @@ eval! the(nat_t, zero)
 let three: nat_t =
   succ(succ(succ(zero)))
 
-let add: (nat_t, nat_t) -> nat_t =
-  (n, k) =>
-    nat_ind(
-      n, _ => nat_t,
-      k, (prev, almost) => succ(almost))
+let add: (nat_t, nat_t) -> nat_t = {
+  (n, k) => nat_ind(
+    n, _ => nat_t,
+    k, (prev, almost) => succ(almost))
+}
 
 eval! three
 eval! add(three)

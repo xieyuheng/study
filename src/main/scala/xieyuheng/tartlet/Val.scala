@@ -1,22 +1,22 @@
 package xieyuheng.tartlet
 
 sealed trait Val
-final case object ValAbsurd extends Val
-final case object ValAtom extends Val
-final case class ValQuote(sym: String) extends Val
 final case class TheNeu(t: Val, neu: Neu) extends Val
+final case class ValAbsurd() extends Val
+final case class ValAtom() extends Val
+final case class ValQuote(sym: String) extends Val
 final case class ValEqv(t: Val, from: Val, to: Val) extends Val
-final case object ValSame extends Val
+final case class ValSame() extends Val
+final case class ValNat() extends Val
+final case class ValZero() extends Val
 final case class ValSucc (prev: Val) extends Val
-final case object ValNat extends Val
-final case object ValZero extends Val
-final case class ValFn(clo: Clo) extends Val
 final case class ValPi(arg_t: Val, ret_t: Clo) extends Val
-final case class ValCons(car: Val, cdr: Val) extends Val
+final case class ValFn(clo: Clo) extends Val
 final case class ValSigma(arg_t: Val, cdr_t: Clo) extends Val
-final case object ValSole extends Val
-final case object ValTrivial extends Val
-final case object ValUniverse extends Val
+final case class ValCons(car: Val, cdr: Val) extends Val
+final case class ValSole() extends Val
+final case class ValTrivial() extends Val
+final case class ValUniverse() extends Val
 
 sealed trait Neu
 final case class NeuVar(name: String) extends Neu

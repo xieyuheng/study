@@ -1,59 +1,127 @@
-// package xieyuheng.tartlet
+package xieyuheng.tartlet
 
-// case class Module(
-//   var ctx: Ctx = Ctx(),
-// ) {
-//   def claim(name: String, t: Exp): Module = {
-//     if (ctx.lookup_type(name).isDefined) {
-//       println(s"name: ${name} is alreay claimed")
-//     } else {
-//       t.check(ctx, ValUniverse) match {
-//         case Right(checkedTypeExp) =>
-//           for {
-//             checkedType <- checkedTypeExp.eval(ctx.to_env)
-//           } ctx = ctx.ext(name, Bind(checkedType))
-//         case Left(errorMsg) =>
-//           println(s"type check fail, name: ${name}, errorMsg: ${errorMsg}")
-//       }
-//     }
-//     this
-//   }
+import eval._
+import check._
+import pretty._
+import readback._
 
-//   def define(name: String, exp: Exp): Module = {
-//     ctx.lookup_den(name) match {
-//       case Some(Bind(t_val)) =>
-//         exp.check(ctx, t_val) match {
-//           case Right(exp) =>
-//             for {
-//               value <- exp.eval(ctx.to_env)
-//             } ctx = ctx.ext(name, Def(t_val, value))
-//           case Left(errorMsg) =>
-//             println(s"type check fail for name: ${name}, errorMsg: ${errorMsg}")
-//         }
-//       case Some(Def(t_val, value)) =>
-//         println(s"name: ${name} is already defined, type: ${t_val}, value: ${value}")
-//       case None =>
-//         println(s"name: ${name} is not claimed before define")
-//     }
-//     this
-//   }
 
-//   def run(exp: Exp): Either[Err, Exp] = {
-//     val env = ctx.to_env
-//     val result = for {
-//       the <- exp.infer(ctx)
-//       t_val <- the.t.eval(env)
-//       value <- exp.eval(env)
-//       norm <- value.readback_val(ctx, t_val)
-//     } yield The(the.t, norm)
+case class Module() {
 
-//     result match {
-//       case Right(exp) =>
-//         println(s"==> ${exp}")
-//       case Left(Err(msg)) =>
-//         println(s"error: ${msg}")
-//     }
+  var top_list: List[Top] = List()
 
-//     result
-//   }
-// }
+  def add_top(top: Top): Module = {
+    top_list = top_list :+ top
+    this
+  }
+
+  def declare(decl: Decl): Unit = {
+    add_top(TopDecl(decl))
+  }
+
+  def env: Env = {
+    var env: Env = Env()
+    top_list.foreach {
+      case TopDecl(DeclLet(name, t, e)) =>
+        env = env.ext(name, eval_unwrap(e, env))
+      case _ => {}
+    }
+    env
+  }
+
+  def ctx: Ctx = {
+    var env: Env = Env()
+    var ctx: Ctx = Ctx()
+    top_list.foreach {
+      case TopDecl(DeclLet(name, t, e)) =>
+        env = env.ext(name, eval_unwrap(e, env))
+        ctx = ctx.ext(name, Def(eval_unwrap(t, env), eval_unwrap(e, env)))
+      case _ => {}
+    }
+    ctx
+  }
+
+  def type_check(): Unit = {
+    var env: Env = Env()
+    var ctx: Ctx = Ctx()
+    top_list.foreach {
+      case TopDecl(DeclLet(name, t, e)) =>
+        check(e, ctx, eval_unwrap(t, env)) match {
+          case Right(the_e) =>
+            ctx = ctx.ext(name, Def(eval_unwrap(t, env), eval_unwrap(the_e, env)))
+            env = env.ext(name, eval_unwrap(the_e, env))
+          case Left(err) =>
+            println(s"${err.msg}")
+            throw new Exception()
+        }
+      case TopEval(exp) =>
+        eval_print(exp)
+      case TopEq(e1, e2) =>
+        assert_eq(e1)(e2)
+      case TopNotEq(e1, e2) =>
+        assert_not_eq(e1)(e2)
+      case _ => {}
+    }
+  }
+
+  def run(): Unit = {
+    var env: Env = Env()
+    top_list.foreach {
+      case TopDecl(DeclLet(name, t, e)) =>
+        env = env.ext(name, eval_unwrap(e, env))
+      case TopEval(exp) =>
+        eval_print(exp)
+      case TopEq(e1, e2) =>
+        assert_eq(e1)(e2)
+      case TopNotEq(e1, e2) =>
+        assert_not_eq(e1)(e2)
+      case _ => {}
+    }
+  }
+
+  def assert_not_eq(e1: Exp)(e2: Exp): Unit = {
+    val v1 = eval_unwrap(e1, env)
+    val v2 = eval_unwrap(e2, env)
+    // val n1 = readback_val(v1, Set())
+    // val n2 = readback_val(v2, Set())
+    if (v1 == v2) {
+      println(s"[assertion fail]")
+      println(s"the following two expressions are asserted to be not equal")
+      println(s">>> ${pretty_exp(e1)}")
+      println(s"=== ${pretty_val(v1)}")
+      // println(s"=== ${pretty_exp(n1)}")
+      println(s">>> ${pretty_exp(e2)}")
+      println(s"=== ${pretty_val(v2)}")
+      // println(s"=== ${pretty_exp(n2)}")
+      throw new Exception()
+    }
+  }
+
+  def assert_eq(e1: Exp)(e2: Exp): Unit = {
+    val v1 = eval_unwrap(e1, env)
+    val v2 = eval_unwrap(e2, env)
+    // val n1 = readback_val(v1, Set())
+    // val n2 = readback_val(v2, Set())
+    if (v1 != v2) {
+      println(s"[assertion fail]")
+      println(s"the following two expressions are asserted to be equal")
+      println(s">>> ${pretty_exp(e1)}")
+      println(s"=== ${pretty_val(v1)}")
+      // println(s"=== ${pretty_exp(n1)}")
+      println(s">>> ${pretty_exp(e2)}")
+      println(s"=== ${pretty_val(v2)}")
+      // println(s"=== ${pretty_exp(n2)}")
+      throw new Exception()
+    }
+  }
+
+  def eval_print(exp: Exp): Unit = {
+    val value = eval_unwrap(exp, env)
+    // val norm = readback_val(value, Set())
+    println(s">>> ${pretty_exp(exp)}")
+    println(s"=== ${pretty_val(value)}")
+    // println(s"=== ${pretty_exp(norm)}")
+    println()
+  }
+
+}

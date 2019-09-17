@@ -9,19 +9,19 @@ object check {
     exp match {
       case Quote(sym: String) =>
         // ---------------------
-        // ctx :- Quote(sym) <= Atom
+        // ctx :- Quote(sym) <= Atom()
         t match {
-          case ValAtom =>
+          case ValAtom() =>
             Right(
-              The(Atom, exp))
+              The(Atom(), exp))
           case _ =>
             Left(Err(
-              s"expected ValAtom, found: ${t}"))
+              s"expected ValAtom(), found: ${t}"))
         }
-      case Same =>
+      case Same() =>
         // ctx :- conversion_check(T, from, to)
         // ---------------------
-        // ctx :- Same <= Eqv(T, from, to)
+        // ctx :- Same() <= Eqv(T, from, to)
         t match {
           case ValEqv(t_val, from, to) =>
             for {
@@ -32,11 +32,11 @@ object check {
               s"expected ValEqv(t_val, from, to), found: ${t}"))
         }
       case Succ(prev: Exp) =>
-        // ctx :- prev <= Nat
+        // ctx :- prev <= Nat()
         // ---------------------
-        // ctx :- Succ(prev) <= Nat
+        // ctx :- Succ(prev) <= Nat()
         t match {
-          case ValNat =>
+          case ValNat() =>
             for {
               prev <- check(prev, ctx, t)
             } yield Succ(prev)
@@ -44,15 +44,15 @@ object check {
             Left(Err(
               s"expected ValSucc, found: ${t}"))
         }
-      case Zero =>
+      case Zero() =>
         // ---------------------
-        // ctx :- Zero <= Nat
+        // ctx :- Zero() <= Nat()
         t match {
-          case ValNat =>
+          case ValNat() =>
             Right(exp)
           case _ =>
             Left(Err(
-              s"expected ValNat, found: ${t}"))
+              s"expected ValNat(), found: ${t}"))
         }
       case Fn(name: String, body: Exp) =>
         // ctx.ext(x, A) :- body <= R
@@ -70,15 +70,15 @@ object check {
             Left(Err(
               s"expected ValPi(arg_t, ret_t), found: ${t}"))
         }
-      case Sole =>
+      case Sole() =>
         // ---------------------
-        // ctx :- Sole <= Trivial
+        // ctx :- Sole() <= Trivial()
         t match {
-          case ValTrivial =>
+          case ValTrivial() =>
             Right(exp)
           case _ =>
             Left(Err(
-              s"expected ValTrivial, found: ${t}"))
+              s"expected ValTrivial(), found: ${t}"))
         }
       case Cons(car: Exp, cdr: Exp) =>
         // ctx :- car <= A
@@ -102,7 +102,7 @@ object check {
         for {
           the <- infer(exp, ctx)
           t2 <- eval(the.t, ctx.to_env)
-          _ok <- conversion_check(ctx, ValUniverse, t, t2)
+          _ok <- conversion_check(ctx, ValUniverse(), t, t2)
         } yield the.value
       }
       case _ =>
@@ -113,7 +113,7 @@ object check {
         for {
           the <- infer(exp, ctx)
           t2 <- eval(the.t, ctx.to_env)
-          _ok <- conversion_check(ctx, ValUniverse, t, t2)
+          _ok <- conversion_check(ctx, ValUniverse(), t, t2)
         } yield the.value
     }
   }

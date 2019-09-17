@@ -5,6 +5,14 @@ object eval {
   def apply(exp: Exp, env: Env): Either[Err, Val] =
     eval(exp: Exp, env: Env)
 
+  def eval_unwrap(exp: Exp, env: Env): Val =
+    eval(exp: Exp, env: Env) match {
+      case Right(value) => value
+      case Left(err) =>
+        println(s"${err.msg}")
+        throw new Exception()
+    }
+
   def eval(exp: Exp, env: Env): Either[Err, Val] = {
     exp match {
       case Var(name: String) =>
@@ -14,8 +22,8 @@ object eval {
           case None =>
             Left(Err(s"can not find var: ${this} in env: ${env}"))
         }
-      case Atom =>
-        Right(ValAtom)
+      case Atom() =>
+        Right(ValAtom())
       case Quote(sym: String) =>
         Right(ValQuote(sym))
       case Eqv(t: Exp, from: Exp, to: Exp) =>
@@ -34,8 +42,8 @@ object eval {
             motive_val,
             baseVal)
         } yield res
-      case Same =>
-        Right(ValSame)
+      case Same() =>
+        Right(ValSame())
       case Succ(prev: Exp) =>
         for {
           prevVal <- eval(prev, env)
@@ -52,10 +60,10 @@ object eval {
             baseVal,
             stepVal)
         } yield res
-      case Nat =>
-        Right(ValNat)
-      case Zero =>
-        Right(ValZero)
+      case Nat() =>
+        Right(ValNat())
+      case Zero() =>
+        Right(ValZero())
       case Ap(rator: Exp, rand: Exp) =>
         for {
           fn <- eval(rator, env)
@@ -64,8 +72,8 @@ object eval {
         } yield res
       case Fn(name: String, body: Exp) =>
         Right(ValFn(CloEnv(env, name, body)))
-      case Absurd =>
-        Right(ValAbsurd)
+      case Absurd() =>
+        Right(ValAbsurd())
       case AbsurdInd(target: Exp, motive: Exp) =>
         for {
           target_val <- eval(target, env)
@@ -76,12 +84,12 @@ object eval {
         for {
           arg_t_val <- eval(arg_t, env)
         } yield ValSigma(arg_t_val, CloEnv(env, name, cdr_t))
-      case Sole =>
-        Right(ValSole)
-      case Trivial =>
-        Right(ValTrivial)
-      case Universe =>
-        Right(ValUniverse)
+      case Sole() =>
+        Right(ValSole())
+      case Trivial() =>
+        Right(ValTrivial())
+      case Universe() =>
+        Right(ValUniverse())
       case Pi(name: String, arg_t: Exp, ret_t: Exp) =>
         for {
           arg_t_val <- eval(arg_t, env)

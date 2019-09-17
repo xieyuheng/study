@@ -33,9 +33,9 @@ object alpha_eq {
           case _ =>
             false
         }
-      case Atom =>
+      case Atom() =>
         y match {
-          case Atom => true
+          case Atom() => true
           case _ => false
         }
       case Quote(sym: String) =>
@@ -60,9 +60,9 @@ object alpha_eq {
             alpha_eq(base, base2, x_map, y_map)
           case _ => false
         }
-      case Same =>
+      case Same() =>
         y match {
-          case Same => true
+          case Same() => true
           case _ => false
         }
       case Succ(prev: Exp) =>
@@ -80,14 +80,14 @@ object alpha_eq {
             alpha_eq(step, step2, x_map, y_map)
           case _ => false
         }
-      case Nat =>
+      case Nat() =>
         y match {
-          case Nat => true
+          case Nat() => true
           case _ => false
         }
-      case Zero =>
+      case Zero() =>
         y match {
-          case Zero => true
+          case Zero() => true
           case _ => false
         }
       case Ap(rator: Exp, rand: Exp) =>
@@ -105,9 +105,9 @@ object alpha_eq {
           }
           case _ => false
         }
-      case Absurd =>
+      case Absurd() =>
         y match {
-          case Absurd => true
+          case Absurd() => true
           case _ => false
         }
       case AbsurdInd(target: Exp, motive: Exp) =>
@@ -126,19 +126,19 @@ object alpha_eq {
           }
           case _ => false
         }
-      case Sole =>
+      case Sole() =>
         y match {
-          case Sole => true
+          case Sole() => true
           case _ => false
         }
-      case Trivial =>
+      case Trivial() =>
         y match {
-          case Trivial => true
+          case Trivial() => true
           case _ => false
         }
-      case Universe =>
+      case Universe() =>
         y match {
-          case Universe => true
+          case Universe() => true
           case _ => false
         }
       case Pi(name: String, arg_t: Exp, ret_t: Exp) =>
@@ -173,7 +173,7 @@ object alpha_eq {
         y match {
           case The(t2, value2) =>
             (t, t2) match {
-              case (Absurd, Absurd) =>
+              case (Absurd(), Absurd()) =>
                 true
               case _ =>
                 if (alpha_eq(t, t2, x_map, y_map)

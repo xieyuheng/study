@@ -189,7 +189,7 @@ object infer {
                 s"expected the type to be Sigma(arg_t, cdr_t), found: ${the.t}"))
           }
         } yield res
-      case The(t: Exp, value: Exp) =>
+      case The(t, e) =>
         // ctx :- T <= UNIVERSE
         // ctx :- e <= T
         // -----------------
@@ -197,7 +197,7 @@ object infer {
         for {
           t <- check(t, ctx, ValUniverse())
           t_val <- eval(t, ctx.to_env)
-          value <- check(value, ctx, t_val)
+          value <- check(e, ctx, t_val)
         } yield The(t, value)
       case _ =>
         Left(Err(s"infer is not implemented for exp: ${exp}"))

@@ -3,7 +3,7 @@ package xieyuheng.tartlet
 object check {
 
   def apply(exp: Exp, ctx: Ctx, t: Val): Either[Err, Exp] =
-    apply(exp: Exp, ctx: Ctx, t: Val)
+    check(exp: Exp, ctx: Ctx, t: Val)
 
   def check(exp: Exp, ctx: Ctx, t: Val): Either[Err, Exp] = {
     exp match {
@@ -25,7 +25,7 @@ object check {
         t match {
           case ValEqv(t_val, from, to) =>
             for {
-              _ok <- conversion_check(ctx, t_val, from, to)
+              _ <- conversion_check(ctx, t_val, from, to)
             } yield exp
           case _ =>
             Left(Err(
@@ -97,12 +97,10 @@ object check {
             Left(Err(
               s"expected ValSigma(arg_t, cdr_t), found: ${t}"))
         }
-      case exp: The => {
-        // TODO be sure about this
+      case the: The => {
         for {
-          the <- infer(exp, ctx)
           t2 <- eval(the.t, ctx.to_env)
-          _ok <- conversion_check(ctx, ValUniverse(), t, t2)
+          _ <- conversion_check(ctx, ValUniverse(), t, t2)
         } yield the.value
       }
       case _ =>
@@ -113,7 +111,7 @@ object check {
         for {
           the <- infer(exp, ctx)
           t2 <- eval(the.t, ctx.to_env)
-          _ok <- conversion_check(ctx, ValUniverse(), t, t2)
+          _ <- conversion_check(ctx, ValUniverse(), t, t2)
         } yield the.value
     }
   }

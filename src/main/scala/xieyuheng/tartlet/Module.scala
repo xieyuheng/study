@@ -102,7 +102,6 @@ case class Module() {
   def eval_print(ctx: Ctx, exp: Exp): Unit = {
     val env = ctx.to_env
     val value = eval_unwrap(exp, env)
-
     val result = for {
       the <- infer(exp, ctx)
       t_val <- eval(the.t, env)

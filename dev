@@ -19,7 +19,8 @@ t () {
         run_test && \
         run_minitt_test && \
         run_lambda_test && \
-        run_syst_test
+        run_syst_test && \
+        run_tartlet_test
 }
 
 run_test () {
@@ -76,6 +77,20 @@ run_syst_test () {
     done
 }
 
+run_tartlet_test () {
+    tartlet=./target/universal/stage/bin/tartlet
+
+    for file in $(find . | grep "^\./example/tartlet/" | grep "\.tartlet$")
+    do
+        echo ""
+        echo "[tartlet_test] $file"
+        if ! time $tartlet --eval $file
+        then
+            exit 1
+        fi
+    done
+}
+
 build_minitt () {
     mkdir -p target/linux/bin/
     get_classpath
@@ -107,6 +122,17 @@ build_syst () {
         -cp $(cat target/classpath) \
         -H:Name="target/linux/bin/syst" \
         -H:Class="xieyuheng.syst.syst"
+}
+
+build_tartlet () {
+    mkdir -p target/linux/bin/
+    get_classpath
+
+    native-image \
+        --no-server \
+        -cp $(cat target/classpath) \
+        -H:Name="target/linux/bin/tartlet" \
+        -H:Class="xieyuheng.tartlet.tartlet"
 }
 
 release () {

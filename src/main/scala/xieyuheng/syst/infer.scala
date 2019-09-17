@@ -24,9 +24,9 @@ object infer {
         // -----------------------------------
         // ctx :- NatRec [T] (target, base, step) => T
         for {
-          _ok <- check(target, ctx, Nat())
-          _ok <- check(base, ctx, t)
-          _ok <- check(step, ctx, Arrow(Nat(), Arrow(t, t)))
+          _ <- check(target, ctx, Nat())
+          _ <- check(base, ctx, t)
+          _ <- check(step, ctx, Arrow(Nat(), Arrow(t, t)))
         } yield t
       case The(t: Type, exp: Exp) =>
         // ctx :- e <= T
@@ -41,7 +41,7 @@ object infer {
         infer(rator, ctx) match {
           case Right(Arrow(arg_t, ret_t)) =>
             for {
-              _ok <- check(rand, ctx, arg_t)
+              _ <- check(rand, ctx, arg_t)
             } yield ret_t
           case Left(errorMsg) =>
             Left(errorMsg)

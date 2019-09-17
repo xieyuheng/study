@@ -78,7 +78,7 @@ object grammar {
   def block: Rule = Rule(
     "block", Map(
       "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
-      "block_of_one_exp" -> List("{", exp, "}"),
+      "block_one" -> List("{", exp, "}"),
     ))
 
   def block_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -87,7 +87,7 @@ object grammar {
         non_empty_list_matcher(decl_matcher)(decl_list)
           .foldRight(exp_matcher(exp)) { case (decl, body) =>
             Block(decl, body) } },
-      "block_of_one_exp" -> { case List(_, exp, _) =>
+      "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
     ))
 
@@ -95,8 +95,8 @@ object grammar {
     "rator", Map(
       "var" -> List(identifier),
       "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
-      "ap_one_without_comma" -> List(rator, "(", exp, ")"),
-      "ap_without_last_comma" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "ap_one" -> List(rator, "(", exp, ")"),
+      "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
       "car" -> List("car", "(", exp, ")"),
       "cdr" -> List("cdr", "(", exp, ")"),
       "match" -> List("{", non_empty_list(mat_clause), "}"),
@@ -109,9 +109,9 @@ object grammar {
       "ap" -> { case List(rator, _, exp_comma_list, _) =>
         non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) } },
-      "ap_one_without_comma" -> { case List(rator, _, exp, _) =>
+      "ap_one" -> { case List(rator, _, exp, _) =>
         Ap(rator_matcher(rator), exp_matcher(exp)) },
-      "ap_without_last_comma" -> { case List(rator, _, exp_comma_list, exp, _) =>
+      "ap_drop" -> { case List(rator, _, exp_comma_list, exp, _) =>
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
@@ -165,9 +165,9 @@ object grammar {
       "multi_fn" -> List("(", non_empty_list(pat_entry), ")", "=", ">", exp),
       "cons" ->
         List("[", non_empty_list(exp_comma), "]"),
-      "cons_one_without_comma" ->
+      "cons_one" ->
         List("[", exp, "]"),
-      "cons_without_last_comma" ->
+      "cons_drop" ->
         List("[", non_empty_list(exp_comma), exp, "]"),
       "sigma" -> List("(", pat, ":", exp, ")", "*", "*", exp),
       "sigma_list" -> List("$", "[", non_empty_list(sigma_entry), exp, "]"),
@@ -203,9 +203,9 @@ object grammar {
         val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
         list.init.foldRight(list.last) { case (head, tail) =>
           Cons(head, tail) } },
-      "cons_one_without_comma" -> { case List(_, exp, _) =>
+      "cons_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
-      "cons_without_last_comma" -> { case List(_, exp_comma_list, exp, _) =>
+      "cons_drop" -> { case List(_, exp_comma_list, exp, _) =>
         val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
         list.foldRight(exp_matcher(exp)) { case (head, tail) =>
           Cons(head, tail) } },
@@ -288,9 +288,9 @@ object grammar {
       "var" -> List(identifier),
       "cons" ->
         List("[", non_empty_list(pat_comma), "]"),
-      "cons_one_without_comma" ->
+      "cons_one" ->
         List("[", pat, "]"),
-      "cons_without_last_comma" ->
+      "cons_drop" ->
         List("[", non_empty_list(pat_comma), pat, "]"),
       "sole" -> List("[", "]"),
     ))
@@ -302,9 +302,9 @@ object grammar {
         val list = non_empty_list_matcher(pat_comma_matcher)(pat_comma_list)
         list.init.foldRight(list.last) { case (head, tail) =>
           PatCons(head, tail) } },
-      "cons_one_without_comma" -> { case List(_, pat, _) =>
+      "cons_one" -> { case List(_, pat, _) =>
         pat_matcher(pat) },
-      "cons_without_last_comma" -> { case List(_, pat_comma_list, pat, _) =>
+      "cons_drop" -> { case List(_, pat_comma_list, pat, _) =>
         val list = non_empty_list_matcher(pat_comma_matcher)(pat_comma_list)
         list.foldRight(pat_matcher(pat)) { case (head, tail) =>
           PatCons(head, tail) } },

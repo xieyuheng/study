@@ -100,8 +100,8 @@ object grammar {
     "rator", Map(
       "var" -> List(identifier),
       "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
-      "ap_one_without_comma" -> List(rator, "(", exp, ")"),
-      "ap_without_last_comma" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "ap_one" -> List(rator, "(", exp, ")"),
       "ap_to_block" -> List(rator, block),
       "the" -> List("the", "(", ty, ",", exp, ")"),
       "zero" -> List("zero"),
@@ -116,12 +116,12 @@ object grammar {
       "ap" -> { case List(rator, _, exp_comma_list, _) =>
         non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) } },
-      "ap_one_without_comma" -> { case List(rator, _, exp, _) =>
-        Ap(rator_matcher(rator), exp_matcher(exp)) },
-      "ap_without_last_comma" -> { case List(rator, _, exp_comma_list, exp, _) =>
+      "ap_drop" -> { case List(rator, _, exp_comma_list, exp, _) =>
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
+      "ap_one" -> { case List(rator, _, exp, _) =>
+        Ap(rator_matcher(rator), exp_matcher(exp)) },
       "ap_to_block" -> { case List(rator, block) =>
         Ap(rator_matcher(rator), block_matcher(block)) },
       "the" -> { case  List(_, _, t, _, e, _) => The(ty_matcher(t), exp_matcher(e)) },
@@ -135,7 +135,7 @@ object grammar {
   def block: Rule = Rule(
     "block", Map(
       "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
-      "block_of_one_exp" -> List("{", exp, "}"),
+      "block_one" -> List("{", exp, "}"),
     ))
 
   def block_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -144,7 +144,7 @@ object grammar {
         non_empty_list_matcher(decl_matcher)(decl_list)
           .foldRight(exp_matcher(exp)) { case (decl, body) =>
             Block(decl, body) } },
-      "block_of_one_exp" -> { case List(_, exp, _) =>
+      "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
     ))
 

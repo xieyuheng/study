@@ -74,6 +74,26 @@ object grammar {
       "non_rator" -> { case List(non_rator) => non_rator_matcher(non_rator) },
     ))
 
+  def bind: Rule = Rule(
+    "bind", Map(
+      "bind" -> List(exp),
+      "bind_comma" -> List(exp, ","),
+      "bind_t" -> List(identifier, ":", exp),
+      "bind_t_comma" -> List(identifier, ":", exp, ","),
+    ))
+
+  def bind_matcher = Tree.matcher[(Option[String], Exp)](
+    "bind", Map(
+      "bind" -> { case List(exp) =>
+        (None, exp_matcher(exp)) },
+      "bind_comma" -> { case List(exp, _) =>
+        (None, exp_matcher(exp)) },
+      "bind_t" -> { case List(Leaf(name), _, exp) =>
+        (Some(name), exp_matcher(exp)) },
+      "bind_t_comma" -> { case List(Leaf(name), _, exp, _) =>
+        (Some(name), exp_matcher(exp)) },
+    ))
+
   def rator: Rule = Rule(
     "rator", Map(
       "var" -> List(identifier),
@@ -146,8 +166,9 @@ object grammar {
       "nat_t" -> List("nat_t"),
       "zero" -> List("zero"),
       "succ" -> List("succ", "(", exp, ")"),
-      "fn" -> List(identifier, "=", ">", exp),
-      "multi_fn" -> List("(", non_empty_list(id_entry), ")", "=", ">", exp),
+      "pi" -> List("(", non_empty_list(bind), ")", "-", ">", exp),
+      "fn" -> List("(", non_empty_list(id_entry), ")", "=", ">", exp),
+      "fn_one" -> List(identifier, "=", ">", exp),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -158,15 +179,16 @@ object grammar {
       "nat_t" -> { case _ => Nat() },
       "zero" -> { case _ => Zero() },
       "succ" -> { case List(_, _, exp, _) => Succ(exp_matcher(exp)) },
-      "fn" -> { case List(Leaf(name), _, _, body) =>
-        Fn(name, exp_matcher(body)) },
-      "multi_fn" -> { case List(_, id_entry_list, _, _, _, body) =>
-        var exp = exp_matcher(body)
+      "pi" -> { case List(_, bind_list, _, _, _, t) =>
+        non_empty_list_matcher(bind_matcher)(bind_list)
+          .foldRight(exp_matcher(t)) {
+            case ((Some(name), arg_t), exp) => Pi(name, arg_t, exp)
+            case ((None, arg_t), exp) => Pi("_", arg_t, exp) } },
+      "fn" -> { case List(_, id_entry_list, _, _, _, body) =>
         non_empty_list_matcher(id_entry_matcher)(id_entry_list)
-          .reverse.foreach { case pat =>
-            exp = Fn(pat, exp)
-          }
-        exp },
+          .foldRight(exp_matcher(body)) { case (pat, exp) => Fn(pat, exp) } },
+      "fn_one" -> { case List(Leaf(name), _, _, body) =>
+        Fn(name, exp_matcher(body)) },
     ))
 
   def exp_comma = Rule(

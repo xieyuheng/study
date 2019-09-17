@@ -49,10 +49,9 @@ object sexp extends ExampleRule {
       "null" -> { case _ => NullSexp },
       "atom" -> { case List(Leaf(str)) => AtomSexp(str) },
       "sexp_list" -> { case List(_, list, _) =>
-        var sexp: Sexp = NullSexp
-        val sexp_list = non_empty_list_matcher(sexp_matcher)(list)
-        sexp_list.reverse.foreach { case car => sexp = ConsSexp(car, sexp) }
-        sexp }
+        val init: Sexp = NullSexp
+        non_empty_list_matcher(sexp_matcher)(list)
+          .foldRight(init) { case (car, sexp) => ConsSexp(car, sexp) } }
     ))
 
 

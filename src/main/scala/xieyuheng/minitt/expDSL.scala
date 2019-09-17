@@ -12,11 +12,7 @@ object expDSL {
   def __ = PatSole()
 
   def fn(pats: Pat*)(body: Exp): Exp = {
-    var exp = body
-    pats.reverse.foreach { case pat =>
-      exp = Fn(pat, exp)
-    }
-    exp
+    pats.foldRight(body) { case (pat, exp) => Fn(pat, exp) }
   }
 
   def pi(pair: (Pat, Exp))(t: Exp): Pi = {

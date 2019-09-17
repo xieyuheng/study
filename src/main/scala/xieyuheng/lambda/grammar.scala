@@ -116,21 +116,17 @@ object grammar {
 
   def non_rator: Rule = Rule(
     "non_rator", Map(
-      "fn" -> List(identifier, "=", ">", exp),
-      "multi_fn" -> List("(", non_empty_list(id_entry), ")", "=", ">", exp),
+      "fn" -> List("(", non_empty_list(id_entry), ")", "=", ">", exp),
+      "fn_one" -> List(identifier, "=", ">", exp),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "non_rator", Map(
-      "fn" -> { case List(Leaf(name), _, _, body) =>
-        Fn(name, exp_matcher(body)) },
-      "multi_fn" -> { case List(_, id_entry_list, _, _, _, body) =>
-        var exp = exp_matcher(body)
+      "fn" -> { case List(_, id_entry_list, _, _, _, body) =>
         non_empty_list_matcher(id_entry_matcher)(id_entry_list)
-          .reverse.foreach { case pat =>
-            exp = Fn(pat, exp)
-          }
-        exp },
+          .foldRight(exp_matcher(body)) { case (pat, exp) => Fn(pat, exp) } },
+      "fn_one" -> { case List(Leaf(name), _, _, body) =>
+        Fn(name, exp_matcher(body)) },
     ))
 
   def exp_comma = Rule(

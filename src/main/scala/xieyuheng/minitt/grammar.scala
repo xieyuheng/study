@@ -127,24 +127,23 @@ object grammar {
 
   def bind: Rule = Rule(
     "bind", Map(
-      "arg" -> List(exp),
-      "arg_comma" -> List(exp, ","),
-      "arg_t" -> List(pat, ":", exp),
-      "arg_t_comma" -> List(pat, ":", exp, ","),
+      "bind" -> List(exp),
+      "bind_comma" -> List(exp, ","),
+      "bind_t" -> List(pat, ":", exp),
+      "bind_t_comma" -> List(pat, ":", exp, ","),
     ))
 
   def bind_matcher = Tree.matcher[(Pat, Exp)](
     "bind", Map(
-      "arg" -> { case List(exp) =>
+      "bind" -> { case List(exp) =>
         (PatSole(), exp_matcher(exp)) },
-      "arg_comma" -> { case List(exp, _) =>
+      "bind_comma" -> { case List(exp, _) =>
         (PatSole(), exp_matcher(exp)) },
-      "arg_t" -> { case List(pat, _, exp) =>
+      "bind_t" -> { case List(pat, _, exp) =>
         (pat_matcher(pat), exp_matcher(exp)) },
-      "arg_t_comma" -> { case List(pat, _, exp, _) =>
+      "bind_t_comma" -> { case List(pat, _, exp, _) =>
         (pat_matcher(pat), exp_matcher(exp)) },
     ))
-
 
   def pat_entry: Rule = Rule(
     "pat_entry", Map(
@@ -162,10 +161,9 @@ object grammar {
 
   def non_rator: Rule = Rule(
     "non_rator", Map(
-      "pi" -> List("(", pat, ":", exp, ")", "-", ">", exp),
-      "multi_pi" -> List("(", non_empty_list(bind), ")", "-", ">", exp),
-      "fn" -> List(pat, "=", ">", exp),
-      "multi_fn" -> List("(", non_empty_list(pat_entry), ")", "=", ">", exp),
+      "pi" -> List("(", non_empty_list(bind), ")", "-", ">", exp),
+      "fn" -> List("(", non_empty_list(pat_entry), ")", "=", ">", exp),
+      "fn_one" -> List(pat, "=", ">", exp),
       "cons" ->
         List("[", non_empty_list(exp_comma), "]"),
       "cons_one" ->
@@ -184,24 +182,16 @@ object grammar {
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "non_rator", Map(
-      "pi" -> { case List(_, pat, _, arg_t, _, _, _, t) =>
-        Pi(pat_matcher(pat), exp_matcher(arg_t), exp_matcher(t)) },
-      "multi_pi" -> { case List(_, bind_list, _, _, _, t) =>
-        var exp = exp_matcher(t)
+      "pi" -> { case List(_, bind_list, _, _, _, t) =>
         non_empty_list_matcher(bind_matcher)(bind_list)
-          .reverse.foreach { case (pat, arg_t) =>
-            exp = Pi(pat, arg_t, exp)
-          }
-        exp },
-      "fn" -> { case List(pat, _, _, t) =>
-        Fn(pat_matcher(pat), exp_matcher(t)) },
-      "multi_fn" -> { case List(_, pat_entry_list, _, _, _, t) =>
-        var exp = exp_matcher(t)
+          .foldRight(exp_matcher(t)) {
+            case ((pat, arg_t), exp) => Pi(pat, arg_t, exp) } },
+      "fn" -> { case List(_, pat_entry_list, _, _, _, t) =>
         non_empty_list_matcher(pat_entry_matcher)(pat_entry_list)
-          .reverse.foreach { case pat =>
-            exp = Fn(pat, exp)
-          }
-        exp },
+          .foldRight(exp_matcher(t)) {
+            case (pat, exp) => Fn(pat, exp) } },
+      "fn_one" -> { case List(pat, _, _, t) =>
+        Fn(pat_matcher(pat), exp_matcher(t)) },
       "cons" -> { case List(_, exp_comma_list, _) =>
         val list = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
         list.init.foldRight(list.last) { case (head, tail) =>

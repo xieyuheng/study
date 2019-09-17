@@ -5,81 +5,64 @@ import check._
 import pretty._
 import readback._
 
-
 case class Module() {
 
   var top_list: List[Top] = List()
 
-  def add_top(top: Top): Module = {
-    top_list = top_list :+ top
-    this
-  }
-
-  def declare(decl: Decl): Unit = {
-    add_top(TopDecl(decl))
-  }
-
-  def env: Env = {
-    var env: Env = Env()
-    top_list.foreach {
-      case TopDecl(DeclLet(name, t, e)) =>
-        env = env.ext(name, eval_unwrap(e, env))
-      case _ => {}
-    }
-    env
-  }
-
-  def ctx: Ctx = {
-    var env: Env = Env()
+  def run(): Unit = {
     var ctx: Ctx = Ctx()
     top_list.foreach {
       case TopDecl(DeclLet(name, t, e)) =>
-        env = env.ext(name, eval_unwrap(e, env))
-        ctx = ctx.ext(name, Def(eval_unwrap(t, env), eval_unwrap(e, env)))
+        ctx = claim(ctx, name, t)
+        ctx = define(ctx, name, e)
+      case TopEval(exp) =>
+        eval_print(ctx, exp)
+      case TopEq(e1, e2) =>
+        assert_eq(ctx, e1, e2)
+      case TopNotEq(e1, e2) =>
+        assert_not_eq(ctx, e1, e2)
       case _ => {}
     }
-    ctx
   }
 
-  def type_check(): Unit = {
-    var env: Env = Env()
-    var ctx: Ctx = Ctx()
-    top_list.foreach {
-      case TopDecl(DeclLet(name, t, e)) =>
-        check(e, ctx, eval_unwrap(t, env)) match {
-          case Right(the_e) =>
-            ctx = ctx.ext(name, Def(eval_unwrap(t, env), eval_unwrap(the_e, env)))
-            env = env.ext(name, eval_unwrap(the_e, env))
+  def claim(ctx: Ctx, name: String, t: Exp): Ctx = {
+    if (ctx.lookup_type(name).isDefined) {
+      println(s"name: ${name} is alreay defined")
+      throw new Exception()
+    } else {
+      check(t, ctx, ValUniverse()) match {
+        case Right(t_checked) =>
+          val t_val = eval_unwrap(t_checked, ctx.to_env)
+          ctx.ext(name, Bind(t_val))
+        case Left(err) =>
+          println(s"type check fail, name: ${name}, error: ${err.msg}")
+          throw new Exception()
+      }
+    }
+  }
+
+  def define(ctx: Ctx, name: String, exp: Exp): Ctx = {
+    ctx.lookup_den(name) match {
+      case Some(Bind(t_val)) =>
+        check(exp, ctx, t_val) match {
+          case Right(exp) =>
+            val value = eval_unwrap(exp, ctx.to_env)
+            ctx.ext(name, Def(t_val, value))
           case Left(err) =>
-            println(s"${err.msg}")
+            println(s"type check fail for name: ${name}, error: ${err.msg}")
             throw new Exception()
         }
-      case TopEval(exp) =>
-        eval_print(exp)
-      case TopEq(e1, e2) =>
-        assert_eq(e1)(e2)
-      case TopNotEq(e1, e2) =>
-        assert_not_eq(e1)(e2)
-      case _ => {}
+      case Some(Def(t_val, value)) =>
+        println(s"name: ${name} is already defined, type: ${t_val}, value: ${value}")
+        throw new Exception()
+      case None =>
+        println(s"name: ${name} is not claimed before define")
+        throw new Exception()
     }
   }
 
-  def run(): Unit = {
-    var env: Env = Env()
-    top_list.foreach {
-      case TopDecl(DeclLet(name, t, e)) =>
-        env = env.ext(name, eval_unwrap(e, env))
-      case TopEval(exp) =>
-        eval_print(exp)
-      case TopEq(e1, e2) =>
-        assert_eq(e1)(e2)
-      case TopNotEq(e1, e2) =>
-        assert_not_eq(e1)(e2)
-      case _ => {}
-    }
-  }
-
-  def assert_not_eq(e1: Exp)(e2: Exp): Unit = {
+  def assert_not_eq(ctx: Ctx, e1: Exp, e2: Exp): Unit = {
+    val env = ctx.to_env
     val v1 = eval_unwrap(e1, env)
     val v2 = eval_unwrap(e2, env)
     // val n1 = readback_val(v1, Set())
@@ -97,7 +80,8 @@ case class Module() {
     }
   }
 
-  def assert_eq(e1: Exp)(e2: Exp): Unit = {
+  def assert_eq(ctx: Ctx, e1: Exp, e2: Exp): Unit = {
+    val env = ctx.to_env
     val v1 = eval_unwrap(e1, env)
     val v2 = eval_unwrap(e2, env)
     // val n1 = readback_val(v1, Set())
@@ -115,13 +99,27 @@ case class Module() {
     }
   }
 
-  def eval_print(exp: Exp): Unit = {
+  def eval_print(ctx: Ctx, exp: Exp): Unit = {
+    val env = ctx.to_env
     val value = eval_unwrap(exp, env)
-    // val norm = readback_val(value, Set())
-    println(s">>> ${pretty_exp(exp)}")
-    println(s"=== ${pretty_val(value)}")
-    // println(s"=== ${pretty_exp(norm)}")
-    println()
+
+    val result = for {
+      the <- infer(exp, ctx)
+      t_val <- eval(the.t, env)
+      value <- eval(exp, env)
+      norm <- readback_val(value, t_val, ctx)
+    } yield The(the.t, norm)
+
+    result match {
+      case Right(the_exp) =>
+        println(s">>> ${pretty_exp(exp)}")
+        println(s"=== ${pretty_val(value)}")
+        println(s"=== ${pretty_exp(the_exp)}")
+        println()
+      case Left(err) =>
+        println(s"error: ${err.msg}")
+        throw new Exception()
+    }
   }
 
 }

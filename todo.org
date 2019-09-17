@@ -1,4 +1,3 @@
-- [tartlet] concrete syntax
 * tartlet
 - extend tartlet to pie
 - the little typer as test

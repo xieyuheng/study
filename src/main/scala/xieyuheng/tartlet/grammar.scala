@@ -106,6 +106,9 @@ object grammar {
       "the" -> List("the", "(", exp, ",", exp, ")"),
       "nat_ind" -> List("nat_ind", "(", exp, ",", exp, ",", exp, ",", exp, ")"),
       "absurd_ind" -> List("absurd_ind", "(", exp, ",", exp, ")"),
+      "car" -> List("car", "(", exp, ")"),
+      "cdr" -> List("cdr", "(", exp, ")"),
+      "the" -> List("the", "(", exp, ",",  exp, ")"),
     ))
 
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -130,6 +133,10 @@ object grammar {
         NatInd(exp_matcher(target), exp_matcher(motive), exp_matcher(base), exp_matcher(step)) },
       "absurd_ind" -> { case List(_, _, target, _, motive, _) =>
         AbsurdInd(exp_matcher(target), exp_matcher(motive)) },
+      "car" -> { case List(_, _, exp, _) => Car(exp_matcher(exp)) },
+      "cdr" -> { case List(_, _, exp, _) => Cdr(exp_matcher(exp)) },
+      "the" -> { case List(_, _, t, _,  e, _) =>
+        The(exp_matcher(t), exp_matcher(e)) },
     ))
 
   // def block: Rule = Rule(
@@ -174,6 +181,10 @@ object grammar {
       "fn_one" -> List(identifier, "=", ">", exp),
       "absurd_t" -> List("absurd_t"),
       "sigma" -> List("$", "[", non_empty_list(bind), exp, "]"),
+      "cons" -> List("cons", "(", exp, ",", exp, ")"),
+      "sole" -> List("sole"),
+      "trivial_t" -> List("trivial_t"),
+      "type_t" -> List("type_t"),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -200,6 +211,11 @@ object grammar {
           .foldRight(exp_matcher(t)) {
             case ((Some(name), arg_t), exp) => Sigma(name, arg_t, exp)
             case ((None, arg_t), exp) => Sigma("_", arg_t, exp) } },
+      "cons" -> { case List(_, _, car, _, cdr, _) =>
+        Cons(exp_matcher(car), exp_matcher(cdr)) },
+      "sole" -> { case _ => Sole() },
+      "trivial_t" -> { case _ => Trivial() },
+      "type_t" -> { case _ => Universe() },
     ))
 
   def exp_comma = Rule(

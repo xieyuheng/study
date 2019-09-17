@@ -17,7 +17,6 @@ final case class Ap(rator: Exp, rand: Exp) extends Exp
 final case class Absurd() extends Exp
 final case class AbsurdInd(target: Exp, motive: Exp) extends Exp
 final case class Sigma(name: String, arg_t: Exp, cdr_t: Exp) extends Exp
-// TODO
 final case class Cons(car: Exp, cdr: Exp) extends Exp
 final case class Car(pair: Exp) extends Exp
 final case class Cdr(pair: Exp) extends Exp

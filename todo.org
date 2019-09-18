@@ -1,10 +1,12 @@
-* tartlet
 - extend tartlet to pie
-- be sure about the use of TheVal and friends
-- test proof: f == (x) => f(x)
 - the little typer as test
 - use `todo` as un-implemented
 - block of let and return
+- ErrMsg and Span
+- better report with ErrMsg in context
+* tartlet
+- be sure about the use of TheVal and friends
+- test proof: f == (x) => f(x)
 - extend tartlet to define new types
   - keep it subrecursive, but be generic about data and ind, rec and iter
 * minitt
@@ -24,8 +26,6 @@
 * module system
 - module as value with opaque module_t
 * partech
-- ErrMsg and Span
-- better report with ErrMsg in context
 - [important] fix equals between rules -- how ? by ruleGen with uuid ?
 - concrete syntax for rule
   - to use partech as more general tool out side scala

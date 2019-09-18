@@ -97,12 +97,12 @@ object check {
             Left(Err(
               s"expected ValSigma(arg_t, dep_t), found: ${t}"))
         }
-      case the: The => {
+      case the: The =>
         for {
+          // the <- infer(the.value, ctx)
           t2 <- eval(the.t, ctx.to_env)
           _ <- conversion_check(ctx, ValUniverse(), t, t2)
         } yield the.value
-      }
       case _ =>
         // ctx :- exp => E
         // ctx :- conversion_check (UNIVERSE, T, E)
@@ -111,7 +111,7 @@ object check {
         for {
           the <- infer(exp, ctx)
           t2 <- eval(the.t, ctx.to_env)
-          _ <- conversion_check(ctx, ValUniverse(), t, t2)
+          ok <- conversion_check(ctx, ValUniverse(), t, t2)
         } yield the.value
     }
   }

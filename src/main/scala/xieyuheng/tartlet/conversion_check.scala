@@ -1,5 +1,6 @@
 package xieyuheng.tartlet
 
+import pretty._
 import readback._
 
 object conversion_check {
@@ -11,10 +12,16 @@ object conversion_check {
     for {
       e1 <- readback_val(v1, t, ctx)
       e2 <- readback_val(v2, t, ctx)
-    } yield if (alpha_eq(e1, e2, Map(), Map())) {
-      ()
-    } else {
-      Err("conversion_check fail")
-    }
+      result <- {
+        if (alpha_eq(e1, e2, Map(), Map())) {
+          Right(())
+        } else {
+          Left(Err(
+            s"conversion_check fail\n" ++
+              s"e1 = ${pretty_exp(e1)}\n" ++
+              s"e2 = ${pretty_exp(e2)}\n"))
+        }
+      }
+    } yield result
   }
 }

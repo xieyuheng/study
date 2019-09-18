@@ -1,7 +1,9 @@
 * tartlet
+- problem of yield https://github.com/scala/bug/issues/5793
 - string_t
-- fix pattern match in alpha_eq
-- f == (x) => f(x)
+- fix pattern match for alpha_eq
+- fix check match for check
+- test proof: f == (x) => f(x)
 - be sure about the use of TheVal and friends
 - extend tartlet to pie
 - the little typer as test

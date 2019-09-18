@@ -69,7 +69,7 @@
     we can not possibly infer the type of a bound variable x.
     thus we do check for the rule of function abstraction.
 
-    [infer] ctx, x: A -- e: B
+    [check] ctx, x: A -- e: B
     ------------
     [check] ctx -- λ x. e : A -> B
 
@@ -78,6 +78,28 @@
     and since the rules about function are core of type systems,
     we propagate the property "we need to check instead of infer"
     to all rules about constructor.
+
+    why we have this propagation ?
+
+  - why we sometimes need infer, when we only want to implementation check ?
+    because we need to infer the type of target of elimination rules.
+
+    for elimination rules the pattern is
+
+    [infer] premise about target
+    [check] premise
+    [check] premise
+    [check] ...
+    ----------
+    [infer] conclusion
+
+    for construction rules the pattern is
+
+    [check] premise
+    [check] premise
+    [check] ...
+    ----------
+    [check] conclusion
 
   - can we just provide enough information in the syntax.
     for example, use church's typed lambda calculus instead of curry's typed lambda calculus ?
@@ -101,7 +123,7 @@
     ctx -- f(x): T
 
     [infer] ctx -- f: A -> B
-    [infer] ctx -- x: A
+    [check] ctx -- x: A
     [assert] val_eq(val_apply(B, x), T)
     // B is a value that can apply to x
     //   thus it must be value (with closure)

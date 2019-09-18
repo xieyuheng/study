@@ -42,6 +42,7 @@
     by sometimes view a rule as infer sometimes as check.
 
     for example, the rule of function application:
+
     ctx -- f: A -> B
     ctx -- x: A
     ------------
@@ -51,16 +52,26 @@
     and if we have infer, we can also infer the type of function application.
     thus for rule of function application we use infer.
 
+    [infer] ctx -- f: A -> B
+    [infer] ctx -- x: A
+    ------------
+    [infer] ctx -- f(x): B
+
     we examine our rules recursively and do infer as far as possible.
     and for those left we do check.
 
     but the rule of (curry's) function abstraction:
+
     ctx, x: A -- e: B
     ------------
     ctx -- λ x. e : A -> B
 
     we can not possibly infer the type of a bound variable x.
     thus we do check for the rule of function abstraction.
+
+    [infer] ctx, x: A -- e: B
+    ------------
+    [check] ctx -- λ x. e : A -> B
 
     function abstraction is the constructor of function type,
     function application is the eliminator of function type,
@@ -79,6 +90,7 @@
     instead of (e: Exp, T: Exp)
 
     the dependent version of the rule of function application
+
     ctx -- f: A -> B
     ctx -- x: A
     val_eq(val_apply(B, x), T)
@@ -87,6 +99,36 @@
     //   to maintain lexical scope
     ------------
     ctx -- f(x): T
+
+    [infer] ctx -- f: A -> B
+    [infer] ctx -- x: A
+    [assert] val_eq(val_apply(B, x), T)
+    // B is a value that can apply to x
+    //   thus it must be value (with closure)
+    //   to maintain lexical scope
+    ------------
+    [infer] ctx -- f(x): T
+
+  - note about the duality (or variance) between
+    premise and conclusion in inference rule
+
+    premise
+    ----------
+    conclusion
+
+    is like function of type premise -> conclusion
+
+    [check] premise
+    ----------
+    [infer] conclusion
+
+    can be read as,
+    if we can implement check for premise,
+    we can implement infer for conclusion.
+
+    if we only need to implement check for premise to implement infer for conclusion,
+    the rule will be useful in more places,
+    for it is usable even if we can not implement infer premise.
 
 * comparing equivalence between expressions
 

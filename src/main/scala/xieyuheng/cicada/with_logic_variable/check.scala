@@ -22,9 +22,9 @@ object check {
 
     // - target can be MemberType or SumType
 
-    //   ctx :- target.map.get(fieldName) <: t
+    //   ctx :- target.map.get(field_name) <: t
     //   ----------------
-    //   ctx :- Dot(target, fieldName) <: t
+    //   ctx :- Dot(target, field_name) <: t
 
 
     // - Ap

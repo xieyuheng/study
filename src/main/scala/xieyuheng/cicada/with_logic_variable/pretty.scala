@@ -34,8 +34,8 @@ object pretty {
       case Choice(target, map) =>
         val mapString = maybeln(pretty_exp_map(map))
         s"${pretty_exp(target)} case {${mapString}}"
-      case Dot(target, fieldName) =>
-        s"${pretty_exp(target)}.${fieldName}"
+      case Dot(target, field_name) =>
+        s"${pretty_exp(target)}.${field_name}"
       case Pi(args, ret) =>
         s"pi (${pretty_exp_args(args)}): ${pretty_exp(ret)}"
       case Fn(args, ret, body) =>
@@ -71,8 +71,8 @@ object pretty {
       case ChoiceNeu(target, map) =>
         val mapString = maybeln(pretty_valMap(map, bind))
         s"${pretty_neu(target, bind)} case {${mapString}}"
-      case DotNeu(target, fieldName) =>
-        s"${pretty_neu(target, bind)}.${fieldName}"
+      case DotNeu(target, field_name) =>
+        s"${pretty_neu(target, bind)}.${field_name}"
       case ApNeu(target, args) =>
         s"${pretty_neu(target, bind)}(${pretty_valArgs(args, bind)})"
     }

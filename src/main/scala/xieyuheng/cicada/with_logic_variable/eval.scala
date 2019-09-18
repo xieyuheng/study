@@ -52,22 +52,22 @@ object eval {
         } yield result
       }
 
-      case Dot(target, fieldName) => {
+      case Dot(target, field_name) => {
         for {
           targetVal <- eval(target, env)
           result <- targetVal match {
             case sumType: SumTypeVal =>
-              sumType.map.get(fieldName) match {
+              sumType.map.get(field_name) match {
                 case Some(value) => Right(walk.deep(value, sumType.bind))
-                case None => Left(Err(s"no field: ${fieldName}, on sumType: ${sumType}"))
+                case None => Left(Err(s"no field: ${field_name}, on sumType: ${sumType}"))
               }
             case memberType: MemberTypeVal =>
-              memberType.map.get(fieldName) match {
+              memberType.map.get(field_name) match {
                 case Some(value) => Right(walk.deep(value, memberType.bind))
-                case None => Left(Err(s"no field: ${fieldName}, on memberType: ${memberType}"))
+                case None => Left(Err(s"no field: ${field_name}, on memberType: ${memberType}"))
               }
             case NeuVal(neutral) =>
-              Right(NeuVal(DotNeu(neutral, fieldName)))
+              Right(NeuVal(DotNeu(neutral, field_name)))
             case _ =>
               Left(Err("targetVal of Dot should be SumTypeVal, MemberTypeVal or NeuVal, " +
                 s"instead of: ${targetVal}"))

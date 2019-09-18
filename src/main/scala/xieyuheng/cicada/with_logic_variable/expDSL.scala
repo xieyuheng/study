@@ -15,7 +15,7 @@ object expDSL {
   def fn(args: MultiMap[String, Exp], ret: Exp, body: Exp) = Fn(args, ret, body)
 
   implicit class ExpExtension(exp: Exp) {
-    def dot(fieldName: String): Dot = Dot(exp, fieldName)
+    def dot(field_name: String): Dot = Dot(exp, field_name)
     def ap(mp: MultiMap[String, Exp]): Ap = Ap(exp, mp)
     def :: (name: String): (String, The) = (name, The(exp))
     def =: (name: String): (String, Exp) = (name, exp)

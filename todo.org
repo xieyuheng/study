@@ -15,7 +15,8 @@
   - Norm do not use Pattern
 * cicada
 - subtype relation between club and members and class and supers
-  recursively extended to fields in record and pi and si
+  - recursively extended to fields in record and pi and si
+  - need to compute variance (covariant contravariant invariant) for fields
 - eval for cicada without_logic_variable
 - class and extends
 - partially filled data can be used as type

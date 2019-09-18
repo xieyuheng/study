@@ -1,6 +1,6 @@
 - extend tartlet to pie
 - the little typer as test
-- use `todo` as un-implemented
+- use `TODO` as un-implemented
 - block of let and return
 - ErrMsg and Span
 - better report with ErrMsg in context
@@ -9,7 +9,12 @@
 - test proof: f == (x) => f(x)
 - extend tartlet to define new types
   - keep it subrecursive, but be generic about data and ind, rec and iter
+- add level of type_t
 * minitt
+- add level of type_t
+- add `eqv_t` `same` `replace`
+- add constrains to type constructors
+  - use logic programming to resolve constrains ?
 - be sure about the use of Pattern
   - write some notes
   - Norm do not use Pattern
@@ -25,7 +30,7 @@
     - Val includes ValFn which contains Exp
       this Exp is also serde-able
 * module system
-- module as value with opaque module_t
+- module as value with opaque module_t is not enough -- learn from EOPL
 * partech
 - [important] fix equals between rules -- how ? by ruleGen with uuid ?
 - concrete syntax for rule

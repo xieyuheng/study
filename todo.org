@@ -1,5 +1,4 @@
 * tartlet
-- fix check match for check
 - string_t
 - test proof: f == (x) => f(x)
 - be sure about the use of TheVal and friends

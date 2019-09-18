@@ -18,13 +18,13 @@ object Earley {
 
   case class Item(
     rule: Rule,
-    choiceName: String,
+    choice_name: String,
     parts: List[RulePart],
     dot: Int,
     origin: Int,
     completedBy: Option[Item] = None,
   ) {
-    val matters = (rule, choiceName, parts.length, dot, origin)
+    val matters = (rule, choice_name, parts.length, dot, origin)
 
     override def equals(that: Any): Boolean = {
       that match {
@@ -36,7 +36,7 @@ object Earley {
     override def hashCode = matters.hashCode
 
     override def toString(): String = {
-      var s = s"${rule.name}:${choiceName} -> "
+      var s = s"${rule.name}:${choice_name} -> "
       val indexes = 0 until parts.length
       indexes.foreach { case index =>
         val part = parts(index)
@@ -92,8 +92,8 @@ case class Earley(words: List[Word], rule: Rule) {
   }
 
   def expendRule(rule: Rule, index: Int): Unit = {
-    rule.choices.foreach { case (choiceName, parts) =>
-      active(index) += Item(rule, choiceName, parts, 0, index)
+    rule.choices.foreach { case (choice_name, parts) =>
+      active(index) += Item(rule, choice_name, parts, 0, index)
     }
   }
 
@@ -244,7 +244,7 @@ case class Earley(words: List[Word], rule: Rule) {
           prevList = itemset.filter { case prev =>
             prev.dot == newItem.dot - 1 &&
             prev.rule == newItem.rule &&
-            prev.choiceName == newItem.choiceName
+            prev.choice_name == newItem.choice_name
           }.toList
 
           result <- {
@@ -285,7 +285,7 @@ case class Earley(words: List[Word], rule: Rule) {
         for {
           pair <- collectChildren(item)
           (_newItem, children) = pair
-        } yield Node(item.rule, item.choiceName, children)
+        } yield Node(item.rule, item.choice_name, children)
     }
   }
 

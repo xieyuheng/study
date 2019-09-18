@@ -11,11 +11,11 @@ case class Rule(
     throw new Exception()
   }
 
-  choices.foreach { case (choiceName, ruleParts) =>
+  choices.foreach { case (choice_name, ruleParts) =>
     if (ruleParts.length == 0) {
       println("Rule's choice should not have empty List")
       println(s"name: ${name}")
-      println(s"choice: ${choiceName}")
+      println(s"choice: ${choice_name}")
       throw new Exception()
     }
   }

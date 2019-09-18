@@ -172,6 +172,8 @@ object grammar {
 
   def non_rator: Rule = Rule(
     "non_rator", Map(
+      "string_t" -> List("string_t"),
+      "string" -> List(double_quoted_string),
       "eqv_t" -> List("eqv_t", "(", exp, ",", exp, ",", exp, ")"),
       "same" -> List("same"),
       "nat_t" -> List("nat_t"),
@@ -190,6 +192,8 @@ object grammar {
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "non_rator", Map(
+      "string_t" -> { case _ => Atom() },
+      "string" -> { case List(Leaf(str)) => Quote(trim_double_quote(str)) },
       "eqv_t" -> { case List(_, _, t, _, from, _, to, _) =>
         Eqv(exp_matcher(t), exp_matcher(from), exp_matcher(to)) },
       "same" -> { case _ => Same() },

@@ -2,7 +2,7 @@ package xieyuheng.partech
 
 import xieyuheng.partech.example._
 
-object treeMatcherTest extends App {
+object tree_matcher_test extends App {
   def test(ex: ExampleRule): Unit = {
     val rule = ex.start
     val lexer = ex.lexer

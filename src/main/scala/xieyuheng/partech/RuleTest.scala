@@ -30,8 +30,8 @@ object RuleTest extends App {
     "case_clause", List(
       identifier, "=", ">", exp))
 
-  case class Item(rule: Rule, choiceName: String, parts: List[RulePart], index: Int) {
-    val matters = (rule, choiceName, parts.length, index)
+  case class Item(rule: Rule, choice_name: String, parts: List[RulePart], index: Int) {
+    val matters = (rule, choice_name, parts.length, index)
 
     override def equals(that: Any): Boolean = {
       that match {

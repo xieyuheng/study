@@ -6,7 +6,7 @@ object parser {
 
   val space_chars = Set(' ', '\n', '\t')
 
-  def ignoreSpace(text: String): Option[String] = {
+  def ignore_space(text: String): Option[String] = {
     text.headOption match {
       case Some(char) =>
         if (space_chars.contains(char)) {
@@ -18,7 +18,7 @@ object parser {
     }
   }
 
-  def ignoreLineComment(text: String): Option[String] = {
+  def ignore_line_comment(text: String): Option[String] = {
     if (text.startsWith("//")) {
       text.indexOf('\n') match {
         case -1 => Some("")
@@ -35,9 +35,9 @@ object parser {
     var remain: String = text
     var continue: Boolean = true
     while (continue) {
-      ignoreSpace(remain) match {
+      ignore_space(remain) match {
         case Some(str) => remain = str
-        case None => ignoreLineComment(remain) match {
+        case None => ignore_line_comment(remain) match {
           case Some(str) => remain = str
           case None => continue = false
         }
@@ -55,7 +55,7 @@ object parser {
     '{', '}',
   )
 
-  def wordMatcher(text: String): Option[(String, String)] = {
+  def word_matcher(text: String): Option[(String, String)] = {
     text.headOption match {
       case Some(char) =>
         if (symbol_chars.contains(char)) {
@@ -76,6 +76,6 @@ object parser {
     }
   }
 
-  def lexer = Lexer(LexTable(wordMatcher, ignorer))
+  def lexer = Lexer(LexTable(word_matcher, ignorer))
 
 }

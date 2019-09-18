@@ -17,7 +17,7 @@ object predefined {
     ))
 
 
-  def wordInCharSet(set: Set[Char]): String => Boolean = {
+  def word_in_char_set(set: Set[Char]): String => Boolean = {
     { case word => word.forall(set.contains(_)) }
   }
 
@@ -26,7 +26,7 @@ object predefined {
     '0', '1', '2', '3', '4',
     '5', '6', '7', '8', '9')
 
-  def digit = wordInCharSet(digit_char_set)
+  def digit = word_in_char_set(digit_char_set)
 
 
   def lower_case_char_set: Set[Char] = Set(
@@ -36,7 +36,7 @@ object predefined {
     'u', 'v', 'w', 'x', 'y', 'z',
   )
 
-  def lower_case = wordInCharSet(lower_case_char_set)
+  def lower_case = word_in_char_set(lower_case_char_set)
 
 
   def upper_case_char_set: Set[Char] = Set(
@@ -46,7 +46,7 @@ object predefined {
     'U', 'V', 'W', 'X', 'Y', 'Z',
   )
 
-  def upper_case = wordInCharSet(upper_case_char_set)
+  def upper_case = word_in_char_set(upper_case_char_set)
 
   def identifier_with_preserved(
     name: String,
@@ -54,14 +54,28 @@ object predefined {
   ): WordPred = WordPred(name, { case word =>
     if (preserved.contains(word)) {
       false
+    } else if (double_quoted_string.pred(word)) {
+      false
     } else {
       word.headOption match {
         case Some(char) =>
           val head_set = lower_case_char_set ++ upper_case_char_set + '_'
           val tail_set = head_set ++ digit_char_set
-          head_set.contains(char) && wordInCharSet(tail_set)(word.tail)
+          head_set.contains(char) && word_in_char_set(tail_set)(word.tail)
         case None => false
       }
     }
   })
+
+  def double_quoted_string = WordPred("double_quoted_string", { case word =>
+    word.length >= 2 &&
+    word.head == '"' &&
+    word.last == '"'
+  })
+
+  def trim_double_quote(str: String): String = {
+    assert(double_quoted_string.pred(str))
+    println(s"str: ${str}")
+    str.slice(1, str.length - 1)
+  }
 }

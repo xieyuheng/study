@@ -90,11 +90,8 @@ object alpha_eq {
           case (Absurd(), Absurd()) =>
             true
           case _ =>
-            if (alpha_eq(t, t2, x_map, y_map) && alpha_eq(value, value2, x_map, y_map)) {
-              true
-            } else {
-              false
-            }
+            alpha_eq(t, t2, x_map, y_map) &&
+            alpha_eq(value, value2, x_map, y_map)
         }
       case _ =>
         false

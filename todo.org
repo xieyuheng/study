@@ -1,8 +1,7 @@
 * tartlet
-- string_t
-- test proof: f == (x) => f(x)
-- be sure about the use of TheVal and friends
 - extend tartlet to pie
+- be sure about the use of TheVal and friends
+- test proof: f == (x) => f(x)
 - the little typer as test
 - use `todo` as un-implemented
 - block of let and return

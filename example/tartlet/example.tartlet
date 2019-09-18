@@ -1,5 +1,7 @@
 eval! the(nat_t, zero)
 
+eval! the(string_t, "abc")
+
 // let x: nat_t = nat_t
 
 // eval! x

@@ -59,16 +59,16 @@ object check {
         // ------------------------------
         // ctx :- Fn(x, body) <= Pi
         t match {
-          case ValPi(arg_t, ret_t) => {
+          case ValPi(arg_t, dep_t) => {
             val varVal = TheNeu(arg_t, NeuVar(name))
             for {
-              real_ret_t <- ret_t.ap(varVal)
-              body <- check(body, ctx.ext(name, Bind(arg_t)), real_ret_t)
+              real_dep_t <- dep_t.ap(varVal)
+              body <- check(body, ctx.ext(name, Bind(arg_t)), real_dep_t)
             } yield Fn(name, body)
           }
           case _ =>
             Left(Err(
-              s"expected ValPi(arg_t, ret_t), found: ${t}"))
+              s"expected ValPi(arg_t, dep_t), found: ${t}"))
         }
       case Sole() =>
         // ---------------------
@@ -86,16 +86,16 @@ object check {
         // -----------------
         // ctx :- Cons(car, cdr) <= Sigma(x: A, D)
         t match {
-          case ValSigma(arg_t, ret_t) =>
+          case ValSigma(arg_t, dep_t) =>
             for {
               car <- check(car, ctx, arg_t)
               car_val <- eval(car, ctx.to_env)
-              real_ret_t <- ret_t.ap(car_val)
-              cdr <- check(cdr, ctx, real_ret_t)
+              real_dep_t <- dep_t.ap(car_val)
+              cdr <- check(cdr, ctx, real_dep_t)
             } yield Cons(car, cdr)
           case _ =>
             Left(Err(
-              s"expected ValSigma(arg_t, ret_t), found: ${t}"))
+              s"expected ValSigma(arg_t, dep_t), found: ${t}"))
         }
       case the: The => {
         for {

@@ -39,8 +39,8 @@ object eval {
         eval(body, env.ext(name, arg))
       case TheNeu(theType, neu) =>
         theType match {
-          case Arrow(arg_t, ret_t) =>
-            TheNeu(ret_t, NeuAp(neu, TheVal(arg_t, arg)))
+          case Arrow(arg_t, dep_t) =>
+            TheNeu(dep_t, NeuAp(neu, TheVal(arg_t, arg)))
           case _ =>
             println(s"type of neu fn is not Arrow: ${fn}")
             throw new Exception()

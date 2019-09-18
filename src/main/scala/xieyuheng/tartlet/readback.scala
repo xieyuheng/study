@@ -31,48 +31,48 @@ object readback {
       case ValZero() => Right(Zero())
       case ValFn(clo: Clo) =>
         t match {
-          case ValPi(arg_t, ret_t) => {
-            val fresh_name = freshen(ctx.names, ret_t.name)
+          case ValPi(arg_t, dep_t) => {
+            val fresh_name = freshen(ctx.names, dep_t.name)
             val arg = TheNeu(arg_t, NeuVar(fresh_name))
             for {
               body_val <- Ap.exe(value, arg)
-              real_ret_t <- ret_t.ap(arg)
+              real_dep_t <- dep_t.ap(arg)
               body <- readback_val(
                 body_val,
-                real_ret_t,
+                real_dep_t,
                 ctx.ext(fresh_name, Bind(arg_t)))
             } yield Fn(fresh_name, body)
           }
           case _ =>
             Left(Err(s"type of Fn should be Pi: ${t}"))
         }
-      case ValPi(arg_t: Val, ret_t: Clo) =>
-        val fresh_name = freshen(ctx.names, ret_t.name)
+      case ValPi(arg_t: Val, dep_t: Clo) =>
+        val fresh_name = freshen(ctx.names, dep_t.name)
         for {
           arg_t_exp <- readback_val(arg_t, ValUniverse(), ctx)
-          ret_t_exp_val <- ret_t.ap(
+          dep_t_exp_val <- dep_t.ap(
             TheNeu(arg_t, NeuVar(fresh_name)))
-          ret_t_exp <- readback_val(
-            ret_t_exp_val,
+          dep_t_exp <- readback_val(
+            dep_t_exp_val,
             ValUniverse(),
             ctx.ext(fresh_name, Bind(arg_t)))
-        } yield Pi(fresh_name, arg_t_exp, ret_t_exp)
+        } yield Pi(fresh_name, arg_t_exp, dep_t_exp)
       case ValCons(car: Val, cdr: Val) =>
         for {
           car <- readback_val(car, t, ctx)
           cdr <- readback_val(cdr, t, ctx)
         } yield Cons(car, cdr)
-      case ValSigma(arg_t: Val, ret_t: Clo) =>
-        val fresh_name = freshen(ctx.names, ret_t.name)
+      case ValSigma(arg_t: Val, dep_t: Clo) =>
+        val fresh_name = freshen(ctx.names, dep_t.name)
         for {
           arg_t_exp <- readback_val(arg_t, ValUniverse(), ctx)
-          ret_t_exp_val <- ret_t.ap(
+          dep_t_exp_val <- dep_t.ap(
             TheNeu(arg_t, NeuVar(fresh_name)))
-          ret_t_exp <- readback_val(
-            ret_t_exp_val,
+          dep_t_exp <- readback_val(
+            dep_t_exp_val,
             ValUniverse(),
             ctx.ext(fresh_name, Bind(arg_t)))
-        } yield Sigma(fresh_name, arg_t_exp, ret_t_exp)
+        } yield Sigma(fresh_name, arg_t_exp, dep_t_exp)
       case ValSole() => Right(Sole())
       case ValTrivial() => Right(Trivial())
       case ValUniverse() => Right(Universe())

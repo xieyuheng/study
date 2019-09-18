@@ -39,10 +39,10 @@ object infer {
         // ---------------
         // ctx :- Ap (rator, rand) => R
         infer(rator, ctx) match {
-          case Right(Arrow(arg_t, ret_t)) =>
+          case Right(Arrow(arg_t, dep_t)) =>
             for {
               _ <- check(rand, ctx, arg_t)
-            } yield ret_t
+            } yield dep_t
           case Left(errorMsg) =>
             Left(errorMsg)
           case _ =>

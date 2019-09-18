@@ -10,9 +10,9 @@ final case class ValSame() extends Val
 final case class ValNat() extends Val
 final case class ValZero() extends Val
 final case class ValSucc(prev: Val) extends Val
-final case class ValPi(arg_t: Val, ret_t: Clo) extends Val
+final case class ValPi(arg_t: Val, dep_t: Clo) extends Val
 final case class ValFn(clo: Clo) extends Val
-final case class ValSigma(arg_t: Val, ret_t: Clo) extends Val
+final case class ValSigma(arg_t: Val, dep_t: Clo) extends Val
 final case class ValCons(car: Val, cdr: Val) extends Val
 final case class ValSole() extends Val
 final case class ValTrivial() extends Val

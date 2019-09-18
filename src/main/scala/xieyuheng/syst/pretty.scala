@@ -33,8 +33,8 @@ object pretty {
     t match {
       case Nat() =>
         s"nat_t"
-      case Arrow(arg_t: Type, ret_t: Type) =>
-        s"(${pretty_type(arg_t)}) -> ${pretty_type(ret_t)}"
+      case Arrow(arg_t: Type, dep_t: Type) =>
+        s"(${pretty_type(arg_t)}) -> ${pretty_type(dep_t)}"
     }
   }
 

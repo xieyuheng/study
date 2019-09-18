@@ -30,8 +30,8 @@ object check {
          // -------------------------
          // ctx :- Fn (x, e) <= A -> B
         t match {
-          case Arrow(arg_t, ret_t) =>
-            check(body, ctx.ext(name, arg_t), ret_t)
+          case Arrow(arg_t, dep_t) =>
+            check(body, ctx.ext(name, arg_t), dep_t)
           case _ =>
             Left(Err(
               s"type of Fn is not Arrow, exp: ${this}"))

@@ -99,13 +99,13 @@ object infer {
           the <- infer(rator, ctx)
           t <- eval(the.t, ctx.to_env)
           res <- t match {
-            case ValPi(arg_t, ret_t) => {
+            case ValPi(arg_t, dep_t) => {
               for {
                 rand <- check(rand, ctx, arg_t)
                 arg_t_val <- eval(rand, ctx.to_env)
-                ret_t_val <- ret_t.ap(arg_t_val)
-                ret_t_exp <- readback_val(ret_t_val, ValUniverse(), ctx)
-              } yield The(ret_t_exp, Ap(the.value, rand))
+                dep_t_val <- dep_t.ap(arg_t_val)
+                dep_t_exp <- readback_val(dep_t_val, ValUniverse(), ctx)
+              } yield The(dep_t_exp, Ap(the.value, rand))
             }
             case _ =>
               Left(Err("expected Pi, " + "found: ${t}"))
@@ -124,7 +124,7 @@ object infer {
           target <- check(target, ctx, ValAbsurd())
           motive <- check(motive, ctx, ValUniverse())
         } yield The(Universe(), AbsurdInd(target, motive))
-      case Sigma(name: String, arg_t: Exp, ret_t: Exp) =>
+      case Sigma(name: String, arg_t: Exp, dep_t: Exp) =>
         // ctx :- A <= Universe()
         // ctx.ext(x, A) :- B <= Universe()
         // -----------------
@@ -132,8 +132,8 @@ object infer {
         for {
           arg_t <- check(arg_t, ctx, ValUniverse())
           arg_t_val <- eval(arg_t, ctx.to_env)
-          ret_t <- check(ret_t, ctx.ext(name, Bind(arg_t_val)), ValUniverse())
-        } yield The(Universe(), Pi(name, arg_t, ret_t))
+          dep_t <- check(dep_t, ctx.ext(name, Bind(arg_t_val)), ValUniverse())
+        } yield The(Universe(), Pi(name, arg_t, dep_t))
       case Trivial() =>
         // -----------------
         // ctx :- Trivial() => Universe()
@@ -142,7 +142,7 @@ object infer {
         // -----------------
         // ctx :- Universe() => Universe()
         Right(The(Universe(), Universe()))
-      case Pi(name: String, arg_t: Exp, ret_t: Exp) =>
+      case Pi(name: String, arg_t: Exp, dep_t: Exp) =>
         // ctx :- A <= Universe()
         // ctx.ext(x, A) :- B <= Universe()
         // -----------------
@@ -150,8 +150,8 @@ object infer {
         for {
           arg_t <- check(arg_t, ctx, ValUniverse())
           arg_t_val <- eval(arg_t, ctx.to_env)
-          ret_t <- check(ret_t, ctx.ext(name, Bind(arg_t_val)), ValUniverse())
-        } yield The(Universe(), Pi(name, arg_t, ret_t))
+          dep_t <- check(dep_t, ctx.ext(name, Bind(arg_t_val)), ValUniverse())
+        } yield The(Universe(), Pi(name, arg_t, dep_t))
       case Car(pair: Exp) =>
         // ctx: p => Sigma(x: A, D)
         // ----------------
@@ -159,14 +159,14 @@ object infer {
         for {
           the <- infer(pair, ctx)
           res <- the.t match {
-            case Sigma(name, arg_t, ret_t) =>
+            case Sigma(name, arg_t, dep_t) =>
               for {
                 arg_t_val <- eval(arg_t, ctx.to_env)
                 arg_t_exp <- readback_val(arg_t_val, ValUniverse(), ctx)
               } yield The(arg_t_exp, the.value)
             case _ =>
               Left(Err(
-                s"expected the type to be Sigma(arg_t, ret_t), found: ${the.t}"))
+                s"expected the type to be Sigma(arg_t, dep_t), found: ${the.t}"))
           }
         } yield res
       case Cdr(pair: Exp) =>
@@ -177,16 +177,16 @@ object infer {
           the <- infer(pair, ctx)
           value <- eval(the.t, ctx.to_env)
           res <- value match {
-            case ValSigma(arg_t, ret_t) =>
+            case ValSigma(arg_t, dep_t) =>
               for {
                 pair_val <- eval(the.value, ctx.to_env)
                 car_val <- Car.exe(pair_val)
-                real_ret_t <- ret_t.ap(car_val)
-                ret_t_exp <- readback_val(real_ret_t, ValUniverse(), ctx)
-              } yield The(ret_t_exp, the.value)
+                real_dep_t <- dep_t.ap(car_val)
+                dep_t_exp <- readback_val(real_dep_t, ValUniverse(), ctx)
+              } yield The(dep_t_exp, the.value)
             case _ =>
               Left(Err(
-                s"expected the type to be Sigma(arg_t, ret_t), found: ${the.t}"))
+                s"expected the type to be Sigma(arg_t, dep_t), found: ${the.t}"))
           }
         } yield res
       case The(t, e) =>

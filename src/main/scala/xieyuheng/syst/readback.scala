@@ -26,11 +26,11 @@ object readback {
         }
       case ValFn(name: String, body: Exp, env: Env) =>
         t match {
-          case Arrow(arg_t, ret_t) =>
+          case Arrow(arg_t, dep_t) =>
             val fresh_name = freshen (used_names, name)
             val value2 = eval.exe_ap(value, TheNeu(arg_t, NeuVar(fresh_name)))
             for {
-              body2 <- readback_val(value2, used_names + fresh_name, ret_t)
+              body2 <- readback_val(value2, used_names + fresh_name, dep_t)
             } yield Fn(fresh_name, body2)
           case _ =>
             Left(Err(

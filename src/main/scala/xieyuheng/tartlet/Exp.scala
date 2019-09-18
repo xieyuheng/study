@@ -11,12 +11,12 @@ final case class Nat() extends Exp
 final case class Zero() extends Exp
 final case class Succ(prev: Exp) extends Exp
 final case class NatInd(target: Exp, motive: Exp, base: Exp, step: Exp) extends Exp
-final case class Pi(name: String, arg_t: Exp, ret_t: Exp) extends Exp
+final case class Pi(name: String, arg_t: Exp, dep_t: Exp) extends Exp
 final case class Fn(name: String, body: Exp) extends Exp
 final case class Ap(rator: Exp, rand: Exp) extends Exp
 final case class Absurd() extends Exp
 final case class AbsurdInd(target: Exp, motive: Exp) extends Exp
-final case class Sigma(name: String, arg_t: Exp, ret_t: Exp) extends Exp
+final case class Sigma(name: String, arg_t: Exp, dep_t: Exp) extends Exp
 final case class Cons(car: Exp, cdr: Exp) extends Exp
 final case class Car(pair: Exp) extends Exp
 final case class Cdr(pair: Exp) extends Exp
@@ -99,22 +99,22 @@ object Ap {
     fn match {
       case ValFn(clo) =>
         clo.ap(arg)
-      case TheNeu(ValPi(arg_t, ret_t), neu) =>
+      case TheNeu(ValPi(arg_t, dep_t), neu) =>
         for {
-          t <- ret_t.ap(arg)
+          t <- dep_t.ap(arg)
         } yield TheNeu(t, NeuAp(neu, TheVal(arg_t, arg)))
       case _ =>
         Left(Err(
           "fn should be " +
             "ValFn(clo) | " +
-            "TheNeu(ValPi(arg_t, ret_t), neu): " +
+            "TheNeu(ValPi(arg_t, dep_t), neu): " +
             s"${fn}"))
     }
   }
 }
 
 object Arrow {
-  def apply(arg_t: Exp, ret_t: Exp): Exp = Pi("_", arg_t, ret_t)
+  def apply(arg_t: Exp, dep_t: Exp): Exp = Pi("_", arg_t, dep_t)
 }
 
 object AbsurdInd {
@@ -136,14 +136,14 @@ object Car {
     pair match {
       case ValCons(car, cdr) =>
         Right(car)
-      case TheNeu(ValSigma(arg_t, ret_t), neu) => {
+      case TheNeu(ValSigma(arg_t, dep_t), neu) => {
         Right(TheNeu(arg_t, NeuCar(neu)))
       }
       case _ =>
         Left(Err(
           "pair should be " +
             "ValCons(car, cdr) | " +
-            "TheNeu(ValSigma(arg_t, ret_t), neu): " +
+            "TheNeu(ValSigma(arg_t, dep_t), neu): " +
             s"${pair}"))
     }
   }
@@ -154,17 +154,17 @@ object Cdr {
     pair match {
       case ValCons(car, cdr) =>
         Right(cdr)
-      case TheNeu(ValSigma(arg_t, ret_t), neu) => {
+      case TheNeu(ValSigma(arg_t, dep_t), neu) => {
         for {
           car_val <- Car.exe(pair)
-          real_ret_t <- ret_t.ap(car_val)
-        } yield TheNeu(real_ret_t, NeuCar(neu))
+          real_dep_t <- dep_t.ap(car_val)
+        } yield TheNeu(real_dep_t, NeuCar(neu))
       }
       case _ =>
         Left(Err(
           "pair should be " +
             "ValCons(car, cdr) | " +
-            "TheNeu(ValSigma(arg_t, ret_t), neu): " +
+            "TheNeu(ValSigma(arg_t, dep_t), neu): " +
             s"${pair}"))
     }
   }

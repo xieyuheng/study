@@ -31,8 +31,8 @@ object pretty {
         s"succ(${pretty_exp(prev)})"
       case NatInd(target: Exp, motive: Exp, base: Exp, step: Exp) =>
         s"nat_ind(${pretty_exp(target)}, ${pretty_exp(motive)}, ${pretty_exp(base)}, ${pretty_exp(step)})"
-      case Pi(name: String, arg_t: Exp, ret_t: Exp) =>
-        s"(${name}, ${pretty_exp(arg_t)}) -> ${pretty_exp(ret_t)}"
+      case Pi(name: String, arg_t: Exp, dep_t: Exp) =>
+        s"(${name}, ${pretty_exp(arg_t)}) -> ${pretty_exp(dep_t)}"
       case Fn(name, body) =>
         s"${name} => ${pretty_exp(body)}"
       case Ap(fn, arg) =>
@@ -41,8 +41,8 @@ object pretty {
         s"absurd_t"
       case AbsurdInd(target: Exp, motive: Exp) =>
         s"absurd_ind(${pretty_exp(target)}, ${pretty_exp(motive)})"
-      case Sigma(name: String, arg_t: Exp, ret_t: Exp) =>
-        s"(${name}, ${pretty_exp(arg_t)}) * ${pretty_exp(ret_t)}"
+      case Sigma(name: String, arg_t: Exp, dep_t: Exp) =>
+        s"(${name}, ${pretty_exp(arg_t)}) * ${pretty_exp(dep_t)}"
       case Cons(car: Exp, cdr: Exp) =>
         s"cons(${pretty_exp(car)}, ${pretty_exp(cdr)})"
       case Car(pair: Exp) =>
@@ -121,12 +121,12 @@ object pretty {
         s"zero"
       case ValSucc(prev: Val) =>
         s"succ(${pretty_val(prev)})"
-      case ValPi(arg_t: Val, ret_t: Clo) =>
-        s"(${pretty_val(arg_t)}) -> ${pretty_clo(ret_t)}"
+      case ValPi(arg_t: Val, dep_t: Clo) =>
+        s"(${pretty_val(arg_t)}) -> ${pretty_clo(dep_t)}"
       case ValFn(clo: Clo) =>
         s"${pretty_clo(clo)}"
-      case ValSigma(arg_t: Val, ret_t: Clo) =>
-        s"(${pretty_val(arg_t)}) * ${pretty_clo(ret_t)}"
+      case ValSigma(arg_t: Val, dep_t: Clo) =>
+        s"(${pretty_val(arg_t)}) * ${pretty_clo(dep_t)}"
       case ValCons(car: Val, cdr: Val) =>
         s"cons(${pretty_val(car)}, ${pretty_val(cdr)})"
       case ValSole() =>

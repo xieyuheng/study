@@ -117,12 +117,12 @@ object alpha_eq {
             alpha_eq(motive, motive2, x_map, y_map)
           case _ => false
         }
-      case Sigma(name: String, arg_t: Exp, ret_t: Exp) =>
+      case Sigma(name: String, arg_t: Exp, dep_t: Exp) =>
         y match {
-          case Sigma(name2, arg_t2, ret_t2) => {
+          case Sigma(name2, arg_t2, dep_t2) => {
             val sym = UUID.randomUUID().toString
             alpha_eq(arg_t, arg_t2, x_map, y_map) &&
-            alpha_eq(ret_t, ret_t2, x_map + (name -> sym), y_map + (name -> sym))
+            alpha_eq(dep_t, dep_t2, x_map + (name -> sym), y_map + (name -> sym))
           }
           case _ => false
         }
@@ -141,12 +141,12 @@ object alpha_eq {
           case Universe() => true
           case _ => false
         }
-      case Pi(name: String, arg_t: Exp, ret_t: Exp) =>
+      case Pi(name: String, arg_t: Exp, dep_t: Exp) =>
         y match {
-          case Pi(name2, arg_t2, ret_t2) => {
+          case Pi(name2, arg_t2, dep_t2) => {
             val sym = UUID.randomUUID().toString
             alpha_eq(arg_t, arg_t2, x_map, y_map) &&
-            alpha_eq(ret_t, ret_t2, x_map + (name -> sym), y_map + (name -> sym))
+            alpha_eq(dep_t, dep_t2, x_map + (name -> sym), y_map + (name -> sym))
           }
           case _ => false
         }

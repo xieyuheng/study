@@ -66,9 +66,9 @@ object grammar {
   def ty_matcher: Tree => Type = Tree.matcher[Type](
     "type", Map(
       "nat_t" -> { case _ => Nat() },
-      "arrow" -> { case List(_, arrow_arg_list, _, _, _, ret_t) =>
+      "arrow" -> { case List(_, arrow_arg_list, _, _, _, dep_t) =>
         non_empty_list_matcher(arrow_arg_matcher)(arrow_arg_list)
-          .foldRight(ty_matcher(ret_t)) { case (arg_t, t) =>
+          .foldRight(ty_matcher(dep_t)) { case (arg_t, t) =>
             Arrow(arg_t, t) } },
     ))
 

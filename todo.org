@@ -1,6 +1,7 @@
 * tartlet
 - string_t
 - fix pattern match in alpha_eq
+- f == (x) => f(x)
 - be sure about the use of TheVal and friends
 - extend tartlet to pie
 - the little typer as test

@@ -36,11 +36,11 @@ object eval {
         for {
           target_val <- eval(target, env)
           motive_val <- eval(motive, env)
-          baseVal <- eval(base, env)
+          base_val <- eval(base, env)
           res <- Replace.exe(
             target_val,
             motive_val,
-            baseVal)
+            base_val)
         } yield res
       case Same() =>
         Right(ValSame())
@@ -52,12 +52,12 @@ object eval {
         for {
           target_val <- eval(target, env)
           motive_val <- eval(motive, env)
-          baseVal <- eval(base, env)
+          base_val <- eval(base, env)
           stepVal <- eval(step, env)
           res <- NatInd.exe(
             target_val,
             motive_val,
-            baseVal,
+            base_val,
             stepVal)
         } yield res
       case Nat() =>
@@ -80,20 +80,20 @@ object eval {
           motive_val <- eval(motive, env)
           res <- AbsurdInd.exe(target_val, motive_val)
         } yield res
-      case Sigma(name: String, arg_t: Exp, ret_t: Exp) =>
+      case Sigma(name: String, arg_t: Exp, dep_t: Exp) =>
         for {
           arg_t_val <- eval(arg_t, env)
-        } yield ValSigma(arg_t_val, CloEnv(env, name, ret_t))
+        } yield ValSigma(arg_t_val, CloEnv(env, name, dep_t))
       case Sole() =>
         Right(ValSole())
       case Trivial() =>
         Right(ValTrivial())
       case Universe() =>
         Right(ValUniverse())
-      case Pi(name: String, arg_t: Exp, ret_t: Exp) =>
+      case Pi(name: String, arg_t: Exp, dep_t: Exp) =>
         for {
           arg_t_val <- eval(arg_t, env)
-        } yield ValPi(arg_t_val, CloEnv(env, name, ret_t))
+        } yield ValPi(arg_t_val, CloEnv(env, name, dep_t))
       case Car(pair: Exp) =>
         for {
           pair_val <- eval(pair, env)

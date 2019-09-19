@@ -10,7 +10,7 @@ final case class Ap(target: Exp, arg: Exp) extends Exp
 
 final case class Club(
   name: String,
-  member_names: List[String],
+  members: List[Member],
   fileds: List[(String, Exp, Option[Exp])],
 ) extends Exp
 

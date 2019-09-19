@@ -1,4 +1,5 @@
 * cicada
+- lets do grammar first this time
 - eval
 - subtype relation between club and members and class and supers
   - recursively extended to fields in record and pi and si
@@ -25,13 +26,12 @@
 - test proof: f == (x) => f(x)
 - extend tartlet to define new types
   - keep it subrecursive, but be generic about data and ind, rec and iter
-- add cumulative levels of types -- type_t(n)
+- add cumulative (maybe non-cumulative) levels of types -- type_t(n)
 * minitt
-- why not jsut use letrec for every definition ? -- learn from EOPL
-- add cumulative levels of types -- type_t(n)
 - add `eqv_t` `same` `replace`
 - add constrains to type constructors
-  - use logic programming to resolve constrains ?
+- why not jsut use letrec for every definition ? -- learn from EOPL
+- add cumulative (maybe non-cumulative) levels of types -- type_t(n)
 - be sure about the use of Pattern
   - write some notes
   - Norm do not use Pattern

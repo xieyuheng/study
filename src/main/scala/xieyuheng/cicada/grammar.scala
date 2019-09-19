@@ -12,9 +12,9 @@ object grammar {
     // "let", "return",
     "let", "fn",
     "the",
+    "type_t",
     "data", "case", "choice",
     "class", "extends",
-    "type_t",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)

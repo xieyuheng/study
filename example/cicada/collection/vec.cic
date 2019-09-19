@@ -5,22 +5,46 @@ import datatype.nat.*
 data vec_t(A: type_t, length: nat_t) {
   case null_vec_t(length = zero_t)
   case cons_vec_t(
-    n: nat_t,
-    length = succ_t(n),
+    prev: nat_t,
+    length = succ_t(prev),
     head: A,
-    tail: vec_t(A, n))
+    tail: vec_t(A, prev))
 }
 
-fn vec_append(ante: vec_t(A, m), succ: vec_t(A, n)): vec_t(A, nat_add(m, n)) = {
-  choice (ante) {
-    case null_vec_t => succ
-    case cons_vec_t => cons_vec_t(ante.head, vec_append(ante.tail, succ))
+data vec_t(A: type_t, length: nat_t) {
+  case null_vec_t(
+    A: type_t,
+    length: nat_t = zero_t)
+  case cons_vec_t(
+    A: type_t,
+    prev: nat_t,
+    length: nat_t = succ_t(prev),
+    head: A,
+    tail: vec_t(A, prev))
+}
+
+data vec_t(A: type_t, length: nat_t) {
+  case null_vec_t() {
+    length = zero_t
+  }
+  case cons_vec_t(
+    head: A,
+    tail: vec_t(A, prev)
+  ) {
+    length = succ_t(tail.length)
   }
 }
 
-fn vec_map(f: A -> B, vec: vec_t(A, n)): vec_t(A, n) = {
+fn vec_append(A: type_t, x: vec_t(A, m), y: vec_t(A, n)): vec_t(A, nat_add(m, n)) = {
+  choice (x) {
+    case null_vec_t => y
+    case cons_vec_t => cons_vec_t(A, x.head, vec_append(A, x.tail, y))
+  }
+}
+
+fn vec_map(A: type_t, B: type_t, f: (A) -> B, vec: vec_t(A, n)): vec_t(B, n) = {
   choice (vec) {
     case null_vec_t => vec
-    case cons_vec_t => cons_vec_t(f(vec.head), vec_map(f, vec.tail))
+    case cons_vec_t => cons_vec_t(f(vec.head), vec_map(A, B, f, vec.tail))
   }
 }

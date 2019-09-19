@@ -12,16 +12,16 @@ fn list_length(list: list_t): nat_t = {
   }
 }
 
-fn list_append(A: type_t, ante: list_t(A), succ: list_t(A)): list_t(A) = {
-  choice (ante) {
-    case null_t => succ
-    case cons_t => cons_t(ante.head, list_append(ante.tail, succ))
+fn list_append(A: type_t, x: list_t(A), y: list_t(A)): list_t(A) = {
+  choice (x) {
+    case null_t => y
+    case cons_t => cons_t(A, x.head, list_append(A, x.tail, y))
   }
 }
 
-fn list_map(A: type_t, B: type_t, f: A -> B, list: list_t(A)): list_t(B) = {
+fn list_map(A: type_t, B: type_t, f: (A) -> B, list: list_t(A)): list_t(B) = {
   choice (list) {
     case null_t => list
-    case cons_t => cons_t(fun(list.head), list_map(fun, list.tail))
+    case cons_t => cons_t(A, fun(list.head), list_map(A, B, fun, list.tail))
   }
 }

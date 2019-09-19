@@ -3,15 +3,6 @@ package collection.vec
 import datatype.nat.*
 
 data vec_t(A: type_t, length: nat_t) {
-  case null_vec_t(length = zero_t)
-  case cons_vec_t(
-    prev: nat_t,
-    length = succ_t(prev),
-    head: A,
-    tail: vec_t(A, prev))
-}
-
-data vec_t(A: type_t, length: nat_t) {
   case null_vec_t(
     A: type_t,
     length: nat_t = zero_t)
@@ -23,22 +14,18 @@ data vec_t(A: type_t, length: nat_t) {
     tail: vec_t(A, prev))
 }
 
-data vec_t(A: type_t, length: nat_t) {
-  case null_vec_t() {
-    length = zero_t
-  }
-  case cons_vec_t(
-    head: A,
-    tail: vec_t(A, prev)
-  ) {
-    length = succ_t(tail.length)
-  }
-}
-
-fn vec_append(A: type_t, x: vec_t(A, m), y: vec_t(A, n)): vec_t(A, nat_add(m, n)) = {
+fn vec_append(
+  A: type_t,
+  m: nat_t,
+  n: nat_t,
+  x: vec_t(A, m),
+  y: vec_t(A, n),
+): vec_t(A, nat_add(m, n)) = {
   choice (x) {
     case null_vec_t => y
-    case cons_vec_t => cons_vec_t(A, x.head, vec_append(A, x.tail, y))
+    case cons_vec_t => cons_vec_t(
+      A, nat_add(m.prev, n),
+      x.head, vec_append(A, m.prev, n, x.tail, y))
   }
 }
 

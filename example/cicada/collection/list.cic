@@ -1,8 +1,8 @@
 package collection.list
 
 data list_t(A: type_t) {
-  case null_t
-  case cons_t(head: A, tail: list_t(A))
+  case null_t(A: type_t)
+  case cons_t(A: type_t, head: A, tail: list_t(A))
 }
 
 fn list_length(list: list_t): nat_t = {

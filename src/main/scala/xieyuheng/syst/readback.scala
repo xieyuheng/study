@@ -50,8 +50,8 @@ object readback {
       case NeuAp(fn: Neu, arg: TheVal) =>
         for {
           rator <- readback_neu(fn, used_names)
-          rand <- readback_the_val(arg, used_names)
-        } yield Ap(rator, rand)
+          arg <- readback_the_val(arg, used_names)
+        } yield Ap(rator, arg)
       case NeuVar(name: String) => {
         Right(Var(name))
       }

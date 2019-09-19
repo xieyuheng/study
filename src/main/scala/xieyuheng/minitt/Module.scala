@@ -1,7 +1,7 @@
 package xieyuheng.minitt
 
-import xieyuheng.minitt.check._
-import xieyuheng.minitt.pretty._
+import check._
+import pretty._
 
 case class Module() {
 

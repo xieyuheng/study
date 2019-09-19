@@ -103,8 +103,8 @@ object readback {
       case NeuAp(fn: Neu, arg: TheVal) =>
         for {
           rator <- readback_neu(fn, ctx)
-          rand <- readback_the_val(arg, ctx)
-        } yield Ap(rator, rand)
+          arg <- readback_the_val(arg, ctx)
+        } yield Ap(rator, arg)
       case NeuCar(pair: Neu) =>
         for {
           pair <- readback_neu(pair, ctx)

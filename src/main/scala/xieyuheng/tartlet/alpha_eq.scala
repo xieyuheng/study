@@ -53,9 +53,9 @@ object alpha_eq {
         true
       case (Zero(), Zero()) =>
         true
-      case (Ap(rator, rand), Ap(rator2, rand2)) =>
+      case (Ap(rator, arg), Ap(rator2, arg2)) =>
         alpha_eq(rator, rator2, x_map, y_map) &&
-        alpha_eq(rand, rand2, x_map, y_map)
+        alpha_eq(arg, arg2, x_map, y_map)
       case (Fn(name, body), Fn(name2, body2)) =>
         val sym = UUID.randomUUID().toString
         alpha_eq(body, body2, x_map + (name -> sym), y_map + (name2 -> sym))

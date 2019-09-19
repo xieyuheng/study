@@ -5,7 +5,7 @@ final case class ValType(level: Int) extends Val
 final case class ValThe(t: Val, body: Val) extends Val
 final case class ValPi(arg_name: String, arg_t: Val, dep_t: Clo) extends Val
 final case class ValFn(arg_name: String, arg_t: Val, dep_t: Clo, body: Clo) extends Val
-final case class ValClub(name: String, members: List[Member], tel: Telescope) extends Val
+final case class ValClub(name: String, members: List[DeclMember], tel: Telescope) extends Val
 final case class ValMember(name: String, club_name: String, tel: Telescope) extends Val
 final case class ValRecord(name: String, super_names: List[String], tel: Telescope) extends Val
 
@@ -13,7 +13,7 @@ case class Clo(arg_name: String, body: Exp, env: Env)
 
 case class Telescope(
   fileds: List[(String, Exp, Option[Exp])],
-  fills: List[(String, Option[Val], Option[Val])],
+  fills: List[(String, Val, Val)],
   env: Env)
 
 sealed trait Neu extends Val

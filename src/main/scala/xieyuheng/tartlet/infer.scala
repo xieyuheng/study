@@ -90,22 +90,22 @@ object infer {
         // -----------------
         // ctx :- Nat() => Universe()
         Right(The(Universe(), Nat()))
-      case Ap(rator: Exp, rand: Exp) =>
+      case Ap(rator: Exp, arg: Exp) =>
         // ctx :- rator => Pi(x: A, R)
-        // ctx :- rand <= A
+        // ctx :- arg <= A
         // -----------------
-        // ctx :- Ap(rator, rand) => R
+        // ctx :- Ap(rator, arg) => R
         for {
           the <- infer(rator, ctx)
           t <- eval(the.t, ctx.to_env)
           res <- t match {
             case ValPi(arg_t, dep_t) => {
               for {
-                rand <- check(rand, ctx, arg_t)
-                arg_t_val <- eval(rand, ctx.to_env)
+                arg <- check(arg, ctx, arg_t)
+                arg_t_val <- eval(arg, ctx.to_env)
                 dep_t_val <- dep_t.ap(arg_t_val)
                 dep_t_exp <- readback_val(dep_t_val, ValUniverse(), ctx)
-              } yield The(dep_t_exp, Ap(the.value, rand))
+              } yield The(dep_t_exp, Ap(the.value, arg))
             }
             case _ =>
               Left(Err("expected Pi, " + "found: ${t}"))

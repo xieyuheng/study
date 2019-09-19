@@ -13,7 +13,7 @@ final case class Succ(prev: Exp) extends Exp
 final case class NatInd(target: Exp, motive: Exp, base: Exp, step: Exp) extends Exp
 final case class Pi(name: String, arg_t: Exp, dep_t: Exp) extends Exp
 final case class Fn(name: String, body: Exp) extends Exp
-final case class Ap(rator: Exp, rand: Exp) extends Exp
+final case class Ap(rator: Exp, arg: Exp) extends Exp
 final case class Absurd() extends Exp
 final case class AbsurdInd(target: Exp, motive: Exp) extends Exp
 final case class Sigma(name: String, arg_t: Exp, dep_t: Exp) extends Exp

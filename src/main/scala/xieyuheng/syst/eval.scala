@@ -23,10 +23,10 @@ object eval {
       case The(t: Type, exp: Exp) => eval(exp, env)
       case Succ(prev: Exp) => ValSucc(eval(prev, env))
       case Zero() => ValZero()
-      case Ap(rator: Exp, rand: Exp) =>
+      case Ap(rator: Exp, arg: Exp) =>
         exe_ap(
           eval(rator, env),
-          eval(rand, env))
+          eval(arg, env))
       case Fn(name: String, body: Exp) => ValFn(name, body, env)
       case Block(DeclLet(name, t, e), body) =>
         eval(body, env.ext(name, eval(e, env)))

@@ -33,18 +33,18 @@ object infer {
         // -----------------
         // ctx :- e: T => T
         Right(t)
-      case Ap(rator: Exp, rand: Exp) =>
+      case Ap(rator: Exp, arg: Exp) =>
         // ctx :- rator => A -> R
-        // ctx :- rand <= A
+        // ctx :- arg <= A
         // ---------------
-        // ctx :- Ap (rator, rand) => R
+        // ctx :- Ap (rator, arg) => R
         infer(rator, ctx) match {
           case Right(Arrow(arg_t, dep_t)) =>
             for {
-              _ <- check(rand, ctx, arg_t)
+              _ <- check(arg, ctx, arg_t)
             } yield dep_t
-          case Left(errorMsg) =>
-            Left(errorMsg)
+          case Left(err) =>
+            Left(err)
           case _ =>
             Left(Err(s"the type of rator: ${rator} is not Arrow"))
         }

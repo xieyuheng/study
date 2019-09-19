@@ -64,10 +64,10 @@ object eval {
         Right(ValNat())
       case Zero() =>
         Right(ValZero())
-      case Ap(rator: Exp, rand: Exp) =>
+      case Ap(rator: Exp, arg: Exp) =>
         for {
           fn <- eval(rator, env)
-          arg <- eval(rand, env)
+          arg <- eval(arg, env)
           res <- Ap.exe(fn, arg)
         } yield res
       case Fn(name: String, body: Exp) =>

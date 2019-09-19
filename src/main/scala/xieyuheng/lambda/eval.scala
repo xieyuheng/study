@@ -14,14 +14,14 @@ object eval {
             println((s"can not find var: ${name}"))
             throw new Exception()
         }
-      case Ap(rator: Exp, rand: Exp) =>
+      case Ap(rator: Exp, arg: Exp) =>
         val fn = eval(rator, env)
-        val arg = eval(rand, env)
+        val arg_val = eval(arg, env)
         fn match {
           case fn: ValFn =>
-            eval(fn.body, fn.env.ext(fn.name, arg))
+            eval(fn.body, fn.env.ext(fn.name, arg_val))
           case fn: Neu =>
-            NeuAp(fn, arg)
+            NeuAp(fn, arg_val)
           case _ =>
             s"unknown fn value type: ${fn}"
             throw new Exception()

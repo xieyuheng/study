@@ -13,7 +13,7 @@ A dependently typed language
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):
   The untyped lambda calculus with norm-by-eval (normalization by evaluation).
 - [syst](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/syst):
-  Kurt Gödel's System T (simply typed lambda calculus with natural number)
+  Kurt Gödel's System T (curry style simply typed lambda calculus with natural number)
   with typed norm-by-eval, (a step toward tartlet and pie).
 - [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet)
   The tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",

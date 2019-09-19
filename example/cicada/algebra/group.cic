@@ -1,4 +1,4 @@
-module algebra
+package algebra
 
 class group_t extends monoid_t {
   inv(x: E): eqv_t(mul(id, x), x)

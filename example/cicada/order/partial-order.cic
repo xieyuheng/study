@@ -1,4 +1,4 @@
-module order
+package order
 
 class partial_order_t extends pre_order_t {
   antisymmetric(pre_t(a, b), pre_t(b, a)): eqv_t(a, b)

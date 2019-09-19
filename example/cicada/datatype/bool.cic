@@ -1,6 +1,6 @@
-module datatype
+package datatype
 
-type bool_t {
+data bool_t {
   true_t
   false_t
 }

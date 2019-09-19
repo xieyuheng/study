@@ -1,7 +1,7 @@
 let id: (A: type_t, A) -> A =
   (A, x) => x
 
-let bool_t: type_t = type {
+let bool_t: type_t = data {
   case true
   case false
 }
@@ -31,7 +31,7 @@ let bool_elim: (
   }
 }
 
-letrec nat_t: type_t = type {
+letrec nat_t: type_t = data {
   case zero
   case succ[nat_t]
 }
@@ -118,7 +118,7 @@ eq! nat_eq(one, two) false
 eq! nat_eq(two, one) false
 
 letrec list_t: (A: type_t) -> type_t = {
-  A => type {
+  A => data {
     case null
     case cons $[A, list_t(A)]
   }
@@ -208,7 +208,7 @@ let and_commute_2: (
 }
 
 // letrec vec_t: (A: type_t, n: nat_t) -> type_t = {
-//   A => type {
+//   A => data {
 //     case vec_null { n = zero }
 //     case vec_cons $[A, prev: nat_t, vec_t(A, prev)] {
 //       n = succ[prev]

@@ -1,27 +1,27 @@
-module collection.list
+package collection.list
 
-type list_t(A: type_t) {
-  null_t
-  cons_t(head: A, tail: list_t(A))
+data list_t(A: type_t) {
+  case null_t
+  case cons_t(head: A, tail: list_t(A))
 }
 
-list_length(list: list_t): nat_t = {
-  list choice {
-    null_t => zero_t
-    cons_t => succ_t(list_length(list.tail))
+fn list_length(list: list_t): nat_t = {
+  choice (list) {
+    case null_t => zero_t
+    case cons_t => succ_t(list_length(list.tail))
   }
 }
 
-list_append(A: type_t, ante: list_t(A), succ: list_t(A)): list_t(A) = {
-  ante choice {
-    null_t => succ
-    cons_t => cons_t(ante.head, list_append(ante.tail, succ))
+fn list_append(A: type_t, ante: list_t(A), succ: list_t(A)): list_t(A) = {
+  choice (ante) {
+    case null_t => succ
+    case cons_t => cons_t(ante.head, list_append(ante.tail, succ))
   }
 }
 
-list_map(A: type_t, B: type_t, f: A -> B, list: list_t(A)): list_t(B) = {
-  list choice {
-    null_t => list
-    cons_t => cons_t(fun(list.head), list_map(fun, list.tail))
+fn list_map(A: type_t, B: type_t, f: A -> B, list: list_t(A)): list_t(B) = {
+  choice (list) {
+    case null_t => list
+    case cons_t => cons_t(fun(list.head), list_map(fun, list.tail))
   }
 }

@@ -11,7 +11,7 @@ object grammar {
   def preserved: List[String] = List(
     "let", "letrec",
     "car", "cdr",
-    "type", "type_t",
+    "data", "type_t",
     "case",
     "sole", "trivial",
     "return",
@@ -172,7 +172,7 @@ object grammar {
         List("[", non_empty_list(exp_comma), exp, "]"),
       "sigma" -> List("$", "[", non_empty_list(bind), exp, "]"),
       "data" -> List(identifier, exp),
-      "sum" -> List("type", "{", non_empty_list(sum_clause), "}"),
+      "sum" -> List("data", "{", non_empty_list(sum_clause), "}"),
       "sole" -> List("[", "]"),
       "lit_sole" -> List("sole"),
       "trivial" -> List("trivial"),

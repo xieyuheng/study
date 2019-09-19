@@ -1,4 +1,4 @@
-module algebra
+package algebra
 
 class functor_t {
   C: category_t

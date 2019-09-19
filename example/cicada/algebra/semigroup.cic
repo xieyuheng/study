@@ -1,4 +1,4 @@
-module algebra
+package algebra
 
 class semigroup_t {
   E: type_t

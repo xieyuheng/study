@@ -1,4 +1,4 @@
-module order
+package order
 
 class pre_order_t {
   E: type_t

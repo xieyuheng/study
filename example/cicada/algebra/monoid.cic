@@ -1,4 +1,4 @@
-module algebra
+package algebra
 
 class monoid_t extends semigroup_t {
   id: E

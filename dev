@@ -84,6 +84,22 @@ test_cicada () {
     done
 }
 
+fast_test_cicada () {
+    name=cicada
+
+    prog=./target/linux/bin/${name}
+
+    for file in $(find . | grep "^\./example/${name}/" | grep "\.cic$")
+    do
+        echo ""
+        echo "[${name}] $file"
+        if ! time $prog --eval $file
+        then
+            exit 1
+        fi
+    done
+}
+
 build_native_image () {
     mkdir -p target/linux/bin/
     get_classpath

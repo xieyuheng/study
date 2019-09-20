@@ -10,7 +10,7 @@ object grammar {
 
   def preserved: List[String] = List(
     "let", "return",
-    "data", "fn",
+    "data", "fn", "function",
     "the", "type_t",
     "case", "choice",
     "class", "extends",
@@ -57,6 +57,8 @@ object grammar {
       "let_type" -> List("let", identifier, ":", exp),
       "fn" -> List("fn", identifier, "(", non_empty_list(bind), ")", ":", exp, "=", exp),
       "fn_type" -> List("fn", identifier, "(", non_empty_list(bind), ")", ":", exp),
+      "function" -> List("function", identifier, "(", non_empty_list(bind), ")", ":", exp, "=", exp),
+      "function_type" -> List("function", identifier, "(", non_empty_list(bind), ")", ":", exp),
       "data" -> List("data", identifier,
         "(", non_empty_list(field), ")",
         "{", non_empty_list(member), "}"),
@@ -90,6 +92,12 @@ object grammar {
         val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
         DeclFn(name, args, exp_matcher(t), exp_matcher(body)) },
       "fn_type" -> { case List(_, Leaf(name), _, bind_list, _, _, t) =>
+        val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
+        DeclFnType(name, args, exp_matcher(t)) },
+      "function" -> { case List(_, Leaf(name), _, bind_list, _, _, t, _, body) =>
+        val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
+        DeclFn(name, args, exp_matcher(t), exp_matcher(body)) },
+      "function_type" -> { case List(_, Leaf(name), _, bind_list, _, _, t) =>
         val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
         DeclFnType(name, args, exp_matcher(t)) },
       "data" -> { case List(_, Leaf(name), _, field_list, _, _, member_list, _) =>
@@ -222,7 +230,7 @@ object grammar {
       "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
       "ap_one" -> List(rator, "(", exp, ")"),
       "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
-      "choice" -> List("choice", "(", exp, ")", "{", non_empty_list(choice_entry), "}"),
+      "choice" -> List("choice", identifier, "{", non_empty_list(choice_entry), "}"),
       "dot" -> List(exp, ".", identifier),
       "dot_type" -> List(exp, ".", ":", identifier),
       "block" -> List(block),
@@ -242,9 +250,9 @@ object grammar {
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
-      "choice" -> { case List(_, _, exp, _, _, choice_entry_list, _) =>
+      "choice" -> { case List(_, Leaf(name), _, choice_entry_list, _) =>
         val map = non_empty_list_matcher(choice_entry_matcher)(choice_entry_list).toMap
-        Choice(exp_matcher(exp), map) },
+        Choice(Var(name), map) },
       "dot" -> { case List(exp, _, Leaf(field_name)) =>
         Dot(exp_matcher(exp), field_name) },
       "dot_type" -> { case List(exp, _, _, Leaf(field_name)) =>
@@ -267,13 +275,18 @@ object grammar {
 
   def block: Rule = Rule(
     "block", Map(
-      "block" -> List("{", non_empty_list(decl), "return", exp, "}"),
+      "block" -> List("{", non_empty_list(decl), exp, "}"),
+      "block_return" -> List("{", non_empty_list(decl), "return", exp, "}"),
       "block_one" -> List("{", exp, "}"),
     ))
 
   def block_matcher: Tree => Exp = Tree.matcher[Exp](
     "block", Map(
-      "block" -> { case List(_, decl_list, _, exp, _) =>
+      "block" -> { case List(_, decl_list, exp, _) =>
+        non_empty_list_matcher(decl_matcher)(decl_list)
+          .foldRight(exp_matcher(exp)) { case (decl, body) =>
+            Let(decl, body) } },
+      "block_return" -> { case List(_, decl_list, _, exp, _) =>
         non_empty_list_matcher(decl_matcher)(decl_list)
           .foldRight(exp_matcher(exp)) { case (decl, body) =>
             Let(decl, body) } },

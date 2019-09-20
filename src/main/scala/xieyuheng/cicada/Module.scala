@@ -1,7 +1,7 @@
 package xieyuheng.cicada
 
 // import check._
-// import pretty._
+import pretty._
 
 case class Module() {
 
@@ -17,7 +17,20 @@ case class Module() {
   }
 
   def run(): Unit = {
-    top_list.foreach(println)
+    top_list.map {
+      case TopDecl(decl: Decl) =>
+        s"${pretty_decl(decl)}"
+      case TopEval(exp: Exp) =>
+        s"eval! ${pretty_exp(exp)}"
+      case TopEq(x: Exp, y: Exp) =>
+        s"eq! ${pretty_exp(x)} ${pretty_exp(y)}"
+      case TopNotEq(x: Exp, y: Exp) =>
+        s"not_eq! ${pretty_exp(x)} ${pretty_exp(y)}"
+    }.foreach {
+      case str =>
+        println(str)
+        println()
+    }
   }
 
 }

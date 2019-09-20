@@ -4,21 +4,21 @@ data list_t(A: type_t) {
 }
 
 fn list_length(list: list_t): nat_t = {
-  choice (list) {
+  choice list {
     case null_t => zero_t
     case cons_t => succ_t(list_length(list.tail))
   }
 }
 
 fn list_append(A: type_t, x: list_t(A), y: list_t(A)): list_t(A) = {
-  choice (x) {
+  choice x {
     case null_t => y
     case cons_t => cons_t(A, x.head, list_append(A, x.tail, y))
   }
 }
 
 fn list_map(A: type_t, B: type_t, f: (A) -> B, list: list_t(A)): list_t(B) = {
-  choice (list) {
+  choice list {
     case null_t => list
     case cons_t => cons_t(A, fun(list.head), list_map(A, B, fun, list.tail))
   }

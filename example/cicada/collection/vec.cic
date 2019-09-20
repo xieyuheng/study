@@ -17,7 +17,7 @@ fn vec_append(
   x: vec_t(A, m),
   y: vec_t(A, n),
 ): vec_t(A, nat_add(m, n)) = {
-  choice (x) {
+  choice x {
     case null_vec_t => y
     case cons_vec_t => cons_vec_t(
       A, nat_add(m.prev, n),
@@ -26,8 +26,30 @@ fn vec_append(
 }
 
 fn vec_map(A: type_t, B: type_t, f: (A) -> B, vec: vec_t(A, n)): vec_t(B, n) = {
-  choice (vec) {
+  choice vec {
     case null_vec_t => vec
     case cons_vec_t => cons_vec_t(f(vec.head), vec_map(A, B, f, vec.tail))
   }
 }
+
+// data vec_t(A: type_t, length: nat_t) {
+//   case null_vec_t(
+//     A: type_t,
+//     length: nat_t = zero_t)
+//   case cons_vec_t(
+//     A: type_t,
+//     head: A,
+//     tail: vec_t(A),
+//     length: nat_t = succ_t(tail.length))
+// }
+
+// fn vec_append(
+//   A: type_t,
+//   x: vec_t(A),
+//   y: vec_t(A),
+// ): vec_t(A, nat_add(x.length, y.length)) = {
+//   choice x {
+//     case null_vec_t => y
+//     case cons_vec_t => cons_vec_t(A, x.head, vec_append(A, x.tail, y))
+//   }
+// }

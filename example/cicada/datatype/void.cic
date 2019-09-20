@@ -1,3 +1,0 @@
-package datatype
-
-data void_t() {}

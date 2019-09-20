@@ -15,20 +15,13 @@ get_classpath () {
 t () {
     rm -f target/universal/stage/bin/*
 
-    #     sbt stage && \
-        #         test_general && \
-        #         test_tartlet && \
-        #         test_lambda && \
-        #         test_syst && \
-        #         test_minitt && \
-        #         test_cicada
-
     sbt stage && \
         test_general && \
         test_tartlet && \
         test_lambda && \
         test_syst && \
-        test_minitt
+        test_minitt && \
+        test_cicada
 }
 
 test_general () {
@@ -57,7 +50,6 @@ test () {
             exit 1
         fi
     done
-
 }
 
 test_lambda () {
@@ -77,7 +69,19 @@ test_minitt () {
 }
 
 test_cicada () {
-    test cicada
+    name=cicada
+
+    prog=./target/universal/stage/bin/${name}
+
+    for file in $(find . | grep "^\./example/${name}/" | grep "\.cic$")
+    do
+        echo ""
+        echo "[${name}] $file"
+        if ! time $prog --eval $file
+        then
+            exit 1
+        fi
+    done
 }
 
 build_native_image () {

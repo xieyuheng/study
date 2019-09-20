@@ -54,26 +54,92 @@ object grammar {
   def decl: Rule = Rule(
     "decl", Map(
       "let" -> List("let", identifier, ":", exp, "=", exp),
+      "let_type" -> List("let", identifier, ":", exp),
       "fn" -> List("fn", identifier, "(", non_empty_list(bind), ")", ":", exp, "=", exp),
+      "fn_type" -> List("fn", identifier, "(", non_empty_list(bind), ")", ":", exp),
       "data" -> List("data", identifier,
         "(", non_empty_list(field), ")",
         "{", non_empty_list(member), "}"),
+      "data_nullary" -> List("data", identifier,
+        "{", non_empty_list(member), "}"),
       "class" -> List("class", identifier,
-        "{", non_empty_list(member), "}")
+        "{", non_empty_list(decl), "}"),
+      "class_extends" -> List("class", identifier,
+        "extends", identifier,
+        "{", non_empty_list(decl), "}"),
+      "class_extends_many" -> List("class", identifier,
+        "extends", identifier, non_empty_list(comma_identifier),
+        "{", non_empty_list(decl), "}"),
+      "class_empty_body" -> List("class", identifier,
+        "{", "}"),
+      "class_extends_empty_body" -> List("class", identifier,
+        "extends", identifier,
+        "{", "}"),
+      "class_extends_many_empty_body" -> List("class", identifier,
+        "extends", identifier, non_empty_list(comma_identifier),
+        "{", "}"),
     ))
 
-
-  def decl_matcher = Tree.matcher[Decl](
+  def decl_matcher: Tree => Decl = Tree.matcher[Decl](
     "decl", Map(
       "let" -> { case List(_, Leaf(name), _, t, _, e) =>
         DeclLet(name, exp_matcher(t), exp_matcher(e)) },
+      "let_type" -> { case List(_, Leaf(name), _, t) =>
+        DeclLetType(name, exp_matcher(t)) },
       "fn" -> { case List(_, Leaf(name), _, bind_list, _, _, t, _, body) =>
         val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
         DeclFn(name, args, exp_matcher(t), exp_matcher(body)) },
+      "fn_type" -> { case List(_, Leaf(name), _, bind_list, _, _, t) =>
+        val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
+        DeclFnType(name, args, exp_matcher(t)) },
       "data" -> { case List(_, Leaf(name), _, field_list, _, _, member_list, _) =>
         val fields = non_empty_list_matcher(field_matcher)(field_list)
         val members = non_empty_list_matcher(member_matcher(name))(member_list)
         DeclClub(name, members, fields) },
+      "data_nullary" -> { case List(_, Leaf(name), _, member_list, _) =>
+        val members = non_empty_list_matcher(member_matcher(name))(member_list)
+        DeclClub(name, members, List()) },
+      "class" -> { case List(_, Leaf(name),
+        _, decl_list, _) =>
+        val decls = non_empty_list_matcher(decl_matcher)(decl_list)
+        DeclRecord(name, List(), decls) },
+      "class_extends" -> { case List(_, Leaf(name),
+        _, Leaf(super_name),
+        _, decl_list, _) =>
+        val decls = non_empty_list_matcher(decl_matcher)(decl_list)
+        DeclRecord(name, List(super_name), decls) },
+      "class_extends_many" -> { case List(_, Leaf(name),
+          _, Leaf(super_name), rest_super_names,
+        _, decl_list, _) =>
+        val decls = non_empty_list_matcher(decl_matcher)(decl_list)
+        val rest = non_empty_list_matcher(comma_identifier_matcher)(rest_super_names)
+        DeclRecord(name, super_name +: rest, decls) },
+      "class_empty_body" -> { case List(_, Leaf(name),
+        _, _) =>
+        val decls = List()
+        DeclRecord(name, List(), decls) },
+      "class_extends_empty_body" -> { case List(_, Leaf(name),
+        _, Leaf(super_name),
+        _, _) =>
+        val decls = List()
+        DeclRecord(name, List(super_name), decls) },
+      "class_extends_many_empty_body" -> { case List(_, Leaf(name),
+          _, Leaf(super_name), rest_super_names,
+        _, _) =>
+        val decls = List()
+        val rest = non_empty_list_matcher(comma_identifier_matcher)(rest_super_names)
+        DeclRecord(name, super_name +: rest, decls) },
+    ))
+
+
+  def comma_identifier = Rule(
+    "comma_identifier", Map(
+      "comma_identifier" -> List(",", identifier),
+    ))
+
+  def comma_identifier_matcher = Tree.matcher[String](
+    "comma_identifier", Map(
+      "comma_identifier" -> { case List(_, Leaf(name)) => name },
     ))
 
 
@@ -122,6 +188,7 @@ object grammar {
   def member: Rule = Rule(
     "member", Map(
       "member" -> List("case", identifier, "(", non_empty_list(field), ")"),
+      "member_nullary" -> List("case", identifier),
     ))
 
 
@@ -130,6 +197,8 @@ object grammar {
       "member" -> { case List(_, Leaf(name), _, field_list, _) =>
         val fields = non_empty_list_matcher(field_matcher)(field_list)
         Member(name, club_name, fields) },
+      "member_nullary" -> { case List(_, Leaf(name)) =>
+        Member(name, club_name, List()) },
     ))
 
 

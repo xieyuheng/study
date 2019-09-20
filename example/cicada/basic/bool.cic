@@ -1,0 +1,4 @@
+data bool_t {
+  case true_t
+  case false_t
+}

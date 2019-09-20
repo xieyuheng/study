@@ -1,7 +1,3 @@
-package collection.vec
-
-import datatype.nat.*
-
 data vec_t(A: type_t, length: nat_t) {
   case null_vec_t(
     A: type_t,

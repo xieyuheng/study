@@ -1,13 +1,11 @@
-package order
-
 class pre_order_t {
-  E: type_t
-  pre_t(E, E): type_t
-  reflexive(a: E): pre_t(a, a)
-  transitive(pre_t(a, b), pre_t(b, c)): pre_t(a, c)
+  let E: type_t
+  fn pre_t(E, E): type_t
+  fn reflexive(a: E): pre_t(a, a)
+  fn transitive(pre_t(a, b), pre_t(b, c)): pre_t(a, c)
 
-  strict_pre_t(a: E, b: E): type_t =
-    (pre_t(a <= b), not_eqv_t(a, b))
+  fn strict_pre_t(a: E, b: E): type_t =
+    cons(pre_t(a, b), not_eqv_t(a, b))
 }
 
 // thin category

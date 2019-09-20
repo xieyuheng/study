@@ -1,6 +1,0 @@
-package datatype
-
-data bool_t {
-  true_t
-  false_t
-}

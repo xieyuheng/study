@@ -1,5 +1,3 @@
-package datatype
-
 data nat_t {
   case zero_t
   case succ_t(prev: nat_t)

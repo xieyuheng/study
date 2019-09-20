@@ -1,10 +1,9 @@
-package order
-
 class partial_order_t extends pre_order_t {
-  antisymmetric(pre_t(a, b), pre_t(b, a)): eqv_t(a, b)
+  fn antisymmetric(pre_t(a, b), pre_t(b, a)): eqv_t(a, b)
 
-  cover_t(a: E, b: E): type_t =
-    (strict_pre_t(a, b),
+  fn cover_t(a: E, b: E): type_t =
+    cons(
+      strict_pre_t(a, b),
       (x: E, pre_t(a, x), strict_pre_t(x, b)) -> eqv_t(x, a))
 }
 

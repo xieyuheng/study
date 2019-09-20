@@ -1,3 +1,1 @@
-package order
-
-class lattic_t extends join_semilattice_t with meet_semilattice_t
+class lattic_t extends join_semilattice_t, meet_semilattice_t {}

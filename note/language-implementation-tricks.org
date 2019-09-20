@@ -64,14 +64,14 @@
 
     ctx, x: A |- e: B
     ------------
-    ctx |- λ x. e : A -> B
+    ctx |- (x) => e: A -> B
 
     we can not possibly infer the type of a bound variable x.
     thus we do check for the rule of function abstraction.
 
     [check] ctx, x: A |- e: B
     ------------
-    [check] ctx |- λ x. e : A -> B
+    [check] ctx |- (x) => e: A -> B
 
     function abstraction is the constructor of function type,
     function application is the eliminator of function type,
@@ -105,6 +105,12 @@
     for example, use church's typed lambda calculus instead of curry's typed lambda calculus ?
     in church's typed lambda calculus, can we infer all the way down ?
     is this true for all the rules about constructor ?
+
+    [infer] ctx, x: A |- e: B
+    ------------
+    [infer] ctx |- (x: A) => e: A -> B
+
+    we do not need to annotate the return type of function
 
   - a sub-trick is that,
     the argument type of type check function

@@ -16,5 +16,8 @@ case class Module() {
     add_top(TopDecl(decl))
   }
 
+  def run(): Unit = {
+    top_list.foreach(println)
+  }
 
 }

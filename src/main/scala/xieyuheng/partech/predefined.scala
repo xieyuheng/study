@@ -26,7 +26,7 @@ object predefined {
     '0', '1', '2', '3', '4',
     '5', '6', '7', '8', '9')
 
-  def digit = word_in_char_set(digit_char_set)
+  def digit = WordPred("digit", word_in_char_set(digit_char_set))
 
 
   def lower_case_char_set: Set[Char] = Set(
@@ -36,7 +36,7 @@ object predefined {
     'u', 'v', 'w', 'x', 'y', 'z',
   )
 
-  def lower_case = word_in_char_set(lower_case_char_set)
+  def lower_case = WordPred("lower_case", word_in_char_set(lower_case_char_set))
 
 
   def upper_case_char_set: Set[Char] = Set(
@@ -46,7 +46,7 @@ object predefined {
     'U', 'V', 'W', 'X', 'Y', 'Z',
   )
 
-  def upper_case = word_in_char_set(upper_case_char_set)
+  def upper_case = WordPred("upper_case", word_in_char_set(upper_case_char_set))
 
   def identifier_with_preserved(
     name: String,

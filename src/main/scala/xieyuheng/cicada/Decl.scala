@@ -10,23 +10,21 @@ final case class DeclLet(
 
 final case class DeclFn(
   name: String,
-  arg_name: String,
-  arg_t: Exp,
+  args: Map[String, Exp],
   dep_t: Exp,
   body: Exp,
 ) extends Decl
 
 final case class DeclClub(
   name: String,
-  members: List[DeclMember],
+  members: List[Member],
   fileds: List[(String, Exp, Option[Exp])],
 ) extends Decl
 
-final case class DeclMember(
+case class Member(
   name: String,
   club_name: String,
-  fileds: List[(String, Exp, Option[Exp])],
-) extends Decl
+  fileds: List[(String, Exp, Option[Exp])])
 
 final case class DeclRecord(
   name: String,

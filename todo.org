@@ -1,7 +1,5 @@
-human readable js 
 * cicada
 - eval
-- grammar
 - pre -- between any two values, because value can be used as type
   - pre_val and pre_exp should be implemented by pre_norm
   - we will need variance to implement pre

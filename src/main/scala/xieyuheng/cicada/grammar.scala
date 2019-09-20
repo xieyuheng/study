@@ -70,9 +70,10 @@ object grammar {
       "fn" -> { case List(_, Leaf(name), _, bind_list, _, _, t, _, body) =>
         val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
         DeclFn(name, args, exp_matcher(t), exp_matcher(body)) },
-//       "data" -> List("data", identifier,
-//         "(", non_empty_list(field), ")",
-//         "{", non_empty_list(member), "}"),
+      "data" -> { case List(_, Leaf(name), _, field_list, _, _, member_list, _) =>
+        val fields = non_empty_list_matcher(field_matcher)(field_list)
+        val members = non_empty_list_matcher(member_matcher(name))(member_list)
+        DeclClub(name, members, fields) },
     ))
 
 
@@ -105,7 +106,17 @@ object grammar {
       "value_comma" -> List(identifier, ":", exp, "=", exp, ","),
     ))
 
-  // def field_matcher
+  def field_matcher = Tree.matcher[(String, Exp, Option[Exp])](
+    "field", Map(
+      "type" -> { case List(Leaf(name), _, t) =>
+        (name, exp_matcher(t), None) },
+      "type_comma" -> { case List(Leaf(name), _, t, _) =>
+        (name, exp_matcher(t), None) },
+      "value" -> { case List(Leaf(name), _, t, _, body) =>
+        (name, exp_matcher(t), Some(exp_matcher(body))) },
+      "value_comma" -> { case List(Leaf(name), _, t, _, body, _) =>
+        (name, exp_matcher(t), Some(exp_matcher(body))) },
+    ))
 
 
   def member: Rule = Rule(
@@ -113,7 +124,13 @@ object grammar {
       "member" -> List("case", identifier, "(", non_empty_list(field), ")"),
     ))
 
-  // def member_matcher
+
+  def member_matcher(club_name: String) = Tree.matcher[Member](
+    "member", Map(
+      "member" -> { case List(_, Leaf(name), _, field_list, _) =>
+        val fields = non_empty_list_matcher(field_matcher)(field_list)
+        Member(name, club_name, fields) },
+    ))
 
 
   def exp: Rule = Rule(

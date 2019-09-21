@@ -54,10 +54,10 @@ object infer {
                   CloNative("_", _ => Right(ValUniverse()))))
                 motive_val <- eval(motive, ctx.to_env)
                 from_val <- eval(from, ctx.to_env)
-                base_t <- Ap.exe(motive_val, from_val)
+                base_t <- Ap.ap(motive_val, from_val)
                 base <- check(base, ctx, base_t)
                 to_val <- eval(to, ctx.to_env)
-                t_val <- Ap.exe(motive_val, to_val)
+                t_val <- Ap.ap(motive_val, to_val)
                 t_exp <- readback_val(t_val, ValUniverse(), ctx)
               } yield The(t_exp, Replace(the.value, motive, base))
             case _ =>
@@ -80,10 +80,10 @@ object infer {
             CloNative("n", _ => Right(ValUniverse()))))
           motive_val <- eval(motive, ctx.to_env)
           target_val <- eval(target, ctx.to_env)
-          base_t <- Ap.exe(motive_val, ValZero())
+          base_t <- Ap.ap(motive_val, ValZero())
           base <- check(base, ctx, base_t)
           step <- check(step, ctx, NatInd.stepType(motive_val))
-          t_val <- Ap.exe(motive_val, target_val)
+          t_val <- Ap.ap(motive_val, target_val)
           t <- readback_val(t_val, ValUniverse(), ctx)
         } yield The(t, NatInd(target, motive, base, step))
       case Nat() =>
@@ -180,7 +180,7 @@ object infer {
             case ValSigma(arg_t, dep_t) =>
               for {
                 pair_val <- eval(the.value, ctx.to_env)
-                car_val <- Car.exe(pair_val)
+                car_val <- Car.ap(pair_val)
                 real_dep_t <- dep_t.ap(car_val)
                 dep_t_exp <- readback_val(real_dep_t, ValUniverse(), ctx)
               } yield The(dep_t_exp, the.value)

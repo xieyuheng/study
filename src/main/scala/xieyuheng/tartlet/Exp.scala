@@ -26,14 +26,14 @@ final case class Universe() extends Exp
 final case class The(t: Exp, value: Exp) extends Exp
 
 object Replace {
-  def exe(target: Val, motive: Val, base: Val): Either[Err, Val] = {
+  def ap(target: Val, motive: Val, base: Val): Either[Err, Val] = {
     target match {
       case ValSame() =>
         Right(base)
       case TheNeu(ValEqv(t, from, to), neu) => {
         for {
-          t_val <- Ap.exe(motive, to)
-          base_t <- Ap.exe(motive, from)
+          t_val <- Ap.ap(motive, to)
+          base_t <- Ap.ap(motive, from)
         } yield TheNeu(t_val,
           NeuReplace(
             neu,
@@ -55,27 +55,27 @@ object NatInd {
     ValPi(ValNat(),
       CloNative("prev", prev =>
         for {
-          almostType <- Ap.exe(motive, prev)
+          almostType <- Ap.ap(motive, prev)
         } yield ValPi(almostType,
           CloNative("almost", almost =>
-            Ap.exe(motive, ValSucc(prev))))))
+            Ap.ap(motive, ValSucc(prev))))))
   }
 
-  def exe(target: Val, motive: Val, base: Val, step: Val): Either[Err, Val] = {
+  def ap(target: Val, motive: Val, base: Val, step: Val): Either[Err, Val] = {
     target match {
       case ValZero() =>
         Right(base)
       case ValSucc(prev) => {
         for {
-          f <- Ap.exe(step, prev)
-          almost <- NatInd.exe(prev, motive, base, step)
-          res <- Ap.exe(f, almost)
+          f <- Ap.ap(step, prev)
+          almost <- NatInd.ap(prev, motive, base, step)
+          res <- Ap.ap(f, almost)
         } yield res
       }
       case TheNeu(ValNat(), neu) => {
         for {
-          t <- Ap.exe(motive, target)
-          base_t <- Ap.exe(motive, ValZero())
+          t <- Ap.ap(motive, target)
+          base_t <- Ap.ap(motive, ValZero())
         } yield TheNeu(t,
           NeuNatInd(
             neu,
@@ -95,7 +95,7 @@ object NatInd {
 }
 
 object Ap {
-  def exe(fn: Val, arg: Val): Either[Err, Val] = {
+  def ap(fn: Val, arg: Val): Either[Err, Val] = {
     fn match {
       case ValFn(clo) =>
         clo.ap(arg)
@@ -118,7 +118,7 @@ object Arrow {
 }
 
 object AbsurdInd {
-  def exe(target: Val, motive: Val): Either[Err, Val] = {
+  def ap(target: Val, motive: Val): Either[Err, Val] = {
     target match {
       case TheNeu(ValAbsurd(), neu) =>
         Right(
@@ -132,7 +132,7 @@ object AbsurdInd {
 }
 
 object Car {
-  def exe(pair: Val): Either[Err, Val] = {
+  def ap(pair: Val): Either[Err, Val] = {
     pair match {
       case ValCons(car, cdr) =>
         Right(car)
@@ -150,13 +150,13 @@ object Car {
 }
 
 object Cdr {
-  def exe(pair: Val): Either[Err, Val] = {
+  def ap(pair: Val): Either[Err, Val] = {
     pair match {
       case ValCons(car, cdr) =>
         Right(cdr)
       case TheNeu(ValSigma(arg_t, dep_t), neu) => {
         for {
-          car_val <- Car.exe(pair)
+          car_val <- Car.ap(pair)
           real_dep_t <- dep_t.ap(car_val)
         } yield TheNeu(real_dep_t, NeuCar(neu))
       }

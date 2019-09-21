@@ -35,7 +35,7 @@ object readback {
             val fresh_name = freshen(ctx.names, dep_t.name)
             val arg = TheNeu(arg_t, NeuVar(fresh_name))
             for {
-              body_val <- Ap.exe(value, arg)
+              body_val <- Ap.ap(value, arg)
               real_dep_t <- dep_t.ap(arg)
               body <- readback_val(
                 body_val,

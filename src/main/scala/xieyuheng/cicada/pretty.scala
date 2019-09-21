@@ -58,8 +58,8 @@ object pretty {
         name
       case Type(level: Int) =>
         if (level == 1) s"type_t" else s"type_t^${level}"
-      case The(t: Exp, body: Exp) =>
-        s"the(${pretty_exp(t)}, ${pretty_exp(body)})"
+      // case The(t: Exp, body: Exp) =>
+      //   s"the(${pretty_exp(t)}, ${pretty_exp(body)})"
       case Pi(arg_name: String, arg_t: Exp, dep_t: Exp) =>
         s"(${arg_name}: ${pretty_exp(arg_t)}) -> ${pretty_exp(dep_t)}"
       case Fn(arg_name: String, arg_t: Exp, body: Exp) =>
@@ -86,8 +86,8 @@ object pretty {
     value match {
       case ValType(level) =>
         if (level == 1) s"type_t" else s"type_t^${level}"
-      case ValThe(t: Val, body: Val) =>
-        s"the(${pretty_val(t)}, ${pretty_val(body)})"
+      // case ValThe(t: Val, body: Val) =>
+      //   s"the(${pretty_val(t)}, ${pretty_val(body)})"
       case ValPi(arg_name: String, arg_t: Val, dep_t: Clo) =>
         s"(${arg_name}: ${pretty_val(arg_t)}) -> ${pretty_clo(dep_t)}"
       case ValFn(arg_name: String, arg_t: Val, body: Clo) =>

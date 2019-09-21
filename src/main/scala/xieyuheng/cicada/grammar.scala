@@ -226,7 +226,7 @@ object grammar {
   def rator: Rule = Rule(
     "rator", Map(
       "var" -> List(identifier),
-      "the" -> List("the", "(", exp, ",", exp, ")"),
+      // "the" -> List("the", "(", exp, ",", exp, ")"),
       "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
       "ap_one" -> List(rator, "(", exp, ")"),
       "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
@@ -239,8 +239,8 @@ object grammar {
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "rator", Map(
       "var" -> { case List(Leaf(name)) => Var(name) },
-      "the" -> { case List(_, _, t, _, e, _) =>
-        The(exp_matcher(t), exp_matcher(e)) },
+      // "the" -> { case List(_, _, t, _, e, _) =>
+      //   The(exp_matcher(t), exp_matcher(e)) },
       "ap" -> { case List(rator, _, exp_comma_list, _) =>
         non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) } },

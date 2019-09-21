@@ -37,7 +37,7 @@ object eval {
           target_val <- eval(target, env)
           motive_val <- eval(motive, env)
           base_val <- eval(base, env)
-          res <- Replace.exe(
+          res <- Replace.ap(
             target_val,
             motive_val,
             base_val)
@@ -54,7 +54,7 @@ object eval {
           motive_val <- eval(motive, env)
           base_val <- eval(base, env)
           stepVal <- eval(step, env)
-          res <- NatInd.exe(
+          res <- NatInd.ap(
             target_val,
             motive_val,
             base_val,
@@ -68,7 +68,7 @@ object eval {
         for {
           fn <- eval(rator, env)
           arg <- eval(arg, env)
-          res <- Ap.exe(fn, arg)
+          res <- Ap.ap(fn, arg)
         } yield res
       case Fn(name: String, body: Exp) =>
         Right(ValFn(CloEnv(env, name, body)))
@@ -78,7 +78,7 @@ object eval {
         for {
           target_val <- eval(target, env)
           motive_val <- eval(motive, env)
-          res <- AbsurdInd.exe(target_val, motive_val)
+          res <- AbsurdInd.ap(target_val, motive_val)
         } yield res
       case Sigma(name: String, arg_t: Exp, dep_t: Exp) =>
         for {
@@ -97,12 +97,12 @@ object eval {
       case Car(pair: Exp) =>
         for {
           pair_val <- eval(pair, env)
-          res <- Car.exe(pair_val)
+          res <- Car.ap(pair_val)
         } yield res
       case Cdr(pair: Exp) =>
         for {
           pair_val <- eval(pair, env)
-          res <- Cdr.exe(pair_val)
+          res <- Cdr.ap(pair_val)
         } yield res
       case Cons(car: Exp, cdr: Exp) =>
         for {

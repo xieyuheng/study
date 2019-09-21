@@ -15,10 +15,18 @@ case class Clo(arg_name: String, body: Exp, env: Env) {
   }
 }
 
+object Telescope {
+    def from_decls(decls: List[Decl], env: Env): Telescope = {
+    // TODO
+    Telescope(???, env)
+  }
+}
+
 case class Telescope(
   fields: List[(String, Exp, Option[Exp], Option[Val], Option[Val])],
   env: Env,
 ) {
+
   def put(arg: Val): Telescope = {
     val i = fields.indexWhere {
       case (_, _, _, _, None) => true

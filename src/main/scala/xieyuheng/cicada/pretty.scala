@@ -118,8 +118,8 @@ object pretty {
         name
       case NeuAp(target: Neu, arg: Val) =>
         s"${pretty_nen(target)}(${pretty_val(arg)})"
-      case NeuChoice(target: Neu, map: Map[String, Val]) =>
-        s"choice ${pretty_nen(target)} {${maybeln(pretty_val_case(map))}}"
+      case NeuChoice(target: Neu, map: Map[String, Exp], env) =>
+        s"choice ${pretty_nen(target)} {${maybeln(pretty_exp_case(map))}}"
       case NeuDot(target: Neu, field_name: String) =>
         s"${pretty_nen(target)}.${field_name}"
       case NeuDotType(target: Neu, field_name: String) =>

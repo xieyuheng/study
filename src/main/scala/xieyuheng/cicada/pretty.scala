@@ -33,7 +33,12 @@ object pretty {
         s"data ${name}(${fileds_str}) {${maybeln(member_str)}}"
       case DeclRecord(name: String, super_names: List[String], decls: List[Decl]) =>
         val decls_str = decls.map(pretty_decl).mkString("\n")
-        s"class ${name} extends ${super_names} {${maybeln(decls_str)}}"
+        if (super_names.length == 0) {
+          s"class ${name} {${maybeln(decls_str)}}"
+        } else {
+          val super_names_str = super_names.mkString(", ")
+          s"class ${name} extends ${super_names_str} {${maybeln(decls_str)}}"
+        }
     }
   }
 

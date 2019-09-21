@@ -66,8 +66,8 @@ object pretty {
         s"(${arg_name}: ${pretty_exp(arg_t)}) => ${pretty_exp(body)}"
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
-      case Choice(target: Exp, map: Map[String, Exp]) =>
-        s"choice ${pretty_exp(target)} {${maybeln(pretty_exp_case(map))}}"
+      case Choice(path: List[String], map: Map[String, Exp]) =>
+        s"choice ${pretty_path(path)} {${maybeln(pretty_exp_case(map))}}"
       case Dot(target: Exp, field_name: String) =>
         s"${pretty_exp(target)}.${field_name}"
       case DotType(target: Exp, field_name: String) =>
@@ -75,6 +75,10 @@ object pretty {
       case Let(decl: Decl, body: Exp) =>
         s"{ ${pretty_decl(decl)}; ${pretty_exp(body)} }"
     }
+  }
+
+  def pretty_path(path: List[String]): String = {
+    path.mkString(".")
   }
 
   def pretty_exp_case(map: Map[String, Exp]) =

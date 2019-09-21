@@ -2,9 +2,12 @@ package xieyuheng.cicada
 
 object eval {
 
+  def apply(exp: Exp, env: Env): Val =
+    eval(exp: Exp, env: Env)
+
   def eval(exp: Exp, env: Env): Val = {
     exp match {
-      case Var(name: String) =>
+      case Var(name) =>
         env.lookup_val(name) match {
           case Some(value) =>
             value
@@ -12,24 +15,24 @@ object eval {
             println(s"can not find var: ${name} in env: ${env}")
             throw new Exception()
         }
-      case Type(level: Int) =>
+      case Type(level) =>
         ValType(level)
       // case The(t: Exp, body: Exp) =>
       //   ValThe(eval(t, env), eval(body, env))
-      case Pi(arg_name: String, arg_t: Exp, dep_t: Exp) =>
+      case Pi(arg_name, arg_t, dep_t) =>
         ValPi(arg_name, eval(arg_t, env), Clo(arg_name, dep_t, env))
-      case Fn(arg_name: String, arg_t: Exp, body: Exp) =>
+      case Fn(arg_name, arg_t, body) =>
         ValFn(arg_name, eval(arg_t, env), Clo(arg_name, body, env))
-      case Ap(target: Exp, arg: Exp) =>
-        ???
-      case Choice(target: Exp, map: Map[String, Exp]) =>
-        ???
-      case Dot(target: Exp, field_name: String) =>
-        ???
-      case DotType(target: Exp, field_name: String) =>
-        ???
-      case Let(decl: Decl, body: Exp) =>
-        ???
+      case Ap(target, arg) =>
+        Ap.ap(eval(target, env), eval(arg, env))
+      case Choice(path, map: Map[String, Exp]) =>
+        Choice.ap(path, map, env)
+      case Dot(target, field_name) =>
+        Dot.ap(eval(target, env), field_name)
+      case DotType(target, field_name) =>
+        DotType.ap(eval(target, env), field_name)
+      case Let(decl, body) =>
+        eval(body, env.ext_by_decl(decl))
     }
   }
 

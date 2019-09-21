@@ -27,12 +27,9 @@ fn nat_factorial(x: nat_t): nat_t = {
 fn nat_even_p(x: nat_t): bool_t = {
   choice x {
     case zero_t => true_t
-    case succ_t => {
-      let y: nat_t = x.prev
-      choice y {
-        case zero_t => false_t
-        case succ_t => nat_even_p(x.prev.prev)
-      }
+    case succ_t => choice x.prev {
+      case zero_t => false_t
+      case succ_t => nat_even_p(x.prev.prev)
     }
   }
 }

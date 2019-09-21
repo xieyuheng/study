@@ -230,7 +230,7 @@ object grammar {
       "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
       "ap_one" -> List(rator, "(", exp, ")"),
       "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
-      "choice" -> List("choice", identifier, "{", non_empty_list(choice_entry), "}"),
+      "choice" -> List("choice", path, "{", non_empty_list(choice_entry), "}"),
       "dot" -> List(exp, ".", identifier),
       "dot_type" -> List(exp, ".", ":", identifier),
       "block" -> List(block),
@@ -250,9 +250,9 @@ object grammar {
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
-      "choice" -> { case List(_, Leaf(name), _, choice_entry_list, _) =>
+      "choice" -> { case List(_, path, _, choice_entry_list, _) =>
         val map = non_empty_list_matcher(choice_entry_matcher)(choice_entry_list).toMap
-        Choice(Var(name), map) },
+        Choice(path_matcher(path), map) },
       "dot" -> { case List(exp, _, Leaf(field_name)) =>
         Dot(exp_matcher(exp), field_name) },
       "dot_type" -> { case List(exp, _, _, Leaf(field_name)) =>
@@ -260,6 +260,29 @@ object grammar {
       "block" -> { case List(block) => block_matcher(block) },
     ))
 
+  def path: Rule = Rule(
+    "path", Map(
+      "name" -> List(identifier),
+      "path" -> List(identifier, non_empty_list(dot_name)),
+    ))
+
+  def path_matcher = Tree.matcher[List[String]](
+    "path", Map(
+      "name" -> { case List(Leaf(name)) => List(name) },
+      "path" -> { case List(Leaf(name), name_list) =>
+        name +: non_empty_list_matcher(dot_name_matcher)(name_list) },
+    ))
+
+
+  def dot_name = Rule(
+    "dot_name", Map(
+      "dot_name" -> List(".", identifier),
+    ))
+
+  def dot_name_matcher = Tree.matcher[String](
+    "dot_name", Map(
+      "dot_name" -> { case List(_, Leaf(name)) => name },
+    ))
 
   def choice_entry: Rule = Rule(
     "choice_entry", Map(

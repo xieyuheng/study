@@ -33,8 +33,49 @@ object Ap {
 }
 
 object Choice {
+
+  def path_as_exp(path: List[String]): Exp = {
+    assert(path.length > 0)
+    val init: Exp = Var(path.head)
+    path.tail.foldLeft(init) { case (exp, field_name) => Dot(exp, field_name) }
+  }
+
   def ap(path: List[String], map: Map[String, Exp], env: Env): Val = {
-    ???
+    val exp = Choice.path_as_exp(path)
+    val value = eval(exp, env)
+    // TODO handle subtype relation in choice
+    value match {
+      case ValClub(name: String, members: List[Member], tel: Telescope) =>
+        map.get(name) match {
+          case Some(body) => eval(body, env)
+          case None =>
+            println(s"choice mismatch: ${value}")
+            println(s"map: ${map}")
+            throw new Exception()
+        }
+      case ValMember(name: String, club_name: String, tel: Telescope) =>
+        map.get(name) match {
+          case Some(body) => eval(body, env)
+          case None =>
+            println(s"choice mismatch: ${value}")
+            println(s"map: ${map}")
+            throw new Exception()
+        }
+      case ValRecord(name: String, super_names: List[String], tel: Telescope) =>
+        map.get(name) match {
+          case Some(body) => eval(body, env)
+          case None =>
+            println(s"choice mismatch: ${value}")
+            println(s"map: ${map}")
+            throw new Exception()
+        }
+      case neu: Neu =>
+        NeuChoice(neu, map, env)
+      case _ =>
+        println(s"choice mismatch: ${value}")
+        println(s"map: ${map}")
+        throw new Exception()
+    }
   }
 }
 
@@ -47,6 +88,8 @@ object Dot {
         tel.dot(field_name)
       case ValRecord(name, super_names, tel) =>
         tel.dot(field_name)
+      case neu: Neu =>
+        NeuDot(neu, field_name)
       case _ =>
         println(s"can not apply dot ${target}")
         throw new Exception()
@@ -63,6 +106,8 @@ object DotType {
         tel.dot_type(field_name)
       case ValRecord(name, super_names, tel) =>
         tel.dot_type(field_name)
+      case neu: Neu =>
+        NeuDotType(neu, field_name)
       case _ =>
         println(s"can not apply dot type ${target}")
         throw new Exception()

@@ -22,15 +22,15 @@ object pretty {
             s"${name}: ${pretty_exp(exp)}"
         }.mkString(", ")
         s"fn ${name}(${args_str}): ${pretty_exp(dep_t)}"
-      case DeclClub(name: String, members: List[Member], fileds: List[(String, Exp, Option[Exp])]) =>
-        val fileds_str = fileds.map {
+      case DeclClub(name: String, members: List[Member], fields: List[(String, Exp, Option[Exp])]) =>
+        val fields_str = fields.map {
           case (name, t, None) =>
             s"${name}: ${pretty_exp(t)}"
           case (name, t, Some(e)) =>
             s"${name}: ${pretty_exp(t)} = ${pretty_exp(e)}"
         }.mkString(", ")
         val member_str = members.map(pretty_member).mkString("\n")
-        s"data ${name}(${fileds_str}) {${maybeln(member_str)}}"
+        s"data ${name}(${fields_str}) {${maybeln(member_str)}}"
       case DeclRecord(name: String, super_names: List[String], decls: List[Decl]) =>
         val decls_str = decls.map(pretty_decl).mkString("\n")
         if (super_names.length == 0) {
@@ -43,13 +43,13 @@ object pretty {
   }
 
   def pretty_member(member: Member): String = {
-    val fileds = member.fileds.map {
+    val fields = member.fields.map {
       case (name, t, None) =>
         s"${name}: ${pretty_exp(t)}"
       case (name, t, Some(e)) =>
         s"${name}: ${pretty_exp(t)} = ${pretty_exp(e)}"
     }.mkString(", ")
-    s"case ${member.name}(${fileds})"
+    s"case ${member.name}(${fields})"
   }
 
   def pretty_exp(exp: Exp): String = {
@@ -132,19 +132,13 @@ object pretty {
   }
 
   def pretty_tel(tel: Telescope): String = {
-    val fileds = tel.fileds.map {
-      case (name, t, None) =>
-        s"${name}: ${pretty_exp(t)}"
-      case (name, t, Some(e)) =>
-        s"${name}: ${pretty_exp(t)} = ${pretty_exp(e)}"
+    val fields = tel.fields.map {
+      case (k, te, ve, Some(tv), Some(vv)) =>
+        s"${k}: ${pretty_val(tv)} = ${pretty_val(vv)}"
+      case (k, te, _, _, _) =>
+        s"${k}: ${pretty_exp(te)}"
     }.mkString(", ")
-
-    val fills = tel.fills.map {
-      case (name, t, v) =>
-        s"${name}: ${pretty_val(t)} = ${pretty_val(v)}"
-    }.mkString(", ")
-
-    s"#tel(${fileds})(${fills})"
+    s"#tel(${fields})"
   }
 
 }

@@ -53,9 +53,9 @@ case class Module() {
       case TopEval(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>
-        assert_eq(e1)(e2)
+        assert_eq(e1, e2)
       case TopNotEq(e1, e2) =>
-        assert_not_eq(e1)(e2)
+        assert_not_eq(e1, e2)
       case _ => {}
     }
   }
@@ -68,14 +68,14 @@ case class Module() {
       case TopEval(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>
-        assert_eq(e1)(e2)
+        assert_eq(e1, e2)
       case TopNotEq(e1, e2) =>
-        assert_not_eq(e1)(e2)
+        assert_not_eq(e1, e2)
       case _ => {}
     }
   }
 
-  def assert_not_eq(e1: Exp)(e2: Exp): Unit = {
+  def assert_not_eq(e1: Exp, e2: Exp): Unit = {
     val v1 = eval(e1, env)
     val v2 = eval(e2, env)
     // val n1 = readback_val(v1, Set())
@@ -93,7 +93,7 @@ case class Module() {
     }
   }
 
-  def assert_eq(e1: Exp)(e2: Exp): Unit = {
+  def assert_eq(e1: Exp, e2: Exp): Unit = {
     val v1 = eval(e1, env)
     val v2 = eval(e2, env)
     // val n1 = readback_val(v1, Set())

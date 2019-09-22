@@ -10,7 +10,7 @@ object grammar {
 
   def preserved: List[String] = List(
     "let", "return",
-    "data", "fn", "function",
+    "data", "fn", "fnrec", "function",
     "the", "type_t",
     "case", "choice",
     "class", "extends",

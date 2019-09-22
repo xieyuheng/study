@@ -32,7 +32,7 @@ object eval {
       case DotType(target, field_name) =>
         DotType.ap(eval(target, env), field_name)
       case Let(decl, body) =>
-        eval(body, env.ext_by_decl(decl))
+        eval(body, env.ext_decl(decl))
     }
   }
 

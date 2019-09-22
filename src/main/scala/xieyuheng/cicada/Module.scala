@@ -20,7 +20,7 @@ case class Module() {
     var env: Env = Env()
     top_list.foreach {
       case TopDecl(decl) =>
-        env = env.ext_by_decl(decl)
+        env = env.ext_decl(decl)
       case _ => {}
     }
     env
@@ -30,7 +30,7 @@ case class Module() {
     var env: Env = Env()
     top_list.foreach {
       case TopDecl(decl) =>
-        env = env.ext_by_decl(decl)
+        env = env.ext_decl(decl)
       case TopEval(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>

@@ -11,7 +11,7 @@ final case class ValRecord(name: String, super_names: List[String], tel: Telesco
 
 case class Clo(arg_name: String, body: Exp, env: Env) {
   def apply(arg: Val): Val = {
-    eval(body, env.ext(arg_name, arg))
+    eval(body, env.ext_val(arg_name, arg))
   }
 }
 
@@ -81,7 +81,7 @@ case class Telescope(
       val (k, te, mve, _, _) = fields(i)
       val new_fields = util.list_replace(fields, i,
         (k, te, mve, Some(eval(te, env)), Some(arg)))
-      Telescope(new_fields, env.ext(k, arg))
+      Telescope(new_fields, env.ext_val(k, arg))
         .self_put()
     }
   }
@@ -100,7 +100,7 @@ case class Telescope(
           val arg = eval(ve, env)
           val new_fields = util.list_replace(fields, i,
             (k, te, Some(ve), Some(eval(te, env)), Some(arg)))
-          Telescope(new_fields, env.ext(k, arg))
+          Telescope(new_fields, env.ext_val(k, arg))
         case _ => this
       }
     }

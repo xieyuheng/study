@@ -33,3 +33,5 @@ fn nat_even_p(x: nat_t): bool_t = {
     }
   }
 }
+
+eval! nat_add(succ_t(zero_t), succ_t(zero_t))

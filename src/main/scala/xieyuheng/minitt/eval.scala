@@ -72,6 +72,7 @@ object eval {
           case None => lookup(name, rest)
         }
       case EnvDecl(DeclLetrec(pat, t, e), rest) =>
+        // NOTE the following uses `env` instead of `rest`
         pat_proj(pat, name, eval(e, env)) match {
           case Some(value) => value
           case None => lookup(name, rest)

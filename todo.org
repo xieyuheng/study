@@ -1,4 +1,5 @@
 * cicada
+- we need to store Decl in Env to handle recursion
 - eval
 - readback
 - pre -- between any two values, because value can be used as type
@@ -36,6 +37,7 @@
   - keep it subrecursive, but be generic about data and ind, rec and iter
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
 * minitt
+- [question] I think the use of NormEnv will break `equals`
 - add `eqv_t` `same` `replace`
 - add constrains to type constructors
 - why not jsut use letrec for every definition ? -- learn from EOPL
@@ -43,6 +45,7 @@
 - be sure about the use of Pattern
   - write some notes
   - Norm do not use Pattern
+  - note about how letrec is handled at lookup-time
 * module system
 - module as value with opaque module_t is not enough -- learn from EOPL
 * partech

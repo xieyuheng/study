@@ -1,7 +1,5 @@
 # cicada
 
-## Contains
-
 - [partech](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech):
   A parser generator with different parsing techniques.
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):

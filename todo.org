@@ -1,5 +1,4 @@
 * cicada
-- eval
 - readback
 - pre
   - between any two values, because value can be used as type

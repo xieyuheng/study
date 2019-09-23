@@ -49,8 +49,11 @@ object Telescope {
         // TODO fix the level of type
         //   should depends on fields
         // TODO since we do not have exp for club and record
-        //   we can created the value at init time
+        //   we can only create the value at init time
         //   this is wrong, because they can depend on value of prev fields
+        // PROBLEM
+        //   I forget what I meant when I said the above sentence
+        //   I can not see what is wrong now
         val club_val = ValClub(name, members, Telescope.from_exp_fields(fields, env))
         val_fiedls = val_fiedls :+ ((name, Type(1), None, Some(ValType(1)), Some(club_val)))
       case DeclRecord(name, super_names, decls) =>

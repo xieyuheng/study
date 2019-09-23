@@ -9,6 +9,11 @@ object pretty {
       case (name, exp) =>
         s"${name}: ${pretty_exp(exp)};\n" }
 
+  def pretty_exp_case(map: Map[String, Exp]) =
+    pretty_map(map) {
+      case (name, exp) =>
+        s"case ${name} => ${pretty_exp(exp)}\n" }
+
   def cons_exp_to_list(cons: Cons): List[Exp] = {
     cons.cdr match {
       case cdr: Cons => cons.car :: cons_exp_to_list(cdr)
@@ -39,9 +44,9 @@ object pretty {
       case Data(tag: String, body: Exp) =>
         s"${tag}[${pretty_exp(body)}]"
       case Mat(mats: Map[String, Exp]) =>
-        s"match {${maybeln(pretty_exp_map(mats))}}"
+        s"{${maybeln(pretty_exp_case(mats))}}"
       case Sum(mats: Map[String, Exp]) =>
-        s"sum {${maybeln(pretty_exp_map(mats))}}"
+        s"datatype {${maybeln(pretty_exp_map(mats))}}"
       case Sole() => "[]"
       case Trivial() => "[]"
       case Univ() => "type_t"
@@ -81,7 +86,7 @@ object pretty {
       case NeuCdr(target: Neu) =>
         s"cdr(${pretty_neu(target)})"
       case NeuMat(target: Neu, CloMat(mats: Map[String, Exp], env: Env)) =>
-        s"match {${maybeln(pretty_exp_map(mats))}} (${pretty_neu(target)})"
+        s"choice (${pretty_neu(target)}) {${maybeln(pretty_exp_case(mats))}}"
     }
   }
 
@@ -98,7 +103,7 @@ object pretty {
       case CloFn(pat: Pat, body: Exp, env: Env) =>
         s"(${pretty_pat(pat)}) => ${pretty_exp(body)}"
       case CloMat(mats, env: Env) =>
-        s"match {${maybeln(pretty_exp_map(mats))}}"
+        s"{${maybeln(pretty_exp_case(mats))}}"
       case CloTag(tag: String, clo: Clo) =>
         s"${pretty_clo(clo)} on ${tag}"
     }
@@ -126,9 +131,9 @@ object pretty {
       case ValData(tag: String, body: Val) =>
         s"${tag}[${pretty_val(body)}]"
       case ValSum(CloMat(mats: Map[String, Exp], env: Env)) =>
-        s"sum {${maybeln(pretty_exp_map(mats))}}"
+        s"datatype {${maybeln(pretty_exp_map(mats))}}"
       case ValMat(CloMat(mats: Map[String, Exp], env: Env)) =>
-        s"match {${maybeln(pretty_exp_map(mats))}}"
+        s"{${maybeln(pretty_exp_case(mats))}}"
     }
   }
 

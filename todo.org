@@ -28,6 +28,8 @@
     and fit the arg in by type when name is not provided
   - I will not even provide named function application syntax for type constructors
   - termination check
+* fulfilling type system
+* game semantics
 * tartlet
 - extend tartlet to pie
 - the little typer as test

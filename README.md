@@ -1,11 +1,5 @@
 # cicada
 
-A dependently typed language
-- with fulfilling type system
-- based on game semantics
-- for interactive theorem proving
-- and practical verification tasks
-
 ## Contains
 
 - [partech](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech):

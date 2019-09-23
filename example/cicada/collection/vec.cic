@@ -1,4 +1,4 @@
-data vec_t(A: type_t, length: nat_t) {
+datatype vec_t(A: type_t, length: nat_t) {
   case null_vec_t(
     A: type_t,
     length: nat_t = zero_t)
@@ -34,7 +34,7 @@ fn vec_map(A: type_t, B: type_t, f: (A) -> B, vec: vec_t(A, n)): vec_t(B, n) = {
 
 // maybe this
 
-data vec_t(A: type_t, length: nat_t) {
+datatype vec_t(A: type_t, length: nat_t) {
   case null_vec_t(
     A: type_t,
     length: nat_t = zero_t)

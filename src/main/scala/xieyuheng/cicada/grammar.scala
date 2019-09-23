@@ -10,7 +10,7 @@ object grammar {
 
   def preserved: List[String] = List(
     "let", "return",
-    "data", "fn", "fnrec", "function",
+    "datatype", "fn", "function",
     "the", "type_t",
     "case", "choice",
     "class", "extends",
@@ -59,10 +59,10 @@ object grammar {
       "fn_type" -> List("fn", identifier, "(", non_empty_list(bind), ")", ":", exp),
       "function" -> List("function", identifier, "(", non_empty_list(bind), ")", ":", exp, "=", exp),
       "function_type" -> List("function", identifier, "(", non_empty_list(bind), ")", ":", exp),
-      "data" -> List("data", identifier,
+      "datatype" -> List("datatype", identifier,
         "(", non_empty_list(field), ")",
         "{", non_empty_list(member), "}"),
-      "data_nullary" -> List("data", identifier,
+      "datatype_nullary" -> List("datatype", identifier,
         "{", non_empty_list(member), "}"),
       "class" -> List("class", identifier,
         "{", non_empty_list(decl), "}"),
@@ -100,11 +100,11 @@ object grammar {
       "function_type" -> { case List(_, Leaf(name), _, bind_list, _, _, t) =>
         val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
         DeclFnType(name, args, exp_matcher(t)) },
-      "data" -> { case List(_, Leaf(name), _, field_list, _, _, member_list, _) =>
+      "datatype" -> { case List(_, Leaf(name), _, field_list, _, _, member_list, _) =>
         val fields = non_empty_list_matcher(field_matcher)(field_list)
         val members = non_empty_list_matcher(member_matcher(name))(member_list)
         DeclClub(name, members, fields) },
-      "data_nullary" -> { case List(_, Leaf(name), _, member_list, _) =>
+      "datatype_nullary" -> { case List(_, Leaf(name), _, member_list, _) =>
         val members = non_empty_list_matcher(member_matcher(name))(member_list)
         DeclClub(name, members, List()) },
       "class" -> { case List(_, Leaf(name),

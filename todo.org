@@ -1,8 +1,8 @@
 * cicada
-- we need to store Decl in Env to handle recursion
 - eval
 - readback
-- pre -- between any two values, because value can be used as type
+- pre
+  - between any two values, because value can be used as type
   - pre_val and pre_exp should be implemented by pre_norm
   - we will need variance to implement pre
     maybe we do not need to pre-calculet variance

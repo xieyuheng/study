@@ -11,7 +11,7 @@ object grammar {
   def preserved: List[String] = List(
     "let", "letrec",
     "car", "cdr",
-    "data", "type_t",
+    "datatype", "type_t",
     "case",
     "sole", "trivial",
     "return",
@@ -172,7 +172,7 @@ object grammar {
         List("[", non_empty_list(exp_comma), exp, "]"),
       "sigma" -> List("$", "[", non_empty_list(bind), exp, "]"),
       "data" -> List(identifier, exp),
-      "sum" -> List("data", "{", non_empty_list(sum_clause), "}"),
+      "datatype" -> List("datatype", "{", non_empty_list(sum_clause), "}"),
       "sole" -> List("[", "]"),
       "lit_sole" -> List("sole"),
       "trivial" -> List("trivial"),
@@ -207,7 +207,7 @@ object grammar {
             case ((pat, arg_t), exp) => Sigma(pat, arg_t, exp) } },
       "data" -> { case List(Leaf(tag), exp) =>
         Data(tag, exp_matcher(exp)) },
-      "sum" -> { case List(_, _, sum_clause_list, _) =>
+      "datatype" -> { case List(_, _, sum_clause_list, _) =>
         Sum(non_empty_list_matcher(sum_clause_matcher)(sum_clause_list).toMap) },
       "sole" -> { case _ => Sole() },
       "lit_sole" -> { case _ => Sole() },

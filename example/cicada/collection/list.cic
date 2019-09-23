@@ -1,4 +1,4 @@
-data list_t(A: type_t) {
+datatype list_t(A: type_t) {
   case null_t(A: type_t)
   case cons_t(A: type_t, head: A, tail: list_t(A))
 }

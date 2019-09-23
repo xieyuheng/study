@@ -2,6 +2,8 @@ package xieyuheng.minitt
 
 import xieyuheng.minitt.pretty._
 
+import scala.annotation.tailrec
+
 object eval {
 
   def apply(exp: Exp, env: Env): Val = {
@@ -59,6 +61,7 @@ object eval {
     }
   }
 
+  @tailrec
   def lookup(name: String, env: Env): Val = {
     env match {
       case EnvPat(pat, value, rest) =>

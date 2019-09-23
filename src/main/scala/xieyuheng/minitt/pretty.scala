@@ -7,7 +7,7 @@ object pretty {
   def pretty_exp_map(map: Map[String, Exp]) =
     pretty_map(map) {
       case (name, exp) =>
-        s"${name}: ${pretty_exp(exp)};" }
+        s"${name}: ${pretty_exp(exp)};\n" }
 
   def cons_exp_to_list(cons: Cons): List[Exp] = {
     cons.cdr match {

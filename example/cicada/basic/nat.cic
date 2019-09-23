@@ -1,4 +1,4 @@
-data nat_t {
+datatype nat_t {
   case zero_t
   case succ_t(prev: nat_t)
 }

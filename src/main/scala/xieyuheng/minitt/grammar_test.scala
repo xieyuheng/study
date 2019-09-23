@@ -19,7 +19,7 @@ object grammar_test extends App {
     """,
 
     s"""
-    let bool_t: type_t = data {
+    let bool_t: type_t = datatype {
       case true
       case false
     }
@@ -49,7 +49,7 @@ object grammar_test extends App {
     """,
 
     s"""
-    letrec nat_t: type_t = data {
+    letrec nat_t: type_t = datatype {
       case zero
       case succ[nat_t]
     }
@@ -141,20 +141,20 @@ object grammar_test extends App {
     """,
 
     s"""
-    let x: X = data {
+    let x: X = datatype {
       case nil
     }
     """,
 
     s"""
-    let x: X = data {
+    let x: X = datatype {
       case nil
       case nil2
     }
     """,
 
     s"""
-    let x: X = data {
+    let x: X = datatype {
       case nil
       case nil2
       case nil3
@@ -162,27 +162,27 @@ object grammar_test extends App {
     """,
 
     s"""
-    let x: X = data {
+    let x: X = datatype {
       case cons $$[A, list_t(A)]
     }
     """,
 
     s"""
-    let x: X = data {
+    let x: X = datatype {
       case cons $$[A, list_t(A)]
       case cons2 $$[A, list_t(A)]
     }
     """,
 
     s"""
-    let x: X = data {
+    let x: X = datatype {
       case nil
       case cons $$[A, list_t(A)]
     }
     """,
 
     s"""
-    letrec list_t: type_t = data {
+    letrec list_t: type_t = datatype {
       case nil
       case cons $$[A, list_t(A)]
     }
@@ -242,7 +242,7 @@ object grammar_test extends App {
 
     assert_decl_to_tree(
       s"""
-      let bool_t: type_t = data {
+      let bool_t: type_t = datatype {
         case true
         case false
       }
@@ -381,7 +381,7 @@ object grammar_test extends App {
 
     assert_decl_to_tree(
       s"""
-      letrec nat_t: type_t = data {
+      letrec nat_t: type_t = datatype {
         case zero
         case succ[nat_t]
       }

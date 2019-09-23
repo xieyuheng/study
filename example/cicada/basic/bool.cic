@@ -1,4 +1,4 @@
-data bool_t {
+datatype bool_t {
   case true_t
   case false_t
 }

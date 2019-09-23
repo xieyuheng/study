@@ -9,6 +9,16 @@ final case class ValClub(name: String, members: List[Member], tel: Telescope) ex
 final case class ValMember(name: String, club_name: String, tel: Telescope) extends Val
 final case class ValRecord(name: String, super_names: List[String], tel: Telescope) extends Val
 
+sealed trait Neu extends Val
+final case class NeuVar(name: String) extends Neu
+final case class NeuAp(target: Neu, arg: Val) extends Neu
+// NOTE do not store env in NeuChoice
+// 1. deep_ext env ?
+// 2. env can use path as key ?
+final case class NeuChoice(target: Neu, map: Map[String, Exp], env: Env) extends Neu
+final case class NeuDot(target: Neu, field_name: String) extends Neu
+final case class NeuDotType(target: Neu, field_name: String) extends Neu
+
 case class Clo(arg_name: String, body: Exp, env: Env) {
   def apply(arg: Val): Val = {
     eval(body, env.ext_val(arg_name, arg))
@@ -127,13 +137,3 @@ case class Telescope(
     }
   }
 }
-
-sealed trait Neu extends Val
-final case class NeuVar(name: String) extends Neu
-final case class NeuAp(target: Neu, arg: Val) extends Neu
-// NOTE do not store env in NeuChoice
-// 1. deep_ext env ?
-// 2. env can use path as key ?
-final case class NeuChoice(target: Neu, map: Map[String, Exp], env: Env) extends Neu
-final case class NeuDot(target: Neu, field_name: String) extends Neu
-final case class NeuDotType(target: Neu, field_name: String) extends Neu

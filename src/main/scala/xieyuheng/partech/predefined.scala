@@ -77,4 +77,5 @@ object predefined {
     assert(double_quoted_string.pred(str))
     str.slice(1, str.length - 1)
   }
+
 }

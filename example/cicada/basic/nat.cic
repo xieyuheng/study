@@ -53,3 +53,5 @@ eq! nat_add(three, three) six
 eq! nat_mul(one, one) one
 eq! nat_mul(two, two) four
 eq! nat_mul(three, three) nine
+
+eval! one

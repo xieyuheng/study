@@ -70,12 +70,12 @@ object eval {
           case None => lookup(name, rest)
         }
       case EnvDecl(DeclLet(pat, t, e), rest) =>
+        // PROBLEM why we need to use `rest`, but can not use `env` just like letrec
         pat_proj(pat, name, eval(e, rest)) match {
           case Some(value) => value
           case None => lookup(name, rest)
         }
       case EnvDecl(DeclLetrec(pat, t, e), rest) =>
-        // NOTE the following uses `env` instead of `rest`
         pat_proj(pat, name, eval(e, env)) match {
           case Some(value) => value
           case None => lookup(name, rest)

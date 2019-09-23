@@ -141,7 +141,8 @@ build_all () {
     build_native_image lambda && \
         build_native_image syst && \
         build_native_image tartlet && \
-        build_native_image minitt
+        build_native_image minitt && \
+        build_native_image cicada
 
     native-image --server-shutdown-all
 }

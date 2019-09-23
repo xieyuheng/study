@@ -83,7 +83,6 @@ object syst {
     Parser(grammar.lexer, grammar.module).parse(code) match {
       case Right(tree) =>
         val module = grammar.module_matcher(tree)
-        module.type_check()
         module.run()
       case Left(error) =>
         println(s"[parse_error] ${error.msg}")

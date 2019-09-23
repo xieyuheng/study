@@ -44,6 +44,7 @@ case class Module() {
   }
 
   def run(): Unit = {
+    type_check()
     var env: Env = EnvEmpty()
     top_list.foreach {
       case TopDecl(decl) =>
@@ -70,8 +71,8 @@ case class Module() {
   }
 
   def assert_not_eq(e1: Exp, e2: Exp): Unit = {
-    val v1 = eval(e1, this.env)
-    val v2 = eval(e2, this.env)
+    val v1 = eval(e1, env)
+    val v2 = eval(e2, env)
     if (v1 == v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be not equal")
@@ -84,8 +85,8 @@ case class Module() {
   }
 
   def assert_eq(e1: Exp, e2: Exp): Unit = {
-    val v1 = eval(e1, this.env)
-    val v2 = eval(e2, this.env)
+    val v1 = eval(e1, env)
+    val v2 = eval(e2, env)
     if (v1 != v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be equal")
@@ -100,7 +101,7 @@ case class Module() {
   def eval_print(exp: Exp): Unit = {
     print(">>> ")
     println(pretty_exp(exp))
-    val value = eval(exp, this.env)
+    val value = eval(exp, env)
     print("=== ")
     println(pretty_val(value))
     println()

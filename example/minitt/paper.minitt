@@ -5,6 +5,9 @@ let bool_t: type_t = datatype {
 
 eq! true[] true[]
 
+let true: bool_t = true[]
+let false: bool_t = false[]
+
 let id: (A: type_t, A) -> A =
   (A, x) => x
 
@@ -14,9 +17,6 @@ let id_on_id: (A: type_t, A) -> A =
 eq! id(bool_t, true[]) true[]
 eq! id(bool_t, false[]) false[]
 eq! id_on_id id
-
-let true: bool_t = true[]
-let false: bool_t = false[]
 
 eq! id(bool_t, true) true
 eq! id(bool_t, false) false

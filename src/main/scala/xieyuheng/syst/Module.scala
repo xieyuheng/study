@@ -61,6 +61,7 @@ case class Module() {
   }
 
   def run(): Unit = {
+    type_check()
     var env: Env = Env()
     top_list.foreach {
       case TopDecl(DeclLet(name, t, e)) =>

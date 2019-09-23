@@ -1,26 +1,21 @@
 package xieyuheng.cicada
 
+import xieyuheng.partech.Parser
+
 // import check._
 import pretty._
 
-case class Module() {
+case class Module(file_path: String) {
 
   var top_list: List[Top] = List()
-
-  def add_top(top: Top): Module = {
-    top_list = top_list :+ top
-    this
-  }
-
-  def declare(decl: Decl): Unit = {
-    add_top(TopDecl(decl))
-  }
 
   def env: Env = {
     var env: Env = Env()
     top_list.foreach {
       case TopDecl(decl) =>
         env = env.ext_decl(decl)
+      case TopImportAll(path) =>
+        env = import_file(path, env)
       case _ => {}
     }
     env
@@ -31,6 +26,8 @@ case class Module() {
     top_list.foreach {
       case TopDecl(decl) =>
         env = env.ext_decl(decl)
+      case TopImportAll(path) =>
+        env = import_file(path, env)
       case TopEval(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>
@@ -86,4 +83,41 @@ case class Module() {
     println()
   }
 
+  def load_code(code: String): Unit = {
+    Parser(grammar.lexer, grammar.top_list).parse(code) match {
+      case Right(tree) =>
+        top_list = top_list ++ grammar.top_list_matcher(tree)
+      case Left(error) =>
+        println(s"[parse_error] ${error.msg}")
+        throw new Exception()
+    }
+  }
+
+  def module_path: os.Path = {
+    os.Path(file_path, base = os.pwd)
+  }
+
+  def load_file(file_path: String): Unit = {
+    val path = os.Path(file_path, base = os.pwd)
+
+    if (!os.isFile(path)) {
+      println(s"not a file: ${module_path}")
+      System.exit(1)
+    }
+
+    val code = os.read(path)
+    load_code(code)
+  }
+
+  def import_file(file_path: String, env: Env): Env = {
+    val path = os.Path(file_path, base = module_path / os.up)
+    val module = Module(path.toString)
+    env.append(module.env)
+  }
+
+  def init(): Unit = {
+    load_file(file_path)
+  }
+
+  init()
 }

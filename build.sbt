@@ -4,9 +4,6 @@ version := "0.0.1"
 scalaVersion := "2.12.9"
 
 scalacOptions ++= Seq(
-  "-opt:l:method",
-  "-opt:l:inline",
-  "-opt-inline-from:**",
   "-deprecation",
   "-encoding", "UTF-8",
   "-unchecked",

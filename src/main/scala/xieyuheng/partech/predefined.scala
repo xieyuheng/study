@@ -75,7 +75,6 @@ object predefined {
 
   def trim_double_quote(str: String): String = {
     assert(double_quoted_string.pred(str))
-    println(s"str: ${str}")
     str.slice(1, str.length - 1)
   }
 }

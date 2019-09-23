@@ -1,7 +1,5 @@
 package xieyuheng.cicada
 
-import xieyuheng.partech.Parser
-
 object cicada {
 
   def version: String = "0.0.1"
@@ -20,7 +18,7 @@ object cicada {
         |cicada ${version}
         |
         |usage:
-        |  -e, --eval <file_name> [default]
+        |  -e, --eval <file_path> [default]
         |  -v, --version
         |  -h, --help
         """.stripMargin
@@ -54,14 +52,14 @@ object cicada {
     }
 
     opt(args, "--eval", 1).foreach {
-      case Array(file_name) =>
-        run_file(file_name)
+      case Array(file_path) =>
+        run_file(file_path)
         System.exit(0)
     }
 
     if (args.length == 1) {
-      val file_name = args(0)
-      run_file(file_name)
+      val file_path = args(0)
+      run_file(file_path)
       System.exit(0)
     }
 
@@ -70,25 +68,9 @@ object cicada {
     System.exit(0)
   }
 
-  def run_file(file_name: String): Unit = {
-    val path = os.Path(file_name, base = os.pwd)
-
-    if (!os.isFile(path)) {
-      println(s"not a file: ${path}")
-      System.exit(1)
-    }
-
-    val code = os.read(path)
-
-    Parser(grammar.lexer, grammar.module).parse(code) match {
-      case Right(tree) =>
-        val module = grammar.module_matcher(tree)
-        module.run()
-      case Left(error) =>
-        println(s"[parse_error] ${error.msg}")
-        println(s"- file: ${file_name}")
-        System.exit(1)
-    }
+  def run_file(file_path: String): Unit = {
+    var module = Module(file_path)
+    module.run()
   }
 
 }

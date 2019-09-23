@@ -87,6 +87,16 @@ sealed trait Env {
     EnvDecl(decl, this)
   }
 
+  def append(that: Env): Env = {
+    this match {
+      case EnvVal(name, value, rest) =>
+        EnvVal(name, value, rest.append(that))
+      case EnvDecl(decl, rest) =>
+        EnvDecl(decl, rest.append(that))
+      case EnvEmpty() =>
+        that
+    }
+  }
 }
 
 final case class EnvVal(name: String, value: Val, rest: Env) extends Env

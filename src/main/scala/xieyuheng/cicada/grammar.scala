@@ -14,29 +14,28 @@ object grammar {
     "the", "type_t",
     "case", "choice",
     "class", "extends",
+    "import",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
 
 
-  def module = Rule(
-    "module", Map(
-      "module" -> List(non_empty_list(top)),
+  def top_list = Rule(
+    "top_list", Map(
+      "top_list" -> List(non_empty_list(top)),
     ))
 
-  def module_matcher = Tree.matcher[Module](
-    "module", Map(
-      "module" -> { case List(top_list) =>
-        var module = Module()
-        module.top_list = non_empty_list_matcher(top_matcher)(top_list)
-        module
-      },
+  def top_list_matcher = Tree.matcher[List[Top]](
+    "top_list", Map(
+      "top_list" -> { case List(top_list) =>
+        non_empty_list_matcher(top_matcher)(top_list) },
     ))
 
 
   def top = Rule(
     "top", Map(
       "decl" -> List(decl),
+      "import_all" -> List("import", "*", "from", double_quoted_string),
       "eval" -> List("eval", "!", exp),
       "eq" -> List("eq", "!", exp, exp),
       "not_eq" -> List("not_eq", "!", exp, exp),
@@ -45,6 +44,7 @@ object grammar {
   def top_matcher = Tree.matcher[Top](
     "top", Map(
       "decl" -> { case List(decl) => TopDecl(decl_matcher(decl)) },
+      "import_all" -> { case List(_, _, _, Leaf(str)) => TopImportAll(trim_double_quote(str)) },
       "eval" -> { case List(_, _, exp) => TopEval(exp_matcher(exp)) },
       "eq" -> { case List(_, _, x, y) => TopEq(exp_matcher(x), exp_matcher(y)) },
       "not_eq" -> { case List(_, _, x, y) => TopNotEq(exp_matcher(x), exp_matcher(y)) },

@@ -20,7 +20,7 @@ object tartlet {
         |tartlet ${version}
         |
         |usage:
-        |  -e, --eval <file_name> [default]
+        |  -e, --eval <file_path> [default]
         |  -v, --version
         |  -h, --help
         """.stripMargin
@@ -54,14 +54,14 @@ object tartlet {
     }
 
     opt(args, "--eval", 1).foreach {
-      case Array(file_name) =>
-        run_file(file_name)
+      case Array(file_path) =>
+        run_file(file_path)
         System.exit(0)
     }
 
     if (args.length == 1) {
-      val file_name = args(0)
-      run_file(file_name)
+      val file_path = args(0)
+      run_file(file_path)
       System.exit(0)
     }
 
@@ -70,8 +70,8 @@ object tartlet {
     System.exit(0)
   }
 
-  def run_file(file_name: String): Unit = {
-    val path = os.Path(file_name, base = os.pwd)
+  def run_file(file_path: String): Unit = {
+    val path = os.Path(file_path, base = os.pwd)
 
     if (!os.isFile(path)) {
       println(s"not a file: ${path}")
@@ -86,7 +86,7 @@ object tartlet {
         module.run()
       case Left(error) =>
         println(s"[parse_error] ${error.msg}")
-        println(s"- file: ${file_name}")
+        println(s"- file: ${file_path}")
         System.exit(1)
     }
   }

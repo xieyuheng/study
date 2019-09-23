@@ -1,3 +1,5 @@
+import * from "../basic/nat.cic"
+
 datatype list_t(A: type_t) {
   case null_t(A: type_t)
   case cons_t(A: type_t, head: A, tail: list_t(A))
@@ -23,3 +25,7 @@ fn list_map(A: type_t, B: type_t, f: (A) -> B, list: list_t(A)): list_t(B) = {
     case cons_t => cons_t(A, fun(list.head), list_map(A, B, fun, list.tail))
   }
 }
+
+eval! cons_t(nat_t, one, null_t(nat_t))
+eval! succ_t(zero_t)
+eval! list_length(cons_t(nat_t, one, null_t(nat_t)))

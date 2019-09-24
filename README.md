@@ -1,7 +1,7 @@
 # cicada
 
-A dependently typed language with fulfilling type system,
-in which partly fulfilled constructor can be used as type.
+A dependently typed language
+- with fulfilling type system, in which partly fulfilled constructor can be used as type.
 
 ## Also Contains
 

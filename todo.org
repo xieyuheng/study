@@ -26,7 +26,6 @@
     and fit the arg in by type when name is not provided
   - I will not even provide named function application syntax for type constructors
   - termination check
-* fulfilling type system
 * game semantics
 * tartlet
 - why we need "type directed norm-by-eval" here ?

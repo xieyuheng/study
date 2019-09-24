@@ -19,8 +19,9 @@
   described in paper: "A simple type-theoretic language: Mini-TT",
   by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
   - no termination check, thus when viewed as logic it is unsound.
-
-**... cicada emerging ...**
+- [cicada](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/cicada):
+  A dependently typed language with fulfilling type system,
+  in which partly fulfilled constructor can be used as type.
 
 ## Usage
 

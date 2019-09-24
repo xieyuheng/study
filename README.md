@@ -1,6 +1,6 @@
 # cicada
 
-A dependently typed language
+A dependently typed language and proof assistant that
 - with **fulfilling type system**, in which partially fulfilled data can be used as type.
 
 ## Also Contains

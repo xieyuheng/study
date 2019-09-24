@@ -1,5 +1,4 @@
 * cicada
-- Norm
 - readback
 - string_t
 - check undefined during top loading

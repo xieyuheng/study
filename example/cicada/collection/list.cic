@@ -22,10 +22,23 @@ fn list_append(A: type_t, x: list_t(A), y: list_t(A)): list_t(A) = {
 fn list_map(A: type_t, B: type_t, f: (A) -> B, list: list_t(A)): list_t(B) = {
   choice list {
     case null_t => list
-    case cons_t => cons_t(A, fun(list.head), list_map(A, B, fun, list.tail))
+    case cons_t => cons_t(A, f(list.head), list_map(A, B, f, list.tail))
   }
 }
 
-eval! cons_t(nat_t, one, null_t(nat_t))
-eval! succ_t(zero_t)
-eval! list_length(cons_t(nat_t, one, null_t(nat_t)))
+let three_zeros: list_t(nat_t) =
+  cons_t(nat_t, zero,
+    cons_t(nat_t, zero,
+      cons_t(nat_t, zero,
+        null_t(nat_t))))
+
+let three_ones: list_t(nat_t) =
+  cons_t(nat_t, one,
+    cons_t(nat_t, one,
+      cons_t(nat_t, one,
+        null_t(nat_t))))
+
+eq! list_length(null_t) zero
+eq! list_length(three_ones) three
+eq! list_length(list_append(nat_t, three_ones, three_ones)) six
+eq! list_map(nat_t, nat_t, nat_add(one), three_zeros) three_ones

@@ -20,7 +20,7 @@ object eval {
           case Some(value) =>
             Right(value)
           case None =>
-            Left(Err(s"can not find var: ${name} in env: ${env}"))
+            Left(Err(s"undefined var: ${name}"))
         }
       case Atom() =>
         Right(ValAtom())

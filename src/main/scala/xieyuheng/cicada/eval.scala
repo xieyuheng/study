@@ -12,7 +12,7 @@ object eval {
           case Some(value) =>
             value
           case None =>
-            println(s"can not find var: ${name} in env: ${env}")
+            println(s"undefined var: ${name}")
             throw new Exception()
         }
       case Type(level) =>

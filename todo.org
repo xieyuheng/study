@@ -1,32 +1,23 @@
 * cicada
-- pre
+- fulfill_norm
   - between any two values, because value can be used as type
-  - pre_val and pre_exp should be implemented by pre_norm
-  - we will need variance to implement pre
-    maybe we do not need to pre-calculet variance
+    - subtype relation between club and members and class and supers
+      - recursively extended to fields in record and pi and si
+      - need to compute variance (covariant contravariant invariant) for fields
+  - we will need variance, but we might not need to pre-calculet variance
     just compare fields as covariant and function arg as contravariant
   - value of a field must be full value
-    val_full_p
-    val_part_p
-- string_t
-- check undefined during top loading
-- subtype relation between club and members and class and supers
-  - recursively extended to fields in record and pi and si
-  - need to compute variance (covariant contravariant invariant) for fields
-- partially filled data can be used as type
+    full_p, part_p
 - cumulative levels of types -- type_t(n)
   - this should be simple since we have subtype relation and infer
+- string_t
+- check undefined during top loading
 - compile to js with runtime type information
   - this means keep Val serde-able
     - Val includes ValFn which contains Exp
       this Exp is also serde-able
-- things to leave out in this prototype
-  - "do what I mean" function application
-    named function application syntax
-    and fit the arg in by type when name is not provided
-  - I will not even provide named function application syntax for type constructors
-  - termination check
-* game semantics
+- termination check
+- markdown support
 * tartlet
 - why we need "type directed norm-by-eval" here ?
 - extend tartlet to pie

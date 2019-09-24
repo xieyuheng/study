@@ -34,14 +34,14 @@ object pretty {
             s"${name}: ${pretty_exp(t)} = ${pretty_exp(e)}"
         }.mkString(", ")
         val member_str = members.map(pretty_member).mkString("\n")
-        s"data ${name}(${fields_str}) {${maybeln(member_str)}}"
+        s"data ${name}(${fields_str}) {${maybe_ln(member_str)}}"
       case DeclRecord(name: String, super_names: List[String], decls: List[Decl]) =>
         val decls_str = decls.map(pretty_decl).mkString("\n")
         if (super_names.length == 0) {
-          s"class ${name} {${maybeln(decls_str)}}"
+          s"class ${name} {${maybe_ln(decls_str)}}"
         } else {
           val super_names_str = super_names.mkString(", ")
-          s"class ${name} extends ${super_names_str} {${maybeln(decls_str)}}"
+          s"class ${name} extends ${super_names_str} {${maybe_ln(decls_str)}}"
         }
     }
   }
@@ -69,7 +69,7 @@ object pretty {
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
       case Choice(path: List[String], map: Map[String, Exp]) =>
-        s"choice ${pretty_path(path)} {${maybeln(pretty_exp_case(map))}}"
+        s"choice ${pretty_path(path)} {${maybe_ln(pretty_exp_case(map))}}"
       case Dot(target: Exp, field_name: String) =>
         s"${pretty_exp(target)}.${field_name}"
       case DotType(target: Exp, field_name: String) =>
@@ -97,11 +97,11 @@ object pretty {
       case ValFn(arg_name: String, arg_t: Val, body: Clo) =>
         s"(${arg_name}: ${pretty_val(arg_t)}) => ${pretty_clo(body)}"
       case ValClub(name: String, members: List[Member], tel: Telescope) =>
-        s"${name}(${pretty_tel(tel)})"
+        s"${name}(${maybe_paren(pretty_tel(tel))})"
       case ValMember(name: String, club_name: String, tel: Telescope) =>
-        s"${name}(${pretty_tel(tel)})"
+        s"${name}(${maybe_paren(pretty_tel(tel))})"
       case ValRecord(name: String, super_names: List[String], tel: Telescope) =>
-        s"${name}(${pretty_tel(tel)})"
+        s"${name}(${maybe_paren(pretty_tel(tel))})"
       case neu: Neu =>
         pretty_neu(neu)
     }
@@ -122,7 +122,7 @@ object pretty {
       case NeuAp(target: Neu, arg: Val) =>
         s"${pretty_neu(target)}(${pretty_val(arg)})"
       case NeuChoice(target: Neu, map: Map[String, Exp], env) =>
-        s"choice ${pretty_neu(target)} {${maybeln(pretty_exp_case(map))}}"
+        s"choice ${pretty_neu(target)} {${maybe_ln(pretty_exp_case(map))}}"
       case NeuDot(target: Neu, field_name: String) =>
         s"${pretty_neu(target)}.${field_name}"
       case NeuDotType(target: Neu, field_name: String) =>
@@ -155,11 +155,11 @@ object pretty {
       case NormFn(arg_name: String, arg_t: Norm, body: Norm) =>
         s"(${arg_name}: ${pretty_norm(arg_t)}) => ${pretty_norm(body)}"
       case NormClub(name: String, members: List[Member], norm_tel: NormTelescope) =>
-        s"${name}(${pretty_norm_tel(norm_tel)})"
+        s"${name}(${maybe_paren(pretty_norm_tel(norm_tel))})"
       case NormMember(name: String, club_name: String, norm_tel: NormTelescope) =>
-        s"${name}(${pretty_norm_tel(norm_tel)})"
+        s"${name}(${maybe_paren(pretty_norm_tel(norm_tel))})"
       case NormRecord(name: String, super_names: List[String], norm_tel: NormTelescope) =>
-        s"${name}(${pretty_norm_tel(norm_tel)})"
+        s"${name}(${maybe_paren(pretty_norm_tel(norm_tel))})"
     }
   }
 
@@ -170,7 +170,7 @@ object pretty {
       case NormNeuAp(target: NormNeu, arg: Norm) =>
         s"${pretty_norm_neu(target)}(${pretty_norm(arg)})"
       case NormNeuChoice(target: NormNeu, map: Map[String, Exp], env: NormEnv) =>
-        s"choice ${pretty_norm_neu(target)} {${maybeln(pretty_exp_case(map))}}"
+        s"choice ${pretty_norm_neu(target)} {${maybe_ln(pretty_exp_case(map))}}"
       case NormNeuDot(target: NormNeu, field_name: String) =>
         s"${pretty_norm_neu(target)}.${field_name}"
       case NormNeuDotType(target: NormNeu, field_name: String) =>

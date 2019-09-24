@@ -20,7 +20,7 @@ object pretty {
     tree match {
       case Leaf(str) => '"' + str + '"'
       case Node(rule, choice_name, children) =>
-        val childrenStr = maybeln(children.map(pretty_tree).mkString("\n"))
+        val childrenStr = maybe_ln(children.map(pretty_tree).mkString("\n"))
         s"${rule.name}::${choice_name}${get_args_str(rule)} {${childrenStr}}"
     }
   }

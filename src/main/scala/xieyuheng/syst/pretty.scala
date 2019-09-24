@@ -70,7 +70,7 @@ object pretty {
         s"zero"
       case ValFn(name, body, env) =>
         // val map_str = pretty_env(env)
-        // s"${name} => ${pretty_exp(body)} #env {${maybeln(map_str)}}"
+        // s"${name} => ${pretty_exp(body)} #env {${maybe_ln(map_str)}}"
         s"${name} => ${pretty_exp(body)}"
     }
   }

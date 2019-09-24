@@ -44,9 +44,9 @@ object pretty {
       case Data(tag: String, body: Exp) =>
         s"${tag}[${pretty_exp(body)}]"
       case Mat(mats: Map[String, Exp]) =>
-        s"{${maybeln(pretty_exp_case(mats))}}"
+        s"{${maybe_ln(pretty_exp_case(mats))}}"
       case Sum(mats: Map[String, Exp]) =>
-        s"datatype {${maybeln(pretty_exp_map(mats))}}"
+        s"datatype {${maybe_ln(pretty_exp_map(mats))}}"
       case Sole() => "[]"
       case Trivial() => "[]"
       case Univ() => "type_t"
@@ -86,7 +86,7 @@ object pretty {
       case NeuCdr(target: Neu) =>
         s"cdr(${pretty_neu(target)})"
       case NeuMat(target: Neu, CloMat(mats: Map[String, Exp], env: Env)) =>
-        s"choice (${pretty_neu(target)}) {${maybeln(pretty_exp_case(mats))}}"
+        s"choice (${pretty_neu(target)}) {${maybe_ln(pretty_exp_case(mats))}}"
     }
   }
 
@@ -103,7 +103,7 @@ object pretty {
       case CloFn(pat: Pat, body: Exp, env: Env) =>
         s"(${pretty_pat(pat)}) => ${pretty_exp(body)}"
       case CloMat(mats, env: Env) =>
-        s"{${maybeln(pretty_exp_case(mats))}}"
+        s"{${maybe_ln(pretty_exp_case(mats))}}"
       case CloTag(tag: String, clo: Clo) =>
         s"${pretty_clo(clo)} on ${tag}"
     }
@@ -131,9 +131,9 @@ object pretty {
       case ValData(tag: String, body: Val) =>
         s"${tag}[${pretty_val(body)}]"
       case ValSum(CloMat(mats: Map[String, Exp], env: Env)) =>
-        s"datatype {${maybeln(pretty_exp_map(mats))}}"
+        s"datatype {${maybe_ln(pretty_exp_map(mats))}}"
       case ValMat(CloMat(mats: Map[String, Exp], env: Env)) =>
-        s"{${maybeln(pretty_exp_case(mats))}}"
+        s"{${maybe_ln(pretty_exp_case(mats))}}"
     }
   }
 

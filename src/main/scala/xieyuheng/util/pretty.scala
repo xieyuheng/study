@@ -16,11 +16,19 @@ object pretty {
       .mkString("\n")
   }
 
-  def maybeln(string: String): String = {
+  def maybe_ln(string: String): String = {
     if (string.trim.isEmpty) {
       ""
     } else {
       "\n" ++ add_indent_to_block(string, 1) ++ "\n"
+    }
+  }
+
+  def maybe_paren(string: String): String = {
+    if (string.trim.isEmpty) {
+      ""
+    } else {
+      "(" ++ string ++ ")"
     }
   }
 

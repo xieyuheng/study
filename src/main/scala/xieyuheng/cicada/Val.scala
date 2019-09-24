@@ -9,7 +9,18 @@ final case class ValMember(name: String, club_name: String, tel: Telescope) exte
 final case class ValRecord(name: String, super_names: List[String], tel: Telescope) extends Val
 
 sealed trait Neu extends Val
-final case class NeuVar(name: String) extends Neu
+final case class NeuVar(name: String, aka: Option[String]) extends Neu {
+  val matters = name
+
+  override def equals(that: Any): Boolean = {
+    that match {
+      case that: NeuVar => this.matters == that.matters
+      case _ => false
+    }
+  }
+
+  override def hashCode = matters.hashCode
+}
 final case class NeuAp(target: Neu, arg: Val) extends Neu
 // NOTE do not store env in NeuChoice
 // 1. deep_ext env ?

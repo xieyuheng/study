@@ -1,5 +1,6 @@
 * cicada
-- readback
+- test readback
+- pretty_norm
 - string_t
 - check undefined during top loading
 - pre

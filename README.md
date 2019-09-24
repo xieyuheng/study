@@ -1,6 +1,9 @@
 # cicada
 
-## Contains
+A dependently typed language with fulfilling type system,
+in which partly fulfilled constructor can be used as type.
+
+## Also Contains
 
 - [partech](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech):
   A parser generator with different parsing techniques.
@@ -19,9 +22,6 @@
   described in paper: "A simple type-theoretic language: Mini-TT",
   by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
   - no termination check, thus when viewed as logic it is unsound.
-- [cicada](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/cicada):
-  A dependently typed language with fulfilling type system,
-  in which partly fulfilled constructor can be used as type.
 
 ## Usage
 
@@ -33,6 +33,7 @@
 - We enforce C4 as collaboration protocol -- [The C4 RFC](https://rfc.zeromq.org/spec:42/C4)
 - [Style Guide](STYLE-GUIDE.md) -- observe the style of existing code and respect it
 - [Code of Conduct](CODE-OF-CONDUCT.md)
+- [travis-ci](https://travis-ci.org/xieyuheng/cicada)
 
 ## License
 

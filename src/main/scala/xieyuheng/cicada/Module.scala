@@ -26,6 +26,7 @@ case class Module(file_path: String) {
     var env: Env = Env()
     top_list.foreach {
       case TopDecl(decl) =>
+        // println(pretty_decl(decl))
         env = env.ext_decl(decl)
       case TopImportAll(path) =>
         env = import_file(path, env)

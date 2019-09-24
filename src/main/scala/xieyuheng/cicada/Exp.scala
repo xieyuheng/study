@@ -1,5 +1,7 @@
 package xieyuheng.cicada
 
+import pretty._
+
 sealed trait Exp
 final case class Var(name: String) extends Exp
 final case class Type(level: Int) extends Exp
@@ -48,31 +50,31 @@ object Choice {
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
-            println(s"choice mismatch: ${value}")
-            println(s"map: ${map}")
+            println(s"choice mismatch: ${pretty_val(value)}")
+            println(s"${pretty_exp_case(map)}")
             throw new Exception()
         }
       case ValMember(name: String, club_name: String, tel: Telescope) =>
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
-            println(s"choice mismatch: ${value}")
-            println(s"map: ${map}")
+            println(s"choice mismatch: ${pretty_val(value)}")
+            println(s"${pretty_exp_case(map)}")
             throw new Exception()
         }
       case ValRecord(name: String, super_names: List[String], tel: Telescope) =>
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
-            println(s"choice mismatch: ${value}")
-            println(s"map: ${map}")
+            println(s"choice mismatch: ${pretty_val(value)}")
+            println(s"${pretty_exp_case(map)}")
             throw new Exception()
         }
       case neu: Neu =>
         NeuChoice(neu, map, env)
       case _ =>
-        println(s"choice mismatch: ${value}")
-        println(s"map: ${map}")
+        println(s"choice mismatch: ${pretty_val(value)}")
+        println(s"${pretty_exp_case(map)}")
         throw new Exception()
     }
   }

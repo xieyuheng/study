@@ -1,3 +1,4 @@
+import * from "../basic/bool.cic"
 import * from "../basic/nat.cic"
 
 datatype list_t(A: type_t) {
@@ -39,6 +40,6 @@ let three_ones: list_t(nat_t) =
         null_t(nat_t))))
 
 eq! list_length(null_t) zero
-eq! list_length(three_ones) three
-eq! list_length(list_append(nat_t, three_ones, three_ones)) six
+eq! list_length(three_zeros) three
+eq! list_length(list_append(nat_t, three_zeros, three_ones)) six
 eq! list_map(nat_t, nat_t, nat_add(one), three_zeros) three_ones

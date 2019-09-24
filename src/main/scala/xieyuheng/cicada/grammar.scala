@@ -89,16 +89,16 @@ object grammar {
       "let_type" -> { case List(_, Leaf(name), _, t) =>
         DeclLetType(name, exp_matcher(t)) },
       "fn" -> { case List(_, Leaf(name), _, bind_list, _, _, t, _, body) =>
-        val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
+        val args = non_empty_list_matcher(bind_matcher)(bind_list)
         DeclFn(name, args, exp_matcher(t), exp_matcher(body)) },
       "fn_type" -> { case List(_, Leaf(name), _, bind_list, _, _, t) =>
-        val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
+        val args = non_empty_list_matcher(bind_matcher)(bind_list)
         DeclFnType(name, args, exp_matcher(t)) },
       "function" -> { case List(_, Leaf(name), _, bind_list, _, _, t, _, body) =>
-        val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
+        val args = non_empty_list_matcher(bind_matcher)(bind_list)
         DeclFn(name, args, exp_matcher(t), exp_matcher(body)) },
       "function_type" -> { case List(_, Leaf(name), _, bind_list, _, _, t) =>
-        val args = non_empty_list_matcher(bind_matcher)(bind_list).toMap
+        val args = non_empty_list_matcher(bind_matcher)(bind_list)
         DeclFnType(name, args, exp_matcher(t)) },
       "datatype" -> { case List(_, Leaf(name), _, field_list, _, _, member_list, _) =>
         val fields = non_empty_list_matcher(field_matcher)(field_list)

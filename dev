@@ -156,6 +156,10 @@ release () {
         popd
 }
 
+install () {
+    cp target/linux/bin/* ~/bin
+}
+
 main () {
     for TASK in $@
     do

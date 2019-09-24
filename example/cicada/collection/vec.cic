@@ -1,10 +1,11 @@
+import * from "../basic/bool.cic"
 import * from "../basic/nat.cic"
 
 datatype vec_t(A: type_t, length: nat_t) {
-  case null_vec_t(
+  case vec_null_t(
     A: type_t,
     length: nat_t = zero_t)
-  case cons_vec_t(
+  case vec_cons_t(
     A: type_t,
     prev: nat_t,
     length: nat_t = succ_t(prev),
@@ -20,40 +21,40 @@ fn vec_append(
   y: vec_t(A, n),
 ): vec_t(A, nat_add(m, n)) = {
   choice x {
-    case null_vec_t => y
-    case cons_vec_t => cons_vec_t(
+    case vec_null_t => y
+    case vec_cons_t => vec_cons_t(
       A, nat_add(m.prev, n),
       x.head, vec_append(A, m.prev, n, x.tail, y))
   }
 }
 
-fn vec_map(A: type_t, B: type_t, f: (A) -> B, vec: vec_t(A, n)): vec_t(B, n) = {
+fn vec_map(A: type_t, B: type_t, n: nat_t, f: (A) -> B, vec: vec_t(A, n)): vec_t(B, n) = {
   choice vec {
-    case null_vec_t => vec
-    case cons_vec_t => cons_vec_t(f(vec.head), vec_map(A, B, f, vec.tail))
+    case vec_null_t => vec
+    case vec_cons_t => vec_cons_t(
+      B, n.prev,
+      f(vec.head), vec_map(A, B, n.prev, f, vec.tail))
   }
 }
 
-// maybe this
+eq! vec_null_t(nat_t).A nat_t
+eq! vec_null_t(nat_t).length zero
 
-datatype vec_t(A: type_t, length: nat_t) {
-  case null_vec_t(
-    A: type_t,
-    length: nat_t = zero_t)
-  case cons_vec_t(
-    A: type_t,
-    head: A,
-    tail: vec_t(A),
-    length: nat_t = succ_t(tail.length))
-}
+let three_zeros: vec_t(nat_t, three) =
+  vec_cons_t(nat_t, two, zero,
+    vec_cons_t(nat_t, one, zero,
+      vec_cons_t(nat_t, zero, zero,
+        vec_null_t(nat_t))))
 
-fn vec_append(
-  A: type_t,
-  x: vec_t(A),
-  y: vec_t(A),
-): vec_t(A, nat_add(x.length, y.length)) = {
-  choice x {
-    case null_vec_t => y
-    case cons_vec_t => cons_vec_t(A, x.head, vec_append(A, x.tail, y))
-  }
-}
+let three_ones: vec_t(nat_t, three) =
+  vec_cons_t(nat_t, two, one,
+    vec_cons_t(nat_t, one, one,
+      vec_cons_t(nat_t, zero, one,
+        vec_null_t(nat_t))))
+
+eq! three_zeros.A nat_t
+eq! three_zeros.length three
+
+eq! vec_append(nat_t, three, three, three_zeros, three_ones).length six
+
+eq! vec_map(nat_t, nat_t, three, nat_add(one), three_zeros) three_ones

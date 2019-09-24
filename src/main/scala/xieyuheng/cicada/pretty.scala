@@ -14,13 +14,13 @@ object pretty {
         s"let ${name}: ${pretty_exp(t)} = ${pretty_exp(body)}"
       case DeclLetType(name: String, t: Exp) =>
         s"let ${name}: ${pretty_exp(t)}"
-      case DeclFn(name: String, args: Map[String, Exp], dep_t: Exp, body: Exp) =>
+      case DeclFn(name: String, args, dep_t: Exp, body: Exp) =>
         val args_str = args.map {
           case (name, exp) =>
             s"${name}: ${pretty_exp(exp)}"
         }.mkString(", ")
         s"fn ${name}(${args_str}): ${pretty_exp(dep_t)} = ${pretty_exp(body)}"
-      case DeclFnType(name: String, args: Map[String, Exp], dep_t: Exp) =>
+      case DeclFnType(name: String, args, dep_t: Exp) =>
         val args_str = args.map {
           case (name, exp) =>
             s"${name}: ${pretty_exp(exp)}"

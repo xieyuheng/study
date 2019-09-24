@@ -4,6 +4,7 @@ import xieyuheng.minitt.pretty._
 import xieyuheng.minitt.readback._
 
 object check {
+
   def gen_fresh(i: Int, aka: Option[String] = None): Val = {
     ValNeu(NeuVar(fresh_name(i), aka))
   }

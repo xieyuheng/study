@@ -3,6 +3,7 @@ package xieyuheng.minitt
 import xieyuheng.minitt.pretty._
 
 sealed trait Ctx {
+
   def lookup(name: String): Option[Val] = {
     this match {
       case CtxVar(name2: String, t: Val, rest: Ctx) =>

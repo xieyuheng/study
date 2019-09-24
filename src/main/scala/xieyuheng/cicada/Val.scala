@@ -2,7 +2,6 @@ package xieyuheng.cicada
 
 sealed trait Val
 final case class ValType(level: Int) extends Val
-// final case class ValThe(t: Val, body: Val) extends Val
 final case class ValPi(arg_name: String, arg_t: Val, dep_t: Clo) extends Val
 final case class ValFn(arg_name: String, arg_t: Val, body: Clo) extends Val
 final case class ValClub(name: String, members: List[Member], tel: Telescope) extends Val

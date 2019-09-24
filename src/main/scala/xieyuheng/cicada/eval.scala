@@ -17,8 +17,6 @@ object eval {
         }
       case Type(level) =>
         ValType(level)
-      // case The(t: Exp, body: Exp) =>
-      //   ValThe(eval(t, env), eval(body, env))
       case Pi(arg_name, arg_t, dep_t) =>
         ValPi(arg_name, eval(arg_t, env), Clo(arg_name, dep_t, env))
       case Fn(arg_name, arg_t, body) =>

@@ -4,6 +4,10 @@ import xieyuheng.util.pretty._
 
 object pretty {
 
+  def pretty_level(level: Int): String = {
+    if (level == 1) s"type_t" else s"type_t^${level}"
+  }
+
   def pretty_decl(decl: Decl): String = {
     decl match {
       case DeclLet(name: String, t: Exp, body: Exp) =>
@@ -57,7 +61,7 @@ object pretty {
       case Var(name: String) =>
         name
       case Type(level: Int) =>
-        if (level == 1) s"type_t" else s"type_t^${level}"
+        pretty_level(level)
       case Pi(arg_name: String, arg_t: Exp, dep_t: Exp) =>
         s"(${arg_name}: ${pretty_exp(arg_t)}) -> ${pretty_exp(dep_t)}"
       case Fn(arg_name: String, arg_t: Exp, body: Exp) =>
@@ -87,7 +91,7 @@ object pretty {
   def pretty_val(value: Val): String = {
     value match {
       case ValType(level) =>
-        if (level == 1) s"type_t" else s"type_t^${level}"
+        pretty_level(level)
       case ValPi(arg_name: String, arg_t: Val, dep_t: Clo) =>
         s"(${arg_name}: ${pretty_val(arg_t)}) -> ${pretty_clo(dep_t)}"
       case ValFn(arg_name: String, arg_t: Val, body: Clo) =>
@@ -99,7 +103,7 @@ object pretty {
       case ValRecord(name: String, super_names: List[String], tel: Telescope) =>
         s"${name}(${pretty_tel(tel)})"
       case neu: Neu =>
-        pretty_nen(neu)
+        pretty_neu(neu)
     }
   }
 
@@ -108,18 +112,21 @@ object pretty {
       case (name, value) =>
         s"case ${name} => ${pretty_val(value)}\n" }
 
-  def pretty_nen(neu: Neu): String = {
+  def pretty_neu(neu: Neu): String = {
     neu match {
-      case NeuVar(name: String) =>
-        name
+      case NeuVar(name: String, aka) =>
+        aka match {
+          case Some(alias) => s"${alias}${name}"
+          case None => name
+        }
       case NeuAp(target: Neu, arg: Val) =>
-        s"${pretty_nen(target)}(${pretty_val(arg)})"
+        s"${pretty_neu(target)}(${pretty_val(arg)})"
       case NeuChoice(target: Neu, map: Map[String, Exp], env) =>
-        s"choice ${pretty_nen(target)} {${maybeln(pretty_exp_case(map))}}"
+        s"choice ${pretty_neu(target)} {${maybeln(pretty_exp_case(map))}}"
       case NeuDot(target: Neu, field_name: String) =>
-        s"${pretty_nen(target)}.${field_name}"
+        s"${pretty_neu(target)}.${field_name}"
       case NeuDotType(target: Neu, field_name: String) =>
-        s"${pretty_nen(target)}.:${field_name}"
+        s"${pretty_neu(target)}.:${field_name}"
     }
   }
 
@@ -131,6 +138,50 @@ object pretty {
     val fields = tel.fields.map {
       case (k, te, ve, Some(tv), Some(vv)) =>
         s"${k}: ${pretty_val(tv)} = ${pretty_val(vv)}"
+      case (k, te, _, _, _) =>
+        s"${k}: ${pretty_exp(te)}"
+    }.mkString(", ")
+    s"#tel(${fields})"
+  }
+
+  def pretty_norm(norm: Norm): String = {
+    norm match {
+      case norm_neu: NormNeu =>
+        pretty_norm_neu(norm_neu)
+      case NormType(level: Int) =>
+        pretty_level(level)
+      case NormPi(arg_name: String, arg_t: Norm, dep_t: Norm) =>
+        s"(${arg_name}: ${pretty_norm(arg_t)}) -> ${pretty_norm(dep_t)}"
+      case NormFn(arg_name: String, arg_t: Norm, body: Norm) =>
+        s"(${arg_name}: ${pretty_norm(arg_t)}) => ${pretty_norm(body)}"
+      case NormClub(name: String, members: List[Member], norm_tel: NormTelescope) =>
+        s"${name}(${pretty_norm_tel(norm_tel)})"
+      case NormMember(name: String, club_name: String, norm_tel: NormTelescope) =>
+        s"${name}(${pretty_norm_tel(norm_tel)})"
+      case NormRecord(name: String, super_names: List[String], norm_tel: NormTelescope) =>
+        s"${name}(${pretty_norm_tel(norm_tel)})"
+    }
+  }
+
+  def pretty_norm_neu(norm_neu: NormNeu): String = {
+    norm_neu match {
+      case NormNeuVar(name: String) =>
+        name
+      case NormNeuAp(target: NormNeu, arg: Norm) =>
+        s"${pretty_norm_neu(target)}(${pretty_norm(arg)})"
+      case NormNeuChoice(target: NormNeu, map: Map[String, Exp], env: NormEnv) =>
+        s"choice ${pretty_norm_neu(target)} {${maybeln(pretty_exp_case(map))}}"
+      case NormNeuDot(target: NormNeu, field_name: String) =>
+        s"${pretty_norm_neu(target)}.${field_name}"
+      case NormNeuDotType(target: NormNeu, field_name: String) =>
+        s"${pretty_norm_neu(target)}.:${field_name}"
+    }
+  }
+
+  def pretty_norm_tel(norm_tel: NormTelescope): String = {
+    val fields = norm_tel.fields.map {
+      case (k, te, ve, Some(tn), Some(vn)) =>
+        s"${k}: ${pretty_norm(tn)} = ${pretty_norm(vn)}"
       case (k, te, _, _, _) =>
         s"${k}: ${pretty_exp(te)}"
     }.mkString(", ")

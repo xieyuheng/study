@@ -49,10 +49,10 @@ case class Module(file_path: String) {
       println(s"the following two expressions are asserted to be not equal")
       println(s">>> ${pretty_exp(e1)}")
       println(s"=== ${pretty_val(v1)}")
-      // println(s"=== ${pretty_norm(n1)}")
+      println(s"=== ${pretty_norm(n1)}")
       println(s">>> ${pretty_exp(e2)}")
       println(s"=== ${pretty_val(v2)}")
-      // println(s"=== ${pretty_norm(n2)}")
+      println(s"=== ${pretty_norm(n2)}")
       throw new Exception()
     }
   }
@@ -60,17 +60,17 @@ case class Module(file_path: String) {
   def assert_eq(e1: Exp, e2: Exp): Unit = {
     val v1 = eval(e1, env)
     val v2 = eval(e2, env)
-    // val n1 = readback_val(v1, Set())
-    // val n2 = readback_val(v2, Set())
+    val n1 = readback_val(init_seed(), v1)
+    val n2 = readback_val(init_seed(), v2)
     if (v1 != v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be equal")
       println(s">>> ${pretty_exp(e1)}")
       println(s"=== ${pretty_val(v1)}")
-      // println(s"=== ${pretty_exp(n1)}")
+      println(s"=== ${pretty_norm(n1)}")
       println(s">>> ${pretty_exp(e2)}")
       println(s"=== ${pretty_val(v2)}")
-      // println(s"=== ${pretty_exp(n2)}")
+      println(s"=== ${pretty_norm(n2)}")
       throw new Exception()
     }
   }
@@ -80,8 +80,7 @@ case class Module(file_path: String) {
     val norm = readback_val(init_seed(), value)
     println(s">>> ${pretty_exp(exp)}")
     println(s"=== ${pretty_val(value)}")
-    println(s"=== ${norm}")
-    // println(s"=== ${pretty_norm(norm)}")
+    println(s"=== ${pretty_norm(norm)}")
     println()
   }
 

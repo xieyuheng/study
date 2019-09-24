@@ -6,21 +6,25 @@ object readback {
     s"#${i}"
   }
 
+  def gen_fresh(i: Int, aka: Option[String] = None): Val = {
+    ValNeu(NeuVar(fresh_name(i), aka))
+  }
+
   def readback_val(i: Int, value: Val): Norm = {
     value match {
       case ValNeu(neu: Neu) =>
         readback_neu(i, neu)
       case ValFn(clo) =>
         val name = fresh_name(i)
-        val body = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name, clo.maybe_arg_name()))))
+        val body = readback_val(i + 1, clo.ap(gen_fresh(i, clo.maybe_arg_name())))
         NormFn(name, body)
       case ValPi(arg_t: Val, clo) =>
         val name = fresh_name(i)
-        val dep_t = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name, clo.maybe_arg_name()))))
+        val dep_t = readback_val(i + 1, clo.ap(gen_fresh(i, clo.maybe_arg_name())))
         NormPi(name, readback_val(i, arg_t), dep_t)
       case ValSigma(arg_t: Val, clo) =>
         val name = fresh_name(i)
-        val dep_t = readback_val(i + 1, clo.ap(ValNeu(NeuVar(name, clo.maybe_arg_name()))))
+        val dep_t = readback_val(i + 1, clo.ap(gen_fresh(i, clo.maybe_arg_name())))
         NormSigma(name, readback_val(i, arg_t), dep_t)
       case ValUniv() => NormUniv()
       case ValCons(car: Val, cdr: Val) =>

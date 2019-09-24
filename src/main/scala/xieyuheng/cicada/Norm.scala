@@ -12,7 +12,6 @@ case class NormTelescope(
   fields: List[(String, Exp, Option[Exp], Option[Norm], Option[Norm])],
   env: NormEnv)
 
-
 sealed trait NormNeu extends Norm
 final case class NormNeuVar(name: String) extends NormNeu
 final case class NormNeuAp(target: NormNeu, arg: Norm) extends NormNeu
@@ -25,3 +24,7 @@ sealed trait NormEnv
 final case class NormEnvDecl(decl: Decl, rest: NormEnv) extends NormEnv
 final case class NormEnvVal(name: String, value: Norm, rest: NormEnv) extends NormEnv
 final case class NormEnvEmpty() extends NormEnv
+
+object NormEnv {
+  def apply(): NormEnv = NormEnvEmpty()
+}

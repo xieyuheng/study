@@ -5,10 +5,6 @@ import xieyuheng.minitt.readback._
 
 object check {
 
-  def gen_fresh(i: Int, aka: Option[String] = None): Val = {
-    ValNeu(NeuVar(fresh_name(i), aka))
-  }
-
   def gen_fresh_for(i: Int, t: Val, aka: Option[String] = None): Val = {
     t match {
       case ValTrivial() => ValSole()

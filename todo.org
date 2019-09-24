@@ -30,6 +30,7 @@
 * fulfilling type system
 * game semantics
 * tartlet
+- why we need "type directed norm-by-eval" here ?
 - extend tartlet to pie
 - the little typer as test
 - use `TODO` as un-implemented
@@ -40,6 +41,7 @@
   - keep it subrecursive, but be generic about data and ind, rec and iter
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
 * minitt
+- why we do not need "type directed norm-by-eval" here ?
 - [question] I think the use of NormEnv will break `equals`
 - add `eqv_t` `same` `replace`
 - add constrains to type constructors

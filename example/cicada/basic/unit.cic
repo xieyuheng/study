@@ -3,5 +3,3 @@ class unit_t {}
 let unit: unit_t = unit_t
 
 eq! unit unit_t
-
-eval! unit

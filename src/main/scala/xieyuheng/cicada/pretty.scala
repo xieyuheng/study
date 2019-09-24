@@ -97,11 +97,11 @@ object pretty {
       case ValFn(arg_name: String, arg_t: Val, body: Clo) =>
         s"(${arg_name}: ${pretty_val(arg_t)}) => ${pretty_clo(body)}"
       case ValClub(name: String, members: List[Member], tel: Telescope) =>
-        s"${name}(${maybe_paren(pretty_tel(tel))})"
+        s"${name}${maybe_paren(pretty_tel(tel))}"
       case ValMember(name: String, club_name: String, tel: Telescope) =>
-        s"${name}(${maybe_paren(pretty_tel(tel))})"
+        s"${name}${maybe_paren(pretty_tel(tel))}"
       case ValRecord(name: String, super_names: List[String], tel: Telescope) =>
-        s"${name}(${maybe_paren(pretty_tel(tel))})"
+        s"${name}${maybe_paren(pretty_tel(tel))}"
       case neu: Neu =>
         pretty_neu(neu)
     }
@@ -155,11 +155,11 @@ object pretty {
       case NormFn(arg_name: String, arg_t: Norm, body: Norm) =>
         s"(${arg_name}: ${pretty_norm(arg_t)}) => ${pretty_norm(body)}"
       case NormClub(name: String, members: List[Member], norm_tel: NormTelescope) =>
-        s"${name}(${maybe_paren(pretty_norm_tel(norm_tel))})"
+        s"${name}${maybe_paren(pretty_norm_tel(norm_tel))}"
       case NormMember(name: String, club_name: String, norm_tel: NormTelescope) =>
-        s"${name}(${maybe_paren(pretty_norm_tel(norm_tel))})"
+        s"${name}${maybe_paren(pretty_norm_tel(norm_tel))}"
       case NormRecord(name: String, super_names: List[String], norm_tel: NormTelescope) =>
-        s"${name}(${maybe_paren(pretty_norm_tel(norm_tel))})"
+        s"${name}${maybe_paren(pretty_norm_tel(norm_tel))}"
     }
   }
 

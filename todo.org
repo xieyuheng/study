@@ -1,7 +1,5 @@
 * cicada
-- test readback
-- string_t
-- check undefined during top loading
+- test eval on list and vec
 - pre
   - between any two values, because value can be used as type
   - pre_val and pre_exp should be implemented by pre_norm
@@ -11,6 +9,8 @@
   - value of a field must be full value
     val_full_p
     val_part_p
+- string_t
+- check undefined during top loading
 - subtype relation between club and members and class and supers
   - recursively extended to fields in record and pi and si
   - need to compute variance (covariant contravariant invariant) for fields

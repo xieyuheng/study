@@ -1,1 +1,3 @@
 class unit_t {}
+
+eval! unit_t

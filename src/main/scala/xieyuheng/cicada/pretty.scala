@@ -141,7 +141,7 @@ object pretty {
       case (k, te, _, _, _) =>
         s"${k}: ${pretty_exp(te)}"
     }.mkString(", ")
-    s"#tel(${fields})"
+    s"${fields}"
   }
 
   def pretty_norm(norm: Norm): String = {
@@ -185,7 +185,7 @@ object pretty {
       case (k, te, _, _, _) =>
         s"${k}: ${pretty_exp(te)}"
     }.mkString(", ")
-    s"#tel(${fields})"
+    s"${fields}"
   }
 
 }

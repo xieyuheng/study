@@ -20,7 +20,7 @@ object eval {
           case Some(value) =>
             Right(value)
           case None =>
-            Left(Err(s"undefined var: ${name}"))
+            Left(Err(s"undefined variable: ${name}"))
         }
       case Atom() =>
         Right(ValAtom())

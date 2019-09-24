@@ -12,7 +12,7 @@ object eval {
           case Some(value) =>
             value
           case None =>
-            println(s"undefined var: ${name}")
+            println(s"undefined variable: ${name}")
             throw new Exception()
         }
       case Type(level) =>

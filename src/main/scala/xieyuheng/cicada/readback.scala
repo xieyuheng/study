@@ -61,7 +61,7 @@ object readback {
   def readback_neu(seed: Seed, neu: Neu): NormNeu = {
     neu match {
       case NeuVar(name: String, norm_arg_t: Norm, aka: Option[String]) =>
-        NormNeuVar(name)
+        NormNeuVar(name, norm_arg_t)
       case NeuAp(target: Neu, arg: Val) =>
         NormNeuAp(readback_neu(seed, target), readback_val(seed, arg))
       case NeuChoice(target: Neu, map: Map[String, Exp], env: Env) =>

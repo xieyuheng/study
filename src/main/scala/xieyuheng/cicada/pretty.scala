@@ -165,8 +165,8 @@ object pretty {
 
   def pretty_norm_neu(norm_neu: NormNeu): String = {
     norm_neu match {
-      case NormNeuVar(name: String) =>
-        name
+      case NormNeuVar(name: String, norm_arg_t: Norm) =>
+        s"${name}: ${pretty_norm(norm_arg_t)}"
       case NormNeuAp(target: NormNeu, arg: Norm) =>
         s"${pretty_norm_neu(target)}(${pretty_norm(arg)})"
       case NormNeuChoice(target: NormNeu, map: Map[String, Exp], env: NormEnv) =>

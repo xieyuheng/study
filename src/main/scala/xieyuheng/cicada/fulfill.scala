@@ -58,17 +58,32 @@ object fulfill {
               s"x: ${pretty_norm(x)}" ++
               s"y: ${pretty_norm(y)}"))
         }
-      case (x: NormNeu, NormType(level)) =>
-        // TODO
-        fulfill_type(x, level)
-      case (x: NormNeu, y: NormNeu) =>
-        // TODO
-        fulfill_norm_neu(x, y)
+      case (x: NormNeu, y) =>
+        infer_norm_neu(x).flatMap { case x => fulfill_norm(x, y) }
+      case (x, y: NormNeu) =>
+        infer_norm_neu(y).flatMap { case y => fulfill_norm(x, y) }
       case _ =>
         Left(Err(
           s"[fulfill_norm fail]" ++
             s"x: ${pretty_norm(x)}" ++
             s"y: ${pretty_norm(y)}"))
+    }
+  }
+
+  def infer_norm_neu(norm_neu: NormNeu): Either[Err, Norm] = {
+    norm_neu match {
+      case NormNeuVar(name: String, norm_arg_t: Norm) =>
+        Right(norm_arg_t)
+      case NormNeuAp(target: NormNeu, arg: Norm) =>
+        ???
+      case NormNeuChoice(target: NormNeu, map: Map[String, Exp], env: NormEnv) =>
+        // TODO to return list here
+        ???
+      case NormNeuDot(target: NormNeu, field_name: String) =>
+        ???
+      case NormNeuDotType(target: NormNeu, field_name: String) =>
+        // TODO
+        ???
     }
   }
 
@@ -172,10 +187,6 @@ object fulfill {
       case Some(left) => left
       case None => Right(())
     }
-  }
-
-  def fulfill_norm_neu(x: NormNeu, y: NormNeu): Either[Err, Unit] = {
-    ???
   }
 
 }

@@ -1,4 +1,6 @@
 * cicada
+- path in NeuChoice and NormNeuChoice
+- also both Env and NormEnv in NormTelescope for infer_norm_neu
 - fulfill_norm
   - subtype relation between class and supers
   - value of a field must be full value

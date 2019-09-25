@@ -1,5 +1,7 @@
 package xieyuheng.cicada
 
+import scala.annotation.tailrec
+
 sealed trait Norm
 final case class NormType(level: Int) extends Norm
 final case class NormPi(arg_name: String, arg_t: Norm, dep_t: Norm) extends Norm
@@ -19,7 +21,25 @@ final case class NormNeuChoice(target: NormNeu, map: Map[String, Exp], env: Norm
 final case class NormNeuDot(target: NormNeu, field_name: String) extends NormNeu
 final case class NormNeuDotType(target: NormNeu, field_name: String) extends NormNeu
 
-sealed trait NormEnv
+sealed trait NormEnv {
+
+  @tailrec
+  def find_norm(key: String): Option[Norm] = {
+    this match {
+      case NormEnvDecl(decl: Decl, rest: NormEnv) =>
+        rest.find_norm(key)
+      case NormEnvVal(name: String, value: Norm, rest: NormEnv) =>
+        if (name == key) {
+          Some(value)
+        } else {
+          rest.find_norm(key)
+        }
+      case NormEnvEmpty() =>
+        None
+    }
+  }
+}
+
 final case class NormEnvDecl(decl: Decl, rest: NormEnv) extends NormEnv
 final case class NormEnvVal(name: String, value: Norm, rest: NormEnv) extends NormEnv
 final case class NormEnvEmpty() extends NormEnv

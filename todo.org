@@ -1,11 +1,6 @@
 * cicada
 - fulfill_norm
-  - between any two values, because value can be used as type
-    - subtype relation between club and members and class and supers
-      - recursively extended to fields in record and pi and si
-      - need to compute variance (covariant contravariant invariant) for fields
-  - we will need variance, but we might not need to pre-calculet variance
-    just compare fields as covariant and function arg as contravariant
+  - subtype relation between class and supers
   - value of a field must be full value
     full_p, part_p
 - [maybe] type in EnvVal

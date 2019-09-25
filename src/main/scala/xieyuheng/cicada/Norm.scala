@@ -12,7 +12,50 @@ final case class NormRecord(name: String, super_names: List[String], norm_tel: N
 
 case class NormTelescope(
   fields: List[(String, Exp, Option[Exp], Norm, Option[Norm])],
-  env: NormEnv)
+  env: NormEnv,
+) {
+
+  def put(arg: Norm): Either[Err, NormTelescope] = {
+    val i = fields.indexWhere {
+      case (_, _, _, _, None) => true
+      case (_, _, _, _, Some(_)) => false
+    }
+
+    if (i == -1) {
+      Left(Err(s"the norm telescope is full, fail to put: ${arg}"))
+    } else {
+      val (k, te, mve, tn, _) = fields(i)
+      val new_fields = util.list_replace(fields, i,
+        (k, te, mve, tn, Some(arg)))
+      Right(
+        NormTelescope(new_fields, env.ext_norm(k, arg))
+          .self_put())
+    }
+  }
+
+  def self_put(): NormTelescope = {
+    val i = fields.indexWhere {
+      case (_, _, _, _, None) => true
+      case (_, _, _, _, Some(_)) => false
+    }
+
+    if (i == -1) {
+      this
+    } else {
+      ???
+      // TODO need eval in NormEnv
+      // fields(i) match {
+      //   case (k, te, Some(ve), _, _) =>
+      //     val arg = eval(ve, env)
+      //     val new_fields = util.list_replace(fields, i,
+      //       (k, te, Some(ve), Some(eval(te, env)), Some(arg)))
+      //     Telescope(new_fields, env.ext_val(k, arg))
+      //   case _ => this
+      // }
+    }
+  }
+
+}
 
 sealed trait NormNeu extends Norm
 final case class NormNeuVar(name: String, norm_arg_t: Norm) extends NormNeu
@@ -28,7 +71,7 @@ sealed trait NormEnv {
     this match {
       case NormEnvDecl(decl: Decl, rest: NormEnv) =>
         rest.find_norm(key)
-      case NormEnvVal(name: String, value: Norm, rest: NormEnv) =>
+      case NormEnvName(name: String, value: Norm, rest: NormEnv) =>
         if (name == key) {
           Some(value)
         } else {
@@ -38,10 +81,15 @@ sealed trait NormEnv {
         None
     }
   }
+
+  def ext_norm(name: String, norm: Norm): NormEnv = {
+    NormEnvName(name, norm, this)
+  }
+
 }
 
 final case class NormEnvDecl(decl: Decl, rest: NormEnv) extends NormEnv
-final case class NormEnvVal(name: String, value: Norm, rest: NormEnv) extends NormEnv
+final case class NormEnvName(name: String, value: Norm, rest: NormEnv) extends NormEnv
 final case class NormEnvEmpty() extends NormEnv
 
 object NormEnv {

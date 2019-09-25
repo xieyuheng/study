@@ -81,8 +81,8 @@ object readback {
     env match {
       case EnvDecl(decl: Decl, rest: Env) =>
         NormEnvDecl(decl, readback_env(seed, rest))
-      case EnvVal(name, value: Val, rest: Env) =>
-        NormEnvVal(name, readback_val(seed, value), readback_env(seed, rest))
+      case EnvName(name, value: Val, rest: Env) =>
+        NormEnvName(name, readback_val(seed, value), readback_env(seed, rest))
       case EnvEmpty() =>
         NormEnvEmpty()
     }

@@ -40,28 +40,28 @@ case class Telescope(
   env: Env,
 ) {
 
-  def put(arg: Val): Telescope = {
+  def put(arg: Val): Either[Err, Telescope] = {
     val i = fields.indexWhere {
       case (_, _, _, _, None) => true
-      case (_, _, _, _, Some(vv)) => false
+      case (_, _, _, _, Some(_)) => false
     }
 
     if (i == -1) {
-      println(s"the telescope is full, fail to put: ${arg}")
-      throw new Exception()
+      Left(Err(s"the telescope is full, fail to put: ${arg}"))
     } else {
       val (k, te, mve, _, _) = fields(i)
       val new_fields = util.list_replace(fields, i,
         (k, te, mve, Some(eval(te, env)), Some(arg)))
-      Telescope(new_fields, env.ext_val(k, arg))
-        .self_put()
+      Right(
+        Telescope(new_fields, env.ext_val(k, arg))
+          .self_put())
     }
   }
 
   def self_put(): Telescope = {
     val i = fields.indexWhere {
       case (_, _, _, _, None) => true
-      case (_, _, _, _, Some(vv)) => false
+      case (_, _, _, _, Some(_)) => false
     }
 
     if (i == -1) {

@@ -75,15 +75,64 @@ object fulfill {
       case NormNeuVar(name: String, norm_arg_t: Norm) =>
         Right(norm_arg_t)
       case NormNeuAp(target: NormNeu, arg: Norm) =>
-        ???
+        infer_norm_neu(target) match {
+          case Left(err) => Left(err)
+          case Right(NormPi(arg_name: String, arg_t: Norm, dep_t: Norm)) =>
+            fulfill_norm(arg, arg_t).flatMap { _ => Right(dep_t) }
+          case Right(NormFn(arg_name: String, arg_t: Norm, body: Norm)) =>
+            fulfill_norm(arg, arg_t).flatMap { _ => Right(body) }
+          case Right(NormClub(name: String, members: List[Member], norm_tel: NormTelescope)) =>
+            norm_tel.put(arg).flatMap {
+              case new_norm_tel =>
+                Right(NormClub(name: String, members: List[Member], new_norm_tel)) }
+          case Right(NormMember(name: String, club_name: String, norm_tel: NormTelescope)) =>
+            norm_tel.put(arg).flatMap {
+              case new_norm_tel =>
+                Right(NormMember(name: String, club_name: String, new_norm_tel)) }
+          case Right(NormRecord(name: String, super_names: List[String], norm_tel: NormTelescope)) =>
+            norm_tel.put(arg).flatMap {
+              case new_norm_tel =>
+                Right(NormRecord(name: String, super_names: List[String], new_norm_tel)) }
+          case Right(_) =>
+            Left(Err(
+              s"[infer_norm_neu fail]" ++
+                s"norm_neu: ${pretty_norm(norm_neu)}"))
+        }
       case NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], env: NormEnv) =>
         // TODO to return list here
         ???
       case NormNeuDot(target: NormNeu, field_name: String) =>
-        ???
+        infer_norm_neu(target) match {
+          case Left(err) => Left(err)
+          case Right(NormClub(name: String, members: List[Member], norm_tel: NormTelescope)) =>
+            infer_norm_tel_dot(norm_tel: NormTelescope, field_name: String)
+          case Right(NormMember(name: String, club_name: String, norm_tel: NormTelescope)) =>
+            infer_norm_tel_dot(norm_tel: NormTelescope, field_name: String)
+          case Right(NormRecord(name: String, super_names: List[String], norm_tel: NormTelescope)) =>
+            infer_norm_tel_dot(norm_tel: NormTelescope, field_name: String)
+          case Right(_) =>
+            Left(Err(
+              s"[infer_norm_neu fail]" ++
+                s"norm_neu: ${pretty_norm(norm_neu)}"))
+        }
       case NormNeuDotType(target: NormNeu, field_name: String) =>
         // TODO
         ???
+    }
+  }
+
+  def infer_norm_tel_dot(norm_tel: NormTelescope, field_name: String): Either[Err, Norm] = {
+    norm_tel.fields.find {
+      case (k, _, _, _, _) =>
+        k == field_name
+    } match {
+      case Some((_, _, _, tn, _)) =>
+        Right(tn)
+      case None =>
+        Left(Err(
+          s"[infer_norm_tel_dot fail]" ++
+            s"norm_tel: ${pretty_norm_tel(norm_tel)}" ++
+            s"field_name: ${field_name}"))
     }
   }
 
@@ -125,8 +174,8 @@ object fulfill {
     y match {
       case NormEnvDecl(decl: Decl, rest: NormEnv) =>
         fulfill_norm_env(x, rest)
-      case NormEnvVal(name: String, value: Norm, rest: NormEnv) =>
-        // NOTE x.find_norm only find NormEnvVal in x
+      case NormEnvName(name: String, value: Norm, rest: NormEnv) =>
+        // NOTE x.find_norm only find NormEnvName in x
         //   maybe we need x.lookup_norm
         //   which also lookup NormEnvDecl in x
         x.find_norm(name) match {
@@ -145,7 +194,7 @@ object fulfill {
   def fulfill_type(x: Norm, level: Int): Either[Err, Unit] = {
     x match {
       case x: NormType =>
-        if (x.level <= level) {
+        if (x.level < level) {
           Right(())
         } else {
           Left(Err(

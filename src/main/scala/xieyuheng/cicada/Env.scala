@@ -9,7 +9,7 @@ sealed trait Env {
     val env = this
     env match {
       case EnvEmpty() => None
-      case EnvVal(name, value, rest) =>
+      case EnvName(name, value, rest) =>
         if (key == name) {
           Some(value)
         } else {
@@ -80,7 +80,7 @@ sealed trait Env {
   }
 
   def ext_val(name: String, value: Val): Env = {
-    EnvVal(name, value, this)
+    EnvName(name, value, this)
   }
 
   def ext_decl(decl: Decl): Env = {
@@ -89,8 +89,8 @@ sealed trait Env {
 
   def append(that: Env): Env = {
     this match {
-      case EnvVal(name, value, rest) =>
-        EnvVal(name, value, rest.append(that))
+      case EnvName(name, value, rest) =>
+        EnvName(name, value, rest.append(that))
       case EnvDecl(decl, rest) =>
         EnvDecl(decl, rest.append(that))
       case EnvEmpty() =>
@@ -99,7 +99,7 @@ sealed trait Env {
   }
 }
 
-final case class EnvVal(name: String, value: Val, rest: Env) extends Env
+final case class EnvName(name: String, value: Val, rest: Env) extends Env
 final case class EnvDecl(decl: Decl, rest: Env) extends Env
 final case class EnvEmpty() extends Env
 

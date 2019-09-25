@@ -47,9 +47,13 @@ object readback {
 
   def readback_tel(seed: Seed, tel: Telescope): NormTelescope = {
     val norm_fields = tel.fields.map {
-      case (k, te, mve, mtv, mvv ) =>
+      case (k, te, mve, None, mvv) =>
         (k, te, mve,
-          mtv.map(readback_val(seed, _)),
+          readback_val(seed, eval(te, tel.env)),
+          mvv.map(readback_val(seed, _)) )
+      case (k, te, mve, Some(tv), mvv) =>
+        (k, te, mve,
+          readback_val(seed, tv),
           mvv.map(readback_val(seed, _)) ) }
     NormTelescope(norm_fields, readback_env(seed, tel.env))
   }

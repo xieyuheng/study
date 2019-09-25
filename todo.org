@@ -1,7 +1,4 @@
 * cicada
-- fix NormTelescope to (String, Exp, Option[Exp], Norm, Option[Norm])
-  for fulfill_norm_tel
-- [maybe] type in EnvVal
 - fulfill_norm
   - between any two values, because value can be used as type
     - subtype relation between club and members and class and supers
@@ -11,6 +8,7 @@
     just compare fields as covariant and function arg as contravariant
   - value of a field must be full value
     full_p, part_p
+- [maybe] type in EnvVal
 - cumulative levels of types -- type_t(n)
   - this should be simple since we have subtype relation and infer
 - string_t

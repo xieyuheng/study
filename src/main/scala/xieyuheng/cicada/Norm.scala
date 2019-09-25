@@ -9,7 +9,7 @@ final case class NormMember(name: String, club_name: String, norm_tel: NormTeles
 final case class NormRecord(name: String, super_names: List[String], norm_tel: NormTelescope) extends Norm
 
 case class NormTelescope(
-  fields: List[(String, Exp, Option[Exp], Option[Norm], Option[Norm])],
+  fields: List[(String, Exp, Option[Exp], Norm, Option[Norm])],
   env: NormEnv)
 
 sealed trait NormNeu extends Norm

@@ -180,10 +180,10 @@ object pretty {
 
   def pretty_norm_tel(norm_tel: NormTelescope): String = {
     val fields = norm_tel.fields.map {
-      case (k, te, ve, Some(tn), Some(vn)) =>
+      case (k, te, ve, tn, Some(vn)) =>
         s"${k}: ${pretty_norm(tn)} = ${pretty_norm(vn)}"
-      case (k, te, _, _, _) =>
-        s"${k}: ${pretty_exp(te)}"
+      case (k, te, _, tn, _) =>
+        s"${k}: ${pretty_norm(tn)}"
     }.mkString(", ")
     s"${fields}"
   }

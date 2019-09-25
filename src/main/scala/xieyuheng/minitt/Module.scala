@@ -49,7 +49,7 @@ case class Module() {
     top_list.foreach {
       case TopDecl(decl) =>
         env = EnvDecl(decl, env)
-      case TopEval(exp) =>
+      case TopShow(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>
         assert_eq(e1, e2)

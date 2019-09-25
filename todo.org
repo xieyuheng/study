@@ -1,3 +1,4 @@
+- `show!` instead of `eval!`
 * cicada
 - fulfill_norm
   - between any two values, because value can be used as type

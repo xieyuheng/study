@@ -36,7 +36,7 @@ object grammar {
     "top", Map(
       "decl" -> List(decl),
       "import_all" -> List("import", "*", "from", double_quoted_string),
-      "eval" -> List("eval", "!", exp),
+      "show" -> List("show", "!", exp),
       "eq" -> List("eq", "!", exp, exp),
       "not_eq" -> List("not_eq", "!", exp, exp),
     ))
@@ -45,7 +45,7 @@ object grammar {
     "top", Map(
       "decl" -> { case List(decl) => TopDecl(decl_matcher(decl)) },
       "import_all" -> { case List(_, _, _, Leaf(str)) => TopImportAll(trim_double_quote(str)) },
-      "eval" -> { case List(_, _, exp) => TopEval(exp_matcher(exp)) },
+      "show" -> { case List(_, _, exp) => TopShow(exp_matcher(exp)) },
       "eq" -> { case List(_, _, x, y) => TopEq(exp_matcher(x), exp_matcher(y)) },
       "not_eq" -> { case List(_, _, x, y) => TopNotEq(exp_matcher(x), exp_matcher(y)) },
     ))

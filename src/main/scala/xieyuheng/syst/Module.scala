@@ -50,7 +50,7 @@ case class Module() {
             println(s"${err.msg}")
             throw new Exception()
         }
-      case TopEval(exp) =>
+      case TopShow(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>
         assert_eq(e1, e2)
@@ -66,7 +66,7 @@ case class Module() {
     top_list.foreach {
       case TopDecl(DeclLet(name, t, e)) =>
         env = env.ext(name, eval(e, env))
-      case TopEval(exp) =>
+      case TopShow(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>
         assert_eq(e1, e2)

@@ -1,10 +1,10 @@
-eval! the(nat_t, zero)
+show! the(nat_t, zero)
 
-eval! the(string_t, "abc")
+show! the(string_t, "abc")
 
 // let x: nat_t = nat_t
 
-// eval! x
+// show! x
 
 let three: nat_t =
   succ(succ(succ(zero)))
@@ -15,6 +15,6 @@ let add: (nat_t, nat_t) -> nat_t = {
     k, (prev, almost) => succ(almost))
 }
 
-eval! three
-eval! add(three)
-eval! add(three, three)
+show! three
+show! add(three)
+show! add(three, three)

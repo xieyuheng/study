@@ -1,5 +1,5 @@
-eval! zero
-eval! succ(succ(succ(zero)))
+show! zero
+show! succ(succ(succ(zero)))
 
 let three: nat_t = succ(succ(succ(zero)))
 
@@ -9,5 +9,5 @@ let add: (nat_t, nat_t) -> nat_t = {
       (prev, almost) => succ(almost))
 }
 
-eval! add(the(nat_t, three))
-eval! add(three, three)
+show! add(the(nat_t, three))
+show! add(three, three)

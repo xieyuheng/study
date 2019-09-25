@@ -30,7 +30,7 @@ case class Module(file_path: String) {
         env = env.ext_decl(decl)
       case TopImportAll(path) =>
         env = import_file(path, env)
-      case TopEval(exp) =>
+      case TopShow(exp) =>
         eval_print(exp)
       case TopEq(e1, e2) =>
         assert_eq(e1, e2)

@@ -15,7 +15,7 @@ case class Module() {
       case TopDecl(DeclLet(name, t, e)) =>
         ctx = claim(ctx, name, t)
         ctx = define(ctx, name, e)
-      case TopEval(exp) =>
+      case TopShow(exp) =>
         eval_print(ctx, exp)
       case TopEq(e1, e2) =>
         assert_eq(ctx, e1, e2)

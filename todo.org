@@ -1,5 +1,4 @@
 * cicada
-- fulfill_norm does not need env
 - fix NormTelescope to (String, Exp, Option[Exp], Norm, Option[Norm])
   for fulfill_norm_tel
 - [maybe] type in EnvVal

@@ -71,7 +71,7 @@ object Choice {
             throw new Exception()
         }
       case neu: Neu =>
-        NeuChoice(neu, map, env)
+        NeuChoice(neu, path, map, env)
       case _ =>
         println(s"choice mismatch: ${pretty_val(value)}")
         println(s"${pretty_exp_case(map)}")

@@ -76,7 +76,7 @@ object fulfill {
         Right(norm_arg_t)
       case NormNeuAp(target: NormNeu, arg: Norm) =>
         ???
-      case NormNeuChoice(target: NormNeu, map: Map[String, Exp], env: NormEnv) =>
+      case NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], env: NormEnv) =>
         // TODO to return list here
         ???
       case NormNeuDot(target: NormNeu, field_name: String) =>

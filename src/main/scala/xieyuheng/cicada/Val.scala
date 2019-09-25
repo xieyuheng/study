@@ -25,7 +25,7 @@ final case class NeuAp(target: Neu, arg: Val) extends Neu
 // NOTE do not store env in NeuChoice
 // 1. deep_ext env ?
 // 2. env can use path as key ?
-final case class NeuChoice(target: Neu, map: Map[String, Exp], env: Env) extends Neu
+final case class NeuChoice(target: Neu, path: List[String], map: Map[String, Exp], env: Env) extends Neu
 final case class NeuDot(target: Neu, field_name: String) extends Neu
 final case class NeuDotType(target: Neu, field_name: String) extends Neu
 

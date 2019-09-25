@@ -1,9 +1,8 @@
 * cicada
-- type in EnvVal
-- type in NeuVar
 - fulfill_norm does not need env
 - fix NormTelescope to (String, Exp, Option[Exp], Norm, Option[Norm])
   for fulfill_norm_tel
+- [maybe] type in EnvVal
 - fulfill_norm
   - between any two values, because value can be used as type
     - subtype relation between club and members and class and supers

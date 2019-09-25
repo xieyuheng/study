@@ -9,8 +9,8 @@ final case class ValMember(name: String, club_name: String, tel: Telescope) exte
 final case class ValRecord(name: String, super_names: List[String], tel: Telescope) extends Val
 
 sealed trait Neu extends Val
-final case class NeuVar(name: String, aka: Option[String]) extends Neu {
-  val matters = name
+final case class NeuVar(name: String, norm_arg_t: Norm, aka: Option[String]) extends Neu {
+  val matters = (name, norm_arg_t)
 
   override def equals(that: Any): Boolean = {
     that match {

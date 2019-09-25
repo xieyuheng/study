@@ -12,8 +12,8 @@ object readback {
     s"#${seed}"
   }
 
-  def gen_fresh(seed: Seed, aka: Option[String] = None): Val = {
-    NeuVar(fresh_name(seed), aka)
+  def gen_fresh(seed: Seed, norm_arg_t: Norm, aka: Option[String] = None): Val = {
+    NeuVar(fresh_name(seed), norm_arg_t, aka)
   }
 
   def readback_val(seed: Seed, value: Val): Norm = {
@@ -23,15 +23,19 @@ object readback {
       case ValType(level: Int) =>
         NormType(level)
       case ValPi(arg_name: String, arg_t: Val, dep_t: Clo) =>
+        val arg_name = fresh_name(seed)
+        val norm_arg_t = readback_val(seed, arg_t)
         NormPi(
-          fresh_name(seed),
-          readback_val(seed, arg_t),
-          readback_val(seed_inc(seed), dep_t(gen_fresh(seed, Some(arg_name)))))
+          arg_name,
+          norm_arg_t,
+          readback_val(seed_inc(seed), dep_t(gen_fresh(seed, norm_arg_t, Some(arg_name)))))
       case ValFn(arg_name: String, arg_t: Val, body: Clo) =>
+        val arg_name = fresh_name(seed)
+        val norm_arg_t = readback_val(seed, arg_t)
         NormFn(
-          fresh_name(seed),
-          readback_val(seed, arg_t),
-          readback_val(seed_inc(seed), body(gen_fresh(seed, Some(arg_name)))))
+          arg_name,
+          norm_arg_t,
+          readback_val(seed_inc(seed), body(gen_fresh(seed, norm_arg_t, Some(arg_name)))))
       case ValClub(name: String, members: List[Member], tel: Telescope) =>
         NormClub(name, members, readback_tel(seed, tel))
       case ValMember(name: String, club_name: String, tel: Telescope) =>
@@ -52,7 +56,7 @@ object readback {
 
   def readback_neu(seed: Seed, neu: Neu): NormNeu = {
     neu match {
-      case NeuVar(name: String, aka: Option[String]) =>
+      case NeuVar(name: String, norm_arg_t: Norm, aka: Option[String]) =>
         NormNeuVar(name)
       case NeuAp(target: Neu, arg: Val) =>
         NormNeuAp(readback_neu(seed, target), readback_val(seed, arg))

@@ -1,9 +1,6 @@
 - env.ext_path
 - fulfill_val -- instead of fulfill_norm
 - join_val
-* readme
-- compile to human readable javascript with runtime type information
-- markdown support for literal programming
 * cicada
 - subtype relation between class and supers
 - value of a field must be full value -- full_p, part_p

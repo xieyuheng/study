@@ -62,14 +62,19 @@ object fulfill {
         }
       case (x, ValType(level)) =>
         fulfill_type(x, level)
-      // TODO constructors can be used as function
+      case (x: ValClub, y: ValPi) =>
+        infer_tel_pi(x.tel).flatMap { case pi => fulfill_val(pi, y) }
+      case (x: ValMember, y: ValPi) =>
+        infer_tel_pi(x.tel).flatMap { case pi => fulfill_val(pi, y) }
+      case (x: ValRecord, y: ValPi) =>
+        infer_tel_pi(x.tel).flatMap { case pi => fulfill_val(pi, y) }
       case (x: Neu, y) =>
-        val list = type_of_neu(x).map {
+        val list = infer_neu(x).map {
           case result =>
             result.flatMap { case x => fulfill_val(x, y) } }
         first_err(list)
       case (x, y: Neu) =>
-        val list = type_of_neu(y).map {
+        val list = infer_neu(y).map {
           case result =>
             result.flatMap { case y => fulfill_val(x, y) } }
         first_err(list)
@@ -123,12 +128,16 @@ object fulfill {
     }
   }
 
-  def type_of_neu(neu: Neu): List[Either[Err, Val]] = {
+  def infer_tel_pi(tel: Tel): Either[Err, ValPi] = {
+    ???
+  }
+
+  def infer_neu(neu: Neu): List[Either[Err, Val]] = {
     neu match {
       case NeuVar(name: String, arg_t: Val, aka) =>
         List(Right(arg_t))
       case NeuAp(target: Neu, arg: Val) =>
-        type_of_neu(target).flatMap {
+        infer_neu(target).flatMap {
           _ match {
             case Left(err) =>
               List(Left(err))
@@ -147,18 +156,18 @@ object fulfill {
                 Right(ValRecord(name, super_names, new_tel)) })
             case Right(_) =>
               List(Left(Err(
-                s"[type_of_neu fail]" ++
+                s"[infer_neu fail]" ++
                   s"neu: ${pretty_val(neu)}")))
           }
         }
       case NeuChoice(target, path, map, env) =>
-        type_of_neu(target).flatMap {
+        infer_neu(target).flatMap {
           case Right(t) =>
             map.toList.map { case (choice_name, body) =>
               refine_choice(t, choice_name, body, path, env) }
           case Left(err) => List(Left(err)) }
       case NeuDot(target: Neu, field_name: String) =>
-        type_of_neu(target).flatMap {
+        infer_neu(target).flatMap {
           _ match {
             case Left(err) =>
               List(Left(err))
@@ -170,7 +179,7 @@ object fulfill {
               List(infer_tel_dot(tel: Tel, field_name: String))
             case Right(_) =>
               List(Left(Err(
-                s"[type_of_neu fail]" ++
+                s"[infer_neu fail]" ++
                   s"neu: ${pretty_val(neu)}")))
           }
         }

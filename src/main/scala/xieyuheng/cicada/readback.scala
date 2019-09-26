@@ -36,16 +36,16 @@ object readback {
           arg_name,
           norm_arg_t,
           readback_val(seed_inc(seed), body(gen_fresh(seed, norm_arg_t, Some(arg_name)))))
-      case ValClub(name: String, members: List[Member], tel: Telescope) =>
+      case ValClub(name: String, members: List[Member], tel: Tel) =>
         NormClub(name, members, readback_tel(seed, tel))
-      case ValMember(name: String, club_name: String, tel: Telescope) =>
+      case ValMember(name: String, club_name: String, tel: Tel) =>
         NormMember(name, club_name, readback_tel(seed, tel))
-      case ValRecord(name: String, super_names: List[String], tel: Telescope) =>
+      case ValRecord(name: String, super_names: List[String], tel: Tel) =>
         NormRecord(name, super_names, readback_tel(seed, tel))
     }
   }
 
-  def readback_tel(seed: Seed, tel: Telescope): NormTelescope = {
+  def readback_tel(seed: Seed, tel: Tel): NormTel = {
     val norm_fields = tel.fields.map {
       case (k, te, mve, None, mvv) =>
         (k, te, mve,
@@ -55,7 +55,7 @@ object readback {
         (k, te, mve,
           readback_val(seed, tv),
           mvv.map(readback_val(seed, _)) ) }
-    NormTelescope(norm_fields, seed, tel.env)
+    NormTel(norm_fields, seed, tel.env)
   }
 
   def readback_neu(seed: Seed, neu: Neu): NormNeu = {

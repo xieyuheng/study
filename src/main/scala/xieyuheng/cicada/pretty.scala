@@ -98,11 +98,11 @@ object pretty {
         s"(${arg_name}: ${pretty_val(arg_t)}) -> ${pretty_clo(dep_t)}"
       case ValFn(arg_name: String, arg_t: Val, body: Clo) =>
         s"(${arg_name}: ${pretty_val(arg_t)}) => ${pretty_clo(body)}"
-      case ValClub(name: String, members: List[Member], tel: Telescope) =>
+      case ValClub(name: String, members: List[Member], tel: Tel) =>
         s"${name}${maybe_paren(pretty_tel(tel))}"
-      case ValMember(name: String, club_name: String, tel: Telescope) =>
+      case ValMember(name: String, club_name: String, tel: Tel) =>
         s"${name}${maybe_paren(pretty_tel(tel))}"
-      case ValRecord(name: String, super_names: List[String], tel: Telescope) =>
+      case ValRecord(name: String, super_names: List[String], tel: Tel) =>
         s"${name}${maybe_paren(pretty_tel(tel))}"
       case neu: Neu =>
         pretty_neu(neu)
@@ -136,7 +136,7 @@ object pretty {
     s"#clo(${clo.arg_name}, ${pretty_exp(clo.body)})"
   }
 
-  def pretty_tel(tel: Telescope): String = {
+  def pretty_tel(tel: Tel): String = {
     val fields = tel.fields.map {
       case (k, te, ve, Some(tv), Some(vv)) =>
         s"${k}: ${pretty_val(tv)} = ${pretty_val(vv)}"
@@ -156,11 +156,11 @@ object pretty {
         s"(${arg_name}: ${pretty_norm(arg_t)}) -> ${pretty_norm(dep_t)}"
       case NormFn(arg_name: String, arg_t: Norm, body: Norm) =>
         s"(${arg_name}: ${pretty_norm(arg_t)}) => ${pretty_norm(body)}"
-      case NormClub(name: String, members: List[Member], norm_tel: NormTelescope) =>
+      case NormClub(name: String, members: List[Member], norm_tel: NormTel) =>
         s"${name}${maybe_paren(pretty_norm_tel(norm_tel))}"
-      case NormMember(name: String, club_name: String, norm_tel: NormTelescope) =>
+      case NormMember(name: String, club_name: String, norm_tel: NormTel) =>
         s"${name}${maybe_paren(pretty_norm_tel(norm_tel))}"
-      case NormRecord(name: String, super_names: List[String], norm_tel: NormTelescope) =>
+      case NormRecord(name: String, super_names: List[String], norm_tel: NormTel) =>
         s"${name}${maybe_paren(pretty_norm_tel(norm_tel))}"
     }
   }
@@ -180,7 +180,7 @@ object pretty {
     }
   }
 
-  def pretty_norm_tel(norm_tel: NormTelescope): String = {
+  def pretty_norm_tel(norm_tel: NormTel): String = {
     val fields = norm_tel.fields.map {
       case (k, te, ve, tn, Some(vn)) =>
         s"${k}: ${pretty_norm(tn)} = ${pretty_norm(vn)}"

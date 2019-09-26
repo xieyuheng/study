@@ -4,9 +4,9 @@ sealed trait Val
 final case class ValType(level: Int) extends Val
 final case class ValPi(arg_name: String, arg_t: Val, dep_t: Clo) extends Val
 final case class ValFn(arg_name: String, arg_t: Val, body: Clo) extends Val
-final case class ValClub(name: String, members: List[Member], tel: Telescope) extends Val
-final case class ValMember(name: String, club_name: String, tel: Telescope) extends Val
-final case class ValRecord(name: String, super_names: List[String], tel: Telescope) extends Val
+final case class ValClub(name: String, members: List[Member], tel: Tel) extends Val
+final case class ValMember(name: String, club_name: String, tel: Tel) extends Val
+final case class ValRecord(name: String, super_names: List[String], tel: Tel) extends Val
 
 sealed trait Neu extends Val
 final case class NeuVar(name: String, norm_arg_t: Norm, aka: Option[String]) extends Neu {
@@ -35,12 +35,12 @@ case class Clo(arg_name: String, body: Exp, env: Env) {
   }
 }
 
-case class Telescope(
+case class Tel(
   fields: List[(String, Exp, Option[Exp], Option[Val], Option[Val])],
   env: Env,
 ) {
 
-  def put(arg: Val): Either[Err, Telescope] = {
+  def put(arg: Val): Either[Err, Tel] = {
     val i = fields.indexWhere {
       case (_, _, _, _, None) => true
       case (_, _, _, _, Some(_)) => false
@@ -53,12 +53,12 @@ case class Telescope(
       val new_fields = util.list_replace(fields, i,
         (k, te, mve, Some(eval(te, env)), Some(arg)))
       Right(
-        Telescope(new_fields, env.ext_val(k, arg))
+        Tel(new_fields, env.ext_val(k, arg))
           .self_put())
     }
   }
 
-  def self_put(): Telescope = {
+  def self_put(): Tel = {
     val i = fields.indexWhere {
       case (_, _, _, _, None) => true
       case (_, _, _, _, Some(_)) => false
@@ -72,7 +72,7 @@ case class Telescope(
           val arg = eval(ve, env)
           val new_fields = util.list_replace(fields, i,
             (k, te, Some(ve), Some(eval(te, env)), Some(arg)))
-          Telescope(new_fields, env.ext_val(k, arg))
+          Tel(new_fields, env.ext_val(k, arg))
         case _ => this
       }
     }
@@ -97,20 +97,20 @@ case class Telescope(
   }
 }
 
-object Telescope {
+object Tel {
 
   def from_exp_fields(
     fields: List[(String, Exp, Option[Exp])],
     env: Env,
-  ): Telescope = {
+  ): Tel = {
     val val_fiedls = fields.map { case (k, te, mve) => (k, te, mve, None, None) }
-    Telescope(val_fiedls, env)
+    Tel(val_fiedls, env)
   }
 
   def from_decls(
     decls: List[Decl],
     env: Env,
-  ): Telescope = {
+  ): Tel = {
     var val_fiedls: List[(String, Exp, Option[Exp], Option[Val], Option[Val])] = List()
 
     decls.foreach {
@@ -136,14 +136,14 @@ object Telescope {
         // NOTE
         //   I forget what I meant when I said the above sentence
         //   I can not see what is wrong now
-        val club_val = ValClub(name, members, Telescope.from_exp_fields(fields, env))
+        val club_val = ValClub(name, members, Tel.from_exp_fields(fields, env))
         val_fiedls = val_fiedls :+ ((name, Type(1), None, Some(ValType(1)), Some(club_val)))
       case DeclRecord(name, super_names, decls) =>
-        val record_val = ValRecord(name, super_names, Telescope.from_decls(decls, env))
+        val record_val = ValRecord(name, super_names, Tel.from_decls(decls, env))
         val_fiedls = val_fiedls :+ ((name, Type(1), None, Some(ValType(1)), Some(record_val)))
     }
 
-    Telescope(val_fiedls, env)
+    Tel(val_fiedls, env)
   }
 
 }

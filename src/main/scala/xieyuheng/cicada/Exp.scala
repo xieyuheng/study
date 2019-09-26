@@ -46,7 +46,7 @@ object Choice {
     val value = eval(exp, env)
     // TODO handle subtype relation in choice
     value match {
-      case ValClub(name: String, members: List[Member], tel: Telescope) =>
+      case ValClub(name: String, members: List[Member], tel: Tel) =>
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
@@ -54,7 +54,7 @@ object Choice {
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
         }
-      case ValMember(name: String, club_name: String, tel: Telescope) =>
+      case ValMember(name: String, club_name: String, tel: Tel) =>
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
@@ -62,7 +62,7 @@ object Choice {
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
         }
-      case ValRecord(name: String, super_names: List[String], tel: Telescope) =>
+      case ValRecord(name: String, super_names: List[String], tel: Tel) =>
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>

@@ -1,10 +1,9 @@
-- env.ext_path
 - fulfill_val -- instead of fulfill_norm
 - join_val
 * cicada
 - subtype relation between class and supers
 - value of a field must be full value -- full_p, part_p
-- [note] is it ok to not use NormEnv in NormTelescope and NormNeuChoice ?
+- [note] is it ok to not use NormEnv in NormTel and NormNeuChoice ?
 - string_t
 - check undefined during top loading
 - termination check

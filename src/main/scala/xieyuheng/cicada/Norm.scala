@@ -8,17 +8,17 @@ sealed trait Norm
 final case class NormType(level: Int) extends Norm
 final case class NormPi(arg_name: String, arg_t: Norm, dep_t: Norm) extends Norm
 final case class NormFn(arg_name: String, arg_t: Norm, body: Norm) extends Norm
-final case class NormClub(name: String, members: List[Member], norm_tel: NormTelescope) extends Norm
-final case class NormMember(name: String, club_name: String, norm_tel: NormTelescope) extends Norm
-final case class NormRecord(name: String, super_names: List[String], norm_tel: NormTelescope) extends Norm
+final case class NormClub(name: String, members: List[Member], norm_tel: NormTel) extends Norm
+final case class NormMember(name: String, club_name: String, norm_tel: NormTel) extends Norm
+final case class NormRecord(name: String, super_names: List[String], norm_tel: NormTel) extends Norm
 
-case class NormTelescope(
+case class NormTel(
   fields: List[(String, Exp, Option[Exp], Norm, Option[Norm])],
   seed: Seed,
   env: Env,
 ) {
 
-  def put(arg: Norm): Either[Err, NormTelescope] = {
+  def put(arg: Norm): Either[Err, NormTel] = {
     val i = fields.indexWhere {
       case (_, _, _, _, None) => true
       case (_, _, _, _, Some(_)) => false
@@ -31,12 +31,12 @@ case class NormTelescope(
       val new_fields = util.list_replace(fields, i,
         (k, te, mve, tn, Some(arg)))
       Right(
-        NormTelescope(new_fields, seed, env)
+        NormTel(new_fields, seed, env)
           .self_put())
     }
   }
 
-  def self_put(): NormTelescope = {
+  def self_put(): NormTel = {
     val i = fields.indexWhere {
       case (_, _, _, _, None) => true
       case (_, _, _, _, Some(_)) => false
@@ -50,7 +50,7 @@ case class NormTelescope(
           val arg = eval(ve, env)
           val new_fields = util.list_replace(fields, i,
             (k, te, Some(ve), tn, Some(readback_val(seed, arg))))
-          NormTelescope(new_fields, seed, env.ext_val(k, arg))
+          NormTel(new_fields, seed, env.ext_val(k, arg))
         case _ => this
       }
     }

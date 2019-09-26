@@ -235,6 +235,12 @@ object fulfill {
 
   def fulfill_type(x: Val, level: Int): Either[Err, Unit] = {
     x match {
+      case neu: Neu =>
+        first_err(infer_neu(neu).map {
+          // NOTE maybe need to dec level here
+          case Right(t) => fulfill_type(t, level)
+          case Left(err) => Left(err)
+        })
       case x: ValType =>
         if (x.level < level) {
           Right(())

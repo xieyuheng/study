@@ -9,7 +9,7 @@ A dependently typed language and proof assistant.
 
 ### vector with length in type
 
-``` js
+``` cicada
 import * from "../basic/nat.cic"
 
 datatype vec_t(A: type_t, length: nat_t) {

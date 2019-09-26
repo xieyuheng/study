@@ -7,15 +7,15 @@ let true: true_t = true_t
 let false: false_t = false_t
 
 fn bool_not(x: bool_t): bool_t = {
-  choice x {
+  x choice {
     case true_t => false
     case false_t => true
   }
 }
 
 fn bool_and(x: bool_t, y: bool_t): bool_t = {
-  choice x {
-    case true_t => choice y {
+  x choice {
+    case true_t => y choice {
       case true_t => true
       case false_t => false
     }
@@ -24,9 +24,9 @@ fn bool_and(x: bool_t, y: bool_t): bool_t = {
 }
 
 fn bool_or(x: bool_t, y: bool_t): bool_t = {
-  choice x {
+  x choice {
     case true_t => true
-    case false_t => choice y {
+    case false_t => y choice {
       case true_t => true
       case false_t => false
     }

@@ -229,7 +229,7 @@ object grammar {
       "ap" -> List(rator, "(", non_empty_list(exp_comma), ")"),
       "ap_one" -> List(rator, "(", exp, ")"),
       "ap_drop" -> List(rator, "(", non_empty_list(exp_comma), exp, ")"),
-      "choice" -> List("choice", path, "{", non_empty_list(choice_entry), "}"),
+      "choice" -> List(path, "choice", "{", non_empty_list(choice_entry), "}"),
       "dot" -> List(exp, ".", identifier),
       "dot_type" -> List(exp, ".", ":", identifier),
       "block" -> List(block),
@@ -247,7 +247,7 @@ object grammar {
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
-      "choice" -> { case List(_, path, _, choice_entry_list, _) =>
+      "choice" -> { case List(path, _, _, choice_entry_list, _) =>
         val map = non_empty_list_matcher(choice_entry_matcher)(choice_entry_list).toMap
         Choice(path_matcher(path), map) },
       "dot" -> { case List(exp, _, Leaf(field_name)) =>

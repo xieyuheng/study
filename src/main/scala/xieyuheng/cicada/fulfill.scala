@@ -98,7 +98,7 @@ object fulfill {
               s"[infer_norm_neu fail]" ++
                 s"norm_neu: ${pretty_norm(norm_neu)}"))
         }
-      case NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], env: NormEnv) =>
+      case NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], env: Env) =>
         // TODO to return list here
         ???
       case NormNeuDot(target: NormNeu, field_name: String) =>
@@ -159,35 +159,12 @@ object fulfill {
       }
     }
 
-    val list2 = list :+ fulfill_norm_env(x.env, y.env)
-
-    list2.find {
+    list.find {
       case Right(_) => false
       case Left(_) => true
     } match {
       case Some(left) => left
       case None => Right(())
-    }
-  }
-
-  def fulfill_norm_env(x: NormEnv, y: NormEnv): Either[Err, Unit] = {
-    y match {
-      case NormEnvDecl(decl: Decl, rest: NormEnv) =>
-        fulfill_norm_env(x, rest)
-      case NormEnvName(name: String, value: Norm, rest: NormEnv) =>
-        // NOTE x.find_norm only find NormEnvName in x
-        //   maybe we need x.lookup_norm
-        //   which also lookup NormEnvDecl in x
-        x.find_norm(name) match {
-          case Some(v2) =>
-            fulfill_norm(v2, value).flatMap { _ => fulfill_norm_env(x, rest) }
-          case None =>
-            Left(Err(
-              s"[fulfill_norm_env fail]" ++
-                s"missing name: ${name}"))
-        }
-      case NormEnvEmpty() =>
-        Right(())
     }
   }
 

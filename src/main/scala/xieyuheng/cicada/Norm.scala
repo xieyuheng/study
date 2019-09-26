@@ -12,7 +12,7 @@ final case class NormRecord(name: String, super_names: List[String], norm_tel: N
 
 case class NormTelescope(
   fields: List[(String, Exp, Option[Exp], Norm, Option[Norm])],
-  env: NormEnv,
+  env: Env,
 ) {
 
   def put(arg: Norm): Either[Err, NormTelescope] = {
@@ -28,7 +28,7 @@ case class NormTelescope(
       val new_fields = util.list_replace(fields, i,
         (k, te, mve, tn, Some(arg)))
       Right(
-        NormTelescope(new_fields, env.ext_norm(k, arg))
+        NormTelescope(new_fields, env)
           .self_put())
     }
   }
@@ -60,38 +60,6 @@ case class NormTelescope(
 sealed trait NormNeu extends Norm
 final case class NormNeuVar(name: String, norm_arg_t: Norm) extends NormNeu
 final case class NormNeuAp(target: NormNeu, arg: Norm) extends NormNeu
-final case class NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], env: NormEnv) extends NormNeu
+final case class NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], env: Env) extends NormNeu
 final case class NormNeuDot(target: NormNeu, field_name: String) extends NormNeu
 final case class NormNeuDotType(target: NormNeu, field_name: String) extends NormNeu
-
-sealed trait NormEnv {
-
-  @tailrec
-  def find_norm(key: String): Option[Norm] = {
-    this match {
-      case NormEnvDecl(decl: Decl, rest: NormEnv) =>
-        rest.find_norm(key)
-      case NormEnvName(name: String, value: Norm, rest: NormEnv) =>
-        if (name == key) {
-          Some(value)
-        } else {
-          rest.find_norm(key)
-        }
-      case NormEnvEmpty() =>
-        None
-    }
-  }
-
-  def ext_norm(name: String, norm: Norm): NormEnv = {
-    NormEnvName(name, norm, this)
-  }
-
-}
-
-final case class NormEnvDecl(decl: Decl, rest: NormEnv) extends NormEnv
-final case class NormEnvName(name: String, value: Norm, rest: NormEnv) extends NormEnv
-final case class NormEnvEmpty() extends NormEnv
-
-object NormEnv {
-  def apply(): NormEnv = NormEnvEmpty()
-}

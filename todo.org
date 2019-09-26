@@ -1,7 +1,11 @@
+* readme
+- compile to human readable javascript
+- markdown support for literal programming
 * cicada
-- Env instead of NormEnv in NormTelescope for infer_norm_neu
 - self_put for NormTelescope
+- infer_norm_neu return list
 ------
+- is it ok to not use NormEnv in NormTelescope and NormNeuChoice ?
 - fulfill_norm
   - subtype relation between class and supers
   - value of a field must be full value
@@ -17,7 +21,7 @@
 - termination check
 - markdown support
 * tartlet
-- why we need "type directed norm-by-eval" here ?
+- why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie
 - the little typer as test
 - use `TODO` as un-implemented
@@ -28,7 +32,7 @@
   - keep it subrecursive, but be generic about data and ind, rec and iter
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
 * minitt
-- why we do not need "type directed norm-by-eval" here ?
+- why we *do not need* "type directed norm-by-eval" here ?
 - [question] I think the use of NormEnv will break `equals`
 - add `eqv_t` `same` `replace`
 - add constrains to type constructors

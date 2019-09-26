@@ -133,7 +133,7 @@ object Telescope {
         // TODO since we do not have exp for club and record
         //   we can only create the value at init time
         //   this is wrong, because they can depend on value of prev fields
-        // PROBLEM
+        // NOTE
         //   I forget what I meant when I said the above sentence
         //   I can not see what is wrong now
         val club_val = ValClub(name, members, Telescope.from_exp_fields(fields, env))

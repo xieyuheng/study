@@ -55,7 +55,7 @@ object readback {
         (k, te, mve,
           readback_val(seed, tv),
           mvv.map(readback_val(seed, _)) ) }
-    NormTelescope(norm_fields, readback_env(seed, tel.env))
+    NormTelescope(norm_fields, tel.env)
   }
 
   def readback_neu(seed: Seed, neu: Neu): NormNeu = {
@@ -65,26 +65,11 @@ object readback {
       case NeuAp(target: Neu, arg: Val) =>
         NormNeuAp(readback_neu(seed, target), readback_val(seed, arg))
       case NeuChoice(target: Neu, path: List[String], map: Map[String, Exp], env: Env) =>
-        NormNeuChoice(
-          readback_neu(seed, target),
-          path,
-          map,
-          readback_env(seed, env))
+        NormNeuChoice(readback_neu(seed, target), path, map, env)
       case NeuDot(target: Neu, field_name: String) =>
         NormNeuDot(readback_neu(seed, target), field_name)
       case NeuDotType(target: Neu, field_name: String) =>
         NormNeuDotType(readback_neu(seed, target), field_name)
-    }
-  }
-
-  def readback_env(seed: Seed, env: Env): NormEnv = {
-    env match {
-      case EnvDecl(decl: Decl, rest: Env) =>
-        NormEnvDecl(decl, readback_env(seed, rest))
-      case EnvName(name, value: Val, rest: Env) =>
-        NormEnvName(name, readback_val(seed, value), readback_env(seed, rest))
-      case EnvEmpty() =>
-        NormEnvEmpty()
     }
   }
 

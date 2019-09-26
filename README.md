@@ -2,7 +2,7 @@
 
 A dependently typed language and proof assistant.
 - with **fulfilling type system**, in which partially fulfilled data can be used as type.
-- compile to human readable javascript, and maintain all type information at runtime (do not erase type information).
+- translate to human readable javascript, and maintain all type information at runtime.
 - literal programming support by markdown, to help proof writers write proofs for human.
 
 ## Also Contains

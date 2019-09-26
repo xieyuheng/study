@@ -1,5 +1,6 @@
 package xieyuheng.cicada
 
+import join._
 import pretty._
 import readback._
 
@@ -59,16 +60,19 @@ object fulfill {
               s"x: ${pretty_val(x)}" ++
               s"y: ${pretty_val(y)}"))
         }
-//       case (x: ValNeu, y) =>
-//         val list = infer_norm_neu(x).map {
-//           case result =>
-//             result.flatMap { case x => fulfill_val(x, y) } }
-//         first_err(list)
-//       case (x, y: ValNeu) =>
-//         val list = infer_norm_neu(y).map {
-//           case result =>
-//             result.flatMap { case y => fulfill_val(x, y) } }
-//         first_err(list)
+      case (x, ValType(level)) =>
+        fulfill_type(x, level)
+      // TODO constructors can be used as function
+      case (x: Neu, y) =>
+        val list = type_of_neu(x).map {
+          case result =>
+            result.flatMap { case x => fulfill_val(x, y) } }
+        first_err(list)
+      case (x, y: Neu) =>
+        val list = type_of_neu(y).map {
+          case result =>
+            result.flatMap { case y => fulfill_val(x, y) } }
+        first_err(list)
       case _ =>
         Left(Err(
           s"[fulfill_val fail]" ++
@@ -119,182 +123,151 @@ object fulfill {
     }
   }
 
-//   def infer_norm_neu(norm_neu: NormNeu): List[Either[Err, Norm]] = {
-//     norm_neu match {
-//       case NormNeuVar(name: String, norm_arg_t: Norm) =>
-//         List(Right(norm_arg_t))
-//       case NormNeuAp(target: NormNeu, arg: Norm) =>
-//         infer_norm_neu(target).flatMap {
-//           _ match {
-//             case Left(err) =>
-//               List(Left(err))
-//             case Right(NormPi(arg_name: String, arg_t: Norm, dep_t: Norm)) =>
-//               List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t) })
-//             case Right(NormFn(arg_name: String, arg_t: Norm, body: Norm)) =>
-//               List(fulfill_val(arg, arg_t).flatMap { _ => Right(body) })
-//             case Right(NormClub(name: String, members: List[Member], norm_tel: NormTel)) =>
-//               List(norm_tel.put(arg).flatMap {
-//                 case new_norm_tel =>
-//                   Right(NormClub(name: String, members: List[Member], new_norm_tel)) })
-//             case Right(NormMember(name: String, club_name: String, norm_tel: NormTel)) =>
-//               List(norm_tel.put(arg).flatMap {
-//                 case new_norm_tel =>
-//                   Right(NormMember(name: String, club_name: String, new_norm_tel)) })
-//             case Right(NormRecord(name: String, super_names: List[String], norm_tel: NormTel)) =>
-//               List(norm_tel.put(arg).flatMap {
-//                 case new_norm_tel =>
-//                   Right(NormRecord(name: String, super_names: List[String], new_norm_tel)) })
-//             case Right(_) =>
-//               List(Left(Err(
-//                 s"[infer_norm_neu fail]" ++
-//                   s"norm_neu: ${pretty_norm(norm_neu)}")))
-//           }
-//         }
-//       case NormNeuChoice(target, path, map, seed, env) =>
-//         infer_norm_neu(target).flatMap {
-//           case Right(norm) =>
-//             map.toList.map { case (choice_name, body) =>
-//               refine_choice(norm, choice_name, body, path, seed, env) }
-//           case Left(err) => List(Left(err)) }
-//       case NormNeuDot(target: NormNeu, field_name: String) =>
-//         infer_norm_neu(target).flatMap {
-//           _ match {
-//             case Left(err) =>
-//               List(Left(err))
-//             case Right(NormClub(name: String, members: List[Member], norm_tel: NormTel)) =>
-//               List(infer_norm_tel_dot(norm_tel: NormTel, field_name: String))
-//             case Right(NormMember(name: String, club_name: String, norm_tel: NormTel)) =>
-//               List(infer_norm_tel_dot(norm_tel: NormTel, field_name: String))
-//             case Right(NormRecord(name: String, super_names: List[String], norm_tel: NormTel)) =>
-//               List(infer_norm_tel_dot(norm_tel: NormTel, field_name: String))
-//             case Right(_) =>
-//               List(Left(Err(
-//                 s"[infer_norm_neu fail]" ++
-//                   s"norm_neu: ${pretty_norm(norm_neu)}")))
-//           }
-//         }
-//       case NormNeuDotType(target: NormNeu, field_name: String) =>
-//         // TODO
-//         ???
-//     }
-//   }
+  def type_of_neu(neu: Neu): List[Either[Err, Val]] = {
+    neu match {
+      case NeuVar(name: String, arg_t: Val, aka) =>
+        List(Right(arg_t))
+      case NeuAp(target: Neu, arg: Val) =>
+        type_of_neu(target).flatMap {
+          _ match {
+            case Left(err) =>
+              List(Left(err))
+            case Right(ValPi(arg_name, arg_t, dep_t: Clo)) =>
+              List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
+            case Right(ValFn(arg_name, arg_t, body: Clo)) =>
+              List(fulfill_val(arg, arg_t).flatMap { _ => Right(body(arg)) })
+            case Right(ValClub(name, members, tel)) =>
+              List(tel.put(arg).flatMap { case new_tel =>
+                Right(ValClub(name, members, new_tel)) })
+            case Right(ValMember(name, club_name, tel)) =>
+              List(tel.put(arg).flatMap { case new_tel =>
+                Right(ValMember(name, club_name, new_tel)) })
+            case Right(ValRecord(name, super_names, tel)) =>
+              List(tel.put(arg).flatMap { case new_tel =>
+                Right(ValRecord(name, super_names, new_tel)) })
+            case Right(_) =>
+              List(Left(Err(
+                s"[type_of_neu fail]" ++
+                  s"neu: ${pretty_val(neu)}")))
+          }
+        }
+      case NeuChoice(target, path, map, env) =>
+        type_of_neu(target).flatMap {
+          case Right(t) =>
+            map.toList.map { case (choice_name, body) =>
+              refine_choice(t, choice_name, body, path, env) }
+          case Left(err) => List(Left(err)) }
+      case NeuDot(target: Neu, field_name: String) =>
+        type_of_neu(target).flatMap {
+          _ match {
+            case Left(err) =>
+              List(Left(err))
+            case Right(ValClub(name: String, members: List[Member], tel: Tel)) =>
+              List(infer_tel_dot(tel: Tel, field_name: String))
+            case Right(ValMember(name: String, club_name: String, tel: Tel)) =>
+              List(infer_tel_dot(tel: Tel, field_name: String))
+            case Right(ValRecord(name: String, super_names: List[String], tel: Tel)) =>
+              List(infer_tel_dot(tel: Tel, field_name: String))
+            case Right(_) =>
+              List(Left(Err(
+                s"[type_of_neu fail]" ++
+                  s"neu: ${pretty_val(neu)}")))
+          }
+        }
+      case NeuDotType(target: Neu, field_name: String) =>
+        // TODO
+        ???
+    }
+  }
 
-//   def refine_choice(
-//     norm: Norm,
-//     choice_name: String,
-//     body: Exp,
-//     path: List[String],
-//     seed: Seed,
-//     env: Env,
-//   ): Either[Err, Norm] = {
-//     env.lookup_val(choice_name) match {
-//       case Some(value) =>
-//         for {
-//           refined_val <- join_norm_with_val(norm, value)
-//           refined_env <- env.ext_by_path(path, refined_val)
-//         } yield readback_val(seed, eval(body, refined_env))
-//       case None =>
-//         Left(Err(
-//           s"[refine_choice fail]" ++
-//             s"norm: ${pretty_norm(norm)}" ++
-//             s"path: ${pretty_path(path)}" ++
-//             s"choice_name: ${choice_name}" ++
-//             s"body: ${pretty_exp(body)}"))
-//     }
-//   }
+  def infer_tel_dot(tel: Tel, field_name: String): Either[Err, Val] = {
+    val tel_forced = tel.force()
 
-//   def join_norm_with_val(norm: Norm, value: Val): Either[Err, Val] = {
-//     (norm, value) match {
-//       case (norm: NormClub, value: ValMember) =>
-//         if (norm.name == value.club_name) {
-//           for {
-//             new_tel <- join_norm_tel_with_val_tel(norm.norm_tel, value.tel)
-//           } yield value.copy(tel = new_tel)
-//         } else {
-//           Left(Err(
-//             s"[join_norm_with_val fail]" ++
-//               s"norm: ${pretty_norm(norm)}" ++
-//               s"value: ${pretty_val(value)}"))
-//         }
-//       case (norm: NormMember, value: ValMember) =>
-//         if (norm.name == value.name) {
-//           for {
-//             new_tel <- join_norm_tel_with_val_tel(norm.norm_tel, value.tel)
-//           } yield value.copy(tel = new_tel)
-//         } else {
-//           Left(Err(
-//             s"[join_norm_with_val fail]" ++
-//               s"norm: ${pretty_norm(norm)}" ++
-//               s"value: ${pretty_val(value)}"))
-//         }
-//       case _ =>
-//         Left(Err(
-//           s"[join_norm_with_val fail]" ++
-//             s"norm: ${pretty_norm(norm)}" ++
-//             s"value: ${pretty_val(value)}"))
-//     }
-//   }
+    tel_forced.fields.find {
+      case (k, _, _, _, _) =>
+        k == field_name
+    } match {
+      case Some((_, _, _, Some(tv), _)) =>
+        Right(tv)
+      case Some((_, _, _, None, _)) =>
+        println(s"[internal error]")
+        println(s"tel.force is not effective")
+        throw new Exception()
+      case None =>
+        Left(Err(
+          s"[infer_tel_dot fail]" ++
+            s"tel: ${pretty_tel(tel)}" ++
+            s"field_name: ${field_name}"))
+    }
+  }
 
-//   def join_norm_tel_with_val_tel(
-//     norm_tel: NormTel,
-//     tel: Tel,
-//   ): Either[Err, Tel] = {
-//     ???
-//   }
+  def refine_choice(
+    t: Val,
+    choice_name: String,
+    body: Exp,
+    path: List[String],
+    env: Env,
+  ): Either[Err, Val] = {
+    env.lookup_val(choice_name) match {
+      case Some(value) =>
+        for {
+          refined_val <- join_val(t, value)
+          refined_env <- env.ext_by_path(path, refined_val)
+        } yield eval(body, refined_env)
+      case None =>
+        Left(Err(
+          s"[refine_choice fail]" ++
+            s"t: ${pretty_val(t)}" ++
+            s"path: ${pretty_path(path)}" ++
+            s"choice_name: ${choice_name}" ++
+            s"body: ${pretty_exp(body)}"))
+    }
+  }
 
-//   def infer_norm_tel_dot(norm_tel: NormTel, field_name: String): Either[Err, Norm] = {
-//     norm_tel.fields.find {
-//       case (k, _, _, _, _) =>
-//         k == field_name
-//     } match {
-//       case Some((_, _, _, tn, _)) =>
-//         Right(tn)
-//       case None =>
-//         Left(Err(
-//           s"[infer_norm_tel_dot fail]" ++
-//             s"norm_tel: ${pretty_norm_tel(norm_tel)}" ++
-//             s"field_name: ${field_name}"))
-//     }
-//   }
+  def fulfill_type(x: Val, level: Int): Either[Err, Unit] = {
+    x match {
+      case x: ValType =>
+        if (x.level < level) {
+          Right(())
+        } else {
+          Left(Err(
+            s"[fulfill_type fail]" ++
+              s"x: ${pretty_val(x)}" ++
+              s"level: ${level}"))
+        }
+      case x: ValPi =>
+        for {
+          _ <- fulfill_type(x.arg_t, level)
+          _ <- fulfill_type(x.dep_t.force(), level)
+        } yield ()
+      case x: ValFn =>
+        for {
+          _ <- fulfill_type(x.arg_t, level)
+          _ <- fulfill_type(x.body.force(), level)
+        } yield ()
+      case x: ValClub =>
+        fulfill_tel_type(x.tel, level)
+      case x: ValMember =>
+        fulfill_tel_type(x.tel, level)
+      case x: ValRecord =>
+        fulfill_tel_type(x.tel, level)
+      case _ =>
+        Left(Err(
+          s"[fulfill_type fail]" ++
+            s"x: ${pretty_val(x)}" ++
+            s"level: ${level}"))
+    }
+  }
 
-//   def fulfill_type(x: Norm, level: Int): Either[Err, Unit] = {
-//     x match {
-//       case x: NormType =>
-//         if (x.level < level) {
-//           Right(())
-//         } else {
-//           Left(Err(
-//             s"[fulfill_type fail]" ++
-//               s"x: ${pretty_norm(x)}" ++
-//               s"level: ${level}"))
-//         }
-//       case x: NormPi =>
-//         for {
-//           _ <- fulfill_type(x.arg_t, level)
-//           _ <- fulfill_type(x.dep_t, level)
-//         } yield ()
-//       case x: NormFn =>
-//         for {
-//           _ <- fulfill_type(x.arg_t, level)
-//           _ <- fulfill_type(x.body, level)
-//         } yield ()
-//       case x: NormClub =>
-//         fulfill_tel_type(x.norm_tel, level)
-//       case x: NormMember =>
-//         fulfill_tel_type(x.norm_tel, level)
-//       case x: NormRecord =>
-//         fulfill_tel_type(x.norm_tel, level)
-//       case _ =>
-//         Left(Err(
-//           s"[fulfill_type fail]" ++
-//             s"x: ${pretty_norm(x)}" ++
-//             s"level: ${level}"))
-//     }
-//   }
-
-//   def fulfill_tel_type(x: NormTel, level: Int): Either[Err, Unit] = {
-//     val list = x.fields.map { case (k, te, mve, tn, mvn) => fulfill_type(tn, level) }
-//     first_err(list)
-//   }
+  def fulfill_tel_type(x: Tel, level: Int): Either[Err, Unit] = {
+    val list = x.force().fields.map {
+      case (_, _, _, Some(tv), _) => fulfill_type(tv, level)
+      case (_, _, _, None, _) =>
+        println(s"[internal error]")
+        println(s"tel.force is not effective")
+        throw new Exception()
+    }
+    first_err(list)
+  }
 
 }

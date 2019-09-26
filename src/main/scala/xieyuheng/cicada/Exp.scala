@@ -19,11 +19,11 @@ object Ap {
       case ValFn(arg_name: String, arg_t: Val, body: Clo) =>
         body(arg)
       case ValClub(name, members, tel) =>
-        ValClub(name, members, util.unwrap(tel.put(arg)))
+        ValClub(name, members, util.result_unwrap(tel.put(arg)))
       case ValMember(name, club_name, tel) =>
-        ValMember(name, club_name, util.unwrap(tel.put(arg)))
+        ValMember(name, club_name, util.result_unwrap(tel.put(arg)))
       case ValRecord(name, super_names, tel) =>
-        ValRecord(name, super_names, util.unwrap(tel.put(arg)))
+        ValRecord(name, super_names, util.result_unwrap(tel.put(arg)))
       case neu: Neu =>
         NeuAp(neu, arg)
       case _ =>

@@ -2,9 +2,7 @@
 - compile to human readable javascript
 - markdown support for literal programming
 * cicada
-- infer_norm_neu return list
-------
-- is it ok to not use NormEnv in NormTelescope and NormNeuChoice ?
+- [note] is it ok to not use NormEnv in NormTelescope and NormNeuChoice ?
 - fulfill_norm
   - subtype relation between class and supers
   - value of a field must be full value

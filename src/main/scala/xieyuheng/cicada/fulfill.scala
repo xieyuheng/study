@@ -5,60 +5,60 @@ import readback._
 
 object fulfill {
 
-//   def fulfill_val(x: Val, y: Val): Either[Err, Unit] = {
-//     (x, y) match {
-//       case (x: ValPi, y: ValPi) =>
-//         for {
-//           _ <- fulfill_val(y.arg_t, x.arg_t)
-//           _ <- fulfill_val(x.dep_t, y.dep_t)
-//         } yield ()
-//       case (x: ValFn, y: ValFn) =>
-//         for {
-//           _ <- fulfill_val(y.arg_t, x.arg_t)
-//           _ <- fulfill_val(x.body, y.body)
-//         } yield ()
-//       case (x: ValFn, y: ValPi) =>
-//         for {
-//           _ <- fulfill_val(y.arg_t, x.arg_t)
-//           _ <- fulfill_val(x.body, y.dep_t)
-//         } yield ()
-//       case (x: ValClub, y: ValClub) =>
-//         if (x.name == y.name) {
-//           fulfill_val_tel(x.norm_tel, y.norm_tel)
-//         } else {
-//           Left(Err(
-//             s"[fulfill_val fail]" ++
-//               s"x: ${pretty_norm(x)}" ++
-//               s"y: ${pretty_norm(y)}"))
-//         }
-//       case (x: ValMember, y: ValMember) =>
-//         if (x.name == y.name) {
-//           fulfill_val_tel(x.norm_tel, y.norm_tel)
-//         } else {
-//           Left(Err(
-//             s"[fulfill_val fail]" ++
-//               s"x: ${pretty_norm(x)}" ++
-//               s"y: ${pretty_norm(y)}"))
-//         }
-//       case (x: ValMember, y: ValClub) =>
-//         if (x.club_name == y.name) {
-//           fulfill_val_tel(x.norm_tel, y.norm_tel)
-//         } else {
-//           Left(Err(
-//             s"[fulfill_val fail]" ++
-//               s"x: ${pretty_norm(x)}" ++
-//               s"y: ${pretty_norm(y)}"))
-//         }
-//       case (x: ValRecord, y: ValRecord) =>
-//         if (x.name == y.name) {
-//           fulfill_val_tel(x.norm_tel, y.norm_tel)
-//         } else {
-//           // TODO handle extends
-//           Left(Err(
-//             s"[fulfill_val fail]" ++
-//               s"x: ${pretty_norm(x)}" ++
-//               s"y: ${pretty_norm(y)}"))
-//         }
+  def fulfill_val(x: Val, y: Val): Either[Err, Unit] = {
+    (x, y) match {
+      case (x: ValPi, y: ValPi) =>
+        for {
+          _ <- fulfill_val(y.arg_t, x.arg_t)
+          _ <- fulfill_clo(x.dep_t, y.dep_t)
+        } yield ()
+      case (x: ValFn, y: ValFn) =>
+        for {
+          _ <- fulfill_val(y.arg_t, x.arg_t)
+          _ <- fulfill_clo(x.body, y.body)
+        } yield ()
+      case (x: ValFn, y: ValPi) =>
+        for {
+          _ <- fulfill_val(y.arg_t, x.arg_t)
+          _ <- fulfill_clo(x.body, y.dep_t)
+        } yield ()
+      case (x: ValClub, y: ValClub) =>
+        if (x.name == y.name) {
+          fulfill_tel(x.tel, y.tel)
+        } else {
+          Left(Err(
+            s"[fulfill_val fail]" ++
+              s"x: ${pretty_val(x)}" ++
+              s"y: ${pretty_val(y)}"))
+        }
+      case (x: ValMember, y: ValMember) =>
+        if (x.name == y.name) {
+          fulfill_tel(x.tel, y.tel)
+        } else {
+          Left(Err(
+            s"[fulfill_val fail]" ++
+              s"x: ${pretty_val(x)}" ++
+              s"y: ${pretty_val(y)}"))
+        }
+      case (x: ValMember, y: ValClub) =>
+        if (x.club_name == y.name) {
+          fulfill_tel(x.tel, y.tel)
+        } else {
+          Left(Err(
+            s"[fulfill_val fail]" ++
+              s"x: ${pretty_val(x)}" ++
+              s"y: ${pretty_val(y)}"))
+        }
+      case (x: ValRecord, y: ValRecord) =>
+        if (x.name == y.name) {
+          fulfill_tel(x.tel, y.tel)
+        } else {
+          // TODO handle extends
+          Left(Err(
+            s"[fulfill_val fail]" ++
+              s"x: ${pretty_val(x)}" ++
+              s"y: ${pretty_val(y)}"))
+        }
 //       case (x: ValNeu, y) =>
 //         val list = infer_norm_neu(x).map {
 //           case result =>
@@ -69,13 +69,45 @@ object fulfill {
 //           case result =>
 //             result.flatMap { case y => fulfill_val(x, y) } }
 //         first_err(list)
-//       case _ =>
-//         Left(Err(
-//           s"[fulfill_val fail]" ++
-//             s"x: ${pretty_norm(x)}" ++
-//             s"y: ${pretty_norm(y)}"))
-//     }
-//   }
+      case _ =>
+        Left(Err(
+          s"[fulfill_val fail]" ++
+            s"x: ${pretty_val(x)}" ++
+            s"y: ${pretty_val(y)}"))
+    }
+  }
+
+  def fulfill_clo(x: Clo, y: Clo): Either[Err, Unit] = {
+    fulfill_val(x.force(), y.force())
+  }
+
+  def fulfill_tel(x: Tel, y: Tel): Either[Err, Unit] = {
+    val x_forced = x.force()
+    val y_forced = y.force()
+
+    val list = y_forced.fields.map {
+      case (k, te, mve, Some(tv), Some(vv)) =>
+        x_forced.fields.find { case (k2, _, _, _, _) => k == k2 } match {
+          case Some((k2, te2, mve2, Some(tv2), Some(vv2))) =>
+            fulfill_val(tv2, tv).flatMap { _ => fulfill_val(vv2, vv) }
+          case Some(_) =>
+            println(s"[internal error]")
+            println(s"tel.force is not effective")
+            throw new Exception()
+          case None =>
+            Left(Err(
+              s"[fulfill_tel fail]" ++
+                s"x: ${pretty_tel(x)}" ++
+                s"y: ${pretty_tel(y)}"))
+        }
+      case _ =>
+        println(s"[internal error]")
+        println(s"tel.force is not effective")
+        throw new Exception()
+    }
+
+    first_err(list)
+  }
 
   def first_err(list: List[Either[Err, Unit]]): Either[Err, Unit] = {
     list.find {
@@ -223,32 +255,6 @@ object fulfill {
 //             s"norm_tel: ${pretty_norm_tel(norm_tel)}" ++
 //             s"field_name: ${field_name}"))
 //     }
-//   }
-
-//   def fulfill_val_tel(x: NormTel, y: NormTel): Either[Err, Unit] = {
-//     val list = y.fields.map { case (k, te, mve, tn, mvn) =>
-//       x.fields.find { case (k2, _, _, _, _) => k == k2 } match {
-//         case Some((k2, te2, mve2, tn2, mvn2)) =>
-//           (mvn2, mvn) match {
-//             case (Some(vn2), Some(vn)) =>
-//               fulfill_val(tn2, tn).flatMap { _ => fulfill_val(vn2, vn) }
-//             case (None, None) =>
-//               fulfill_val(tn2, tn)
-//             case _ =>
-//               Left(Err(
-//                 s"[fulfill_val_tel fail]" ++
-//                   s"x: ${pretty_norm_tel(x)}" ++
-//                   s"y: ${pretty_norm_tel(y)}"))
-//           }
-//         case None =>
-//           Left(Err(
-//             s"[fulfill_val_tel fail]" ++
-//               s"x: ${pretty_norm_tel(x)}" ++
-//               s"y: ${pretty_norm_tel(y)}"))
-//       }
-//     }
-
-//     first_err(list)
 //   }
 
 //   def fulfill_type(x: Norm, level: Int): Either[Err, Unit] = {

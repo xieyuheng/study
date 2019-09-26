@@ -18,9 +18,11 @@ object eval {
       case Type(level) =>
         ValType(level)
       case Pi(arg_name, arg_t, dep_t) =>
-        ValPi(arg_name, eval(arg_t, env), Clo(arg_name, dep_t, env))
+        val arg_t_val = eval(arg_t, env)
+        ValPi(arg_name, arg_t_val, Clo(arg_name, arg_t_val, dep_t, env))
       case Fn(arg_name, arg_t, body) =>
-        ValFn(arg_name, eval(arg_t, env), Clo(arg_name, body, env))
+        val arg_t_val = eval(arg_t, env)
+        ValFn(arg_name, arg_t_val, Clo(arg_name, arg_t_val, body, env))
       case Ap(target, arg) =>
         Ap.ap(eval(target, env), eval(arg, env))
       case Choice(path, map: Map[String, Exp]) =>

@@ -12,8 +12,12 @@ object readback {
     s"#${seed}"
   }
 
-  def gen_fresh(seed: Seed, arg_t: Val, aka: Option[String] = None): Val = {
-    NeuVar(fresh_name(seed), arg_t, aka)
+  def gen_neu_val(arg_name: String, arg_t: Val, aka: Option[String] = None): NeuVar = {
+    NeuVar(arg_name, arg_t, aka)
+  }
+
+  def gen_fresh(seed: Seed, arg_t: Val, aka: Option[String] = None): NeuVar = {
+    gen_neu_val(fresh_name(seed), arg_t, aka)
   }
 
   def readback_val(seed: Seed, value: Val): Norm = {

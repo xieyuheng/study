@@ -1,5 +1,7 @@
 package xieyuheng.cicada
 
+import readback._
+
 sealed trait Val
 final case class ValType(level: Int) extends Val
 final case class ValPi(arg_name: String, arg_t: Val, dep_t: Clo) extends Val
@@ -29,9 +31,14 @@ final case class NeuChoice(target: Neu, path: List[String], map: Map[String, Exp
 final case class NeuDot(target: Neu, field_name: String) extends Neu
 final case class NeuDotType(target: Neu, field_name: String) extends Neu
 
-case class Clo(arg_name: String, body: Exp, env: Env) {
+case class Clo(arg_name: String, arg_t: Val, body: Exp, env: Env) {
   def apply(arg: Val): Val = {
     eval(body, env.ext_val(arg_name, arg))
+  }
+
+  def force(): Val = {
+    val clo = this
+    clo(gen_neu_val(clo.arg_name, clo.arg_t, None))
   }
 }
 
@@ -75,6 +82,19 @@ case class Tel(
           Tel(new_fields, env.ext_val(k, arg))
         case _ => this
       }
+    }
+  }
+
+  self_put()
+
+  def force(): Tel = {
+    fields.foldLeft(this) {
+      case (tel, (k, te, mve, Some(tv), None)) =>
+        util.result_unwrap(tel.put(gen_neu_val(k, tv, None)))
+      case (tel, (k, te, mve, None, None)) =>
+        util.result_unwrap(tel.put(gen_neu_val(k, eval(te, tel.env), None)))
+      case (tel, (k, te, mve, mtv, Some(vv))) =>
+        tel
     }
   }
 

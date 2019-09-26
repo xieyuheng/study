@@ -1,9 +1,9 @@
 # cicada
 
-A dependently typed language and proof assistant
-- with **fulfilling type system**, in which partially fulfilled data can be used as type
-- compile to human readable javascript, and maintain all type information at runtime (do not erase type information)
-- literal programming support by markdown, to help proof writers write proofs for human
+A dependently typed language and proof assistant.
+- with **fulfilling type system**, in which partially fulfilled data can be used as type.
+- compile to human readable javascript, and maintain all type information at runtime (do not erase type information).
+- literal programming support by markdown, to help proof writers write proofs for human.
 
 ## Also Contains
 
@@ -35,7 +35,7 @@ A dependently typed language and proof assistant
 - We enforce C4 as collaboration protocol -- [The C4 RFC](https://rfc.zeromq.org/spec:42/C4)
 - [Style Guide](STYLE-GUIDE.md) -- observe the style of existing code and respect it
 - [Code of Conduct](CODE-OF-CONDUCT.md)
-- [travis-ci](https://travis-ci.org/xieyuheng/cicada)
+- [Travis CI](https://travis-ci.org/xieyuheng/cicada)
 
 ## License
 

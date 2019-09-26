@@ -1,22 +1,16 @@
+- env.ext_path
+- fulfill_val -- instead of fulfill_norm
+- join_val
 * readme
-- compile to human readable javascript
+- compile to human readable javascript with runtime type information
 - markdown support for literal programming
 * cicada
+- subtype relation between class and supers
+- value of a field must be full value -- full_p, part_p
 - [note] is it ok to not use NormEnv in NormTelescope and NormNeuChoice ?
-- fulfill_norm
-  - subtype relation between class and supers
-  - value of a field must be full value
-    full_p, part_p
-- cumulative levels of types -- type_t(n)
-  - this should be simple since we have subtype relation and infer
 - string_t
 - check undefined during top loading
-- compile to js with runtime type information
-  - this means keep Val serde-able
-    - Val includes ValFn which contains Exp
-      this Exp is also serde-able
 - termination check
-- markdown support
 * tartlet
 - why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie

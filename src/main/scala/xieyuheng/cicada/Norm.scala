@@ -61,6 +61,6 @@ case class NormTelescope(
 sealed trait NormNeu extends Norm
 final case class NormNeuVar(name: String, norm_arg_t: Norm) extends NormNeu
 final case class NormNeuAp(target: NormNeu, arg: Norm) extends NormNeu
-final case class NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], env: Env) extends NormNeu
+final case class NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], seed: Seed, env: Env) extends NormNeu
 final case class NormNeuDot(target: NormNeu, field_name: String) extends NormNeu
 final case class NormNeuDotType(target: NormNeu, field_name: String) extends NormNeu

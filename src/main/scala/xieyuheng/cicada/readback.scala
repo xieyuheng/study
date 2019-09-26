@@ -65,7 +65,7 @@ object readback {
       case NeuAp(target: Neu, arg: Val) =>
         NormNeuAp(readback_neu(seed, target), readback_val(seed, arg))
       case NeuChoice(target: Neu, path: List[String], map: Map[String, Exp], env: Env) =>
-        NormNeuChoice(readback_neu(seed, target), path, map, env)
+        NormNeuChoice(readback_neu(seed, target), path, map, seed, env)
       case NeuDot(target: Neu, field_name: String) =>
         NormNeuDot(readback_neu(seed, target), field_name)
       case NeuDotType(target: Neu, field_name: String) =>

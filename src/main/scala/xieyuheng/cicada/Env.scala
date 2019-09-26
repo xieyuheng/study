@@ -97,6 +97,11 @@ sealed trait Env {
         that
     }
   }
+
+  def ext_path(path: List[String], value: Val): Env = {
+    ???
+  }
+
 }
 
 final case class EnvName(name: String, value: Val, rest: Env) extends Env

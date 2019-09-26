@@ -1,5 +1,7 @@
 package xieyuheng.cicada
 
+import readback._
+
 import xieyuheng.util.pretty._
 
 object pretty {
@@ -169,7 +171,7 @@ object pretty {
         s"${name}: ${pretty_norm(norm_arg_t)}"
       case NormNeuAp(target: NormNeu, arg: Norm) =>
         s"${pretty_norm_neu(target)}(${pretty_norm(arg)})"
-      case NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], env: Env) =>
+      case NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], seed: Seed, env: Env) =>
         s"choice ${pretty_path(path)} = ${pretty_norm_neu(target)} {${maybe_ln(pretty_exp_case(map))}}"
       case NormNeuDot(target: NormNeu, field_name: String) =>
         s"${pretty_norm_neu(target)}.${field_name}"

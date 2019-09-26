@@ -1,8 +1,9 @@
 package xieyuheng.cicada
 
 import pretty._
+import readback._
 
-object fulfill {
+object fulfill_norm {
 
   def fulfill_norm(x: Norm, y: Norm): Either[Err, Unit] = {
     (x, y) match {
@@ -117,9 +118,12 @@ object fulfill {
                   s"norm_neu: ${pretty_norm(norm_neu)}")))
           }
         }
-      case NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], env: Env) =>
-        // TODO to return list here
-        ???
+      case NormNeuChoice(target, path, map, seed, env) =>
+        infer_norm_neu(target).flatMap {
+          case Right(norm) =>
+            map.toList.map { case (choice_name, body) =>
+              refine_choice(norm, choice_name, body, path, seed, env) }
+          case Left(err) => List(Left(err)) }
       case NormNeuDot(target: NormNeu, field_name: String) =>
         infer_norm_neu(target).flatMap {
           _ match {
@@ -141,6 +145,69 @@ object fulfill {
         // TODO
         ???
     }
+  }
+
+  def refine_choice(
+    norm: Norm,
+    choice_name: String,
+    body: Exp,
+    path: List[String],
+    seed: Seed,
+    env: Env,
+  ): Either[Err, Norm] = {
+    env.lookup_val(choice_name) match {
+      case Some(value) =>
+        for {
+          refined_val <- join_norm_with_val(norm, value)
+          refined_env = env.ext_path(path, refined_val)
+        } yield readback_val(seed, eval(body, refined_env))
+      case None =>
+        Left(Err(
+          s"[refine_choice fail]" ++
+            s"norm: ${pretty_norm(norm)}" ++
+            s"path: ${pretty_path(path)}" ++
+            s"choice_name: ${choice_name}" ++
+            s"body: ${pretty_exp(body)}"))
+    }
+  }
+
+  def join_norm_with_val(norm: Norm, value: Val): Either[Err, Val] = {
+    (norm, value) match {
+      case (norm: NormClub, value: ValMember) =>
+        if (norm.name == value.club_name) {
+          for {
+            new_tel <- join_norm_tel_with_val_tel(norm.norm_tel, value.tel)
+          } yield value.copy(tel = new_tel)
+        } else {
+          Left(Err(
+            s"[join_norm_with_val fail]" ++
+              s"norm: ${pretty_norm(norm)}" ++
+              s"value: ${pretty_val(value)}"))
+        }
+      case (norm: NormMember, value: ValMember) =>
+        if (norm.name == value.name) {
+          for {
+            new_tel <- join_norm_tel_with_val_tel(norm.norm_tel, value.tel)
+          } yield value.copy(tel = new_tel)
+        } else {
+          Left(Err(
+            s"[join_norm_with_val fail]" ++
+              s"norm: ${pretty_norm(norm)}" ++
+              s"value: ${pretty_val(value)}"))
+        }
+      case _ =>
+        Left(Err(
+          s"[join_norm_with_val fail]" ++
+            s"norm: ${pretty_norm(norm)}" ++
+            s"value: ${pretty_val(value)}"))
+    }
+  }
+
+  def join_norm_tel_with_val_tel(
+    norm_tel: NormTelescope,
+    tel: Telescope,
+  ): Either[Err, Telescope] = {
+    ???
   }
 
   def infer_norm_tel_dot(norm_tel: NormTelescope, field_name: String): Either[Err, Norm] = {

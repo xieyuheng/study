@@ -116,9 +116,9 @@ object pretty {
 
   def pretty_neu(neu: Neu): String = {
     neu match {
-      case NeuVar(name: String, norm_arg_t: Norm, aka) =>
+      case NeuVar(name: String, arg_t: Val, aka) =>
         aka match {
-          case Some(alias) => s"${alias}${name}: ${pretty_norm(norm_arg_t)}"
+          case Some(alias) => s"${alias}${name}: ${pretty_val(arg_t)}"
           case None => name
         }
       case NeuAp(target: Neu, arg: Val) =>

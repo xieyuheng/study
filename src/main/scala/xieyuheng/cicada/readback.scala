@@ -55,7 +55,7 @@ object readback {
         (k, te, mve,
           readback_val(seed, tv),
           mvv.map(readback_val(seed, _)) ) }
-    NormTelescope(norm_fields, tel.env)
+    NormTelescope(norm_fields, seed, tel.env)
   }
 
   def readback_neu(seed: Seed, neu: Neu): NormNeu = {

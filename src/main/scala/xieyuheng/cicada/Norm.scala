@@ -1,5 +1,7 @@
 package xieyuheng.cicada
 
+import readback._
+
 import scala.annotation.tailrec
 
 sealed trait Norm
@@ -12,6 +14,7 @@ final case class NormRecord(name: String, super_names: List[String], norm_tel: N
 
 case class NormTelescope(
   fields: List[(String, Exp, Option[Exp], Norm, Option[Norm])],
+  seed: Seed,
   env: Env,
 ) {
 
@@ -28,7 +31,7 @@ case class NormTelescope(
       val new_fields = util.list_replace(fields, i,
         (k, te, mve, tn, Some(arg)))
       Right(
-        NormTelescope(new_fields, env)
+        NormTelescope(new_fields, seed, env)
           .self_put())
     }
   }
@@ -42,16 +45,14 @@ case class NormTelescope(
     if (i == -1) {
       this
     } else {
-      ???
-      // TODO need eval in NormEnv
-      // fields(i) match {
-      //   case (k, te, Some(ve), _, _) =>
-      //     val arg = eval(ve, env)
-      //     val new_fields = util.list_replace(fields, i,
-      //       (k, te, Some(ve), Some(eval(te, env)), Some(arg)))
-      //     Telescope(new_fields, env.ext_val(k, arg))
-      //   case _ => this
-      // }
+      fields(i) match {
+        case (k, te, Some(ve), tn, _) =>
+          val arg = eval(ve, env)
+          val new_fields = util.list_replace(fields, i,
+            (k, te, Some(ve), tn, Some(readback_val(seed, arg))))
+          NormTelescope(new_fields, seed, env.ext_val(k, arg))
+        case _ => this
+      }
     }
   }
 

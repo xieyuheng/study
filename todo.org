@@ -2,7 +2,6 @@
 - compile to human readable javascript
 - markdown support for literal programming
 * cicada
-- self_put for NormTelescope
 - infer_norm_neu return list
 ------
 - is it ok to not use NormEnv in NormTelescope and NormNeuChoice ?

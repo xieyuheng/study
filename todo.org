@@ -1,30 +1,16 @@
+- join_val
 * cicada
-- type in EnvVal
-- type in NeuVar
-- fulfill_norm does not need env
-- fix NormTelescope to (String, Exp, Option[Exp], Norm, Option[Norm])
-  for fulfill_norm_tel
-- fulfill_norm
-  - between any two values, because value can be used as type
-    - subtype relation between club and members and class and supers
-      - recursively extended to fields in record and pi and si
-      - need to compute variance (covariant contravariant invariant) for fields
-  - we will need variance, but we might not need to pre-calculet variance
-    just compare fields as covariant and function arg as contravariant
-  - value of a field must be full value
-    full_p, part_p
-- cumulative levels of types -- type_t(n)
-  - this should be simple since we have subtype relation and infer
+- [maybe] no dot_type
+- subtype relation between class and supers
+- value of a field must be full value -- full_p, part_p
+- [note] we do not need readback to implement fulfill
+  - we only need readback to handle eqv_t
+- [note] is it ok to not use NormEnv in NormTel and NormNeuChoice ?
 - string_t
 - check undefined during top loading
-- compile to js with runtime type information
-  - this means keep Val serde-able
-    - Val includes ValFn which contains Exp
-      this Exp is also serde-able
 - termination check
-- markdown support
 * tartlet
-- why we need "type directed norm-by-eval" here ?
+- why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie
 - the little typer as test
 - use `TODO` as un-implemented
@@ -35,7 +21,7 @@
   - keep it subrecursive, but be generic about data and ind, rec and iter
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
 * minitt
-- why we do not need "type directed norm-by-eval" here ?
+- why we *do not need* "type directed norm-by-eval" here ?
 - [question] I think the use of NormEnv will break `equals`
 - add `eqv_t` `same` `replace`
 - add constrains to type constructors

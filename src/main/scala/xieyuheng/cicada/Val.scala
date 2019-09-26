@@ -1,16 +1,18 @@
 package xieyuheng.cicada
 
+import readback._
+
 sealed trait Val
 final case class ValType(level: Int) extends Val
 final case class ValPi(arg_name: String, arg_t: Val, dep_t: Clo) extends Val
 final case class ValFn(arg_name: String, arg_t: Val, body: Clo) extends Val
-final case class ValClub(name: String, members: List[Member], tel: Telescope) extends Val
-final case class ValMember(name: String, club_name: String, tel: Telescope) extends Val
-final case class ValRecord(name: String, super_names: List[String], tel: Telescope) extends Val
+final case class ValClub(name: String, members: List[Member], tel: Tel) extends Val
+final case class ValMember(name: String, club_name: String, tel: Tel) extends Val
+final case class ValRecord(name: String, super_names: List[String], tel: Tel) extends Val
 
 sealed trait Neu extends Val
-final case class NeuVar(name: String, aka: Option[String]) extends Neu {
-  val matters = name
+final case class NeuVar(name: String, arg_t: Val, aka: Option[String]) extends Neu {
+  val matters = (name, arg_t)
 
   override def equals(that: Any): Boolean = {
     that match {
@@ -25,43 +27,48 @@ final case class NeuAp(target: Neu, arg: Val) extends Neu
 // NOTE do not store env in NeuChoice
 // 1. deep_ext env ?
 // 2. env can use path as key ?
-final case class NeuChoice(target: Neu, map: Map[String, Exp], env: Env) extends Neu
+final case class NeuChoice(target: Neu, path: List[String], map: Map[String, Exp], env: Env) extends Neu
 final case class NeuDot(target: Neu, field_name: String) extends Neu
 final case class NeuDotType(target: Neu, field_name: String) extends Neu
 
-case class Clo(arg_name: String, body: Exp, env: Env) {
+case class Clo(arg_name: String, arg_t: Val, body: Exp, env: Env) {
   def apply(arg: Val): Val = {
     eval(body, env.ext_val(arg_name, arg))
   }
+
+  def force(): Val = {
+    val clo = this
+    clo(gen_neu_val(clo.arg_name, clo.arg_t, None))
+  }
 }
 
-case class Telescope(
+case class Tel(
   fields: List[(String, Exp, Option[Exp], Option[Val], Option[Val])],
   env: Env,
 ) {
 
-  def put(arg: Val): Telescope = {
+  def put(arg: Val): Either[Err, Tel] = {
     val i = fields.indexWhere {
       case (_, _, _, _, None) => true
-      case (_, _, _, _, Some(vv)) => false
+      case (_, _, _, _, Some(_)) => false
     }
 
     if (i == -1) {
-      println(s"the telescope is full, fail to put: ${arg}")
-      throw new Exception()
+      Left(Err(s"the telescope is full, fail to put: ${arg}"))
     } else {
       val (k, te, mve, _, _) = fields(i)
       val new_fields = util.list_replace(fields, i,
         (k, te, mve, Some(eval(te, env)), Some(arg)))
-      Telescope(new_fields, env.ext_val(k, arg))
-        .self_put()
+      Right(
+        Tel(new_fields, env.ext_val(k, arg))
+          .self_put())
     }
   }
 
-  def self_put(): Telescope = {
+  def self_put(): Tel = {
     val i = fields.indexWhere {
       case (_, _, _, _, None) => true
-      case (_, _, _, _, Some(vv)) => false
+      case (_, _, _, _, Some(_)) => false
     }
 
     if (i == -1) {
@@ -72,9 +79,22 @@ case class Telescope(
           val arg = eval(ve, env)
           val new_fields = util.list_replace(fields, i,
             (k, te, Some(ve), Some(eval(te, env)), Some(arg)))
-          Telescope(new_fields, env.ext_val(k, arg))
+          Tel(new_fields, env.ext_val(k, arg))
         case _ => this
       }
+    }
+  }
+
+  self_put()
+
+  def force(): Tel = {
+    fields.foldLeft(this) {
+      case (tel, (k, te, mve, Some(tv), None)) =>
+        util.result_unwrap(tel.put(gen_neu_val(k, tv, None)))
+      case (tel, (k, te, mve, None, None)) =>
+        util.result_unwrap(tel.put(gen_neu_val(k, eval(te, tel.env), None)))
+      case (tel, (k, te, mve, mtv, Some(vv))) =>
+        tel
     }
   }
 
@@ -97,20 +117,20 @@ case class Telescope(
   }
 }
 
-object Telescope {
+object Tel {
 
   def from_exp_fields(
     fields: List[(String, Exp, Option[Exp])],
     env: Env,
-  ): Telescope = {
+  ): Tel = {
     val val_fiedls = fields.map { case (k, te, mve) => (k, te, mve, None, None) }
-    Telescope(val_fiedls, env)
+    Tel(val_fiedls, env)
   }
 
   def from_decls(
     decls: List[Decl],
     env: Env,
-  ): Telescope = {
+  ): Tel = {
     var val_fiedls: List[(String, Exp, Option[Exp], Option[Val], Option[Val])] = List()
 
     decls.foreach {
@@ -133,17 +153,17 @@ object Telescope {
         // TODO since we do not have exp for club and record
         //   we can only create the value at init time
         //   this is wrong, because they can depend on value of prev fields
-        // PROBLEM
+        // NOTE
         //   I forget what I meant when I said the above sentence
         //   I can not see what is wrong now
-        val club_val = ValClub(name, members, Telescope.from_exp_fields(fields, env))
+        val club_val = ValClub(name, members, Tel.from_exp_fields(fields, env))
         val_fiedls = val_fiedls :+ ((name, Type(1), None, Some(ValType(1)), Some(club_val)))
       case DeclRecord(name, super_names, decls) =>
-        val record_val = ValRecord(name, super_names, Telescope.from_decls(decls, env))
+        val record_val = ValRecord(name, super_names, Tel.from_decls(decls, env))
         val_fiedls = val_fiedls :+ ((name, Type(1), None, Some(ValType(1)), Some(record_val)))
     }
 
-    Telescope(val_fiedls, env)
+    Tel(val_fiedls, env)
   }
 
 }

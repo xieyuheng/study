@@ -19,11 +19,11 @@ object Ap {
       case ValFn(arg_name: String, arg_t: Val, body: Clo) =>
         body(arg)
       case ValClub(name, members, tel) =>
-        ValClub(name, members, tel.put(arg))
+        ValClub(name, members, util.result_unwrap(tel.put(arg)))
       case ValMember(name, club_name, tel) =>
-        ValMember(name, club_name, tel.put(arg))
+        ValMember(name, club_name, util.result_unwrap(tel.put(arg)))
       case ValRecord(name, super_names, tel) =>
-        ValRecord(name, super_names, tel.put(arg))
+        ValRecord(name, super_names, util.result_unwrap(tel.put(arg)))
       case neu: Neu =>
         NeuAp(neu, arg)
       case _ =>
@@ -46,7 +46,7 @@ object Choice {
     val value = eval(exp, env)
     // TODO handle subtype relation in choice
     value match {
-      case ValClub(name: String, members: List[Member], tel: Telescope) =>
+      case ValClub(name: String, members: List[Member], tel: Tel) =>
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
@@ -54,7 +54,7 @@ object Choice {
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
         }
-      case ValMember(name: String, club_name: String, tel: Telescope) =>
+      case ValMember(name: String, club_name: String, tel: Tel) =>
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
@@ -62,7 +62,7 @@ object Choice {
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
         }
-      case ValRecord(name: String, super_names: List[String], tel: Telescope) =>
+      case ValRecord(name: String, super_names: List[String], tel: Tel) =>
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
@@ -71,7 +71,7 @@ object Choice {
             throw new Exception()
         }
       case neu: Neu =>
-        NeuChoice(neu, map, env)
+        NeuChoice(neu, path, map, env)
       case _ =>
         println(s"choice mismatch: ${pretty_val(value)}")
         println(s"${pretty_exp_case(map)}")

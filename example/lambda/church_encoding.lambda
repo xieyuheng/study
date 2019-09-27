@@ -6,7 +6,7 @@ let add = (j, k, f, x) => j(f, k(f, x))
 
 let one = succ(zero)
 
-show! add(one, one)
+@show add(one, one)
 
 let f = {
   let x = one
@@ -14,4 +14,4 @@ let f = {
   return add(x, y)
 }
 
-show! f
+@show f

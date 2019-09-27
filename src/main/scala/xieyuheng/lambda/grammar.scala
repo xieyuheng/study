@@ -31,9 +31,9 @@ object grammar {
   def top = Rule(
     "top", Map(
       "decl" -> List(decl),
-      "show" -> List("show", "!", exp),
-      "eq" -> List("eq", "!", exp, exp),
-      "not_eq" -> List("not_eq", "!", exp, exp),
+      "show" -> List("@", "show", exp),
+      "eq" -> List("@", "assert_eq", exp, exp),
+      "not_eq" -> List("@", "assert_not_eq", exp, exp),
     ))
 
   def top_matcher = Tree.matcher[Top](

@@ -33,15 +33,15 @@ fn bool_or(x: bool_t, y: bool_t): bool_t = {
   }
 }
 
-eq! bool_not(true) false
-eq! bool_not(false) true
+@assert_eq bool_not(true) false
+@assert_eq bool_not(false) true
 
-eq! bool_and(true, true) true
-eq! bool_and(true, false) false
-eq! bool_and(false, true) false
-eq! bool_and(false, false) false
+@assert_eq bool_and(true, true) true
+@assert_eq bool_and(true, false) false
+@assert_eq bool_and(false, true) false
+@assert_eq bool_and(false, false) false
 
-eq! bool_or(true, true) true
-eq! bool_or(true, false) true
-eq! bool_or(false, true) true
-eq! bool_or(false, false) false
+@assert_eq bool_or(true, true) true
+@assert_eq bool_or(true, false) true
+@assert_eq bool_or(false, true) true
+@assert_eq bool_or(false, false) false

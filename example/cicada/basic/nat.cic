@@ -46,14 +46,14 @@ let eight: nat_t = succ_t(seven)
 let nine: nat_t = succ_t(eight)
 let ten: nat_t = succ_t(nine)
 
-eq! nat_add(one, one) two
-eq! nat_add(two, two) four
-eq! nat_add(three, three) six
+@assert_eq nat_add(one, one) two
+@assert_eq nat_add(two, two) four
+@assert_eq nat_add(three, three) six
 
-eq! nat_mul(one, one) one
-eq! nat_mul(two, two) four
-eq! nat_mul(three, three) nine
+@assert_eq nat_mul(one, one) one
+@assert_eq nat_mul(two, two) four
+@assert_eq nat_mul(three, three) nine
 
-eq! nat_factorial(one) one
-eq! nat_factorial(two) two
-eq! nat_factorial(three) six
+@assert_eq nat_factorial(one) one
+@assert_eq nat_factorial(two) two
+@assert_eq nat_factorial(three) six

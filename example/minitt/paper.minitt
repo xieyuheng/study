@@ -3,7 +3,7 @@ let bool_t: type_t = datatype {
   case false
 }
 
-eq! true[] true[]
+@assert_eq true[] true[]
 
 let true: bool_t = true[]
 let false: bool_t = false[]
@@ -14,12 +14,12 @@ let id: (A: type_t, A) -> A =
 let id_on_id: (A: type_t, A) -> A =
   id((A: type_t, A) -> A)(id)
 
-eq! id(bool_t, true[]) true[]
-eq! id(bool_t, false[]) false[]
-eq! id_on_id id
+@assert_eq id(bool_t, true[]) true[]
+@assert_eq id(bool_t, false[]) false[]
+@assert_eq id_on_id id
 
-eq! id(bool_t, true) true
-eq! id(bool_t, false) false
+@assert_eq id(bool_t, true) true
+@assert_eq id(bool_t, false) false
 
 let bool_elim: (
   C: (bool_t) -> type_t,
@@ -62,8 +62,8 @@ let bool_to_nat: (bool_t) -> nat_t = {
   }
 }
 
-eq! bool_to_nat(true) succ[zero]
-eq! bool_to_nat(false) zero
+@assert_eq bool_to_nat(true) succ[zero]
+@assert_eq bool_to_nat(false) zero
 
 letrec nat_rec: (
   C: (nat_t) -> type_t,
@@ -82,14 +82,14 @@ letrec nat_add: (nat_t, nat_t) -> nat_t = {
   case succ[prev] => y => succ[nat_add(prev, y)]
 }
 
-eq! nat_add(two, two) four
+@assert_eq nat_add(two, two) four
 
 let nat_double: (nat_t) -> nat_t =
   x => nat_add(x, x)
 
-eq! nat_double(one) two
-eq! nat_double(two) four
-eq! nat_double(three) six
+@assert_eq nat_double(one) two
+@assert_eq nat_double(two) four
+@assert_eq nat_double(three) six
 
 letrec nat_mul: (nat_t, nat_t) -> nat_t = {
   case zero[] => y => zero
@@ -99,9 +99,9 @@ letrec nat_mul: (nat_t, nat_t) -> nat_t = {
 let nat_square: (nat_t) -> nat_t =
   x => nat_mul(x, x)
 
-eq! nat_square(one) one
-eq! nat_square(two) four
-eq! nat_square(three) nine
+@assert_eq nat_square(one) one
+@assert_eq nat_square(two) four
+@assert_eq nat_square(three) nine
 
 letrec nat_eq: (nat_t, nat_t) -> bool_t = {
   case zero[] => {
@@ -114,10 +114,10 @@ letrec nat_eq: (nat_t, nat_t) -> bool_t = {
   }
 }
 
-eq! nat_eq(one, one) true
-eq! nat_eq(two, two) true
-eq! nat_eq(one, two) false
-eq! nat_eq(two, one) false
+@assert_eq nat_eq(one, one) true
+@assert_eq nat_eq(two, two) true
+@assert_eq nat_eq(one, two) false
+@assert_eq nat_eq(two, one) false
 
 letrec list_t: (A: type_t) -> type_t = {
   A => datatype {
@@ -143,12 +143,12 @@ let two_zeros: list_t(nat_t) =
 let four_zeros: list_t(nat_t) =
   cons[zero, cons[zero, cons[zero, cons[zero, null[]]]]]
 
-eq! list_append(nat_t, two_zeros, two_zeros) four_zeros
+@assert_eq list_append(nat_t, two_zeros, two_zeros) four_zeros
 
 let one_cons_zero: $[nat_t, nat_t] = [one, zero]
 
-eq! car(one_cons_zero) one
-eq! cdr(one_cons_zero) zero
+@assert_eq car(one_cons_zero) one
+@assert_eq cdr(one_cons_zero) zero
 
 // church encoding of "and"
 

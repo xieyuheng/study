@@ -37,8 +37,8 @@ fn vec_map(A: type_t, B: type_t, n: nat_t, f: (A) -> B, vec: vec_t(A, n)): vec_t
   }
 }
 
-eq! vec_null_t(nat_t).A nat_t
-eq! vec_null_t(nat_t).length zero
+@assert_eq vec_null_t(nat_t).A nat_t
+@assert_eq vec_null_t(nat_t).length zero
 
 let three_zeros: vec_t(nat_t, three) =
   vec_cons_t(nat_t, two, zero,
@@ -52,9 +52,9 @@ let three_ones: vec_t(nat_t, three) =
       vec_cons_t(nat_t, zero, one,
         vec_null_t(nat_t))))
 
-eq! three_zeros.A nat_t
-eq! three_zeros.length three
+@assert_eq three_zeros.A nat_t
+@assert_eq three_zeros.length three
 
-eq! vec_append(nat_t, three, three, three_zeros, three_ones).length six
+@assert_eq vec_append(nat_t, three, three, three_zeros, three_ones).length six
 
-eq! vec_map(nat_t, nat_t, three, nat_add(one), three_zeros) three_ones
+@assert_eq vec_map(nat_t, nat_t, three, nat_add(one), three_zeros) three_ones

@@ -52,10 +52,12 @@ fn vec_map(A: type_t, B: type_t, f: (A) -> B, vec: vec_t(A)): vec_t(B, vec.lengt
 - [partech](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech):
   A parser generator with different parsing techniques.
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):
-  The untyped lambda calculus with norm-by-eval (normalization by evaluation).
+  The untyped lambda calculus
+  - with norm-by-eval (normalization by evaluation).
 - [syst](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/syst):
-  Kurt Gödel's System T (curry style simply typed lambda calculus with natural number)
-  with typed norm-by-eval, (a step toward tartlet and pie).
+  Kurt Gödel's system T (curry style simply typed lambda calculus with natural number),
+  - for details about system T, see "Gödel’s system T as a precursor of modern type theory", by Gilles Dowek
+  - with typed norm-by-eval (a step toward tartlet and pie).
 - [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet)
   The tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",
   by David Thrane Christiansen.

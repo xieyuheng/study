@@ -23,7 +23,7 @@ datatype vec_t(A: type_t, length: nat_t) {
     length: nat_t = succ_t(tail.length))
 }
 
-function vec_append(
+fn vec_append(
   A: type_t,
   x: vec_t(A),
   y: vec_t(A),
@@ -34,7 +34,7 @@ function vec_append(
   }
 }
 
-function vec_map(A: type_t, B: type_t, f: (A) -> B, vec: vec_t(A)): vec_t(B, vec.length) = {
+fn vec_map(A: type_t, B: type_t, f: (A) -> B, vec: vec_t(A)): vec_t(B, vec.length) = {
   vec choice {
     case vec_null_t => vec
     case vec_cons_t => vec_cons_t(nat_t, f(vec.head), vec_map(A, B, f, vec.tail))

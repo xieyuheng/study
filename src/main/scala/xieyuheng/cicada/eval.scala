@@ -36,4 +36,27 @@ object eval {
     }
   }
 
+  def eval_decl(decl: Decl, env: Env): Val = {
+    decl match {
+      case DeclLet(name, t, body) =>
+        eval(body, env)
+      case DeclLetType(name, t) =>
+        println(s"${name} is typed by undefined")
+        throw new Exception()
+      case DeclFn(name, args, dep_t, body) =>
+        val fn = args.foldRight(body) { case ((arg_name, arg_t), body) =>
+          Fn(arg_name, arg_t, body) }
+        eval(fn, env)
+      case DeclFnType(name, args, dep_t) =>
+        println(s"${name} is typed by undefined")
+        throw new Exception()
+      case DeclClub(name, members, fields) =>
+        val club_val = ValClub(name, members, Tel.from_exp_fields(fields, env))
+        club_val
+      case DeclRecord(name, super_names, decls) =>
+        val record_val = ValRecord(name, super_names, Tel.from_decls(decls, env))
+        record_val
+    }
+  }
+
 }

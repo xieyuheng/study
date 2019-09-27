@@ -21,8 +21,8 @@ object join {
           } yield x.copy(tel = new_tel)
         } else {
           Left(Err(
-            s"[join_val fail]" ++
-              s"x: ${pretty_val(x)}" ++
+            s"[join_val fail]\n" ++
+              s"x: ${pretty_val(x)}\n" ++
               s"y: ${pretty_val(y)}"))
         }
       case (x: ValMember, y: ValMember) =>
@@ -32,8 +32,8 @@ object join {
           } yield x.copy(tel = new_tel)
         } else {
           Left(Err(
-            s"[join_val fail]" ++
-              s"x: ${pretty_val(x)}" ++
+            s"[join_val fail]\n" ++
+              s"x: ${pretty_val(x)}\n" ++
               s"y: ${pretty_val(y)}"))
         }
       case (x: ValClub, y: ValMember) =>
@@ -45,16 +45,16 @@ object join {
           } yield x.copy(tel = new_tel)
         } else {
           Left(Err(
-            s"[join_val fail]" ++
-              s"x: ${pretty_val(x)}" ++
+            s"[join_val fail]\n" ++
+              s"x: ${pretty_val(x)}\n" ++
               s"y: ${pretty_val(y)}"))
         }
       case (x, ValType(level)) =>
         join_type(x, level)
       case _ =>
         Left(Err(
-          s"[join_val fail]" ++
-            s"x: ${pretty_val(x)}" ++
+          s"[join_val fail]\n" ++
+            s"x: ${pretty_val(x)}\n" ++
             s"y: ${pretty_val(y)}"))
     }
   }

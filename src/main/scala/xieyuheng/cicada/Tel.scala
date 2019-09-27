@@ -1,5 +1,6 @@
 package xieyuheng.cicada
 
+import pretty._
 import readback._
 
 case class Tel(
@@ -60,18 +61,34 @@ case class Tel(
 
   def dot(field_name: String): Val = {
     fields.find { case (k, _, _, _, _) => k == field_name } match {
-      case Some((k, _, _, _, Some(vv))) => vv
+      case Some((k, te, mve, mtv, Some(vv))) =>
+        vv
+      case Some((k, te, mve, Some(tv), None)) =>
+        // NOTE is it enough to generate a NeuVar here ?
+        val arg_t = tv
+        NeuVar("_", arg_t, None)
+      case Some((k, te, mve, None, None)) =>
+        // NOTE is it enough to generate a NeuVar here ?
+        val arg_t = eval(te, this.env)
+        NeuVar("_", arg_t, None)
       case _ =>
+        println(s"[dot fail]")
         println(s"can not find field_name: ${field_name}")
+        println(s"tel: ${pretty_tel(this)}")
         throw new Exception()
     }
   }
 
   def dot_type(field_name: String): Val = {
     fields.find { case (k, _, _, _, _) => k == field_name } match {
-      case Some((k, _, _, Some(tv), _)) => tv
+      case Some((k, te, mve, Some(tv), mvv)) =>
+        tv
+      case Some((k, te, mve, None, mvv)) =>
+        ???
       case _ =>
+        println(s"[dot_type fail]")
         println(s"can not find field_name: ${field_name}")
+        println(s"tel: ${pretty_tel(this)}")
         throw new Exception()
     }
   }

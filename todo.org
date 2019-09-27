@@ -1,4 +1,5 @@
 * cicada
+- @assert_not_check for testing
 - [maybe] no dot_type
 - subtype relation between class and supers
 - value of a field must be full value -- full_p, part_p

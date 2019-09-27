@@ -2,6 +2,7 @@ package xieyuheng.cicada
 
 import scala.annotation.tailrec
 
+import eval._
 import pretty._
 
 sealed trait Env {
@@ -18,53 +19,18 @@ sealed trait Env {
           rest.lookup_val(key)
         }
       case EnvDecl(decl, rest) =>
-        decl match {
-          case DeclLet(name, t, body) =>
-            if (key == name) {
-              Some(eval(body, env))
-            } else {
-              rest.lookup_val(key)
-            }
-          case DeclLetType(name, t) =>
-            if (key == name) {
-              println(s"${name} is typed by undefined")
-              throw new Exception()
-            } else {
-              rest.lookup_val(key)
-            }
-          case DeclFn(name, args, dep_t, body) =>
-            if (key == name) {
-              val fn = args.foldRight(body) {
-                case ((arg_name, arg_t), body) =>
-                  Fn(arg_name, arg_t, body) }
-              Some(eval(fn, env))
-            } else {
-              rest.lookup_val(key)
-            }
-          case DeclFnType(name, args, dep_t) =>
-            if (key == name) {
-              println(s"${name} is typed by undefined")
-              throw new Exception()
-            } else {
-              rest.lookup_val(key)
-            }
-          case DeclClub(name, members, fields) =>
-            if (key == name) {
-              val club_val = ValClub(name, members, Tel.from_exp_fields(fields, env))
-              Some(club_val)
-            } else {
+        if (key == decl.name) {
+          Some(eval_decl(decl, env))
+        } else {
+          decl match {
+            case DeclClub(name, members, fields) =>
               lookup_members(key, members, env) match {
                 case Some(value) => Some(value)
                 case None => rest.lookup_val(key)
               }
-            }
-          case DeclRecord(name, super_names, decls) =>
-            if (key == name) {
-              val record_val = ValRecord(name, super_names, Tel.from_decls(decls, env))
-              Some(record_val)
-            } else {
+            case _ =>
               rest.lookup_val(key)
-            }
+          }
         }
     }
   }

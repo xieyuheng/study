@@ -71,7 +71,7 @@ object pretty {
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
       case Choice(path: List[String], map: Map[String, Exp]) =>
-        s"choice ${pretty_path(path)} {${maybe_ln(pretty_exp_case(map))}}"
+        s"${pretty_path(path)} choice {${maybe_ln(pretty_exp_case(map))}}"
       case Dot(target: Exp, field_name: String) =>
         s"${pretty_exp(target)}.${field_name}"
       case DotType(target: Exp, field_name: String) =>
@@ -95,9 +95,9 @@ object pretty {
       case ValType(level) =>
         pretty_level(level)
       case ValPi(arg_name: String, arg_t: Val, dep_t: Clo) =>
-        s"(${arg_name}: ${pretty_val(arg_t)}) -> ${pretty_clo(dep_t)}"
+        s"(${arg_name}: ${pretty_val(arg_t)}) -> ${pretty_exp(dep_t.body)}"
       case ValFn(arg_name: String, arg_t: Val, body: Clo) =>
-        s"(${arg_name}: ${pretty_val(arg_t)}) => ${pretty_clo(body)}"
+        s"(${arg_name}: ${pretty_val(arg_t)}) => ${pretty_exp(body.body)}"
       case ValClub(name: String, members: List[Member], tel: Tel) =>
         s"${name}${maybe_paren(pretty_tel(tel))}"
       case ValMember(name: String, club_name: String, tel: Tel) =>
@@ -118,13 +118,15 @@ object pretty {
     neu match {
       case NeuVar(name: String, arg_t: Val, aka) =>
         aka match {
-          case Some(alias) => s"${alias}${name}: ${pretty_val(arg_t)}"
-          case None => name
+          case Some(alias) =>
+            s"${alias}${name}: ${pretty_val(arg_t)}"
+          case None =>
+            s"${name}: ${pretty_val(arg_t)}"
         }
       case NeuAp(target: Neu, arg: Val) =>
         s"${pretty_neu(target)}(${pretty_val(arg)})"
       case NeuChoice(target: Neu, path: List[String], map: Map[String, Exp], env) =>
-        s"choice ${pretty_path(path)} = ${pretty_neu(target)} {${maybe_ln(pretty_exp_case(map))}}"
+        s"(${pretty_path(path)} = ${pretty_neu(target)}) choice {${maybe_ln(pretty_exp_case(map))}}"
       case NeuDot(target: Neu, field_name: String) =>
         s"${pretty_neu(target)}.${field_name}"
       case NeuDotType(target: Neu, field_name: String) =>
@@ -172,7 +174,7 @@ object pretty {
       case NormNeuAp(target: NormNeu, arg: Norm) =>
         s"${pretty_norm_neu(target)}(${pretty_norm(arg)})"
       case NormNeuChoice(target: NormNeu, path: List[String], map: Map[String, Exp], seed: Seed, env: Env) =>
-        s"choice ${pretty_path(path)} = ${pretty_norm_neu(target)} {${maybe_ln(pretty_exp_case(map))}}"
+        s"(${pretty_path(path)} = ${pretty_norm_neu(target)}) choice {${maybe_ln(pretty_exp_case(map))}}"
       case NormNeuDot(target: NormNeu, field_name: String) =>
         s"${pretty_norm_neu(target)}.${field_name}"
       case NormNeuDotType(target: NormNeu, field_name: String) =>

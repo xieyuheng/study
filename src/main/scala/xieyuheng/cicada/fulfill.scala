@@ -16,6 +16,9 @@ object fulfill {
       case (x: ValFn, y: ValFn) =>
         for {
           _ <- fulfill_val(y.arg_t, x.arg_t)
+          _ = {
+            println("------")
+          }
           _ <- fulfill_clo(x.body, y.body)
         } yield ()
       case (x: ValFn, y: ValPi) =>
@@ -28,27 +31,27 @@ object fulfill {
           fulfill_tel(x.tel, y.tel)
         } else {
           Left(Err(
-            s"[fulfill_val fail]" ++
-              s"x: ${pretty_val(x)}" ++
-              s"y: ${pretty_val(y)}"))
+            s"[fulfill_val fail]\n" ++
+              s"x: ${pretty_val(x)}\n" ++
+              s"y: ${pretty_val(y)}\n"))
         }
       case (x: ValMember, y: ValMember) =>
         if (x.name == y.name) {
           fulfill_tel(x.tel, y.tel)
         } else {
           Left(Err(
-            s"[fulfill_val fail]" ++
-              s"x: ${pretty_val(x)}" ++
-              s"y: ${pretty_val(y)}"))
+            s"[fulfill_val fail]\n" ++
+              s"x: ${pretty_val(x)}\n" ++
+              s"y: ${pretty_val(y)}\n"))
         }
       case (x: ValMember, y: ValClub) =>
         if (x.club_name == y.name) {
           fulfill_tel(x.tel, y.tel)
         } else {
           Left(Err(
-            s"[fulfill_val fail]" ++
-              s"x: ${pretty_val(x)}" ++
-              s"y: ${pretty_val(y)}"))
+            s"[fulfill_val fail]\n" ++
+              s"x: ${pretty_val(x)}\n" ++
+              s"y: ${pretty_val(y)}\n"))
         }
       case (x: ValRecord, y: ValRecord) =>
         if (x.name == y.name) {
@@ -56,9 +59,9 @@ object fulfill {
         } else {
           // TODO handle extends
           Left(Err(
-            s"[fulfill_val fail]" ++
-              s"x: ${pretty_val(x)}" ++
-              s"y: ${pretty_val(y)}"))
+            s"[fulfill_val fail]\n" ++
+              s"x: ${pretty_val(x)}\n" ++
+              s"y: ${pretty_val(y)}\n"))
         }
       case (x, ValType(level)) =>
         fulfill_type(x, level)
@@ -77,9 +80,9 @@ object fulfill {
             } yield fulfill_val(x.copy(tel = new_tel), y.dep_t.force())
           case _ =>
             Left(Err(
-              s"[fulfill_val fail]" ++
-                s"x: ${pretty_val(x)}" ++
-                s"y: ${pretty_val(y)}"))
+              s"[fulfill_val fail]\n" ++
+                s"x: ${pretty_val(x)}\n" ++
+                s"y: ${pretty_val(y)}\n"))
         }
       case (x: ValMember, y: ValPi) =>
         fields_find_first_none(x.tel.fields) match {
@@ -96,9 +99,9 @@ object fulfill {
             } yield fulfill_val(x.copy(tel = new_tel), y.dep_t.force())
           case _ =>
             Left(Err(
-              s"[fulfill_val fail]" ++
-                s"x: ${pretty_val(x)}" ++
-                s"y: ${pretty_val(y)}"))
+              s"[fulfill_val fail]\n" ++
+                s"x: ${pretty_val(x)}\n" ++
+                s"y: ${pretty_val(y)}\n"))
         }
       case (x: ValRecord, y: ValPi) =>
         fields_find_first_none(x.tel.fields) match {
@@ -115,9 +118,9 @@ object fulfill {
             } yield fulfill_val(x.copy(tel = new_tel), y.dep_t.force())
           case _ =>
             Left(Err(
-              s"[fulfill_val fail]" ++
-                s"x: ${pretty_val(x)}" ++
-                s"y: ${pretty_val(y)}"))
+              s"[fulfill_val fail]\n" ++
+                s"x: ${pretty_val(x)}\n" ++
+                s"y: ${pretty_val(y)}\n"))
         }
       case (x: Neu, y) =>
         val list = infer_neu(x).map {
@@ -131,9 +134,9 @@ object fulfill {
         first_err(list)
       case _ =>
         Left(Err(
-          s"[fulfill_val fail]" ++
-            s"x: ${pretty_val(x)}" ++
-            s"y: ${pretty_val(y)}"))
+          s"[fulfill_val fail]\n" ++
+            s"x: ${pretty_val(x)}\n" ++
+            s"y: ${pretty_val(y)}\n"))
     }
   }
 
@@ -156,9 +159,9 @@ object fulfill {
             throw new Exception()
           case None =>
             Left(Err(
-              s"[fulfill_tel fail]" ++
-                s"x: ${pretty_tel(x)}" ++
-                s"y: ${pretty_tel(y)}"))
+              s"[fulfill_tel fail]\n" ++
+                s"x: ${pretty_tel(x)}\n" ++
+                s"y: ${pretty_tel(y)}\n"))
         }
       case _ =>
         println(s"[internal error]")
@@ -194,50 +197,55 @@ object fulfill {
         List(Right(arg_t))
       case NeuAp(target: Neu, arg: Val) =>
         infer_neu(target).flatMap {
-          _ match {
-            case Left(err) =>
-              List(Left(err))
-            case Right(ValPi(arg_name, arg_t, dep_t: Clo)) =>
-              List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
-            case Right(ValFn(arg_name, arg_t, body: Clo)) =>
-              List(fulfill_val(arg, arg_t).flatMap { _ => Right(body(arg)) })
-            case Right(ValClub(name, members, tel)) =>
-              List(tel.put(arg).flatMap { case new_tel =>
-                Right(ValClub(name, members, new_tel)) })
-            case Right(ValMember(name, club_name, tel)) =>
-              List(tel.put(arg).flatMap { case new_tel =>
-                Right(ValMember(name, club_name, new_tel)) })
-            case Right(ValRecord(name, super_names, tel)) =>
-              List(tel.put(arg).flatMap { case new_tel =>
-                Right(ValRecord(name, super_names, new_tel)) })
-            case Right(_) =>
-              List(Left(Err(
-                s"[infer_neu fail]" ++
-                  s"neu: ${pretty_val(neu)}")))
-          }
+          case Left(err) =>
+            List(Left(err))
+          case Right(ValPi(arg_name, arg_t, dep_t: Clo)) =>
+            List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
+          case Right(ValFn(arg_name, arg_t, body: Clo)) =>
+            List(fulfill_val(arg, arg_t).flatMap { _ => Right(body(arg)) })
+          case Right(ValClub(name, members, tel)) =>
+            List(tel.put(arg).flatMap { case new_tel =>
+              Right(ValClub(name, members, new_tel)) })
+          case Right(ValMember(name, club_name, tel)) =>
+            List(tel.put(arg).flatMap { case new_tel =>
+              Right(ValMember(name, club_name, new_tel)) })
+          case Right(ValRecord(name, super_names, tel)) =>
+            List(tel.put(arg).flatMap { case new_tel =>
+              Right(ValRecord(name, super_names, new_tel)) })
+          case Right(_) =>
+            List(Left(Err(
+              s"[infer_neu fail]\n" ++
+                s"neu: ${pretty_val(neu)}\n")))
         }
       case NeuChoice(target, path, map, env) =>
         infer_neu(target).flatMap {
           case Right(t) =>
             map.toList.map { case (choice_name, body) =>
+              refine_choice(t, choice_name, body, path, env).map {
+                case value =>
+                  println(s"target: ${pretty_neu(target)}")
+                  println(s"path: ${pretty_path(path)}")
+                  println(s"path_type: ${pretty_val(t)}")
+                  println(s"choice_name: ${choice_name}")
+                  println(s"body: ${pretty_exp(body)}")
+                  println(s"refined_body: ${pretty_val(value)}")
+                  println() }
               refine_choice(t, choice_name, body, path, env) }
           case Left(err) => List(Left(err)) }
       case NeuDot(target: Neu, field_name: String) =>
         infer_neu(target).flatMap {
-          _ match {
-            case Left(err) =>
-              List(Left(err))
-            case Right(ValClub(name: String, members: List[Member], tel: Tel)) =>
-              List(infer_tel_dot(tel: Tel, field_name: String))
-            case Right(ValMember(name: String, club_name: String, tel: Tel)) =>
-              List(infer_tel_dot(tel: Tel, field_name: String))
-            case Right(ValRecord(name: String, super_names: List[String], tel: Tel)) =>
-              List(infer_tel_dot(tel: Tel, field_name: String))
-            case Right(_) =>
-              List(Left(Err(
-                s"[infer_neu fail]" ++
-                  s"neu: ${pretty_val(neu)}")))
-          }
+          case Left(err) =>
+            List(Left(err))
+          case Right(ValClub(name: String, members: List[Member], tel: Tel)) =>
+            List(infer_tel_dot(tel: Tel, field_name: String))
+          case Right(ValMember(name: String, club_name: String, tel: Tel)) =>
+            List(infer_tel_dot(tel: Tel, field_name: String))
+          case Right(ValRecord(name: String, super_names: List[String], tel: Tel)) =>
+            List(infer_tel_dot(tel: Tel, field_name: String))
+          case Right(_) =>
+            List(Left(Err(
+              s"[infer_neu fail]\n" ++
+                s"neu: ${pretty_val(neu)}\n")))
         }
       case NeuDotType(target: Neu, field_name: String) =>
         // TODO
@@ -260,9 +268,9 @@ object fulfill {
         throw new Exception()
       case None =>
         Left(Err(
-          s"[infer_tel_dot fail]" ++
-            s"tel: ${pretty_tel(tel)}" ++
-            s"field_name: ${field_name}"))
+          s"[infer_tel_dot fail]\n" ++
+            s"tel: ${pretty_tel(tel)}\n" ++
+            s"field_name: ${field_name}\n"))
     }
   }
 
@@ -278,14 +286,20 @@ object fulfill {
         for {
           refined_val <- join_val(t, value)
           refined_env <- env.ext_by_path(path, refined_val)
+          // _ = {
+          //   println(s"- t: ${pretty_val(t)}")
+          //   println(s"- choice_name: ${choice_name}")
+          //   println(s"- refined_val: ${pretty_val(refined_val)}")
+          //   println(s"- refined_path_val: ${pretty_val(eval(Choice.path_as_exp(path), refined_env))}")
+          // }
         } yield eval(body, refined_env)
       case None =>
         Left(Err(
-          s"[refine_choice fail]" ++
-            s"t: ${pretty_val(t)}" ++
-            s"path: ${pretty_path(path)}" ++
-            s"choice_name: ${choice_name}" ++
-            s"body: ${pretty_exp(body)}"))
+          s"[refine_choice fail]\n" ++
+            s"t: ${pretty_val(t)}\n" ++
+            s"path: ${pretty_path(path)}\n" ++
+            s"choice_name: ${choice_name}\n" ++
+            s"body: ${pretty_exp(body)}\n"))
     }
   }
 
@@ -302,9 +316,9 @@ object fulfill {
           Right(())
         } else {
           Left(Err(
-            s"[fulfill_type fail]" ++
-              s"x: ${pretty_val(x)}" ++
-              s"level: ${level}"))
+            s"[fulfill_type fail]\n" ++
+              s"x: ${pretty_val(x)}\n" ++
+              s"level: ${level}\n"))
         }
       case x: ValPi =>
         for {
@@ -324,9 +338,9 @@ object fulfill {
         fulfill_tel_type(x.tel, level)
       case _ =>
         Left(Err(
-          s"[fulfill_type fail]" ++
-            s"x: ${pretty_val(x)}" ++
-            s"level: ${level}"))
+          s"[fulfill_type fail]\n" ++
+            s"x: ${pretty_val(x)}\n" ++
+            s"level: ${level}\n"))
     }
   }
 

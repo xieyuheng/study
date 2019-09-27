@@ -63,11 +63,62 @@ object fulfill {
       case (x, ValType(level)) =>
         fulfill_type(x, level)
       case (x: ValClub, y: ValPi) =>
-        infer_tel_pi(x.tel).flatMap { case pi => fulfill_val(pi, y) }
+        fields_find_first_none(x.tel.fields) match {
+          case Some((k, te, mve, Some(tv), None)) =>
+            for {
+              _ <- fulfill_val(y.arg_t, tv)
+              new_tel <- x.tel.put(gen_neu_val(k, tv, None))
+            } yield fulfill_val(x.copy(tel = new_tel), y.dep_t.force())
+          case Some((k, te, mve, None, None)) =>
+            val tv = eval(te, x.tel.env)
+            for {
+              _ <- fulfill_val(y.arg_t, tv)
+              new_tel <- x.tel.put(gen_neu_val(k, tv, None))
+            } yield fulfill_val(x.copy(tel = new_tel), y.dep_t.force())
+          case _ =>
+            Left(Err(
+              s"[fulfill_val fail]" ++
+                s"x: ${pretty_val(x)}" ++
+                s"y: ${pretty_val(y)}"))
+        }
       case (x: ValMember, y: ValPi) =>
-        infer_tel_pi(x.tel).flatMap { case pi => fulfill_val(pi, y) }
+        fields_find_first_none(x.tel.fields) match {
+          case Some((k, te, mve, Some(tv), None)) =>
+            for {
+              _ <- fulfill_val(y.arg_t, tv)
+              new_tel <- x.tel.put(gen_neu_val(k, tv, None))
+            } yield fulfill_val(x.copy(tel = new_tel), y.dep_t.force())
+          case Some((k, te, mve, None, None)) =>
+            val tv = eval(te, x.tel.env)
+            for {
+              _ <- fulfill_val(y.arg_t, tv)
+              new_tel <- x.tel.put(gen_neu_val(k, tv, None))
+            } yield fulfill_val(x.copy(tel = new_tel), y.dep_t.force())
+          case _ =>
+            Left(Err(
+              s"[fulfill_val fail]" ++
+                s"x: ${pretty_val(x)}" ++
+                s"y: ${pretty_val(y)}"))
+        }
       case (x: ValRecord, y: ValPi) =>
-        infer_tel_pi(x.tel).flatMap { case pi => fulfill_val(pi, y) }
+        fields_find_first_none(x.tel.fields) match {
+          case Some((k, te, mve, Some(tv), None)) =>
+            for {
+              _ <- fulfill_val(y.arg_t, tv)
+              new_tel <- x.tel.put(gen_neu_val(k, tv, None))
+            } yield fulfill_val(x.copy(tel = new_tel), y.dep_t.force())
+          case Some((k, te, mve, None, None)) =>
+            val tv = eval(te, x.tel.env)
+            for {
+              _ <- fulfill_val(y.arg_t, tv)
+              new_tel <- x.tel.put(gen_neu_val(k, tv, None))
+            } yield fulfill_val(x.copy(tel = new_tel), y.dep_t.force())
+          case _ =>
+            Left(Err(
+              s"[fulfill_val fail]" ++
+                s"x: ${pretty_val(x)}" ++
+                s"y: ${pretty_val(y)}"))
+        }
       case (x: Neu, y) =>
         val list = infer_neu(x).map {
           case result =>
@@ -128,8 +179,13 @@ object fulfill {
     }
   }
 
-  def infer_tel_pi(tel: Tel): Either[Err, ValPi] = {
-    ???
+  def fields_find_first_none(
+    fields: List[(String, Exp, Option[Exp], Option[Val], Option[Val])]
+  ): Option[(String, Exp, Option[Exp], Option[Val], Option[Val])] = {
+    fields.find {
+      case (k, te, mve, mtv, None) => true
+      case (k, te, mve, mtv, Some(vv)) => false
+    }
   }
 
   def infer_neu(neu: Neu): List[Either[Err, Val]] = {

@@ -1,4 +1,3 @@
-- infer_tel_pi
 * cicada
 - [maybe] no dot_type
 - subtype relation between class and supers

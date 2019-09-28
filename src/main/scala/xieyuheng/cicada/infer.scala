@@ -2,6 +2,7 @@ package xieyuheng.cicada
 
 import join._
 import pretty._
+import fulfill._
 
 object infer {
 
@@ -177,11 +178,11 @@ object infer {
           case Left(err) =>
             List(Left(err))
           case Right(ValPi(arg_name, arg_t, dep_t: Clo)) =>
-            // List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
-            List(Right(dep_t(arg)))
+            List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
+            // List(Right(dep_t(arg)))
           case Right(ValFn(arg_name, arg_t, dep_t: Clo, body: Clo)) =>
-            // List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
-            List(Right(dep_t(arg)))
+            List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
+            // List(Right(dep_t(arg)))
           case Right(ValClub(name, members, tel)) =>
             List(tel.put(arg).flatMap { case new_tel =>
               Right(ValClub(name, members, new_tel)) })

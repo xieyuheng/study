@@ -16,9 +16,6 @@ object fulfill {
       case (x: ValFn, y: ValFn) =>
         for {
           _ <- fulfill_val(y.arg_t, x.arg_t)
-          _ = {
-            println("------")
-          }
           _ <- fulfill_clo(x.body, y.body)
         } yield ()
       case (x: ValFn, y: ValPi) =>
@@ -66,6 +63,9 @@ object fulfill {
       case (x, ValType(level)) =>
         fulfill_type(x, level)
       case (x: ValClub, y: ValPi) =>
+        println("(x: ValClub, y: ValPi)")
+        println(s"x: ${pretty_val(x)}")
+        println(s"y: ${pretty_val(y)}")
         fields_find_first_none(x.tel.fields) match {
           case Some((k, te, mve, Some(tv), None)) =>
             for {
@@ -85,6 +85,9 @@ object fulfill {
                 s"y: ${pretty_val(y)}\n"))
         }
       case (x: ValMember, y: ValPi) =>
+        println("(x: ValMember, y: ValPi)")
+        println(s"x: ${pretty_val(x)}")
+        println(s"y: ${pretty_val(y)}")
         fields_find_first_none(x.tel.fields) match {
           case Some((k, te, mve, Some(tv), None)) =>
             for {
@@ -104,6 +107,9 @@ object fulfill {
                 s"y: ${pretty_val(y)}\n"))
         }
       case (x: ValRecord, y: ValPi) =>
+        println("(x: ValRecord, y: ValPi)")
+        println(s"x: ${pretty_val(x)}")
+        println(s"y: ${pretty_val(y)}")
         fields_find_first_none(x.tel.fields) match {
           case Some((k, te, mve, Some(tv), None)) =>
             for {
@@ -201,6 +207,7 @@ object fulfill {
           case Left(err) => Left(err)
         })
       case x: ValType =>
+        // NOTE should be `x.level < level`
         if (x.level < level + 1) {
           Right(())
         } else {

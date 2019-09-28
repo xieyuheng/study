@@ -1,3 +1,4 @@
+- type in env
 * cicada
 - @assert_not_check for testing
 - [maybe] no dot_type

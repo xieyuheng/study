@@ -1,4 +1,5 @@
-- type in env
+- let's do a check instead of fulfill
+- [maybe] type in env, or ctx of type for check
 * cicada
 - @assert_not_check for testing
 - [maybe] no dot_type

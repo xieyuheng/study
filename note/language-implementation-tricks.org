@@ -53,7 +53,7 @@
     thus for rule of function application we use infer.
 
     [infer] ctx |- f: A -> B
-    [infer] ctx |- x: A
+    [check] ctx |- x: A
     ------------
     [infer] ctx |- f(x): B
 

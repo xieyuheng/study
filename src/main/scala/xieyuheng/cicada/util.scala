@@ -11,7 +11,7 @@ object util {
       case Right(a) => a
       case Left(err) =>
         println(s"[result_unwrap fail]")
-        println(s"error: ${err.msg}")
+        println(s"${err.msg}")
         throw new Exception()
     }
   }

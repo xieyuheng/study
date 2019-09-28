@@ -1,5 +1,6 @@
 package xieyuheng.cicada
 
+import join._
 import pretty._
 
 object infer {
@@ -14,6 +15,7 @@ object infer {
           case Some(value) =>
             value
           case None =>
+            println(s"[infer fail]")
             println(s"undefined variable: ${name}")
             throw new Exception()
         }
@@ -165,4 +167,124 @@ object infer {
     }
   }
 
+
+  def infer_neu(neu: Neu): List[Either[Err, Val]] = {
+    neu match {
+      case NeuVar(name: String, arg_t: Val, aka) =>
+        List(Right(arg_t))
+      case NeuAp(target: Neu, arg: Val) =>
+        infer_neu(target).flatMap {
+          case Left(err) =>
+            List(Left(err))
+          case Right(ValPi(arg_name, arg_t, dep_t: Clo)) =>
+            // List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
+            List(Right(dep_t(arg)))
+          case Right(ValFn(arg_name, arg_t, dep_t: Clo, body: Clo)) =>
+            // List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
+            List(Right(dep_t(arg)))
+          case Right(ValClub(name, members, tel)) =>
+            List(tel.put(arg).flatMap { case new_tel =>
+              Right(ValClub(name, members, new_tel)) })
+          case Right(ValMember(name, club_name, tel)) =>
+            List(tel.put(arg).flatMap { case new_tel =>
+              Right(ValMember(name, club_name, new_tel)) })
+          case Right(ValRecord(name, super_names, tel)) =>
+            List(tel.put(arg).flatMap { case new_tel =>
+              Right(ValRecord(name, super_names, new_tel)) })
+          case Right(_) =>
+            List(Left(Err(
+              s"[infer_neu fail]\n" ++
+                s"neu: ${pretty_val(neu)}\n")))
+        }
+      case NeuChoice(target, path, map, env) =>
+        infer_neu(target).flatMap {
+          case Right(t) =>
+            map.toList.map { case (choice_name, body) =>
+              // refine_choice(t, choice_name, body, path, env).map {
+              //   case value =>
+              //     println(s"target: ${pretty_neu(target)}")
+              //     println(s"path: ${pretty_path(path)}")
+              //     println(s"path_type: ${pretty_val(t)}")
+              //     println(s"choice_name: ${choice_name}")
+              //     println(s"body: ${pretty_exp(body)}")
+              //     println(s"refined_body: ${pretty_val(value)}")
+              //     println() }
+              refine_choice(t, choice_name, body, path, env) }
+          case Left(err) => List(Left(err)) }
+      case NeuDot(target: Neu, field_name: String) =>
+        infer_neu(target).flatMap {
+          case Left(err) =>
+            List(Left(err))
+          case Right(ValClub(name: String, members: List[Member], tel: Tel)) =>
+            List(infer_tel_dot(tel: Tel, field_name: String))
+          case Right(ValMember(name: String, club_name: String, tel: Tel)) =>
+            List(infer_tel_dot(tel: Tel, field_name: String))
+          case Right(ValRecord(name: String, super_names: List[String], tel: Tel)) =>
+            List(infer_tel_dot(tel: Tel, field_name: String))
+          case Right(_) =>
+            List(Left(Err(
+              s"[infer_neu fail]\n" ++
+                s"neu: ${pretty_val(neu)}\n")))
+        }
+      case NeuDotType(target: Neu, field_name: String) =>
+        // TODO
+        ???
+    }
+  }
+
+  def infer_tel_dot(tel: Tel, field_name: String): Either[Err, Val] = {
+    val tel_forced = tel.force()
+
+    tel_forced.fields.find {
+      case (k, _, _, _, _) =>
+        k == field_name
+    } match {
+      case Some((_, _, _, Some(tv), _)) =>
+        Right(tv)
+      case Some((_, _, _, None, _)) =>
+        println(s"[internal error]")
+        println(s"tel.force is not effective")
+        throw new Exception()
+      case None =>
+        Left(Err(
+          s"[infer_tel_dot fail]\n" ++
+            s"tel: ${pretty_tel(tel)}\n" ++
+            s"field_name: ${field_name}\n"))
+    }
+  }
+
+  def refine_choice(
+    t: Val,
+    choice_name: String,
+    body: Exp,
+    path: List[String],
+    env: Env,
+  ): Either[Err, Val] = {
+    env.lookup_val(choice_name) match {
+      case Some(value) =>
+        for {
+          refined_val <- join_val(t, value)
+          refined_env <- env.ext_by_path(path, refined_val)
+          // _ = {
+          //   println(s"- t: ${pretty_val(t)}")
+          //   println(s"- choice_name: ${choice_name}")
+          //   println(s"- refined_val: ${pretty_val(refined_val)}")
+          //   println(s"- refined_path_val: ${pretty_val(eval(Exp.from_path(path), refined_env))}")
+          // }
+        } yield infer(body, refined_env)
+      case None =>
+        Left(Err(
+          s"[refine_choice fail]\n" ++
+            s"t: ${pretty_val(t)}\n" ++
+            s"path: ${pretty_path(path)}\n" ++
+            s"choice_name: ${choice_name}\n" ++
+            s"body: ${pretty_exp(body)}\n"))
+    }
+  }
+
+  def infer_val(value: Val): List[Either[Err, Val]] = {
+    value match {
+      case _ => ???
+    }
+  }
 }

@@ -14,6 +14,7 @@ object eval {
           case Some(value) =>
             value
           case None =>
+            println(s"[eval fail]")
             println(s"undefined variable: ${name}")
             throw new Exception()
         }

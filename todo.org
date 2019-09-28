@@ -1,4 +1,6 @@
+* fulfilling type system
 * cicada
+- note about paper as docs
 - @assert_not_check for testing
 - [maybe] no dot_type
 - subtype relation between class and supers

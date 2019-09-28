@@ -61,7 +61,7 @@ case class Module(file_path: String) {
           case Left(err) =>
             println(s"[check_decl fail]")
             println(s"decl: ${pretty_decl(decl)}")
-            println(s"error: ${err.msg}")
+            println(s"${err.msg}")
             throw new Exception()
         }
       case TopImportAll(path) =>

@@ -1,4 +1,3 @@
-* fulfilling type system
 * cicada
 - @assert_not_check for testing
 - [maybe] no dot_type

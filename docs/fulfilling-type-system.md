@@ -7,3 +7,21 @@
 ------
 
 ## Abstract
+
+In this paper, I specify a type system,
+in which partially fulfilled data can be used as type,
+Thus I call it **fulfilling type system**.
+
+### Contains
+
+- [Introduction](#introduction)
+- [Appendixes](#appendixes)
+- [References](#references)
+
+## Introduction
+
+## Appendixes
+
+------
+
+## References

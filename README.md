@@ -1,7 +1,7 @@
 # cicada
 
 A dependently typed language and proof assistant.
-- with [**fulfilling type system**](docs/fulfilling-type-system.md), in which partially fulfilled data can be used as type.
+- with **fulfilling type system**, in which partially fulfilled data can be used as type.
 - translate to human readable javascript, and maintain all type information at runtime.
 - literal programming support by markdown, to help writers write proofs for human.
 
@@ -49,8 +49,7 @@ fn vec_map(A: type_t, B: type_t, f: (A) -> B, vec: vec_t(A)): vec_t(B, vec.lengt
 
 ## Docs
 
-- [Fulfilling Type System](https://github.com/xieyuheng/cell-complex/blob/master/docs/a-recursive-combinatorial-description-of-cell-complex.md)
-  - A paper about the new type system
+- [Fulfilling Type System (paper)](docs/fulfilling-type-system.md)
 
 ## Also Contains
 

@@ -33,12 +33,13 @@ object readback {
           arg_name,
           norm_arg_t,
           readback_val(seed_inc(seed), dep_t(gen_fresh(seed, arg_t, Some(arg_name)))))
-      case ValFn(arg_name: String, arg_t: Val, body: Clo) =>
+      case ValFn(arg_name: String, arg_t: Val, dep_t: Clo, body: Clo) =>
         val arg_name = fresh_name(seed)
         val norm_arg_t = readback_val(seed, arg_t)
         NormFn(
           arg_name,
           norm_arg_t,
+          readback_val(seed_inc(seed), dep_t(gen_fresh(seed, arg_t, Some(arg_name)))),
           readback_val(seed_inc(seed), body(gen_fresh(seed, arg_t, Some(arg_name)))))
       case ValClub(name: String, members: List[Member], tel: Tel) =>
         NormClub(name, members, readback_tel(seed, tel))

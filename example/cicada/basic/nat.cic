@@ -17,43 +17,43 @@ fn nat_mul(x: nat_t, y: nat_t): nat_t = {
   }
 }
 
-// fn nat_factorial(x: nat_t): nat_t = {
-//   x choice {
-//     case zero_t => succ_t(zero_t)
-//     case succ_t => nat_mul(x, nat_factorial(x.prev))
-//   }
-// }
+fn nat_factorial(x: nat_t): nat_t = {
+  x choice {
+    case zero_t => succ_t(zero_t)
+    case succ_t => nat_mul(x, nat_factorial(x.prev))
+  }
+}
 
-// fn nat_even_p(x: nat_t): bool_t = {
-//   x choice {
-//     case zero_t => true_t
-//     case succ_t => x.prev choice {
-//       case zero_t => false_t
-//       case succ_t => nat_even_p(x.prev.prev)
-//     }
-//   }
-// }
+fn nat_even_p(x: nat_t): bool_t = {
+  x choice {
+    case zero_t => true_t
+    case succ_t => x.prev choice {
+      case zero_t => false_t
+      case succ_t => nat_even_p(x.prev.prev)
+    }
+  }
+}
 
-// let zero: nat_t = zero_t
-// let one: nat_t = succ_t(zero_t)
-// let two: nat_t = succ_t(one)
-// let three: nat_t = succ_t(two)
-// let four: nat_t = succ_t(three)
-// let five: nat_t = succ_t(four)
-// let six: nat_t = succ_t(five)
-// let seven: nat_t = succ_t(six)
-// let eight: nat_t = succ_t(seven)
-// let nine: nat_t = succ_t(eight)
-// let ten: nat_t = succ_t(nine)
+let zero: nat_t = zero_t
+let one: nat_t = succ_t(zero_t)
+let two: nat_t = succ_t(one)
+let three: nat_t = succ_t(two)
+let four: nat_t = succ_t(three)
+let five: nat_t = succ_t(four)
+let six: nat_t = succ_t(five)
+let seven: nat_t = succ_t(six)
+let eight: nat_t = succ_t(seven)
+let nine: nat_t = succ_t(eight)
+let ten: nat_t = succ_t(nine)
 
-// @assert_eq nat_add(one, one) two
-// @assert_eq nat_add(two, two) four
-// @assert_eq nat_add(three, three) six
+@assert_eq nat_add(one, one) two
+@assert_eq nat_add(two, two) four
+@assert_eq nat_add(three, three) six
 
-// @assert_eq nat_mul(one, one) one
-// @assert_eq nat_mul(two, two) four
-// @assert_eq nat_mul(three, three) nine
+@assert_eq nat_mul(one, one) one
+@assert_eq nat_mul(two, two) four
+@assert_eq nat_mul(three, three) nine
 
-// @assert_eq nat_factorial(one) one
-// @assert_eq nat_factorial(two) two
-// @assert_eq nat_factorial(three) six
+@assert_eq nat_factorial(one) one
+@assert_eq nat_factorial(two) two
+@assert_eq nat_factorial(three) six

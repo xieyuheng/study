@@ -118,8 +118,10 @@ object Tel {
       case DeclFn(name, args, dep_t, body) =>
         // NOTE using body as type here
         //   which might be wrong
-        val pi = args.foldRight(dep_t) { case ((arg_name, arg_t), pi) => Pi(arg_name, arg_t, pi) }
-        val fn = args.foldRight(body) { case ((arg_name, arg_t), fn) => Fn(arg_name, arg_t, fn) }
+        val (pi, fn) = args.foldRight(dep_t, body) { case ((arg_name, arg_t), (dep_t, body)) =>
+          val pi = Pi(arg_name, arg_t, dep_t)
+          val fn = Fn(arg_name, arg_t, dep_t, body)
+          (pi, fn) }
         val_fiedls = val_fiedls :+ ((name, pi, Some(fn), None, None))
       case DeclFnType(name, args, dep_t) =>
         val pi = args.foldRight(dep_t) { case ((arg_name, arg_t), pi) => Pi(arg_name, arg_t, pi) }

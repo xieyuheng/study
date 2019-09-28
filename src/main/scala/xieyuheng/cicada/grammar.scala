@@ -320,7 +320,7 @@ object grammar {
       "type_t" -> List("type_t"),
       "type_level" -> List("type_t", "^", digit),
       "pi" -> List("(", non_empty_list(bind), ")", "-", ">", exp),
-      "fn" -> List("(", non_empty_list(bind), ")", "=", ">", exp),
+      "fn" -> List("(", non_empty_list(bind), ")", ":", exp, "=", ">", exp),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -331,10 +331,14 @@ object grammar {
         non_empty_list_matcher(bind_matcher)(bind_list)
           .foldRight(exp_matcher(dep_t)) {
             case ((name, arg_t), exp) => Pi(name, arg_t, exp) } },
-      "fn" -> { case List(_, bind_list, _, _, _, body) =>
-        non_empty_list_matcher(bind_matcher)(bind_list)
-          .foldRight(exp_matcher(body)) {
-            case ((name, arg_t), exp) => Fn(name, arg_t, exp) } },
+      "fn" -> { case List(_, bind_list, _, _, dep_t, _, _, body) =>
+        val (pi, fn) = non_empty_list_matcher(bind_matcher)(bind_list)
+          .foldRight((exp_matcher(dep_t), exp_matcher(body))) {
+            case ((name, arg_t), (dep_t, body)) =>
+              val pi = Pi(name, arg_t, dep_t)
+              val fn = Fn(name, arg_t, dep_t, body)
+              (pi, fn) }
+        fn },
     ))
 
 

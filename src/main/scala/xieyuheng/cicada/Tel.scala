@@ -9,20 +9,25 @@ case class Tel(
 ) {
 
   def put(arg: Val): Either[Err, Tel] = {
-    val i = fields.indexWhere {
+    val tel = this.self_put()
+
+    val i = tel.fields.indexWhere {
       case (_, _, _, _, None) => true
       case (_, _, _, _, Some(_)) => false
     }
 
     if (i == -1) {
-      Left(Err(s"the telescope is full, fail to put: ${arg}"))
+      Left(Err(
+        s"[tel.put]\n" ++
+          s"the telescope is full\n" ++
+          s"fail to put arg: ${pretty_val(arg)}\n" ++
+          s"tel: ${pretty_tel(tel)}\n"))
     } else {
-      val (k, te, mve, _, _) = fields(i)
-      val new_fields = util.list_replace(fields, i,
-        (k, te, mve, Some(eval(te, env)), Some(arg)))
-      Right(
-        Tel(new_fields, env.ext_val(k, arg))
-          .self_put())
+      val (k, te, mve, _, _) = tel.fields(i)
+      val new_fields = util.list_replace(tel.fields, i,
+        (k, te, mve, Some(eval(te, tel.env)), Some(arg)))
+      val new_tel = Tel(new_fields, tel.env.ext_val(k, arg))
+      Right(new_tel.self_put())
     }
   }
 
@@ -46,17 +51,36 @@ case class Tel(
     }
   }
 
-  self_put()
-
   def force(): Tel = {
-    fields.foldLeft(this) {
+    println(s"[tel.force] begin")
+    println(s"tel: ${pretty_tel(this)}")
+    val forced = fields.foldLeft(this) {
       case (tel, (k, te, mve, Some(tv), None)) =>
+        // println(s"(tel, (k, te, mve, Some(tv), None))")
+        // println(s"--- ${pretty_tel(util.result_unwrap(tel.put(gen_neu_val(k, tv, None))))}")
         util.result_unwrap(tel.put(gen_neu_val(k, tv, None)))
       case (tel, (k, te, mve, None, None)) =>
+        // println(s"(tel, (k, te, mve, None, None))")
+        // println(s"k: ${k}")
+        // println(s"te: ${pretty_exp(te)}")
+        // println(s"--- ${pretty_tel(util.result_unwrap(tel.put(gen_neu_val(k, eval(te, tel.env), None))))}")
         util.result_unwrap(tel.put(gen_neu_val(k, eval(te, tel.env), None)))
       case (tel, (k, te, mve, mtv, Some(vv))) =>
-        tel
+        // println(s"(tel, (k, te, mve, mtv, Some(vv)))")
+        // println(s"k: ${k}")
+        // println(s"te: ${pretty_exp(te)}")
+        // println(s"mve: ${mve}")
+        // println(s"mtv: ${mtv}")
+        // println(s"vv: ${pretty_val(vv)}")
+        // TODO in some case vv is put to the tel, but the tel.env is not extended
+        //   should be enough to return `tel`
+        //   but I did an ad hoc fix to extend env
+        // tel
+        Tel(tel.fields, tel.env.ext_val(k, vv))
+
     }
+    println(s"[tel.force] end")
+    forced
   }
 
   def dot(field_name: String): Val = {
@@ -84,7 +108,7 @@ case class Tel(
       case Some((k, te, mve, Some(tv), mvv)) =>
         tv
       case Some((k, te, mve, None, mvv)) =>
-        ???
+        eval(te, this.env)
       case _ =>
         println(s"[dot_type fail]")
         println(s"can not find field_name: ${field_name}")
@@ -100,6 +124,7 @@ object Tel {
     fields: List[(String, Exp, Option[Exp])],
     env: Env,
   ): Tel = {
+
     val val_fiedls = fields.map { case (k, te, mve) => (k, te, mve, None, None) }
     Tel(val_fiedls, env)
   }

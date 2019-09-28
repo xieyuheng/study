@@ -80,7 +80,8 @@ object eval {
       case neu: Neu =>
         NeuAp(neu, arg)
       case _ =>
-        println(s"eval can not apply ${target}")
+        println(s"[eval fail]")
+        println(s"can not apply ${target}")
         throw new Exception()
     }
   }
@@ -140,7 +141,8 @@ object eval {
       case neu: Neu =>
         NeuDot(neu, field_name)
       case _ =>
-        println(s"eval can not apply dot ${target}")
+        println(s"[eval fail]")
+        println(s"can not apply dot ${target}")
         throw new Exception()
     }
   }
@@ -156,7 +158,8 @@ object eval {
       case neu: Neu =>
         NeuDotType(neu, field_name)
       case _ =>
-        println(s"eval can not apply dot type ${target}")
+        println(s"[eval fail]")
+        println(s"can not apply dot type ${target}")
         throw new Exception()
     }
   }

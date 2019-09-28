@@ -34,11 +34,22 @@ object infer {
         // ValFn(arg_name, arg_t_val, dep_t_clo, body_clo)
         ValPi(arg_name, arg_t_val, dep_t_clo)
       case Ap(target, arg) =>
+        println(s"[infer] on Ap")
+        println(s"target: ${pretty_exp(target)}")
+        println(s"arg: ${pretty_exp(arg)}")
+        println(s"infer(target, env): ${pretty_val(infer(target, env))}")
+        println(s"infer(arg, env): ${pretty_val(infer(arg, env))}")
         ap_exe(infer(target, env), infer(arg, env))
       case Choice(path, map: Map[String, Exp]) =>
         choice_exe(path, map, env)
       case Dot(target, field_name) =>
-        dot_exe(infer(target, env), field_name)
+        println(s"[infer] on Dot")
+        println(s"target: ${pretty_exp(target)}")
+        println(s"field_name: ${field_name}")
+        println(s"infer(target, env): ${pretty_val(infer(target, env))}")
+        println(s"dot_type_exe(infer(target, env), field_name): ${pretty_val(dot_type_exe(infer(target, env), field_name))}")
+        // dot_exe(infer(target, env), field_name)
+        dot_type_exe(infer(target, env), field_name)
       case DotType(target, field_name) =>
         dot_type_exe(infer(target, env), field_name)
       case Let(decl, body) =>
@@ -81,6 +92,10 @@ object infer {
       case ValClub(name, members, tel) =>
         ValClub(name, members, util.result_unwrap(tel.put(arg)))
       case ValMember(name, club_name, tel) =>
+        println(s"[ap_exe]")
+        println(s"name: ${name}")
+        println(s"club_name: ${club_name}")
+        println(s"tel: ${pretty_tel(tel)}")
         ValMember(name, club_name, util.result_unwrap(tel.put(arg)))
       case ValRecord(name, super_names, tel) =>
         ValRecord(name, super_names, util.result_unwrap(tel.put(arg)))
@@ -147,7 +162,8 @@ object infer {
       case neu: Neu =>
         NeuDot(neu, field_name)
       case _ =>
-        println(s"infer can not apply dot ${target}")
+        println(s"[infer fail]")
+        println(s"can not apply dot ${target}")
         throw new Exception()
     }
   }
@@ -155,15 +171,16 @@ object infer {
   def dot_type_exe(target: Val, field_name: String): Val = {
     target match {
       case ValClub(name, members, tel) =>
-        tel.dot_type(field_name)
+        tel.force().dot_type(field_name)
       case ValMember(name, club_name, tel) =>
-        tel.dot_type(field_name)
+        tel.force().dot_type(field_name)
       case ValRecord(name, super_names, tel) =>
-        tel.dot_type(field_name)
+        tel.force().dot_type(field_name)
       case neu: Neu =>
         NeuDotType(neu, field_name)
       case _ =>
-        println(s"infer can not apply dot type ${target}")
+        println(s"[infer fail]")
+        println(s"can not apply dot type ${target}")
         throw new Exception()
     }
   }
@@ -201,13 +218,13 @@ object infer {
         infer_neu(target).flatMap {
           case Right(t) =>
             map.toList.map { case (choice_name, body) =>
+              // println(s"choice_name: ${choice_name}")
+              // println(s"body: ${pretty_exp(body)}")
               // refine_choice(t, choice_name, body, path, env).map {
               //   case value =>
               //     println(s"target: ${pretty_neu(target)}")
               //     println(s"path: ${pretty_path(path)}")
               //     println(s"path_type: ${pretty_val(t)}")
-              //     println(s"choice_name: ${choice_name}")
-              //     println(s"body: ${pretty_exp(body)}")
               //     println(s"refined_body: ${pretty_val(value)}")
               //     println() }
               refine_choice(t, choice_name, body, path, env) }
@@ -266,12 +283,15 @@ object infer {
         for {
           refined_val <- join_val(t, value)
           refined_env <- env.ext_by_path(path, refined_val)
-          // _ = {
-          //   println(s"- t: ${pretty_val(t)}")
-          //   println(s"- choice_name: ${choice_name}")
-          //   println(s"- refined_val: ${pretty_val(refined_val)}")
-          //   println(s"- refined_path_val: ${pretty_val(eval(Exp.from_path(path), refined_env))}")
-          // }
+          _ = {
+            println(s"[refine_choice]")
+            println(s"t: ${pretty_val(t)}")
+            println(s"choice_name: ${choice_name}")
+            println(s"refined_val: ${pretty_val(refined_val)}")
+            println(s"refined_path_val: ${pretty_val(eval(Exp.from_path(path), refined_env))}")
+            println(s"body: ${pretty_exp(body)}")
+            println(s"infer(body, refined_env): ${pretty_val(infer(body, refined_env))}")
+          }
         } yield infer(body, refined_env)
       case None =>
         Left(Err(

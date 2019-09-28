@@ -14,6 +14,7 @@ final case class DotType(target: Exp, field_name: String) extends Exp
 final case class Let(decl: Decl, body: Exp) extends Exp
 
 object Exp {
+
   def from_path(path: List[String]): Exp = {
     assert(path.length > 0)
     val init: Exp = Var(path.head)

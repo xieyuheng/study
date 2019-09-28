@@ -201,7 +201,8 @@ object fulfill {
             List(Left(err))
           case Right(ValPi(arg_name, arg_t, dep_t: Clo)) =>
             List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
-          case Right(ValFn(arg_name, arg_t, body: Clo)) =>
+          case Right(ValFn(arg_name, arg_t, dep_t: Clo, body: Clo)) =>
+            // TODO
             List(fulfill_val(arg, arg_t).flatMap { _ => Right(body(arg)) })
           case Right(ValClub(name, members, tel)) =>
             List(tel.put(arg).flatMap { case new_tel =>

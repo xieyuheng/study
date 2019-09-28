@@ -7,7 +7,7 @@ import scala.annotation.tailrec
 sealed trait Norm
 final case class NormType(level: Int) extends Norm
 final case class NormPi(arg_name: String, arg_t: Norm, dep_t: Norm) extends Norm
-final case class NormFn(arg_name: String, arg_t: Norm, body: Norm) extends Norm
+final case class NormFn(arg_name: String, arg_t: Norm, dep_t: Norm, body: Norm) extends Norm
 final case class NormClub(name: String, members: List[Member], norm_tel: NormTel) extends Norm
 final case class NormMember(name: String, club_name: String, norm_tel: NormTel) extends Norm
 final case class NormRecord(name: String, super_names: List[String], norm_tel: NormTel) extends Norm

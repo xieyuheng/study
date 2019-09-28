@@ -56,14 +56,14 @@ case class Module(file_path: String) {
     top_list.foreach {
       case TopDecl(decl) =>
         env = env.ext_decl(decl)
-        check_decl(decl, env) match {
-          case Right(()) =>
-          case Left(err) =>
-            println(s"[check_decl fail]")
-            println(s"decl: ${pretty_decl(decl)}")
-            println(s"error: ${err.msg}")
-            throw new Exception()
-        }
+        // check_decl(decl, env) match {
+        //   case Right(()) =>
+        //   case Left(err) =>
+        //     println(s"[check_decl fail]")
+        //     println(s"decl: ${pretty_decl(decl)}")
+        //     println(s"error: ${err.msg}")
+        //     throw new Exception()
+        // }
       case TopImportAll(path) =>
         env = import_file(path, env)
       case TopShow(exp) =>

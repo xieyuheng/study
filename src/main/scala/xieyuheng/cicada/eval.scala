@@ -19,10 +19,13 @@ object eval {
         ValType(level)
       case Pi(arg_name, arg_t, dep_t) =>
         val arg_t_val = eval(arg_t, env)
-        ValPi(arg_name, arg_t_val, Clo(arg_name, arg_t_val, dep_t, env))
-      case Fn(arg_name, arg_t, body) =>
+        val dep_t_clo = Clo(arg_name, arg_t_val, dep_t, env)
+        ValPi(arg_name, arg_t_val, dep_t_clo)
+      case Fn(arg_name, arg_t, dep_t, body) =>
         val arg_t_val = eval(arg_t, env)
-        ValFn(arg_name, arg_t_val, Clo(arg_name, arg_t_val, body, env))
+        val dep_t_clo = Clo(arg_name, arg_t_val, dep_t, env)
+        val body_clo = Clo(arg_name, arg_t_val, body, env)
+        ValFn(arg_name, arg_t_val, dep_t_clo, body_clo)
       case Ap(target, arg) =>
         Ap.ap(eval(target, env), eval(arg, env))
       case Choice(path, map: Map[String, Exp]) =>
@@ -44,8 +47,10 @@ object eval {
         println(s"${name} is typed by undefined")
         throw new Exception()
       case DeclFn(name, args, dep_t, body) =>
-        val fn = args.foldRight(body) { case ((arg_name, arg_t), body) =>
-          Fn(arg_name, arg_t, body) }
+        val (pi, fn) = args.foldRight((dep_t, body)) { case ((arg_name, arg_t), (dep_t, body)) =>
+          val pi = Pi(arg_name, arg_t, dep_t)
+          val fn = Fn(arg_name, arg_t, dep_t, body)
+          (pi, fn) }
         eval(fn, env)
       case DeclFnType(name, args, dep_t) =>
         println(s"${name} is typed by undefined")

@@ -1,5 +1,7 @@
 package xieyuheng.cicada
 
+import pretty._
+
 object infer {
 
   def apply(exp: Exp, env: Env): Val =
@@ -29,13 +31,13 @@ object infer {
         // ValFn(arg_name, arg_t_val, dep_t_clo, body_clo)
         ValPi(arg_name, arg_t_val, dep_t_clo)
       case Ap(target, arg) =>
-        Ap.ap(infer(target, env), infer(arg, env))
+        ap_exe(infer(target, env), infer(arg, env))
       case Choice(path, map: Map[String, Exp]) =>
-        Choice.ap(path, map, env)
+        choice_exe(path, map, env)
       case Dot(target, field_name) =>
-        Dot.ap(infer(target, env), field_name)
+        dot_exe(infer(target, env), field_name)
       case DotType(target, field_name) =>
-        DotType.ap(infer(target, env), field_name)
+        dot_type_exe(infer(target, env), field_name)
       case Let(decl, body) =>
         infer(body, env.ext_decl(decl))
     }
@@ -63,6 +65,103 @@ object infer {
       case DeclRecord(name, super_names, decls) =>
         val record_val = ValRecord(name, super_names, Tel.from_decls(decls, env))
         record_val
+    }
+  }
+
+
+  def ap_exe(target: Val, arg: Val): Val = {
+    target match {
+      case ValPi(arg_name: String, arg_t: Val, dep_t: Clo) =>
+        dep_t(arg)
+      case ValFn(arg_name: String, arg_t: Val, dep_t: Clo, body: Clo) =>
+        dep_t(arg)
+      case ValClub(name, members, tel) =>
+        ValClub(name, members, util.result_unwrap(tel.put(arg)))
+      case ValMember(name, club_name, tel) =>
+        ValMember(name, club_name, util.result_unwrap(tel.put(arg)))
+      case ValRecord(name, super_names, tel) =>
+        ValRecord(name, super_names, util.result_unwrap(tel.put(arg)))
+      case neu: Neu =>
+        NeuAp(neu, arg)
+      case _ =>
+        println(s"infer can not apply ${target}")
+        throw new Exception()
+    }
+  }
+
+  def path_as_exp(path: List[String]): Exp = {
+    assert(path.length > 0)
+    val init: Exp = Var(path.head)
+    path.tail.foldLeft(init) { case (exp, field_name) => Dot(exp, field_name) }
+  }
+
+  def choice_exe(path: List[String], map: Map[String, Exp], env: Env): Val = {
+    val exp = Exp.from_path(path)
+    val value = infer(exp, env)
+    // TODO handle subtype relation in choice
+    value match {
+      case ValClub(name: String, members: List[Member], tel: Tel) =>
+        map.get(name) match {
+          case Some(body) => infer(body, env)
+          case None =>
+            println(s"choice mismatch: ${pretty_val(value)}")
+            println(s"${pretty_exp_case(map)}")
+            throw new Exception()
+        }
+      case ValMember(name: String, club_name: String, tel: Tel) =>
+        map.get(name) match {
+          case Some(body) => infer(body, env)
+          case None =>
+            println(s"choice mismatch: ${pretty_val(value)}")
+            println(s"${pretty_exp_case(map)}")
+            throw new Exception()
+        }
+      case ValRecord(name: String, super_names: List[String], tel: Tel) =>
+        map.get(name) match {
+          case Some(body) => infer(body, env)
+          case None =>
+            println(s"choice mismatch: ${pretty_val(value)}")
+            println(s"${pretty_exp_case(map)}")
+            throw new Exception()
+        }
+      case neu: Neu =>
+        NeuChoice(neu, path, map, env)
+      case _ =>
+        println(s"choice mismatch: ${pretty_val(value)}")
+        println(s"${pretty_exp_case(map)}")
+        throw new Exception()
+    }
+  }
+
+  def dot_exe(target: Val, field_name: String): Val = {
+    target match {
+      case ValClub(name, members, tel) =>
+        tel.dot(field_name)
+      case ValMember(name, club_name, tel) =>
+        tel.dot(field_name)
+      case ValRecord(name, super_names, tel) =>
+        tel.dot(field_name)
+      case neu: Neu =>
+        NeuDot(neu, field_name)
+      case _ =>
+        println(s"infer can not apply dot ${target}")
+        throw new Exception()
+    }
+  }
+
+  def dot_type_exe(target: Val, field_name: String): Val = {
+    target match {
+      case ValClub(name, members, tel) =>
+        tel.dot_type(field_name)
+      case ValMember(name, club_name, tel) =>
+        tel.dot_type(field_name)
+      case ValRecord(name, super_names, tel) =>
+        tel.dot_type(field_name)
+      case neu: Neu =>
+        NeuDotType(neu, field_name)
+      case _ =>
+        println(s"infer can not apply dot type ${target}")
+        throw new Exception()
     }
   }
 

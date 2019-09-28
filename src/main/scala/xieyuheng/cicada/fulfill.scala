@@ -221,15 +221,15 @@ object fulfill {
         infer_neu(target).flatMap {
           case Right(t) =>
             map.toList.map { case (choice_name, body) =>
-              refine_choice(t, choice_name, body, path, env).map {
-                case value =>
-                  println(s"target: ${pretty_neu(target)}")
-                  println(s"path: ${pretty_path(path)}")
-                  println(s"path_type: ${pretty_val(t)}")
-                  println(s"choice_name: ${choice_name}")
-                  println(s"body: ${pretty_exp(body)}")
-                  println(s"refined_body: ${pretty_val(value)}")
-                  println() }
+              // refine_choice(t, choice_name, body, path, env).map {
+              //   case value =>
+              //     println(s"target: ${pretty_neu(target)}")
+              //     println(s"path: ${pretty_path(path)}")
+              //     println(s"path_type: ${pretty_val(t)}")
+              //     println(s"choice_name: ${choice_name}")
+              //     println(s"body: ${pretty_exp(body)}")
+              //     println(s"refined_body: ${pretty_val(value)}")
+              //     println() }
               refine_choice(t, choice_name, body, path, env) }
           case Left(err) => List(Left(err)) }
       case NeuDot(target: Neu, field_name: String) =>
@@ -290,7 +290,7 @@ object fulfill {
           //   println(s"- t: ${pretty_val(t)}")
           //   println(s"- choice_name: ${choice_name}")
           //   println(s"- refined_val: ${pretty_val(refined_val)}")
-          //   println(s"- refined_path_val: ${pretty_val(eval(Choice.path_as_exp(path), refined_env))}")
+          //   println(s"- refined_path_val: ${pretty_val(eval(Exp.from_path(path), refined_env))}")
           // }
         } yield infer(body, refined_env)
       case None =>

@@ -1,3 +1,5 @@
+import * from "./bool.cic"
+
 datatype nat_t {
   case zero_t
   case succ_t(prev: nat_t)
@@ -57,3 +59,9 @@ let ten: nat_t = succ_t(nine)
 @assert_eq nat_factorial(one) one
 @assert_eq nat_factorial(two) two
 @assert_eq nat_factorial(three) six
+
+@assert_eq nat_even_p(one) false
+@assert_eq nat_even_p(two) true
+@assert_eq nat_even_p(three) false
+@assert_eq nat_even_p(four) true
+@assert_eq nat_even_p(five) false

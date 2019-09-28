@@ -202,8 +202,7 @@ object fulfill {
           case Right(ValPi(arg_name, arg_t, dep_t: Clo)) =>
             List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
           case Right(ValFn(arg_name, arg_t, dep_t: Clo, body: Clo)) =>
-            // TODO
-            List(fulfill_val(arg, arg_t).flatMap { _ => Right(body(arg)) })
+            List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
           case Right(ValClub(name, members, tel)) =>
             List(tel.put(arg).flatMap { case new_tel =>
               Right(ValClub(name, members, new_tel)) })
@@ -293,7 +292,7 @@ object fulfill {
           //   println(s"- refined_val: ${pretty_val(refined_val)}")
           //   println(s"- refined_path_val: ${pretty_val(eval(Choice.path_as_exp(path), refined_env))}")
           // }
-        } yield eval(body, refined_env)
+        } yield infer(body, refined_env)
       case None =>
         Left(Err(
           s"[refine_choice fail]\n" ++

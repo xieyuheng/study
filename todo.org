@@ -1,17 +1,3 @@
-* cicada
-- let's do a check instead of fulfill
-- [note] information lost
-  x.length and y.length is infered as the same
-- @assert_not_check for testing
-- [maybe] no dot_type
-- subtype relation between class and supers
-- value of a field must be full value -- full_p, part_p
-- [note] we do not need readback to implement fulfill
-  - we only need readback to handle eqv_t
-- [note] is it ok to not use NormEnv in NormTel and NormNeuChoice ?
-- string_t
-- check undefined during top loading
-- termination check
 * tartlet
 - why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie
@@ -34,6 +20,20 @@
   - write some notes
   - Norm do not use Pattern
   - note about how letrec is handled at lookup-time
+* cicada
+- let's do a check instead of fulfill
+- [note] information lost
+  x.length and y.length is infered as the same
+- @assert_not_check for testing
+- [maybe] no dot_type
+- subtype relation between class and supers
+- value of a field must be full value -- full_p, part_p
+- [note] we do not need readback to implement fulfill
+  - we only need readback to handle eqv_t
+- [note] is it ok to not use NormEnv in NormTel and NormNeuChoice ?
+- string_t
+- check undefined during top loading
+- termination check
 * module system
 - module as value with opaque module_t is not enough -- learn from EOPL
 * partech

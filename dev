@@ -15,13 +15,20 @@ get_classpath () {
 t () {
     rm -f target/universal/stage/bin/*
 
+    # sbt stage && \
+    #     test_general && \
+    #     test_tartlet && \
+    #     test_lambda && \
+    #     test_syst && \
+    #     test_minitt && \
+    #     test_cicada
+
     sbt stage && \
         test_general && \
         test_tartlet && \
         test_lambda && \
         test_syst && \
-        test_minitt && \
-        test_cicada
+        test_minitt
 }
 
 test_general () {
@@ -68,37 +75,37 @@ test_minitt () {
     test minitt
 }
 
-test_cicada () {
-    name=cicada
+# test_cicada () {
+#     name=cicada
 
-    prog=./target/universal/stage/bin/${name}
+#     prog=./target/universal/stage/bin/${name}
 
-    for file in $(find . | grep "^\./example/${name}/" | grep "\.cic$")
-    do
-        echo ""
-        echo "[${name}] $file"
-        if ! time $prog --eval $file
-        then
-            exit 1
-        fi
-    done
-}
+#     for file in $(find . | grep "^\./example/${name}/" | grep "\.cic$")
+#     do
+#         echo ""
+#         echo "[${name}] $file"
+#         if ! time $prog --eval $file
+#         then
+#             exit 1
+#         fi
+#     done
+# }
 
-fast_test_cicada () {
-    name=cicada
+# fast_test_cicada () {
+#     name=cicada
 
-    prog=./target/linux/bin/${name}
+#     prog=./target/linux/bin/${name}
 
-    for file in $(find . | grep "^\./example/${name}/" | grep "\.cic$")
-    do
-        echo ""
-        echo "[${name}] $file"
-        if ! time $prog --eval $file
-        then
-            exit 1
-        fi
-    done
-}
+#     for file in $(find . | grep "^\./example/${name}/" | grep "\.cic$")
+#     do
+#         echo ""
+#         echo "[${name}] $file"
+#         if ! time $prog --eval $file
+#         then
+#             exit 1
+#         fi
+#     done
+# }
 
 build_native_image () {
     mkdir -p target/linux/bin/
@@ -132,17 +139,22 @@ build_minitt () {
     native-image --server-shutdown-all
 }
 
-build_cicada () {
-    build_native_image cicada
-    native-image --server-shutdown-all
-}
+# build_cicada () {
+#     build_native_image cicada
+#     native-image --server-shutdown-all
+# }
 
 build_all () {
+    # build_native_image lambda && \
+    #     build_native_image syst && \
+    #     build_native_image tartlet && \
+    #     build_native_image minitt && \
+    #     build_native_image cicada
+
     build_native_image lambda && \
         build_native_image syst && \
         build_native_image tartlet && \
-        build_native_image minitt && \
-        build_native_image cicada
+        build_native_image minitt
 
     native-image --server-shutdown-all
 }

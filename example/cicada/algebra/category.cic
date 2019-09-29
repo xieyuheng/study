@@ -5,7 +5,14 @@ class category_t {
 
   fn id(a: object_t): morphism_t(a, a)
 
-  fn compose(f: morphism_t(a, b), g: morphism_t(b, c)): morphism_t(a, c)
+  // fn compose(f: morphism_t(a, b), g: morphism_t(b, c)): morphism_t(a, c)
+  fn compose(
+    a: object_t,
+    b: object_t,
+    c: object_t,
+    f: morphism_t(a, b),
+    g: morphism_t(b, c),
+  ): morphism_t(a, c)
 
   fn left_id(f: morphism_t(a, b)): eqv_t(compose(id(a), f), f)
   fn right_id(f: morphism_t(a, b)): eqv_t(compose(f, id(b)), f)

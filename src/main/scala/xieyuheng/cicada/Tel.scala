@@ -52,8 +52,8 @@ case class Tel(
   }
 
   def force(): Tel = {
-    println(s"[tel.force] begin")
-    println(s"tel: ${pretty_tel(this)}")
+    //println(s"[tel.force] begin")
+    //println(s"tel: ${pretty_tel(this)}")
     val forced = fields.foldLeft(this) {
       case (tel, (k, te, mve, Some(tv), None)) =>
         // println(s"(tel, (k, te, mve, Some(tv), None))")
@@ -79,7 +79,7 @@ case class Tel(
         Tel(tel.fields, tel.env.ext_val(k, vv))
 
     }
-    println(s"[tel.force] end")
+    // println(s"[tel.force] end")
     forced
   }
 

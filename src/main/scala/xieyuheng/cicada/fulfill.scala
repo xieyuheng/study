@@ -13,11 +13,6 @@ object fulfill {
           _ <- fulfill_val(y.arg_t, x.arg_t)
           _ <- fulfill_clo(x.dep_t, y.dep_t)
         } yield ()
-      case (x: ValFn, y: ValFn) =>
-        for {
-          _ <- fulfill_val(y.arg_t, x.arg_t)
-          _ <- fulfill_clo(x.body, y.body)
-        } yield ()
       case (x: ValFn, y: ValPi) =>
         for {
           _ <- fulfill_val(y.arg_t, x.arg_t)
@@ -129,11 +124,19 @@ object fulfill {
                 s"y: ${pretty_val(y)}\n"))
         }
       case (x: Neu, y) =>
+        println(s"[fulfill_val]")
+        println(s"(x: Neu, y)")
+        println(s"x: ${pretty_val(x)}")
+        println(s"y: ${pretty_val(y)}")
         val list = infer_neu(x).map {
           case result =>
             result.flatMap { case x => fulfill_val(x, y) } }
         first_err(list)
       case (x, y: Neu) =>
+        println(s"[fulfill_val]")
+        println(s"(x, y: Neu)")
+        println(s"x: ${pretty_val(x)}")
+        println(s"y: ${pretty_val(y)}")
         val list = infer_neu(y).map {
           case result =>
             result.flatMap { case y => fulfill_val(x, y) } }
@@ -141,7 +144,6 @@ object fulfill {
       case _ =>
         Left(Err(
           s"[fulfill_val fail]\n" ++
-            s"not handled case\n" ++
             s"x: ${pretty_val(x)}\n" ++
             s"y: ${pretty_val(y)}\n"))
     }

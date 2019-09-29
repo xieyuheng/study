@@ -19,7 +19,7 @@ fn vec_append(
   n: nat_t,
   x: vec_t(A, m),
   y: vec_t(A, n),
-): vec_t(A, nat_add(m, n)) = {
+): vec_t(A, n) = {
   x choice {
     case vec_null_t => y
     case vec_cons_t => vec_cons_t(

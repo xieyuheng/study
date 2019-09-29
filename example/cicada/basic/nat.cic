@@ -26,16 +26,6 @@ fn nat_factorial(x: nat_t): nat_t = {
   }
 }
 
-fn nat_even_p(x: nat_t): bool_t = {
-  x choice {
-    case zero_t => true_t
-    case succ_t => x.prev choice {
-      case zero_t => false_t
-      case succ_t => nat_even_p(x.prev.prev)
-    }
-  }
-}
-
 let zero: nat_t = zero_t
 let one: nat_t = succ_t(zero_t)
 let two: nat_t = succ_t(one)
@@ -59,6 +49,16 @@ let ten: nat_t = succ_t(nine)
 @assert_eq nat_factorial(one) one
 @assert_eq nat_factorial(two) two
 @assert_eq nat_factorial(three) six
+
+fn nat_even_p(x: nat_t): bool_t = {
+  x choice {
+    case zero_t => true_t
+    case succ_t => x.prev choice {
+      case zero_t => false_t
+      case succ_t => nat_even_p(x.prev.prev)
+    }
+  }
+}
 
 @assert_eq nat_even_p(one) false
 @assert_eq nat_even_p(two) true

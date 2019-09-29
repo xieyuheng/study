@@ -101,6 +101,7 @@ object eval {
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
+            println(s"[eval choice_exe]")
             println(s"choice mismatch: ${pretty_val(value)}")
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
@@ -109,6 +110,7 @@ object eval {
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
+            println(s"[eval choice_exe]")
             println(s"choice mismatch: ${pretty_val(value)}")
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
@@ -117,6 +119,7 @@ object eval {
         map.get(name) match {
           case Some(body) => eval(body, env)
           case None =>
+            println(s"[eval choice_exe]")
             println(s"choice mismatch: ${pretty_val(value)}")
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
@@ -124,6 +127,7 @@ object eval {
       case neu: Neu =>
         NeuChoice(neu, path, map, env)
       case _ =>
+        println(s"[eval choice_exe]")
         println(s"choice mismatch: ${pretty_val(value)}")
         println(s"${pretty_exp_case(map)}")
         throw new Exception()

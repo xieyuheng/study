@@ -31,24 +31,23 @@ object infer {
         val dep_t_clo = Clo(arg_name, arg_t_val, dep_t, env)
         val body_clo = Clo(arg_name, arg_t_val, body, env)
         // NOTE currently the only different from `eval`
-        // ValFn(arg_name, arg_t_val, dep_t_clo, body_clo)
         ValPi(arg_name, arg_t_val, dep_t_clo)
+        // ValFn(arg_name, arg_t_val, dep_t_clo, body_clo)
       case Ap(target, arg) =>
-        println(s"[infer] on Ap")
-        println(s"target: ${pretty_exp(target)}")
-        println(s"arg: ${pretty_exp(arg)}")
-        println(s"infer(target, env): ${pretty_val(infer(target, env))}")
-        println(s"infer(arg, env): ${pretty_val(infer(arg, env))}")
+        // println(s"[infer] on Ap")
+        // println(s"target: ${pretty_exp(target)}")
+        // println(s"arg: ${pretty_exp(arg)}")
+        // println(s"infer(target, env): ${pretty_val(infer(target, env))}")
+        // println(s"infer(arg, env): ${pretty_val(infer(arg, env))}")
         ap_exe(infer(target, env), infer(arg, env))
       case Choice(path, map: Map[String, Exp]) =>
         choice_exe(path, map, env)
       case Dot(target, field_name) =>
-        println(s"[infer] on Dot")
-        println(s"target: ${pretty_exp(target)}")
-        println(s"field_name: ${field_name}")
-        println(s"infer(target, env): ${pretty_val(infer(target, env))}")
-        println(s"dot_type_exe(infer(target, env), field_name): ${pretty_val(dot_type_exe(infer(target, env), field_name))}")
-        // dot_exe(infer(target, env), field_name)
+        // println(s"[infer] on Dot")
+        // println(s"target: ${pretty_exp(target)}")
+        // println(s"field_name: ${field_name}")
+        // println(s"infer(target, env): ${pretty_val(infer(target, env))}")
+        // println(s"dot_type_exe(infer(target, env), field_name): ${pretty_val(dot_type_exe(infer(target, env), field_name))}")
         dot_type_exe(infer(target, env), field_name)
       case DotType(target, field_name) =>
         dot_type_exe(infer(target, env), field_name)
@@ -92,10 +91,10 @@ object infer {
       case ValClub(name, members, tel) =>
         ValClub(name, members, util.result_unwrap(tel.put(arg)))
       case ValMember(name, club_name, tel) =>
-        println(s"[ap_exe]")
-        println(s"name: ${name}")
-        println(s"club_name: ${club_name}")
-        println(s"tel: ${pretty_tel(tel)}")
+        // println(s"[ap_exe]")
+        // println(s"name: ${name}")
+        // println(s"club_name: ${club_name}")
+        // println(s"tel: ${pretty_tel(tel)}")
         ValMember(name, club_name, util.result_unwrap(tel.put(arg)))
       case ValRecord(name, super_names, tel) =>
         ValRecord(name, super_names, util.result_unwrap(tel.put(arg)))
@@ -122,6 +121,7 @@ object infer {
         map.get(name) match {
           case Some(body) => infer(body, env)
           case None =>
+            println(s"[infer choice_exe]")
             println(s"choice mismatch: ${pretty_val(value)}")
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
@@ -130,6 +130,7 @@ object infer {
         map.get(name) match {
           case Some(body) => infer(body, env)
           case None =>
+            println(s"[infer choice_exe]")
             println(s"choice mismatch: ${pretty_val(value)}")
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
@@ -138,6 +139,7 @@ object infer {
         map.get(name) match {
           case Some(body) => infer(body, env)
           case None =>
+            println(s"[infer choice_exe]")
             println(s"choice mismatch: ${pretty_val(value)}")
             println(s"${pretty_exp_case(map)}")
             throw new Exception()
@@ -145,6 +147,7 @@ object infer {
       case neu: Neu =>
         NeuChoice(neu, path, map, env)
       case _ =>
+        println(s"[infer choice_exe]")
         println(s"choice mismatch: ${pretty_val(value)}")
         println(s"${pretty_exp_case(map)}")
         throw new Exception()
@@ -154,11 +157,11 @@ object infer {
   def dot_exe(target: Val, field_name: String): Val = {
     target match {
       case ValClub(name, members, tel) =>
-        tel.dot(field_name)
+        tel.dot_type(field_name)
       case ValMember(name, club_name, tel) =>
-        tel.dot(field_name)
+        tel.dot_type(field_name)
       case ValRecord(name, super_names, tel) =>
-        tel.dot(field_name)
+        tel.dot_type(field_name)
       case neu: Neu =>
         NeuDot(neu, field_name)
       case _ =>
@@ -198,7 +201,8 @@ object infer {
             List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
             // List(Right(dep_t(arg)))
           case Right(ValFn(arg_name, arg_t, dep_t: Clo, body: Clo)) =>
-            List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
+            // List(fulfill_val(arg, arg_t).flatMap { _ => Right(dep_t(arg)) })
+            List(fulfill_val(arg, arg_t).flatMap { _ => Right(body(arg)) })
             // List(Right(dep_t(arg)))
           case Right(ValClub(name, members, tel)) =>
             List(tel.put(arg).flatMap { case new_tel =>

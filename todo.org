@@ -1,3 +1,4 @@
+- test readback, and try to specify join after readback
 - let's do a check instead of fulfill
 - [maybe] type in env, or ctx of type for check
 * cicada

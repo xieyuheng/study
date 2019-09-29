@@ -1,8 +1,6 @@
 package xieyuheng.cicada
 
-import infer._
 import pretty._
-import fulfill._
 import readback._
 
 object check {
@@ -15,7 +13,7 @@ object check {
       case Var(name: String) =>
         ctx.lookup_type(name) match {
           case Some(u) =>
-            fulfill_val(u, t)
+            subtype_val(u, t)
           case None =>
             Left(Err(
               s"[check fail]\n" ++
@@ -57,7 +55,7 @@ object check {
             val art_t_val = eval(arg_t, env)
             val fresh = gen_fresh(seed, pi.arg_t, Some(pi.arg_name))
             for {
-              _ <- fulfill_val(pi.arg_t, art_t_val)
+              _ <- subtype_val(pi.arg_t, art_t_val)
               _ <- check(
                 seed_inc(seed),
                 env,
@@ -83,9 +81,23 @@ object check {
                 s"t: ${pretty_val(t)}\n"))
         }
       case Choice(path: List[String], map: Map[String, Exp]) =>
-        ???
+        first_err(map.toList.map { case (choice_name, body) =>
+          check_choice(seed, env, ctx, path, choice_name, body, t) })
       case Dot(target: Exp, field_name: String) =>
-        ???
+        infer(seed, env, ctx, target) match {
+          case Left(err) => Left(err)
+          case Right(v: ValClub) =>
+            subtype_val(v.tel.dot_type(field_name), t)
+          case Right(v: ValMember) =>
+            subtype_val(v.tel.dot_type(field_name), t)
+          case Right(v: ValRecord) =>
+            subtype_val(v.tel.dot_type(field_name), t)
+          case Right(_) =>
+            Left(Err(
+              s"[check fail]\n" ++
+                s"exp: ${pretty_exp(exp)}\n" ++
+                s"t: ${pretty_val(t)}\n"))
+        }
       case DotType(target: Exp, field_name: String) =>
         ???
       case Let(decl: Decl, body: Exp) =>
@@ -94,11 +106,94 @@ object check {
   }
 
   def infer(seed: Seed, env: Env, ctx: Ctx, exp: Exp): Either[Err, Val] = {
-    ???
+    exp match {
+      case Var(name: String) =>
+        ctx.lookup_type(name) match {
+          case Some(t) => Right(t)
+          case None =>
+            Left(Err(
+              s"[infer fail]\n" ++
+                s"exp: ${pretty_exp(exp)}\n"))
+        }
+      case Type(level: Int) =>
+        Right(ValType(level + 1))
+      case Pi(arg_name: String, arg_t: Exp, dep_t: Exp) =>
+        for {
+          x <- infer_level(seed, env, ctx, arg_t)
+          y <- infer_level(seed, env, ctx, dep_t)
+        } yield ValType(Math.max(x, y))
+      case Fn(arg_name: String, arg_t: Exp, dep_t: Exp, body: Exp) =>
+        val pi = Pi(arg_name, arg_t, dep_t)
+        Right(eval(pi, env))
+      case Ap(target: Exp, arg: Exp) =>
+        infer(seed, env, ctx, target) match {
+          case Left(err) => Left(err)
+          case Right(pi: ValPi) =>
+            for {
+              _ <- check(seed, env, ctx, arg, pi.arg_t)
+            } yield (pi.dep_t(eval(arg, env)))
+          case Right(_) =>
+            Left(Err(
+              s"[infer fail]\n" ++
+                s"exp: ${pretty_exp(exp)}\n"))
+        }
+      case Choice(path: List[String], map: Map[String, Exp]) =>
+        Left(Err(
+          s"[infer fail]\n" ++
+            s"can not infer choice\n" ++
+            s"exp: ${pretty_exp(exp)}\n"))
+      case Dot(target: Exp, field_name: String) =>
+        infer(seed, env, ctx, target) match {
+          case Left(err) => Left(err)
+          case Right(v: ValClub) =>
+            Right(v.tel.dot_type(field_name))
+          case Right(v: ValMember) =>
+            Right(v.tel.dot_type(field_name))
+          case Right(v: ValRecord) =>
+            Right(v.tel.dot_type(field_name))
+          case Right(_) =>
+            Left(Err(
+              s"[infer fail]\n" ++
+                s"exp: ${pretty_exp(exp)}\n"))
+        }
+      case DotType(target: Exp, field_name: String) =>
+        ???
+      case Let(decl: Decl, body: Exp) =>
+        ???
+    }
+  }
+
+  def infer_level(seed: Seed, env: Env, ctx: Ctx, exp: Exp): Either[Err, Int] = {
+    // TODO
+    Right(1)
   }
 
   def check_level(seed: Seed, env: Env, ctx: Ctx, exp: Exp, level: Int): Either[Err, Unit] = {
+    // TODO
+    Right(())
+  }
+
+  def check_choice(
+    seed: Seed, env: Env, ctx: Ctx,
+    path: List[String], choice_name: String,
+    body: Exp, t: Val,
+  ): Either[Err, Unit] = {
     ???
   }
+
+  def subtype_val(x: Val, y: Val): Either[Err, Unit] = {
+    ???
+  }
+
+  def first_err(list: List[Either[Err, Unit]]): Either[Err, Unit] = {
+    list.find {
+      case Right(_) => false
+      case Left(_) => true
+    } match {
+      case Some(left) => left
+      case None => Right(())
+    }
+  }
+
 
 }

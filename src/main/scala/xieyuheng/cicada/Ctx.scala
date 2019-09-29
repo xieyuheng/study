@@ -24,7 +24,7 @@ sealed trait Ctx {
   def ext_type(name: String, t: Val): Ctx = {
     CtxName(name, t, this)
   }
-  
+
 }
 
 final case class CtxName(name: String, t: Val, rest: Ctx) extends Ctx

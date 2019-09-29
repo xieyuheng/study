@@ -182,7 +182,35 @@ object check {
   }
 
   def subtype_val(x: Val, y: Val): Either[Err, Unit] = {
-    ???
+    (x, y) match {
+      case (x: ValPi, y: ValPi) =>
+        for {
+          _ <- subtype_val(y.arg_t, x.arg_t)
+          _ <- subtype_val(x.dep_t.force(), y.dep_t.force())
+        } yield ()
+      case (x: ValClub, y: ValClub) =>
+        ???
+      case (x: ValMember, y: ValMember) =>
+        ???
+      case (x: ValRecord, y: ValRecord) =>
+        ???
+      case (x: ValMember, y: ValClub) =>
+        ???
+      case (x: ValClub, y: ValPi) =>
+        ???
+      case (x: ValMember, y: ValPi) =>
+        ???
+      case (x: ValRecord, y: ValPi) =>
+        ???
+      case (x, y: ValType) =>
+        // TODO
+        Right(())
+      case _ =>
+        Left(Err(
+          s"[subtype_val fail]" ++
+            s"x: ${pretty_val(x)}" ++
+            s"y: ${pretty_val(y)}"))
+    }
   }
 
   def first_err(list: List[Either[Err, Unit]]): Either[Err, Unit] = {
@@ -194,6 +222,5 @@ object check {
       case None => Right(())
     }
   }
-
 
 }

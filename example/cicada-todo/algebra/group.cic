@@ -27,9 +27,7 @@ let group_category: category_t = category_t(
   group_hom_t,
   id_group_hom,
 
-  (f: group_hom_t(G, H),
-    g: group_hom_t(H, K)
-  ): TODO => group_hom_t(
+  (f: group_hom_t(G, H), g: group_hom_t(H, K)): TODO => group_hom_t(
     G, K,
     (x: G.E): TODO => { g.hom(f.hom(x)) },
     (x: G.E, y: G.E): TODO => same(g.hom(H.mul(f.hom(x), f.hom(y))))),
@@ -37,8 +35,5 @@ let group_category: category_t = category_t(
   (f: group_hom_t(G, H)): TODO => same(f),
   (f: group_hom_t(G, H)): TODO => same(f),
 
-  (f: group_hom_t(a, b),
-    g: group_hom_t(b, c),
-    h: group_hom_t(c, d),
-  ): TODO => refl
+  (f: group_hom_t(a, b), g: group_hom_t(b, c), h: group_hom_t(c, d)): TODO => refl
 )

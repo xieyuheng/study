@@ -2,9 +2,9 @@
 
 @show the(string_t, "abc")
 
-// let x: nat_t = nat_t
+let x: type_t = nat_t
 
-// @show x
+@show x
 
 let three: nat_t =
   succ(succ(succ(zero)))

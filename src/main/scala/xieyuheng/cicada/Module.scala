@@ -4,7 +4,6 @@ import xieyuheng.partech.Parser
 
 import eval._
 import pretty._
-import fulfill._
 import readback._
 
 case class Module(file_path: String) {
@@ -23,47 +22,47 @@ case class Module(file_path: String) {
     env
   }
 
-  def check_decl(decl: Decl, env: Env): Either[Err, Unit] = {
-    decl match {
-      case DeclLet(name: String, t: Exp, body: Exp) =>
-        fulfill_val(eval(body, env), eval(t, env))
-      case DeclLetType(name: String, t: Exp) =>
-        Left(Err(
-          s"[check_decl fail]\n" ++
-            s"top level `let` without body\n" ++
-            s"decl: ${pretty_decl(decl)}\n"))
-      case DeclFn(name: String, args: List[(String, Exp)], dep_t: Exp, body: Exp) =>
-        val pi = args.foldRight(dep_t) {
-          case ((arg_name, arg_t), dep_t) =>
-            Pi(arg_name, arg_t, dep_t) }
-        fulfill_val(eval_decl(decl, env), eval(pi, env))
-      case DeclFnType(name: String, args: List[(String, Exp)], dep_t: Exp) =>
-        Left(Err(
-          s"[check_decl fail]\n" ++
-            s"top level `fn` without body\n" ++
-            s"decl: ${pretty_decl(decl)}\n"))
-      case DeclClub(name: String, members: List[Member], fields: List[(String, Exp, Option[Exp])]) =>
-        // TODO check_club
-        Right(())
-      case DeclRecord(name: String, super_names: List[String], decls: List[Decl]) =>
-        // TODO check_record
-        Right(())
-    }
-  }
+  // def check_decl(decl: Decl, env: Env): Either[Err, Unit] = {
+  //   decl match {
+  //     case DeclLet(name: String, t: Exp, body: Exp) =>
+  //       fulfill_val(eval(body, env), eval(t, env))
+  //     case DeclLetType(name: String, t: Exp) =>
+  //       Left(Err(
+  //         s"[check_decl fail]\n" ++
+  //           s"top level `let` without body\n" ++
+  //           s"decl: ${pretty_decl(decl)}\n"))
+  //     case DeclFn(name: String, args: List[(String, Exp)], dep_t: Exp, body: Exp) =>
+  //       val pi = args.foldRight(dep_t) {
+  //         case ((arg_name, arg_t), dep_t) =>
+  //           Pi(arg_name, arg_t, dep_t) }
+  //       fulfill_val(eval_decl(decl, env), eval(pi, env))
+  //     case DeclFnType(name: String, args: List[(String, Exp)], dep_t: Exp) =>
+  //       Left(Err(
+  //         s"[check_decl fail]\n" ++
+  //           s"top level `fn` without body\n" ++
+  //           s"decl: ${pretty_decl(decl)}\n"))
+  //     case DeclClub(name: String, members: List[Member], fields: List[(String, Exp, Option[Exp])]) =>
+  //       // TODO check_club
+  //       Right(())
+  //     case DeclRecord(name: String, super_names: List[String], decls: List[Decl]) =>
+  //       // TODO check_record
+  //       Right(())
+  //   }
+  // }
 
   def run(): Unit = {
     var env: Env = Env()
     top_list.foreach {
       case TopDecl(decl) =>
         env = env.ext_decl(decl)
-        check_decl(decl, env) match {
-          case Right(()) =>
-          case Left(err) =>
-            println(s"[check_decl fail]")
-            println(s"decl: ${pretty_decl(decl)}")
-            println(s"${err.msg}")
-            throw new Exception()
-        }
+        // check_decl(decl, env) match {
+        //   case Right(()) =>
+        //   case Left(err) =>
+        //     println(s"[check_decl fail]")
+        //     println(s"decl: ${pretty_decl(decl)}")
+        //     println(s"${err.msg}")
+        //     throw new Exception()
+        // }
       case TopImportAll(path) =>
         env = import_file(path, env)
       case TopShow(exp) =>

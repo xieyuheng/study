@@ -87,6 +87,7 @@ object infer {
       case ValPi(arg_name: String, arg_t: Val, dep_t: Clo) =>
         dep_t(arg)
       case ValFn(arg_name: String, arg_t: Val, dep_t: Clo, body: Clo) =>
+        // NOTE this is the different between `eval`
         dep_t(arg)
       case ValClub(name, members, tel) =>
         ValClub(name, members, util.result_unwrap(tel.put(arg)))

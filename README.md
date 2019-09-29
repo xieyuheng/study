@@ -1,9 +1,6 @@
 # cicada
 
-## Getting Start
-
-- Pre-compiled binaries at: [cicada-release](https://github.com/xieyuheng/cicada-release)
-- Example code at: [example](https://github.com/xieyuheng/cicada/tree/master/example)
+Implementation practices.
 
 ## Also Contains
 
@@ -26,6 +23,11 @@
   described in paper: "A simple type-theoretic language: Mini-TT",
   by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
   - no termination check, thus when viewed as logic it is unsound.
+
+## Usage
+
+- Pre-compiled binaries at: [cicada-release](https://github.com/xieyuheng/cicada-release)
+- Example code at: [example](https://github.com/xieyuheng/cicada/tree/master/example)
 
 ## Community
 

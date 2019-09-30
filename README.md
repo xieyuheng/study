@@ -19,7 +19,7 @@
   - for details about system T, see "Gödel’s system T as a precursor of modern type theory", by Gilles Dowek
   - with typed norm-by-eval (a step toward tartlet and pie).
 
-- [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet)
+- [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet):
   Little pie
   - recursion is not an option.
   - from the tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",

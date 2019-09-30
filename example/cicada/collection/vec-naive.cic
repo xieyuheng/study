@@ -1,4 +1,3 @@
-import * from "../basic/bool.cic"
 import * from "../basic/nat.cic"
 
 datatype vec_t(A: type_t, length: nat_t) {

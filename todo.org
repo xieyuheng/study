@@ -1,7 +1,7 @@
 * cicada
 - if we use logic variable
   then we can not use env, we can only use bind
-  otherwise we can not implement join 
+  otherwise we can not implement join
 * tartlet
 - [note] why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie

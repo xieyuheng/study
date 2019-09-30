@@ -17,7 +17,6 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.lihaoyi" %% "upickle" % "0.7.1",
   "com.lihaoyi" %% "os-lib" % "0.3.0",
 )
 

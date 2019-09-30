@@ -1,8 +1,3 @@
-* cicada
-- if we use logic variable
-  we still need env to implement eval
-  but we can not use env in member and club, we can only use bind
-  otherwise we can not implement join
 * tartlet
 - [note] why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie

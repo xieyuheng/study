@@ -1,6 +1,8 @@
 # cicada
 
-## Also Contains
+programming language implementation practices.
+
+## Contains
 
 ### parsing techniques
 

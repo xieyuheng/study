@@ -1,4 +1,4 @@
-package xieyuheng.cicada
+package xieyuheng.cicada.telescope
 
 import pretty._
 import readback._

@@ -1,4 +1,4 @@
-package xieyuheng.cicada
+package xieyuheng.cicada.telescope
 
 sealed trait Decl {
   def name: String

@@ -1,4 +1,4 @@
-package xieyuheng.cicada
+package xieyuheng.cicada.telescope
 
 import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._

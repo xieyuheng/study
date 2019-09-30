@@ -1,4 +1,4 @@
-package xieyuheng.cicada
+package xieyuheng.cicada.telescope
 
 sealed trait Top
 final case class TopDecl(decl: Decl) extends Top

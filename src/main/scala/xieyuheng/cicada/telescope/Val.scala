@@ -1,4 +1,4 @@
-package xieyuheng.cicada
+package xieyuheng.cicada.telescope
 
 sealed trait Val
 final case class ValType(level: Int) extends Val

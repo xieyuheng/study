@@ -28,7 +28,13 @@ fn vec_append(
   }
 }
 
-fn vec_map(A: type_t, B: type_t, n: nat_t, f: (A) -> B, vec: vec_t(A, n)): vec_t(B, n) = {
+fn vec_map(
+  A: type_t,
+  B: type_t,
+  n: nat_t,
+  f: (A) -> B,
+  vec: vec_t(A, n),
+): vec_t(B, n) = {
   vec choice {
     case vec_null_t => vec
     case vec_cons_t => vec_cons_t(

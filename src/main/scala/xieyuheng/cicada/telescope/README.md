@@ -1,0 +1,21 @@
+- telescope can not handle join between values
+  we need unification to handle this
+  - we need logic_variable again
+- no dot_type
+- use type_t in type_t
+- need unification for refine_choice and join_val
+  - the only place where unification is needed ?
+  - to deal with information lost
+    x.length and y.length is infered as the same
+- need to filter choices
+------
+- @assert_not_check for testing
+- subtype relation between class and supers
+- [maybe] value of a field must be full value -- full_p, part_p
+- string_t
+- check undefined during top loading
+- termination check
+------
+- [note] we do not need readback to implement fulfill
+  - we only need readback to handle eqv_t
+- [note] is it ok to not use NormEnv in NormTel and NormNeuChoice ?

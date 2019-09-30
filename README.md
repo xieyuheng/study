@@ -1,27 +1,34 @@
 # cicada
 
-Implementation practices.
-
 ## Also Contains
 
+### parsing techniques
+
 - [partech](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech):
-  A parser generator with different parsing techniques.
+  An Earley parser generator.
+
+### type theories
+
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):
   The untyped lambda calculus
   - with norm-by-eval (normalization by evaluation).
+
 - [syst](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/syst):
-  Kurt Gödel's system T (curry style simply typed lambda calculus with natural number),
+  Kurt Gödel's system T
+  - curry style simply typed lambda calculus with natural number,
   - for details about system T, see "Gödel’s system T as a precursor of modern type theory", by Gilles Dowek
   - with typed norm-by-eval (a step toward tartlet and pie).
+
 - [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet)
-  The tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",
-  by David Thrane Christiansen.
-  ([the original tutorial](http://davidchristiansen.dk/tutorials/nbe))
-  - subrecursive, recursion is not an option.
+  - recursion is not an option.
+  - from the tutorial "Checking Dependent Types with Normalization by Evaluation: A Tutorial",
+    by David Thrane Christiansen.
+    ([the original tutorial](http://davidchristiansen.dk/tutorials/nbe))
+
 - [minitt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/minitt):
   The dependently typed Mini-TT language
-  described in paper: "A simple type-theoretic language: Mini-TT",
-  by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
+  - described in paper: "A simple type-theoretic language: Mini-TT",
+    by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
   - no termination check, thus when viewed as logic it is unsound.
 
 ## Usage

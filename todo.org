@@ -17,7 +17,7 @@
   - we only need readback to handle eqv_t
 - [note] is it ok to not use NormEnv in NormTel and NormNeuChoice ?
 * tartlet
-- why we *do need* "type directed norm-by-eval" here ?
+- [note] why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie
 - the little typer as test
 - use `TODO` as un-implemented
@@ -27,8 +27,12 @@
 - extend tartlet to define new types
   - keep it subrecursive, but be generic about data and ind, rec and iter
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
+* pure
+- pure type system
+* miniml
+- about type infer
 * minitt
-- why we *do not need* "type directed norm-by-eval" here ?
+- [note] why we *do not need* "type directed norm-by-eval" here ?
 - [question] I think the use of NormEnv will break `equals`
 - add `eqv_t` `same` `replace`
 - add constrains to type constructors

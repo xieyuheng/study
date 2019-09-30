@@ -6,21 +6,43 @@ import readback._
 
 object fulfill {
 
+  def append_msg[A](result: Either[Err, A])(msg: String): Either[Err, A] = {
+    result match {
+      case Right(a) => Right(a)
+      case Left(err) => Left(Err(err.msg ++ msg))
+    }
+  }
+
   def fulfill_val(x: Val, y: Val): Either[Err, Unit] = {
     (x, y) match {
       case (x: ValPi, y: ValPi) =>
-        for {
+        val result = for {
           _ <- fulfill_val(y.arg_t, x.arg_t)
           _ <- fulfill_clo(x.dep_t, y.dep_t)
         } yield ()
+        append_msg(result) {
+          s"[fulfill_val fail]\n" ++
+          s"x: ${pretty_val(x)}\n" ++
+          s"y: ${pretty_val(y)}\n"
+        }
       case (x: ValFn, y: ValPi) =>
-        for {
+        val result = for {
           _ <- fulfill_val(y.arg_t, x.arg_t)
           _ <- fulfill_clo(x.body, y.dep_t)
         } yield ()
+        append_msg(result) {
+          s"[fulfill_val fail]\n" ++
+          s"x: ${pretty_val(x)}\n" ++
+          s"y: ${pretty_val(y)}\n"
+        }
       case (x: ValClub, y: ValClub) =>
         if (x.name == y.name) {
-          fulfill_tel(x.tel, y.tel)
+          val result = fulfill_tel(x.tel, y.tel)
+          append_msg(result) {
+            s"[fulfill_val fail]\n" ++
+            s"x: ${pretty_val(x)}\n" ++
+            s"y: ${pretty_val(y)}\n"
+          }
         } else {
           Left(Err(
             s"[fulfill_val fail]\n" ++
@@ -29,7 +51,12 @@ object fulfill {
         }
       case (x: ValMember, y: ValMember) =>
         if (x.name == y.name) {
-          fulfill_tel(x.tel, y.tel)
+          val result = fulfill_tel(x.tel, y.tel)
+          append_msg(result) {
+            s"[fulfill_val fail]\n" ++
+            s"x: ${pretty_val(x)}\n" ++
+            s"y: ${pretty_val(y)}\n"
+          }
         } else {
           Left(Err(
             s"[fulfill_val fail]\n" ++
@@ -38,7 +65,12 @@ object fulfill {
         }
       case (x: ValMember, y: ValClub) =>
         if (x.club_name == y.name) {
-          fulfill_tel(x.tel, y.tel)
+          val result = fulfill_tel(x.tel, y.tel)
+          append_msg(result) {
+            s"[fulfill_val fail]\n" ++
+            s"x: ${pretty_val(x)}\n" ++
+            s"y: ${pretty_val(y)}\n"
+          }
         } else {
           Left(Err(
             s"[fulfill_val fail]\n" ++
@@ -47,7 +79,12 @@ object fulfill {
         }
       case (x: ValRecord, y: ValRecord) =>
         if (x.name == y.name) {
-          fulfill_tel(x.tel, y.tel)
+          val result = fulfill_tel(x.tel, y.tel)
+          append_msg(result) {
+            s"[fulfill_val fail]\n" ++
+            s"x: ${pretty_val(x)}\n" ++
+            s"y: ${pretty_val(y)}\n"
+          }
         } else {
           // TODO handle extends
           Left(Err(
@@ -56,11 +93,13 @@ object fulfill {
               s"y: ${pretty_val(y)}\n"))
         }
       case (x, ValType(level)) =>
-        fulfill_type(x, level)
+        val result = fulfill_type(x, level)
+        append_msg(result) {
+          s"[fulfill_val fail]\n" ++
+          s"x: ${pretty_val(x)}\n" ++
+          s"y: ${pretty_val(y)}\n"
+        }
       case (x: ValClub, y: ValPi) =>
-        println("(x: ValClub, y: ValPi)")
-        println(s"x: ${pretty_val(x)}")
-        println(s"y: ${pretty_val(y)}")
         fields_find_first_none(x.tel.fields) match {
           case Some((k, te, mve, Some(tv), None)) =>
             for {
@@ -80,9 +119,6 @@ object fulfill {
                 s"y: ${pretty_val(y)}\n"))
         }
       case (x: ValMember, y: ValPi) =>
-        println("(x: ValMember, y: ValPi)")
-        println(s"x: ${pretty_val(x)}")
-        println(s"y: ${pretty_val(y)}")
         fields_find_first_none(x.tel.fields) match {
           case Some((k, te, mve, Some(tv), None)) =>
             for {
@@ -102,9 +138,6 @@ object fulfill {
                 s"y: ${pretty_val(y)}\n"))
         }
       case (x: ValRecord, y: ValPi) =>
-        println("(x: ValRecord, y: ValPi)")
-        println(s"x: ${pretty_val(x)}")
-        println(s"y: ${pretty_val(y)}")
         fields_find_first_none(x.tel.fields) match {
           case Some((k, te, mve, Some(tv), None)) =>
             for {
@@ -124,23 +157,25 @@ object fulfill {
                 s"y: ${pretty_val(y)}\n"))
         }
       case (x: Neu, y) =>
-        println(s"[fulfill_val]")
-        println(s"(x: Neu, y)")
-        println(s"x: ${pretty_val(x)}")
-        println(s"y: ${pretty_val(y)}")
         val list = infer_neu(x).map {
           case result =>
             result.flatMap { case x => fulfill_val(x, y) } }
-        first_err(list)
+        val result = first_err(list)
+        append_msg(result) {
+          s"[fulfill_val fail]\n" ++
+          s"x: ${pretty_val(x)}\n" ++
+          s"y: ${pretty_val(y)}\n"
+        }
       case (x, y: Neu) =>
-        println(s"[fulfill_val]")
-        println(s"(x, y: Neu)")
-        println(s"x: ${pretty_val(x)}")
-        println(s"y: ${pretty_val(y)}")
         val list = infer_neu(y).map {
           case result =>
             result.flatMap { case y => fulfill_val(x, y) } }
-        first_err(list)
+        val result = first_err(list)
+        append_msg(result) {
+          s"[fulfill_val fail]\n" ++
+          s"x: ${pretty_val(x)}\n" ++
+          s"y: ${pretty_val(y)}\n"
+        }
       case _ =>
         Left(Err(
           s"[fulfill_val fail]\n" ++

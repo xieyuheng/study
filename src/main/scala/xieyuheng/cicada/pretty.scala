@@ -67,7 +67,8 @@ object pretty {
       case Pi(arg_name: String, arg_t: Exp, dep_t: Exp) =>
         s"(${arg_name}: ${pretty_exp(arg_t)}) -> ${pretty_exp(dep_t)}"
       case Fn(arg_name: String, arg_t: Exp, dep_t: Exp, body: Exp) =>
-        s"(${arg_name}: ${pretty_exp(arg_t)}): ${pretty_exp(dep_t)} => ${pretty_exp(body)}"
+        // s"(${arg_name}: ${pretty_exp(arg_t)}): ${pretty_exp(dep_t)} => ${pretty_exp(body)}"
+        s"(${arg_name}: ${pretty_exp(arg_t)}) => ${pretty_exp(body)}"
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
       case Choice(path: List[String], map: Map[String, Exp]) =>
@@ -97,7 +98,8 @@ object pretty {
       case ValPi(arg_name: String, arg_t: Val, dep_t: Clo) =>
         s"(${arg_name}: ${pretty_val(arg_t)}) -> ${pretty_exp(dep_t.body)}"
       case ValFn(arg_name: String, arg_t: Val, dep_t: Clo, body: Clo) =>
-        s"(${arg_name}: ${pretty_val(arg_t)}): ${pretty_exp(dep_t.body)} => ${pretty_exp(body.body)}"
+        // s"(${arg_name}: ${pretty_val(arg_t)}): ${pretty_exp(dep_t.body)} => ${pretty_exp(body.body)}"
+        s"(${arg_name}: ${pretty_val(arg_t)}) => ${pretty_exp(body.body)}"
       case ValClub(name: String, members: List[Member], tel: Tel) =>
         s"${name}${maybe_paren(pretty_tel(tel))}"
       case ValMember(name: String, club_name: String, tel: Tel) =>
@@ -119,9 +121,11 @@ object pretty {
       case NeuVar(name: String, arg_t: Val, aka) =>
         aka match {
           case Some(alias) =>
-            s"${alias}${name}: ${pretty_val(arg_t)}"
+            // s"${alias}${name}: ${pretty_val(arg_t)}"
+            s"${alias}${name}"
           case None =>
-            s"${name}: ${pretty_val(arg_t)}"
+            // s"${name}: ${pretty_val(arg_t)}"
+            s"${name}"
         }
       case NeuAp(target: Neu, arg: Val) =>
         s"${pretty_neu(target)}(${pretty_val(arg)})"
@@ -157,7 +161,8 @@ object pretty {
       case NormPi(arg_name: String, arg_t: Norm, dep_t: Norm) =>
         s"(${arg_name}: ${pretty_norm(arg_t)}) -> ${pretty_norm(dep_t)}"
       case NormFn(arg_name: String, arg_t: Norm, dep_t: Norm, body: Norm) =>
-        s"(${arg_name}: ${pretty_norm(arg_t)}): ${pretty_norm(dep_t)} => ${pretty_norm(body)}"
+        // s"(${arg_name}: ${pretty_norm(arg_t)}): ${pretty_norm(dep_t)} => ${pretty_norm(body)}"
+        s"(${arg_name}: ${pretty_norm(arg_t)}) => ${pretty_norm(body)}"
       case NormClub(name: String, members: List[Member], norm_tel: NormTel) =>
         s"${name}${maybe_paren(pretty_norm_tel(norm_tel))}"
       case NormMember(name: String, club_name: String, norm_tel: NormTel) =>

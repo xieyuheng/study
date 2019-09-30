@@ -31,6 +31,7 @@
 - pure type system
 * miniml
 - about type infer
+* sysf
 * minitt
 - [note] why we *do not need* "type directed norm-by-eval" here ?
 - [question] I think the use of NormEnv will break `equals`

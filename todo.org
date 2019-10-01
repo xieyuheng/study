@@ -1,3 +1,16 @@
+* simple
+- theory about equality between lambda terms
+  - reflexivity
+    symmetry
+    transitivity
+    congruence
+  - beta_step
+  - eta_step
+- [note]
+  in this implementation I will use reduction instead of closure.
+  lexical scope is not a problem (or say, the phenomenon of dynamic scope will not occur)
+- church
+- curry
 * tartlet
 - [note] why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie
@@ -34,3 +47,4 @@
 - concrete syntax for rule
   - to use partech as more general tool out side scala
     (like the rosie pattern language)
+* compile with cps

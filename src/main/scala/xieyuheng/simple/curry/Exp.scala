@@ -5,7 +5,7 @@ final case class Var(name: String) extends Exp
 final case class Ap(target: Exp, arg: Exp) extends Exp
 final case class Fn(arg_name: String, body: Exp) extends Exp
 
-object Exp {
+object eval {
   def free_variables(exp: Exp): Set[String] = {
     exp match {
       case Var(name: String) =>

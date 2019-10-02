@@ -1,3 +1,6 @@
+- sat solver vis (how it is vis-ed?)
+- cook's machine for trans algo to lin-algo
+- new machine for call-by-name or call-by-need lambda
 * simple
 - theory about equality between lambda terms
   - reflexivity

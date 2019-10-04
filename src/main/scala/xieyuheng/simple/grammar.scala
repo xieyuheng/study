@@ -32,6 +32,8 @@ object grammar {
     "top", Map(
       "decl" -> List(decl),
       "show" -> List("@", "show", exp),
+      "step" -> List("@", "step", exp),
+      "walk_through" -> List("@", "walk_through", exp),
       "eq" -> List("@", "assert_eq", exp, exp),
       "not_eq" -> List("@", "assert_not_eq", exp, exp),
     ))
@@ -40,6 +42,8 @@ object grammar {
     "top", Map(
       "decl" -> { case List(decl) => TopDecl(decl_matcher(decl)) },
       "show" -> { case List(_, _, exp) => TopShow(exp_matcher(exp)) },
+      "step" -> { case List(_, _, exp) => TopStep(exp_matcher(exp)) },
+      "walk_through" -> { case List(_, _, exp) => TopWalkThrough(exp_matcher(exp)) },
       "eq" -> { case List(_, _, x, y) => TopEq(exp_matcher(x), exp_matcher(y)) },
       "not_eq" -> { case List(_, _, x, y) => TopNotEq(exp_matcher(x), exp_matcher(y)) },
     ))

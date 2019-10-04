@@ -11,7 +11,8 @@ object pretty {
 
   def pretty_exp(exp: Exp): String = {
     exp match {
-      case Var(name, type_annotation) => name
+      case Var(name, type_annotation) =>
+        name
       case Fn(name, arg_type_annotation, body) =>
         s"${name} => ${pretty_exp(body)}"
       case Ap(fn, arg) =>

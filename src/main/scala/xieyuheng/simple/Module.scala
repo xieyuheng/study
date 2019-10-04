@@ -7,8 +7,8 @@ case class Module() {
   var top_list: List[Top] = List()
 
   def eval_with_global(exp: Exp, global: Map[String, Exp]): Exp = {
-    val exp2 = eval.expend_global_variables(exp, global, Set())
-    eval.beta_eta_reduction(exp2)
+    val e = eval.expend_global_variables(exp, global, Set())
+    eval.beta_eta_reduction(e)
   }
 
   def run(): Unit = {
@@ -16,10 +16,14 @@ case class Module() {
 
     top_list.foreach {
       case TopDecl(DeclLet(name, exp)) =>
-        val exp2 = eval_with_global(exp, global)
-        global = global + (name -> exp2)
+        val e = eval_with_global(exp, global)
+        global = global + (name -> e)
       case TopShow(exp) =>
         show(exp, global)
+      case TopStep(exp) =>
+        step(exp, global)
+      case TopWalkThrough(exp) =>
+        walk_through(exp, global)
       case TopEq(e1, e2) =>
         assert_eq(e1, e2, global)
       case TopNotEq(e1, e2) =>
@@ -60,6 +64,26 @@ case class Module() {
     val norm = eval_with_global(exp, global)
     println(s">>> ${pretty_exp(exp)}")
     println(s"=== ${pretty_exp(norm)}")
+    println()
+  }
+
+  def step(exp: Exp, global: Map[String, Exp]): Unit = {
+    val e = eval.expend_global_variables(exp, global, Set())
+    val e2 = eval.beta_eta_step(e)
+    println(s">>> ${pretty_exp(exp)}")
+    println(s"=== ${pretty_exp(e2)}")
+    println()
+  }
+
+  def walk_through(exp: Exp, global: Map[String, Exp]): Unit = {
+    var e = eval.expend_global_variables(exp, global, Set())
+    println(s">>> ${pretty_exp(exp)}")
+    var u = eval.beta_eta_step(e)
+    while (e != u) {
+      println(s"=== ${pretty_exp(u)}")
+      e = u
+      u = eval.beta_eta_step(u)
+    }
     println()
   }
 

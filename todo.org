@@ -1,8 +1,6 @@
-https://www.youtube.com/watch?v=zoauBe465qQ 这个视频有点
-
 - @step
-- [simple] pretty
 * simple
+- check infer syntax
 - theory about equality between lambda terms
   - reflexivity
     symmetry

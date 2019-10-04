@@ -115,4 +115,31 @@ object eval {
     reduction_from_step(beta_eta_step, exp)
   }
 
+  def expend_global_variables(
+    exp: Exp,
+    global: Map[String, Exp],
+    bound_variables: Set[String],
+  ): Exp = {
+    exp match {
+      case Var(name, type_annotation) =>
+        if (bound_variables.contains(name)) {
+          Var(name, type_annotation)
+        } else {
+          global.get(name) match {
+            case Some(exp) => exp
+            case None =>
+              println(s"[expend_global_variables fail]")
+              println(s"undefined name: ${name}")
+              throw new Exception()
+          }
+        }
+      case Ap(target, arg) =>
+        Ap(
+          expend_global_variables(target, global, bound_variables),
+          expend_global_variables(arg, global, bound_variables))
+      case Fn(arg_name, arg_type_annotation, body) =>
+        expend_global_variables(body, global, bound_variables + arg_name)
+    }
+  }
+
 }

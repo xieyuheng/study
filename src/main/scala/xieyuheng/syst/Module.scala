@@ -51,7 +51,7 @@ case class Module() {
             throw new Exception()
         }
       case TopShow(exp) =>
-        eval_print(exp)
+        show(exp)
       case TopEq(e1, e2) =>
         assert_eq(e1, e2)
       case TopNotEq(e1, e2) =>
@@ -67,7 +67,7 @@ case class Module() {
       case TopDecl(DeclLet(name, t, e)) =>
         env = env.ext(name, eval(e, env))
       case TopShow(exp) =>
-        eval_print(exp)
+        show(exp)
       case TopEq(e1, e2) =>
         assert_eq(e1, e2)
       case TopNotEq(e1, e2) =>
@@ -112,7 +112,7 @@ case class Module() {
     }
   }
 
-  def eval_print(exp: Exp): Unit = {
+  def show(exp: Exp): Unit = {
     val value = eval(exp, env)
     // val norm = readback_val(value, Set())
     println(s">>> ${pretty_exp(exp)}")

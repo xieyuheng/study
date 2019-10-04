@@ -4,16 +4,24 @@ case class Module() {
 
   var top_list: List[Top] = List()
 
+  def eval_with_global(exp: Exp, global: Map[String, Exp]): Exp = {
+    val exp2 = eval.expend_global_variables(exp, global, Set())
+    eval.beta_eta_reduction(exp2)
+  }
+
   def run(): Unit = {
+    var global: Map[String, Exp] = Map()
+
     top_list.foreach {
-//       case TopDecl(DeclLet(name, exp)) =>
-//         env = env.ext(name, eval(exp, env))
-//       case TopShow(exp) =>
-//         eval_print(exp)
-//       case TopEq(e1, e2) =>
-//         assert_eq(e1, e2)
-//       case TopNotEq(e1, e2) =>
-//         assert_not_eq(e1, e2)
+      case TopDecl(DeclLet(name, exp)) =>
+        val exp2 = eval_with_global(exp, global)
+        global = global + (name -> exp2)
+      case TopShow(exp) =>
+        show(exp, global)
+      // case TopEq(e1, e2) =>
+      //   assert_eq(e1, e2)
+      // case TopNotEq(e1, e2) =>
+      //   assert_not_eq(e1, e2)
       case _ => {}
     }
   }
@@ -54,13 +62,15 @@ case class Module() {
 //     }
 //   }
 
-//   def eval_print(exp: Exp): Unit = {
-//     val value = eval(exp, env)
-//     val norm = readback_val(value, Set())
-//     println(s">>> ${pretty_exp(exp)}")
-//     println(s"=== ${pretty_val(value)}")
-//     println(s"=== ${pretty_exp(norm)}")
-//     println()
-//   }
+  def show(exp: Exp, global: Map[String, Exp]): Unit = {
+    val value = eval_with_global(exp, global)
+    println(s">>> ${exp}")
+    println(s"=== ${value}")
+    // val norm = readback_val(value, Set())
+    // println(s">>> ${pretty_exp(exp)}")
+    // println(s"=== ${pretty_val(value)}")
+    // println(s"=== ${pretty_exp(norm)}")
+    println()
+  }
 
 }

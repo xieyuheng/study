@@ -50,7 +50,7 @@ case class Module() {
       case TopDecl(decl) =>
         env = EnvDecl(decl, env)
       case TopShow(exp) =>
-        eval_print(exp)
+        show(exp)
       case TopEq(e1, e2) =>
         assert_eq(e1, e2)
       case TopNotEq(e1, e2) =>
@@ -98,7 +98,7 @@ case class Module() {
     }
   }
 
-  def eval_print(exp: Exp): Unit = {
+  def show(exp: Exp): Unit = {
     print(">>> ")
     println(pretty_exp(exp))
     val value = eval(exp, env)

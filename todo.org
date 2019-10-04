@@ -1,4 +1,5 @@
 - @step
+- [simple] pretty
 * simple
 - theory about equality between lambda terms
   - reflexivity
@@ -23,7 +24,7 @@
   - keep it subrecursive, but be generic about data and ind, rec and iter
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
 * pure
-- pure type system
+- in addition to a file to eval, also a file of config of sorts, axioms and rules
 * miniml
 - about type infer
 * sysf

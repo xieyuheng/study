@@ -16,7 +16,7 @@ case class Module() {
         ctx = claim(ctx, name, t)
         ctx = define(ctx, name, e)
       case TopShow(exp) =>
-        eval_print(ctx, exp)
+        show(ctx, exp)
       case TopEq(e1, e2) =>
         assert_eq(ctx, e1, e2)
       case TopNotEq(e1, e2) =>
@@ -99,7 +99,7 @@ case class Module() {
     }
   }
 
-  def eval_print(ctx: Ctx, exp: Exp): Unit = {
+  def show(ctx: Ctx, exp: Exp): Unit = {
     val env = ctx.to_env
     val value = eval_unwrap(exp, env)
     val result = for {

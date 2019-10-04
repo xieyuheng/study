@@ -25,31 +25,31 @@ object paper_without_parser_test extends Module with App {
 
   println("------\n")
 
-  eval_print(
+  show(
     "list_append" $ "nat_t")
 
-  eval_print(
+  show(
     "list_append" $ "nat_t" $ %("nil"))
 
-  eval_print(
+  show(
     "list_append" $ "nat_t" $ %("nil") $ %("nil"))
 
   println("------\n")
 
-  eval_print(
+  show(
     "list_append" $ "nat_t")
 
-  eval_print(
+  show(
     "list_append" $ "nat_t" $ %("cons", %("zero") * %("nil")))
 
-  eval_print(
+  show(
     "list_append" $ "nat_t" $ %("cons", %("zero") * %("nil")) $ %("nil"))
 
   println("------\n")
 
   val two_zeros = %("cons", %("zero") * %("cons", %("zero") * %("nil")))
 
-  eval_print(
+  show(
     "list_append" $ "nat_t" $ two_zeros $ two_zeros)
 
 }

@@ -2,16 +2,7 @@ package xieyuheng.simple
 
 import scala.annotation.tailrec
 
-object practical {
-
-  sealed trait Exp
-  final case class Var(name: String, type_annotation: Option[Type]) extends Exp
-  final case class Ap(target: Exp, arg: Exp) extends Exp
-  final case class Fn(arg_name: String, arg_type_annotation: Option[Type], body: Exp) extends Exp
-
-  sealed trait Type
-  final case class TypeAtom(name: String) extends Type
-  final case class TypeArrow(ante: Type, succ: Type) extends Type
+object eval {
 
   def free_variables(exp: Exp): Set[String] = {
     exp match {
@@ -80,11 +71,6 @@ object practical {
     }
   }
 
-  object practical_test extends App {
-    val f = Fn("x", None, Var("x", None))
-    val a = Var("a", None)
-    println(beta_reduction(Ap(f, a)))
-  }
   // def eta_step()
 
   // def eta_reduction()

@@ -138,7 +138,10 @@ object eval {
           expend_global_variables(target, global, bound_variables),
           expend_global_variables(arg, global, bound_variables))
       case Fn(arg_name, arg_type_annotation, body) =>
-        expend_global_variables(body, global, bound_variables + arg_name)
+        Fn(
+          arg_name,
+          arg_type_annotation,
+          expend_global_variables(body, global, bound_variables + arg_name))
     }
   }
 

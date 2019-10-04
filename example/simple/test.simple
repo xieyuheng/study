@@ -1,3 +1,15 @@
 let id = (x) => x
 
+@show id
 @show id(id)
+
+let zero = (f, x) => x
+
+let succ = (prev, f, x) => f(prev(f, x))
+
+let add = (j, k, f, x) => j(f, k(f, x))
+
+let one = succ(zero)
+let two = succ(one)
+
+@show add(one, one)

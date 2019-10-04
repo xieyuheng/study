@@ -1,5 +1,7 @@
 package xieyuheng.simple
 
+import pretty._
+
 case class Module() {
 
   var top_list: List[Top] = List()
@@ -63,13 +65,9 @@ case class Module() {
 //   }
 
   def show(exp: Exp, global: Map[String, Exp]): Unit = {
-    val value = eval_with_global(exp, global)
-    println(s">>> ${exp}")
-    println(s"=== ${value}")
-    // val norm = readback_val(value, Set())
-    // println(s">>> ${pretty_exp(exp)}")
-    // println(s"=== ${pretty_val(value)}")
-    // println(s"=== ${pretty_exp(norm)}")
+    val norm = eval_with_global(exp, global)
+    println(s">>> ${pretty_exp(exp)}")
+    println(s"=== ${pretty_exp(norm)}")
     println()
   }
 

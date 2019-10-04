@@ -13,3 +13,5 @@ let one = succ(zero)
 let two = succ(one)
 
 @show add(one, one)
+
+@assert_eq add(one, one) two

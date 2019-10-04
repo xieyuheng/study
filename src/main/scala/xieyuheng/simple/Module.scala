@@ -20,49 +20,41 @@ case class Module() {
         global = global + (name -> exp2)
       case TopShow(exp) =>
         show(exp, global)
-      // case TopEq(e1, e2) =>
-      //   assert_eq(e1, e2)
-      // case TopNotEq(e1, e2) =>
-      //   assert_not_eq(e1, e2)
+      case TopEq(e1, e2) =>
+        assert_eq(e1, e2, global)
+      case TopNotEq(e1, e2) =>
+        assert_not_eq(e1, e2, global)
       case _ => {}
     }
   }
 
-//   def assert_not_eq(e1: Exp, e2: Exp): Unit = {
-//     val v1 = eval(e1, env)
-//     val v2 = eval(e2, env)
-//     val n1 = readback_val(v1, Set())
-//     val n2 = readback_val(v2, Set())
-//     if (v1 == v2) {
-//       println(s"[assertion fail]")
-//       println(s"the following two expressions are asserted to be not equal")
-//       println(s">>> ${pretty_exp(e1)}")
-//       println(s"=== ${pretty_val(v1)}")
-//       println(s"=== ${pretty_exp(n1)}")
-//       println(s">>> ${pretty_exp(e2)}")
-//       println(s"=== ${pretty_val(v2)}")
-//       println(s"=== ${pretty_exp(n2)}")
-//       throw new Exception()
-//     }
-//   }
+  def assert_not_eq(e1: Exp, e2: Exp, global: Map[String, Exp]): Unit = {
+    val v1 = eval_with_global(e1, global)
+    val v2 = eval_with_global(e2, global)
+    if (v1 == v2) {
+      println(s"[assertion fail]")
+      println(s"the following two expressions are asserted to be not equal")
+      println(s">>> ${pretty_exp(e1)}")
+      println(s"=== ${pretty_exp(v1)}")
+      println(s">>> ${pretty_exp(e2)}")
+      println(s"=== ${pretty_exp(v2)}")
+      throw new Exception()
+    }
+  }
 
-//   def assert_eq(e1: Exp, e2: Exp): Unit = {
-//     val v1 = eval(e1, env)
-//     val v2 = eval(e2, env)
-//     val n1 = readback_val(v1, Set())
-//     val n2 = readback_val(v2, Set())
-//     if (v1 != v2) {
-//       println(s"[assertion fail]")
-//       println(s"the following two expressions are asserted to be equal")
-//       println(s">>> ${pretty_exp(e1)}")
-//       println(s"=== ${pretty_val(v1)}")
-//       println(s"=== ${pretty_exp(n1)}")
-//       println(s">>> ${pretty_exp(e2)}")
-//       println(s"=== ${pretty_val(v2)}")
-//       println(s"=== ${pretty_exp(n2)}")
-//       throw new Exception()
-//     }
-//   }
+  def assert_eq(e1: Exp, e2: Exp, global: Map[String, Exp]): Unit = {
+    val v1 = eval_with_global(e1, global)
+    val v2 = eval_with_global(e2, global)
+    if (v1 != v2) {
+      println(s"[assertion fail]")
+      println(s"the following two expressions are asserted to be equal")
+      println(s">>> ${pretty_exp(e1)}")
+      println(s"=== ${pretty_exp(v1)}")
+      println(s">>> ${pretty_exp(e2)}")
+      println(s"=== ${pretty_exp(v2)}")
+      throw new Exception()
+    }
+  }
 
   def show(exp: Exp, global: Map[String, Exp]): Unit = {
     val norm = eval_with_global(exp, global)

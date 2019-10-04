@@ -11,4 +11,5 @@ object simple extends App {
 
   println(beta_step(Ap(f, Ap(f, Ap(f, a)))))
   println(beta_step(beta_step(Ap(f, Ap(f, Ap(f, a))))))
+  println(beta_eta_reduction(Ap(f, Ap(f, Ap(f, a)))))
 }

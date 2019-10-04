@@ -62,19 +62,57 @@ object eval {
   }
 
   @tailrec
-  def beta_reduction(exp: Exp): Exp = {
-    val exp2 = beta_step(exp)
+  def reduction_from_step(step: Exp => Exp, exp: Exp): Exp = {
+    val exp2 = step(exp)
     if (exp == exp2) {
       exp
     } else {
-      beta_reduction(exp2)
+      reduction_from_step(step, exp2)
     }
   }
 
-  // def eta_step()
+  def beta_reduction(exp: Exp): Exp = {
+    reduction_from_step(beta_step, exp)
+  }
 
-  // def eta_reduction()
+  def eta_step(exp: Exp): Exp = {
+    exp match {
+      case Var(name: String, type_annotation: Option[Type]) =>
+        exp
+      case Ap(target: Exp, arg: Exp) =>
+        val target2 = eta_step(target)
+        if (target2 == target) {
+          val arg2 = eta_step(arg)
+          Ap(target, arg2)
+        } else {
+          Ap(target2, arg)
+        }
+      case Fn(arg_name, arg_type_annotation, Ap(target, Var(name, type_annotation))) =>
+        if (arg_name == name && free_variable_p(name, target)) {
+          target
+        } else {
+          Fn(arg_name, arg_type_annotation, Ap(eta_step(target), Var(name, type_annotation)))
+        }
+      case Fn(arg_name, arg_type_annotation, body) =>
+        Fn(arg_name, arg_type_annotation, eta_step(body))
+    }
+  }
 
-  // def beta_eta_reduction
+  def eta_reduction(exp: Exp): Exp = {
+    reduction_from_step(eta_step, exp)
+  }
+
+  def beta_eta_step(exp: Exp): Exp = {
+    val exp2 = beta_step(exp)
+    if (exp2 == exp) {
+      eta_step(exp)
+    } else {
+      exp2
+    }
+  }
+
+  def beta_eta_reduction(exp: Exp): Exp = {
+    reduction_from_step(beta_eta_step, exp)
+  }
 
 }

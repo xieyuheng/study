@@ -22,3 +22,5 @@ let five = succ(four)
 @walk_through add(one, one)
 @walk_through add(two, two)
 @walk_through add(five, five)
+
+@walk_through id(id(id(id(id(id(id(id(id))))))))

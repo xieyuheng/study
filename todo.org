@@ -1,5 +1,5 @@
 * simple
-- fix syntax to use fn instead of let, for annotated fn
+- representing data types
 - synth
 - theory about equality between lambda terms
   - reflexivity

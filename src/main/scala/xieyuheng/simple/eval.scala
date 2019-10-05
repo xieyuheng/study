@@ -32,12 +32,12 @@ object eval {
           subst(target, arg_name, arg),
           subst(arg2, arg_name, arg))
       case Fn(arg_name2: String, arg_t: Type, body2: Exp) =>
-        if (arg_name == arg_name2) {
-          body
+        if (free_variable_p(arg_name2, arg)) {
+          val new_name = arg_name2 ++ "*"
+          val new_body = subst(body2, arg_name2, Var(new_name))
+          Fn(new_name, arg_t, subst(new_body, arg_name, arg))
         } else {
-          Fn(
-            arg_name2, arg_t,
-            subst(body2, arg_name, arg))
+          Fn(arg_name2, arg_t, subst(body2, arg_name, arg))
         }
     }
   }

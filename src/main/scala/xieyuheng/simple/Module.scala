@@ -21,6 +21,20 @@ case class Module() {
     var env: Env = Env()
     var ctx: Ctx = Ctx()
 
+    def expend_type_alias(t: Type, map: Map[String, Type]): Type = {
+      t match {
+        case TypeAtom(name) =>
+          map.get(name) match {
+            case Some(t) => t
+            case None => TypeAtom(name)
+          }
+        case TypeArrow(arg_t, ret_t) =>
+          TypeArrow(
+            expend_type_alias(arg_t, map),
+            expend_type_alias(ret_t, map))
+      }
+    }
+
     top_list.foreach {
       case TopDecl(DeclLet(name, t, exp)) =>
         check.check(ctx, exp, t) match {
@@ -42,7 +56,6 @@ case class Module() {
         assert_eq(e1, e2, env)
       case TopNotEq(e1, e2) =>
         assert_not_eq(e1, e2, env)
-      case _ => {}
     }
   }
 

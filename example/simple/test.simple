@@ -1,3 +1,14 @@
-let id: (A) -> B = (x: A) => x
+let true: (A) -> (A) -> A =
+  (x: A) => (y: A) => x
 
-@show id
+let false: (A) -> (A) -> A =
+  (x: A) => (y: A) => y
+
+let not: ((A) -> (A) -> A) -> (A) -> (A) -> A =
+  (a: (A) -> (A) -> A) => (x: A) => (y: A) => a(y, x)
+
+@show true
+@show false
+
+@walk_through not(true)
+@walk_through not(false)

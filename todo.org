@@ -1,6 +1,5 @@
+- fix syntax to use fn instead of let, for annotated fn
 * simple
-- check
-- infer
 - synth
 - theory about equality between lambda terms
   - reflexivity

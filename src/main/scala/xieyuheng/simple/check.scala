@@ -68,8 +68,18 @@ object check {
                 s"excepting type-arrow\n" ++
                 s"but found type-atom: ${name}\n"
             ))
-          case TypeArrow(arg_t, ret_t) =>
-            check(ctx_ext_name(ctx, arg_name, arg_t), body, ret_t)
+          case TypeArrow(arg_t2, ret_t) =>
+            if (arg_t == arg_t2) {
+              check(ctx_ext_name(ctx, arg_name, arg_t), body, ret_t)
+            } else {
+              Left(Err(
+                "[check fail]\n" ++
+                  s"exp: ${pretty_exp(exp)}\n" ++
+                  s"excepting type: ${pretty_type(t)}\n" ++
+                  s"excepting arg_t: ${pretty_type(arg_t2)}\n" ++
+                  s"annotated arg_t: ${pretty_type(arg_t)}\n"
+              ))
+            }
         }
     }
   }
@@ -77,11 +87,51 @@ object check {
   def infer(ctx: Ctx, exp: Exp): Either[Err, Type] = {
     exp match {
       case Var(name: String) =>
-        ???
+        lookup_type(ctx, name) match {
+          case Some(t) => Right(t)
+          case None =>
+            Left(Err(
+              s"[infer fail]\n" ++
+                s"undefined name: ${name}\n"
+            ))
+        }
       case Ap(target: Exp, arg: Exp) =>
-        ???
+        infer(ctx, target) match {
+          case Left(err) =>
+            Left(Err(
+              "[infer fail]\n" ++
+                s"exp: ${pretty_exp(exp)}\n"
+            ).append_cause(err))
+          case Right(TypeAtom(name)) =>
+            Left(Err(
+              "[infer fail]\n" ++
+                s"exp: ${pretty_exp(exp)}\n" ++
+                s"target: ${pretty_exp(target)}\n" ++
+                s"excepting target type to be type-arrow\n" ++
+                s"infered target type is type-atom: ${name}\n"
+            ))
+          case Right(TypeArrow(arg_t, ret_t)) =>
+            infer(ctx, arg) match {
+              case Left(err) =>
+                Left(Err(
+                  "[infer fail]\n" ++
+                    s"exp: ${pretty_exp(exp)}\n"
+                ).append_cause(err))
+              case Right(arg_t2) =>
+                if (arg_t == arg_t2) {
+                  Right(ret_t)
+                } else {
+                  Left(Err(
+                    "[infer fail]\n" ++
+                      s"exp: ${pretty_exp(exp)}\n" ++
+                      s"excepting arg_t: ${pretty_type(arg_t)}\n" ++
+                      s"infered arg_t: ${pretty_type(arg_t2)}\n"
+                  ))
+                }
+            }
+        }
       case Fn(arg_name: String, arg_t, body: Exp) =>
-        ???
+        infer(ctx_ext_name(ctx, arg_name, arg_t), body)
     }
   }
 

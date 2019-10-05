@@ -1,4 +1,4 @@
-package xieyuheng.de_bruijn
+package xieyuheng.curry
 
 import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._
@@ -50,13 +50,13 @@ object grammar {
 
   def decl = Rule(
     "decl", Map(
-      "let" -> List("let", identifier, ":", ty, "=", exp),
+      "let" -> List("let", identifier, "=", exp),
     ))
 
   def decl_matcher = Tree.matcher[Decl](
     "decl", Map(
-      "let" -> { case List(_, Leaf(name), _, t, _, e) =>
-        DeclLet(name, ty_matcher(t), exp_matcher(e)) },
+      "let" -> { case List(_, Leaf(name), _, e) =>
+        DeclLet(name, exp_matcher(e)) },
     ))
 
   def exp: Rule = Rule(
@@ -96,43 +96,33 @@ object grammar {
         Ap(fn, exp_matcher(exp)) },
     ))
 
-  def arg_entry: Rule = Rule(
-    "arg_entry", Map(
-      "arg" -> List(identifier, ":", ty),
-      "arg_comma" -> List(identifier, ":", ty, ","),
+  def id_entry: Rule = Rule(
+    "id_entry", Map(
+      "arg" -> List(identifier),
+      "arg_comma" -> List(identifier, ","),
     ))
 
-  def arg_entry_matcher = Tree.matcher[(String, Type)](
-    "arg_entry", Map(
-      "arg" -> { case List(Leaf(name), _, t) =>
-        (name, ty_matcher(t)) },
-      "arg_comma" -> { case List(Leaf(name), _, t, _) =>
-        (name, ty_matcher(t)) },
-    ))
-
-  def ty: Rule = Rule(
-    "ty", Map(
-      "type_atom" -> List(identifier),
-      "type_arrow" -> List("(", ty, ")", "-", ">", ty),
-    ))
-
-  def ty_matcher: Tree => Type = Tree.matcher[Type](
-    "ty", Map(
-      "type_atom" -> { case List(Leaf(name)) => TypeAtom(name) },
-      "type_arrow" -> { case List(_, arg_t, _, _, _, ret_t) =>
-        TypeArrow(ty_matcher(arg_t), ty_matcher(ret_t)) },
+  def id_entry_matcher = Tree.matcher[String](
+    "id_entry", Map(
+      "arg" -> { case List(Leaf(name)) =>
+        name },
+      "arg_comma" -> { case List(Leaf(name), _) =>
+        name },
     ))
 
   def non_rator: Rule = Rule(
     "non_rator", Map(
-      "fn" -> List("(", non_empty_list(arg_entry), ")", "=", ">", exp),
+      "fn" -> List("(", non_empty_list(id_entry), ")", "=", ">", exp),
+      "fn_one" -> List(identifier, "=", ">", exp),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "non_rator", Map(
-      "fn" -> { case List(_, arg_entry_list, _, _, _, body) =>
-        non_empty_list_matcher(arg_entry_matcher)(arg_entry_list)
-          .foldRight(exp_matcher(body)) { case ((name, arg_t), exp) => Fn(name, arg_t, exp) } },
+      "fn" -> { case List(_, id_entry_list, _, _, _, body) =>
+        non_empty_list_matcher(id_entry_matcher)(id_entry_list)
+          .foldRight(exp_matcher(body)) { case (pat, exp) => Fn(pat, exp) } },
+      "fn_one" -> { case List(Leaf(name), _, _, body) =>
+        Fn(name, exp_matcher(body)) },
     ))
 
   def exp_comma = Rule(

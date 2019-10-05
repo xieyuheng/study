@@ -1,4 +1,4 @@
-package xieyuheng.de_bruijn
+package xieyuheng.curry
 
 import xieyuheng.util.pretty._
 
@@ -9,21 +9,12 @@ object pretty {
       case (name, exp) =>
         s"${name}: ${pretty_exp(exp)};" }
 
-  def pretty_type(t: Type): String = {
-    t match {
-      case TypeAtom(name) =>
-        name
-      case TypeArrow(arg_t, ret_t) =>
-        s"(${pretty_type(arg_t)}) -> ${pretty_type(ret_t)}"
-    }
-  }
-
   def pretty_exp(exp: Exp): String = {
     exp match {
       case Var(name) =>
         name
-      case Fn(name, arg_t, body) =>
-        s"(${name}: ${pretty_type(arg_t)}) => ${pretty_exp(body)}"
+      case Fn(name, body) =>
+        s"${name} => ${pretty_exp(body)}"
       case Ap(fn, arg) =>
         s"${pretty_exp(fn)}(${pretty_exp(arg)})"
     }
@@ -31,8 +22,8 @@ object pretty {
 
   def pretty_decl(decl: Decl): String = {
     decl match {
-      case DeclLet(name, t, e) =>
-        s"let ${name}: ${pretty_type(t)} = ${pretty_exp(e)}"
+      case DeclLet(name, e) =>
+        s"let ${name} = ${pretty_exp(e)}"
     }
   }
 

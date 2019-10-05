@@ -7,4 +7,4 @@ final case class Fn(arg_name: String, body: Exp) extends Exp
 
 sealed trait Type
 final case class TypeAtom(name: String) extends Type
-final case class TypeArrow(ante: Type, succ: Type) extends Type
+final case class TypeArrow(arg_t: Type, ret_t: Type) extends Type

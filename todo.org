@@ -1,5 +1,4 @@
 * curry
-- grammar
 * de_bruijn
 - fix grammar
 - syntax for annotation

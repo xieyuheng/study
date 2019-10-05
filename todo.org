@@ -6,6 +6,16 @@
 - how to implement call-by-need jojo calculus ?
 - how to encode lambda calculus by jojo calculus ?
 - how to encode pure type system by jojo calculus ?
+- how to check equivalence of jojo ?
+- can we use norm-by-eval to check equivalence of jojo ?
+- how to define normal form of jojo ?
+- how to eval jojo with neutral ?
+- how to handle local variable when eval-ing jojo ?
+- for lambda calculus,
+  we have a lattice of type systems.
+  how to get a lattice of type systems for jojo ?
+  use something like pure type system ?
+- what are the lattice of type systems for lambda calculus ?
 * eopl
 * simple
 - representing data types

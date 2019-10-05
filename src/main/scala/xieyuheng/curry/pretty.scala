@@ -9,6 +9,15 @@ object pretty {
       case (name, exp) =>
         s"${name}: ${pretty_exp(exp)};" }
 
+  def pretty_type(t: Type): String = {
+    t match {
+      case TypeAtom(name) =>
+        name
+      case TypeArrow(arg_t, ret_t) =>
+        s"(${pretty_type(arg_t)}) -> ${pretty_type(ret_t)}"
+    }
+  }
+
   def pretty_exp(exp: Exp): String = {
     exp match {
       case Var(name) =>

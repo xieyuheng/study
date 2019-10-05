@@ -1,7 +1,5 @@
 * curry
 - check
-- infer
-- synth
 - theory about equality between lambda terms
   - reflexivity
     symmetry

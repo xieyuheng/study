@@ -12,3 +12,9 @@ let not: ((A) -> (A) -> A) -> (A) -> (A) -> A =
 
 @walk_through not(true)
 @walk_through not(false)
+
+@assert_eq not(true) false
+@assert_eq not(false) true
+
+// @assert_eq not(not(true)) true
+// @assert_eq not(not(false)) false

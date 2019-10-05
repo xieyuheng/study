@@ -11,3 +11,18 @@ let add: (nat_t, nat_t) -> nat_t = {
 
 @show add(the(nat_t, three))
 @show add(three, three)
+
+let true: (nat_t) -> (nat_t) -> nat_t =
+  (x) => (y) => x
+
+let false: (nat_t) -> (nat_t) -> nat_t =
+  (x) => (y) => y
+
+let not: ((nat_t) -> (nat_t) -> nat_t) -> (nat_t) -> (nat_t) -> nat_t =
+  (a) => (x) => (y) => a(y, x)
+
+@show true
+@show false
+
+@show not(true)
+@show not(not(true))

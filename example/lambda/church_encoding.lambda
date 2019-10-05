@@ -1,7 +1,7 @@
+// nat
+
 let zero = (f, x) => x
-
 let succ = (prev, f, x) => f(prev(f, x))
-
 let add = (j, k, f, x) => j(f, k(f, x))
 
 let one = succ(zero)
@@ -16,3 +16,15 @@ let f = {
 }
 
 @show f
+
+// bool
+
+let true = (x) => (y) => x
+let false = (x) => (y) => y
+let not = (a) => (x) => (y) => a(y, x)
+
+@show true
+@show false
+
+@show not(true)
+@show not(not(true))

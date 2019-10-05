@@ -15,9 +15,6 @@ programming language implementation practices.
   The untyped lambda calculus
   - with norm-by-eval (normalization by evaluation).
 
-- [simple](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/simple):
-  Simply typed lambda calculus
-
 - [syst](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/syst):
   Kurt Gödel's system T
   - simply typed lambda calculus with natural number,

@@ -1,3 +1,12 @@
+- how to implement call-by-name lambda calculus ?
+- how to implement call-by-need lambda calculus ?
+- how to implement beta-reduction by renaming ?
+- how lambda calculus handles branching ?
+- how to implement call-by-name jojo calculus ?
+- how to implement call-by-need jojo calculus ?
+- how to encode lambda calculus by jojo calculus ?
+- how to encode pure type system by jojo calculus ?
+* eopl
 * simple
 - representing data types
 - synth
@@ -8,6 +17,9 @@
     congruence
     beta_reduction
     eta_reduction
+* curry
+- type system of curry style need type variable
+  and unification over type variables
 * joy
 - for simple typed
 - how to specify rules ?

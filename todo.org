@@ -1,7 +1,15 @@
 * curry
+- check
+- infer
+- synth
+- theory about equality between lambda terms
+  - reflexivity
+    symmetry
+    transitivity
+    congruence
+    beta_reduction
+    eta_reduction
 * de_bruijn
-- fix grammar
-- syntax for annotation
 - check
 - infer
 - synth

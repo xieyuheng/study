@@ -4,7 +4,7 @@ import pretty._
 
 import scala.annotation.tailrec
 
-case class Ctx(map: Map[String, Type])
+case class Ctx(map: Map[String, Type] = Map())
 
 object check {
 
@@ -12,7 +12,7 @@ object check {
     ctx.map.get(name)
   }
 
-  def ctx_ext_name(ctx: Ctx, name: String, t: Type): Ctx = {
+  def ctx_ext(ctx: Ctx, name: String, t: Type): Ctx = {
     Ctx(ctx.map + (name -> t))
   }
 
@@ -56,7 +56,15 @@ object check {
                 s"infered target type is type-atom: ${name}\n"
             ))
           case Right(TypeArrow(arg_t, ret_t)) =>
-            check(ctx, arg, arg_t)
+            check(ctx, arg, arg_t) match {
+              case Right(()) => Right(())
+              case Left(err) =>
+                Left(Err(
+                  "[check fail]\n" ++
+                    s"exp: ${pretty_exp(exp)}\n" ++
+                    s"excepting type: ${pretty_type(t)}\n"
+                ).append_cause(err))
+            }
         }
       case Fn(arg_name: String, arg_t, body: Exp) =>
         t match {
@@ -70,7 +78,15 @@ object check {
             ))
           case TypeArrow(arg_t2, ret_t) =>
             if (arg_t == arg_t2) {
-              check(ctx_ext_name(ctx, arg_name, arg_t), body, ret_t)
+              check(ctx_ext(ctx, arg_name, arg_t), body, ret_t) match {
+                case Right(()) => Right(())
+                case Left(err) =>
+                  Left(Err(
+                    "[check fail]\n" ++
+                      s"exp: ${pretty_exp(exp)}\n" ++
+                      s"excepting type: ${pretty_type(t)}\n"
+                  ).append_cause(err))
+              }
             } else {
               Left(Err(
                 "[check fail]\n" ++
@@ -131,7 +147,14 @@ object check {
             }
         }
       case Fn(arg_name: String, arg_t, body: Exp) =>
-        infer(ctx_ext_name(ctx, arg_name, arg_t), body)
+        infer(ctx_ext(ctx, arg_name, arg_t), body) match {
+          case Right(t) => Right(t)
+          case Left(err) =>
+            Left(Err(
+              "[infer fail]\n" ++
+                s"exp: ${pretty_exp(exp)}\n"
+            ).append_cause(err))
+        }
     }
   }
 

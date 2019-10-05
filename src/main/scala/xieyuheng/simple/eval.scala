@@ -115,9 +115,9 @@ object eval {
     reduction_from_step(beta_eta_step, exp)
   }
 
-  def expend_global_variables(
+  def expend_free_variables(
     exp: Exp,
-    global: Map[String, Exp],
+    env: Env,
     bound_variables: Set[String],
   ): Exp = {
     exp match {
@@ -125,23 +125,23 @@ object eval {
         if (bound_variables.contains(name)) {
           Var(name)
         } else {
-          global.get(name) match {
+          env.map.get(name) match {
             case Some(exp) => exp
             case None =>
-              println(s"[expend_global_variables fail]")
+              println(s"[expend_free_variables fail]")
               println(s"undefined name: ${name}")
               throw new Exception()
           }
         }
       case Ap(target, arg) =>
         Ap(
-          expend_global_variables(target, global, bound_variables),
-          expend_global_variables(arg, global, bound_variables))
+          expend_free_variables(target, env, bound_variables),
+          expend_free_variables(arg, env, bound_variables))
       case Fn(arg_name, arg_t, body) =>
         Fn(
           arg_name,
           arg_t,
-          expend_global_variables(body, global, bound_variables + arg_name))
+          expend_free_variables(body, env, bound_variables + arg_name))
     }
   }
 

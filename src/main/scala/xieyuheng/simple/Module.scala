@@ -2,39 +2,53 @@ package xieyuheng.simple
 
 import pretty._
 
+case class Env(map: Map[String, Exp] = Map())
+
 case class Module() {
 
   var top_list: List[Top] = List()
 
-  def eval_with_global(exp: Exp, global: Map[String, Exp]): Exp = {
-    val e = eval.expend_global_variables(exp, global, Set())
+  def env_ext(env: Env, name: String, exp: Exp): Env = {
+    Env(env.map + (name -> exp))
+  }
+
+  def eval_with_env(exp: Exp, env: Env): Exp = {
+    val e = eval.expend_free_variables(exp, env, Set())
     eval.beta_eta_reduction(e)
   }
 
   def run(): Unit = {
-    var global: Map[String, Exp] = Map()
+    var env: Env = Env()
+    var ctx: Ctx = Ctx()
 
     top_list.foreach {
       case TopDecl(DeclLet(name, t, exp)) =>
-        val e = eval_with_global(exp, global)
-        global = global + (name -> e)
+        check.check(ctx, exp, t) match {
+          case Right(()) =>
+            ctx = check.ctx_ext(ctx, name, t)
+            val e = eval_with_env(exp, env)
+            env = env_ext(env, name, e)
+          case Left(err) =>
+            println(err.msg)
+            throw new Exception()
+        }
       case TopShow(exp) =>
-        show(exp, global)
+        show(exp, env)
       case TopStep(exp) =>
-        step(exp, global)
+        step(exp, env)
       case TopWalkThrough(exp) =>
-        walk_through(exp, global)
+        walk_through(exp, env)
       case TopEq(e1, e2) =>
-        assert_eq(e1, e2, global)
+        assert_eq(e1, e2, env)
       case TopNotEq(e1, e2) =>
-        assert_not_eq(e1, e2, global)
+        assert_not_eq(e1, e2, env)
       case _ => {}
     }
   }
 
-  def assert_not_eq(e1: Exp, e2: Exp, global: Map[String, Exp]): Unit = {
-    val v1 = eval_with_global(e1, global)
-    val v2 = eval_with_global(e2, global)
+  def assert_not_eq(e1: Exp, e2: Exp, env: Env): Unit = {
+    val v1 = eval_with_env(e1, env)
+    val v2 = eval_with_env(e2, env)
     if (v1 == v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be not equal")
@@ -46,9 +60,9 @@ case class Module() {
     }
   }
 
-  def assert_eq(e1: Exp, e2: Exp, global: Map[String, Exp]): Unit = {
-    val v1 = eval_with_global(e1, global)
-    val v2 = eval_with_global(e2, global)
+  def assert_eq(e1: Exp, e2: Exp, env: Env): Unit = {
+    val v1 = eval_with_env(e1, env)
+    val v2 = eval_with_env(e2, env)
     if (v1 != v2) {
       println(s"[assertion fail]")
       println(s"the following two expressions are asserted to be equal")
@@ -60,23 +74,23 @@ case class Module() {
     }
   }
 
-  def show(exp: Exp, global: Map[String, Exp]): Unit = {
-    val norm = eval_with_global(exp, global)
+  def show(exp: Exp, env: Env): Unit = {
+    val norm = eval_with_env(exp, env)
     println(s">>> ${pretty_exp(exp)}")
     println(s"=== ${pretty_exp(norm)}")
     println()
   }
 
-  def step(exp: Exp, global: Map[String, Exp]): Unit = {
-    val e = eval.expend_global_variables(exp, global, Set())
+  def step(exp: Exp, env: Env): Unit = {
+    val e = eval.expend_free_variables(exp, env, Set())
     val e2 = eval.beta_eta_step(e)
     println(s">>> ${pretty_exp(exp)}")
     println(s"=== ${pretty_exp(e2)}")
     println()
   }
 
-  def walk_through(exp: Exp, global: Map[String, Exp]): Unit = {
-    var e = eval.expend_global_variables(exp, global, Set())
+  def walk_through(exp: Exp, env: Env): Unit = {
+    var e = eval.expend_free_variables(exp, env, Set())
     println(s">>> ${pretty_exp(exp)}")
     var u = eval.beta_eta_step(e)
     while (e != u) {

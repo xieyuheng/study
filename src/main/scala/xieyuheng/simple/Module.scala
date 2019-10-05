@@ -1,4 +1,4 @@
-package xieyuheng.curry
+package xieyuheng.simple
 
 import pretty._
 
@@ -15,7 +15,7 @@ case class Module() {
     var global: Map[String, Exp] = Map()
 
     top_list.foreach {
-      case TopDecl(DeclLet(name, exp)) =>
+      case TopDecl(DeclLet(name, t, exp)) =>
         val e = eval_with_global(exp, global)
         global = global + (name -> e)
       case TopShow(exp) =>

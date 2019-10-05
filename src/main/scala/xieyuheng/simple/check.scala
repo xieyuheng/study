@@ -1,4 +1,4 @@
-package xieyuheng.curry
+package xieyuheng.simple
 
 import pretty._
 
@@ -58,7 +58,7 @@ object check {
           case Right(TypeArrow(arg_t, ret_t)) =>
             check(ctx, arg, arg_t)
         }
-      case Fn(arg_name: String, body: Exp) =>
+      case Fn(arg_name: String, arg_t, body: Exp) =>
         t match {
           case TypeAtom(name) =>
             Left(Err(
@@ -80,7 +80,7 @@ object check {
         ???
       case Ap(target: Exp, arg: Exp) =>
         ???
-      case Fn(arg_name: String, body: Exp) =>
+      case Fn(arg_name: String, arg_t, body: Exp) =>
         ???
     }
   }

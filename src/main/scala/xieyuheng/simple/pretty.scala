@@ -1,4 +1,4 @@
-package xieyuheng.de_bruijn
+package xieyuheng.simple
 
 import xieyuheng.util.pretty._
 

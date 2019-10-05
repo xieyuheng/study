@@ -1,4 +1,4 @@
-package xieyuheng.de_bruijn
+package xieyuheng.simple
 
 sealed trait Top
 final case class TopDecl(decl: Decl) extends Top

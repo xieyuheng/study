@@ -1,13 +1,4 @@
-* curry
-- check
-- theory about equality between lambda terms
-  - reflexivity
-    symmetry
-    transitivity
-    congruence
-    beta_reduction
-    eta_reduction
-* de_bruijn
+* simple
 - check
 - infer
 - synth

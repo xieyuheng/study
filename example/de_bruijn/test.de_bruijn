@@ -14,6 +14,7 @@ let two = succ(one)
 let three = succ(two)
 let four = succ(three)
 let five = succ(four)
+let six = succ(five)
 
 @show add(one, one)
 
@@ -21,6 +22,6 @@ let five = succ(four)
 
 @walk_through add(one, one)
 @walk_through add(two, two)
-@walk_through add(five, five)
+@walk_through add(six, add(six, six))
 
 @walk_through id(id(id(id(id(id(id(id(id))))))))

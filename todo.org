@@ -1,5 +1,11 @@
-* simple
-- check infer synth
+* curry
+- grammar
+* de_bruijn
+- fix grammar
+- syntax for annotation
+- check
+- infer
+- synth
 - theory about equality between lambda terms
   - reflexivity
     symmetry

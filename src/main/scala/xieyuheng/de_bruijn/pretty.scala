@@ -1,4 +1,4 @@
-package xieyuheng.simple
+package xieyuheng.de_bruijn
 
 import xieyuheng.util.pretty._
 
@@ -11,9 +11,9 @@ object pretty {
 
   def pretty_exp(exp: Exp): String = {
     exp match {
-      case Var(name, type_annotation) =>
+      case Var(name) =>
         name
-      case Fn(name, arg_type_annotation, body) =>
+      case Fn(name, arg_t, body) =>
         s"${name} => ${pretty_exp(body)}"
       case Ap(fn, arg) =>
         s"${pretty_exp(fn)}(${pretty_exp(arg)})"

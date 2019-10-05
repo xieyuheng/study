@@ -1,4 +1,4 @@
-package xieyuheng.simple
+package xieyuheng.de_bruijn
 
 import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._
@@ -84,7 +84,7 @@ object grammar {
 
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
     "rator", Map(
-      "var" -> { case List(Leaf(name)) => Var(name, None) },
+      "var" -> { case List(Leaf(name)) => Var(name) },
       "ap" -> { case List(rator, _, exp_comma_list, _) =>
         non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) } },
@@ -110,9 +110,19 @@ object grammar {
         name },
     ))
 
+  def ty: Rule = Rule(
+    "ty", Map(
+      // TODO
+    ))
+
+  def ty_matcher = Tree.matcher[Type](
+    "ty", Map(
+
+    ))
+
   def non_rator: Rule = Rule(
     "non_rator", Map(
-      "fn" -> List("(", non_empty_list(id_entry), ")", "=", ">", exp),
+      "fn" -> List("(", non_empty_list(id_entry), ":", ty , ")", "=", ">", exp),
       "fn_one" -> List(identifier, "=", ">", exp),
     ))
 

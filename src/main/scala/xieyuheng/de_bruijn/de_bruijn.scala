@@ -1,8 +1,8 @@
-package xieyuheng.simple
+package xieyuheng.de_bruijn
 
 import xieyuheng.partech.Parser
 
-object simple {
+object de_bruijn {
 
   def version: String = "0.0.1"
 
@@ -17,7 +17,7 @@ object simple {
 
   def print_help(): Unit = {
     val usage = s"""
-        |simple ${version}
+        |de_bruijn ${version}
         |
         |usage:
         |  -e, --eval <file_path> [default]

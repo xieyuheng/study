@@ -9,6 +9,12 @@ programming language implementation practices.
 - [partech](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech):
   An Earley parser generator
 
+### interpreting techniques
+
+- [eopl](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl):
+  Essentials of Programming Languages
+  - by Daniel P. Friedman and Mitchell Wand
+
 ### type theories
 
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):

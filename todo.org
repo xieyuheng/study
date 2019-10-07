@@ -1,4 +1,3 @@
-- eopl.lang_let
 - eopl.lang_proc
 - eopl.lang_letrec
 - eopl.lang_nameless

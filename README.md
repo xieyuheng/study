@@ -2,7 +2,7 @@
 
 programming language implementation practices.
 
-## Contains
+## Techniques
 
 ### parsing techniques
 
@@ -14,8 +14,16 @@ programming language implementation practices.
 - [eopl](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl):
   Essentials of Programming Languages
   - by Daniel P. Friedman and Mitchell Wand
+  - study of the binding and scoping of variables:
+    [lang_let](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_let)
+    [lang_proc]
+    [lang_letrec]
+    [lang_nameless]
+  - study of assignment to a location in memory (most basic kind of effect):
+    [lang_explicit_refs]
+    [lang_implicit_refs]
 
-### type theories
+### type checking techniques
 
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):
   The untyped lambda calculus
@@ -39,6 +47,10 @@ programming language implementation practices.
   - described in paper: "A simple type-theoretic language: Mini-TT",
     by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
   - no termination check, thus when viewed as logic it is unsound.
+
+- [de_bruijn](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/de_bruijn):
+  De Bruijn stype simple type lambda calculus
+  - implemented by term rewriting.
 
 ## Usage
 

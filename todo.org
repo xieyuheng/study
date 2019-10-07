@@ -8,8 +8,9 @@
 - how to implement call-by-need lambda calculus ?
 - jojo.untyped
 - jojo.simple
-- how to implement beta-reduction by renaming ?
 - how lambda calculus handles branching ?
+  - in church encoding of bool
+- how to implement jojo calculus by rewriting ?
 - how to implement call-by-name jojo calculus ?
 - how to implement call-by-need jojo calculus ?
 - how to encode lambda calculus by jojo calculus ?
@@ -37,7 +38,7 @@
     function's arity and
     the number of return values might be not fixed
 * eopl
-* simple
+* de_bruijn
 - representing data types
 - synth
 - theory about equality between lambda terms

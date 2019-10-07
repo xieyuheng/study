@@ -1,4 +1,4 @@
-package xieyuheng.simple
+package xieyuheng.de_bruijn
 
 import scala.annotation.tailrec
 

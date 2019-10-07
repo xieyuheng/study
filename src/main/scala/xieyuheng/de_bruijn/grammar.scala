@@ -1,4 +1,4 @@
-package xieyuheng.simple
+package xieyuheng.de_bruijn
 
 import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._

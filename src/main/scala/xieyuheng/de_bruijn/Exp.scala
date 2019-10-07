@@ -1,4 +1,4 @@
-package xieyuheng.simple
+package xieyuheng.de_bruijn
 
 sealed trait Exp
 final case class Var(name: String) extends Exp

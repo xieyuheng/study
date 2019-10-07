@@ -19,25 +19,34 @@ object eval {
     free_variables(exp).contains(name)
   }
 
+  @tailrec
+  def gen_name_for_arg(arg_name: String, arg: Exp): String = {
+    if (free_variable_p(arg_name, arg)) {
+      gen_name_for_arg(arg_name ++ "*", arg)
+    } else {
+      arg_name
+    }
+  }
+
   def subst(body: Exp, arg_name: String, arg: Exp): Exp = {
     body match {
       case Var(name: String) =>
         if (arg_name == name) {
           arg
         } else {
-          body
+          Var(name)
         }
       case Ap(target: Exp, arg2: Exp) =>
         Ap(
           subst(target, arg_name, arg),
           subst(arg2, arg_name, arg))
       case Fn(arg_name2: String, arg_t: Type, body2: Exp) =>
-        if (free_variable_p(arg_name2, arg)) {
-          val new_name = arg_name2 ++ "*"
+        if (arg_name2 == arg_name) {
+          Fn(arg_name2, arg_t, body2)
+        } else {
+          val new_name = gen_name_for_arg(arg_name2, arg)
           val new_body = subst(body2, arg_name2, Var(new_name))
           Fn(new_name, arg_t, subst(new_body, arg_name, arg))
-        } else {
-          Fn(arg_name2, arg_t, subst(body2, arg_name, arg))
         }
     }
   }
@@ -120,28 +129,8 @@ object eval {
     env: Env,
     bound_variables: Set[String],
   ): Exp = {
-    exp match {
-      case Var(name) =>
-        if (bound_variables.contains(name)) {
-          Var(name)
-        } else {
-          env.map.get(name) match {
-            case Some(exp) => exp
-            case None =>
-              println(s"[expend_free_variables fail]")
-              println(s"undefined name: ${name}")
-              throw new Exception()
-          }
-        }
-      case Ap(target, arg) =>
-        Ap(
-          expend_free_variables(target, env, bound_variables),
-          expend_free_variables(arg, env, bound_variables))
-      case Fn(arg_name, arg_t, body) =>
-        Fn(
-          arg_name,
-          arg_t,
-          expend_free_variables(body, env, bound_variables + arg_name))
+    env.map.foldLeft(exp) { case (exp, (name, arg)) =>
+      subst(exp, name, arg)
     }
   }
 

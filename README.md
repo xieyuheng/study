@@ -15,13 +15,13 @@ programming language implementation practices.
   Essentials of Programming Languages
   - by Daniel P. Friedman and Mitchell Wand
   - study of the binding and scoping of variables:
-    [lang_let](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_let)
-    [lang_proc]
-    [lang_letrec]
-    [lang_nameless]
+    - [lang_let](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_let)
+    - [lang_proc](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_proc)
+    - [lang_letrec](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_letrec)
+    - [lang_nameless](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_nameless)
   - study of assignment to a location in memory (most basic kind of effect):
-    [lang_explicit_refs]
-    [lang_implicit_refs]
+    - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs)
+    - [lang_implicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_implicit_refs)
 
 ### type checking techniques
 

@@ -1,5 +1,7 @@
 package xieyuheng.eopl.lang_let
 
+import pretty._
+
 import xieyuheng.eopl.Lang
 
 import xieyuheng.partech.Parser
@@ -12,10 +14,11 @@ object lang_let extends Lang(
         val exp = grammar.exp_matcher(tree)
         eval.eval(exp, env) match {
           case Right(value) =>
-            println(value)
+            println(s">>> pretty_exp(exp)")
+            println(s"=== pretty_val(value)")
           case Left(err) =>
             println(s"${err.msg}")
-        System.exit(1)
+            System.exit(1)
         }
       case Left(error) =>
         println(s"[parse_error] ${error.msg}")

@@ -1,5 +1,7 @@
 package xieyuheng.eopl.lang_let
 
+import pretty._
+
 object eval {
 
   def result_maybe_err(result: Either[Err, Val], err: Err): Either[Err, Val] = {
@@ -36,15 +38,15 @@ object eval {
                   s"[eval fail]\n" ++
                     s"diff(x, y) type mismatch\n" ++
                     s"expecting number\n" ++
-                    s"x: ${x}\n" ++
-                    s"y: ${y}\n"
+                    s"x: ${pretty_val(x)}\n" ++
+                    s"y: ${pretty_val(y)}\n"
                 ))
             }
           }
         } yield result
         result_maybe_err(result, Err(
           s"[eval fail]\n" ++
-            s"exp: ${exp}\n"
+            s"exp: ${pretty_exp(exp)}\n"
         ))
       case ZeroP(exp1: Exp) =>
         val result = for {
@@ -62,14 +64,14 @@ object eval {
                   s"[eval fail]\n" ++
                     s"zero_p(x, y) type mismatch\n" ++
                     s"expecting number\n" ++
-                    s"x: ${x}\n"
+                    s"x: ${pretty_val(x)}\n"
                 ))
             }
           }
         } yield result
         result_maybe_err(result, Err(
           s"[eval fail]\n" ++
-            s"exp: ${exp}\n"
+            s"exp: ${pretty_exp(exp)}\n"
         ))
       case If(exp1: Exp, exp2: Exp, exp3: Exp) =>
         val result = for {
@@ -85,14 +87,14 @@ object eval {
                   s"[eval fail]\n" ++
                     s"if x then _ else _ type mismatch\n" ++
                     s"expecting bool\n" ++
-                    s"x: ${x}\n"
+                    s"x: ${pretty_val(x)}\n"
                 ))
             }
           }
         } yield result
         result_maybe_err(result, Err(
           s"[eval fail]\n" ++
-            s"exp: ${exp}\n"
+            s"exp: ${pretty_exp(exp)}\n"
         ))
       case Let(name: String, exp1: Exp, body: Exp) =>
         val result = for {
@@ -101,7 +103,7 @@ object eval {
         } yield result
         result_maybe_err(result, Err(
           s"[eval fail]\n" ++
-            s"exp: ${exp}\n"
+            s"exp: ${pretty_exp(exp)}\n"
         ))
     }
   }

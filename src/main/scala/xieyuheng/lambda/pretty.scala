@@ -7,7 +7,7 @@ object pretty {
   def pretty_exp_map(map: Map[String, Exp]) =
     pretty_map(map) {
       case (name, exp) =>
-        s"${name}: ${pretty_exp(exp)};" }
+        s"${name}: ${pretty_exp(exp)};\n" }
 
   def pretty_exp(exp: Exp): String = {
     exp match {
@@ -41,16 +41,8 @@ object pretty {
     value match {
       case neu: Neu => pretty_neu(neu)
       case ValFn(name, body, env) =>
-        // val map_str = pretty_env(env)
-        // s"${name} => ${pretty_exp(body)} #env {${maybe_ln(map_str)}}"
         s"${name} => ${pretty_exp(body)}"
     }
   }
 
-  def pretty_env(env: Env): String = {
-    val delimiter = ";\n"
-    env.map
-      .map { case (name, value) => s"${name}: ${pretty_val(value)}" }
-      .mkString(delimiter)
-  }
 }

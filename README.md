@@ -7,7 +7,9 @@ programming language implementation practices.
 ### parsing techniques
 
 - [partech](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech):
-  An Earley parser generator
+  A parser generator
+  - with various many parsing techniques:
+    - [Earley parser](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech/parsing_techniques/Earley.scala)
 
 ### interpreting techniques
 

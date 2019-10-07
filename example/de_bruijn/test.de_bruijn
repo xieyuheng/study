@@ -9,6 +9,7 @@ let not: ((A) -> (A) -> A) -> (A) -> (A) -> A =
 
 @show true
 @show false
+@show not
 
 @walk_through not(true)
 @walk_through not(false)

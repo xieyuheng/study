@@ -19,6 +19,11 @@ sealed trait Env {
     }
   }
 
+  def ext_name(name: String, value: Val): Env = {
+    val rest = this
+    EnvName(name, value, rest)
+  }
+
 }
 
 final case class EnvEmpty() extends Env

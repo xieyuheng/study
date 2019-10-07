@@ -10,6 +10,7 @@ programming language implementation practices
   A parser generator
   - with various many parsing techniques:
     - [Earley parser](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech/parsing_techniques/Earley.scala)
+       O(n^3) for general context free grammar
 
 ### interpreting techniques
 

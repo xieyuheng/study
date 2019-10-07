@@ -1,9 +1,10 @@
 - eopl.lang_proc
 - eopl.lang_letrec
 - eopl.lang_nameless
+- eopl about state
+- eopl about cps
+- more about daniel-friedman
 - how to implement call-by-name lambda calculus ?
-  - we need to get into the state chapter of eopl
-    which is about references
 - how to implement call-by-need lambda calculus ?
 - jojo.untyped
 - jojo.simple
@@ -25,6 +26,16 @@
 - what are the lattice of type systems for lambda calculus ?
 - can norm-by-eval handle call-by-name terms ?
 - what are examples of call-by-value bad terms ?
+* jojo
+- lazy eval will be not needed in language with termination check
+  thus for a pie like version of jojo
+  we are good
+- if we want to implement lazy eval
+  we must infer the number of args for each function
+  and function's arity must be fixed
+  - if we use eager eval
+    function's arity and
+    the number of return values might be not fixed
 * eopl
 * simple
 - representing data types
@@ -44,6 +55,7 @@
 - how to specify rules ?
   - need to use stack ?
 * tartlet
+- lazy eval will be not needed in language with termination check
 - [note] why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie
 - the little typer as test

@@ -54,6 +54,12 @@ programming language implementation practices
   De Bruijn stype simple type lambda calculus
   - implemented by term rewriting.
 
+### threaded code techniques
+
+**FBI WARNING: Bizarre Adventure Ahead!**
+
+- [todo] this woule be so fun!
+
 ## Usage
 
 - Pre-compiled binaries at: [cicada-release](https://github.com/xieyuheng/cicada-release)

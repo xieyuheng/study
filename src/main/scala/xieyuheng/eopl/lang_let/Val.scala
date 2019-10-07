@@ -1,4 +1,4 @@
-package xieyuheng.eopl_let
+package xieyuheng.eopl.lang_let
 
 sealed trait Val
 final case class ValNum(num: Int) extends Val

@@ -1,4 +1,4 @@
-package xieyuheng.eopl_let
+package xieyuheng.eopl.lang_let
 
 sealed trait Exp
 final case class Var(name: String) extends Exp

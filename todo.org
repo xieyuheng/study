@@ -1,7 +1,13 @@
-- can norm-by-eval handle call-by-name terms ?
-- what are examples of call-by-value bad terms ?
+- eopl.lang_let
+- eopl.lang_proc
+- eopl.lang_letrec
+- eopl.lang_nameless
 - how to implement call-by-name lambda calculus ?
+  - we need to get into the state chapter of eopl
+    which is about references
 - how to implement call-by-need lambda calculus ?
+- jojo.untyped
+- jojo.simple
 - how to implement beta-reduction by renaming ?
 - how lambda calculus handles branching ?
 - how to implement call-by-name jojo calculus ?
@@ -18,6 +24,8 @@
   how to get a lattice of type systems for jojo ?
   use something like pure type system ?
 - what are the lattice of type systems for lambda calculus ?
+- can norm-by-eval handle call-by-name terms ?
+- what are examples of call-by-value bad terms ?
 * eopl
 * simple
 - representing data types

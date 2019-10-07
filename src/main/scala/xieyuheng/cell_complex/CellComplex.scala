@@ -1,4 +1,4 @@
-package xieyuheng.cx
+package xieyuheng.cell_complex
 
 class Entry(src: Cell, tar: Cell, cfg: Cell) {
   assert(cfg.dom == src.dom)

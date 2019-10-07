@@ -1,3 +1,5 @@
+- can norm-by-eval handle call-by-name terms ?
+- what are examples of call-by-value bad terms ?
 - how to implement call-by-name lambda calculus ?
 - how to implement call-by-need lambda calculus ?
 - how to implement beta-reduction by renaming ?

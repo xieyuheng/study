@@ -6,7 +6,7 @@ programming language implementation practices
 
 > Remember,<br>
 > an engineer solve problem,<br>
-> an engineer doesn't want just a religion about how to solve a problem.<br>
+> an engineer does not want just a religion about how to solve a problem.<br>
 > -- Gerry Sussman
 
 ### parsing techniques

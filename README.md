@@ -56,9 +56,12 @@ programming language implementation practices
 
 ### threaded code techniques
 
-**FBI WARNING: Bizarre Adventure Ahead!**
-
-- [todo] this woule be so fun!
+- [jojo](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/jojo):
+  **FBI WARNING: Bizarre Adventure Ahead!**
+  - [jojo.untyped]
+  - [jojo.curry]
+  - [jojo.de_bruijn]
+  - [jojo.pure]
 
 ## Usage
 

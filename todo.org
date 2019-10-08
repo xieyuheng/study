@@ -2,14 +2,11 @@
 - eopl.lang_nameless
 - eopl.lang_explicit_refs
 - eopl.lang_implicit_refs
-- eopl about cps
-- more about daniel-friedman
 - how to implement call-by-name lambda calculus ?
 - how to implement call-by-need lambda calculus ?
+- eopl about cps
 - jojo.untyped
 - jojo.simple
-- how lambda calculus handles branching ?
-  - in church encoding of bool
 - how to implement jojo calculus by rewriting ?
 - how to implement call-by-name jojo calculus ?
 - how to implement call-by-need jojo calculus ?

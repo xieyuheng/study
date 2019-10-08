@@ -1,6 +1,6 @@
 package xieyuheng.eopl.lang_nameless
 
-case class IdxEnv(list: List[String]) {
+case class IdxCtx(list: List[String]) {
 
   def lookup_index(name: String): Option[Int] = {
     val index = list.indexOf(name)
@@ -11,8 +11,8 @@ case class IdxEnv(list: List[String]) {
     }
   }
 
-  def ext_let(name: String): IdxEnv = {
-    IdxEnv(name +: list)
+  def ext_let(name: String): IdxCtx = {
+    IdxCtx(name +: list)
   }
 
 }

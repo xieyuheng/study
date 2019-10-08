@@ -127,7 +127,26 @@ object eval {
     }
   }
 
-  // TODO
-  // def eval_idx
+
+  def eval_idx(idx: Idx, env: Env): Either[Err, Val] = {
+    idx match {
+      case IdxVar(name: String, index: Int) =>
+        ???
+      case IdxNum(num: Int) =>
+        ???
+      case IdxDiff(exp1: Idx, exp2: Idx) =>
+        ???
+      case IdxZeroP(exp1: Idx) =>
+        ???
+      case IdxIf(exp1: Idx, exp2: Idx, exp3: Idx) =>
+        ???
+      case IdxLet(name: String, exp1: Idx, body: Idx) =>
+        ???
+      case IdxFn(name: String, body: Idx) =>
+        ???
+      case IdxAp(target: Idx, arg: Idx) =>
+        ???
+    }
+  }
 
 }

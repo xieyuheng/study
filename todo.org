@@ -1,4 +1,5 @@
-- eopl.lang_proc
+- block for eopl
+- block for de_bruijn
 - eopl.lang_letrec
 - eopl.lang_nameless
 - eopl.lang_explicit_refs

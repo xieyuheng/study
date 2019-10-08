@@ -3,6 +3,7 @@ package xieyuheng.eopl.lang_letrec
 import pretty._
 
 import xieyuheng.eopl.Interpreter
+import xieyuheng.eopl.util._
 
 import xieyuheng.partech.Parser
 

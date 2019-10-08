@@ -2,14 +2,9 @@ package xieyuheng.eopl.lang_proc
 
 import pretty._
 
-object eval {
+import xieyuheng.eopl.util._
 
-  def result_maybe_err(result: Either[Err, Val], err: Err): Either[Err, Val] = {
-    result match {
-      case Right(value) => Right(value)
-      case Left(cause) => Left(err.append_cause(cause))
-    }
-  }
+object eval {
 
   def eval(exp: Exp, env: Env): Either[Err, Val] = {
     exp match {

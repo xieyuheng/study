@@ -1,4 +1,4 @@
-package xieyuheng.eopl.lang_proc
+package xieyuheng.eopl.lang_nameless
 
 import pretty._
 
@@ -7,8 +7,8 @@ import xieyuheng.eopl.util._
 
 import xieyuheng.partech.Parser
 
-object lang_proc extends Interpreter(
-  "lang_proc", "0.0.1", { case code =>
+object lang_nameless extends Interpreter(
+  "lang_nameless", "0.0.1", { case code =>
     Parser(grammar.lexer, grammar.exp).parse(code) match {
       case Right(tree) =>
         val env = EnvEmpty()

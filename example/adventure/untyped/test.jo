@@ -1,0 +1,6 @@
+exe = { let x x }
+id = { let x { x } }
+
+{ } exe
+
+{ } { exe } id exe

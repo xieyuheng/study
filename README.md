@@ -59,14 +59,15 @@ programming language implementation practices
   De Bruijn stype simple type lambda calculus
   - implemented by term rewriting.
 
-### threaded code techniques
+### bizarre techniques
 
-- [jojo](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/jojo):
-  **FBI WARNING: Bizarre Adventure Ahead!**
-  - [jojo.untyped]
-  - [jojo.curry]
-  - [jojo.de_bruijn]
-  - [jojo.pure]
+- [adventure](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure):
+  - [untyped](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/untyped):
+    de bruijn notation with threaded code implementation
+  - [dependent](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/dependent):
+    two levels of computations -- `exe` and `cut`
+    - `exe` level computation is just computation
+    - `cut` level computation is type checking
 
 ## Usage
 

@@ -1,11 +1,13 @@
+- pretty_jo
+- base_frame with empty jojo
+- fix tail call
+- @step
+- adventure.dependent
 - eopl.lang_explicit_refs
 - eopl.lang_implicit_refs
 - how to implement call-by-name lambda calculus ?
 - how to implement call-by-need lambda calculus ?
 - eopl about cps
-- jojo.untyped
-- jojo.curry
-- jojo.de_bruijn
 - how to implement jojo calculus by rewriting ?
 - how to implement call-by-name jojo calculus ?
 - how to implement call-by-need jojo calculus ?

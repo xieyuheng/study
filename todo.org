@@ -10,6 +10,7 @@
 - how to implement jojo calculus by rewriting ?
 - how to implement call-by-name jojo calculus ?
 - how to implement call-by-need jojo calculus ?
+- what are continuation and cps in jojo calculus ?
 - how to encode lambda calculus by jojo calculus ?
 - how to encode pure type system by jojo calculus ?
 - how to check equivalence of jojo ?
@@ -35,6 +36,7 @@
     function's arity and
     the number of return values might be not fixed
 * eopl
+- more examples of eopl programs
 * de_bruijn
 - representing data types
 - synth

@@ -1,4 +1,4 @@
-package xieyuheng.eopl.lang_proc
+package xieyuheng.eopl.lang_letrec
 
 import pretty._
 
@@ -124,6 +124,14 @@ object eval {
                 ))
             }
           }
+        } yield result
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+      case LetFn(fn_name, arg_name, fn_body, body) =>
+        val result = for {
+          result <- eval(body, env.ext_fn(fn_name, arg_name, fn_body))
         } yield result
         result_maybe_err(result, Err(
           s"[eval fail]\n" ++

@@ -99,7 +99,7 @@ object eval {
       case Let(name: String, exp1: Exp, body: Exp) =>
         val result = for {
           val1 <- eval(exp1, env)
-          result <- eval(body, env.ext_name(name, val1))
+          result <- eval(body, env.ext_let(name, val1))
         } yield result
         result_maybe_err(result, Err(
           s"[eval fail]\n" ++

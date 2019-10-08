@@ -1,0 +1,3 @@
+let devil = 666 in
+let angel = 123 in
+diff(devil, 123)

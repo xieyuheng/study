@@ -4,8 +4,10 @@ let true: (A) -> (A) -> A =
 let false: (A) -> (A) -> A =
   (x: A) => (y: A) => y
 
-let not: ((A) -> (A) -> A) -> (A) -> (A) -> A =
+let not: ((A) -> (A) -> A) -> (A) -> (A) -> A = {
   (a: (A) -> (A) -> A) => (x: A) => (y: A) => a(y, x)
+}
+
 
 @show true
 @show false

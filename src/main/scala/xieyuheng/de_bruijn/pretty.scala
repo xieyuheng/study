@@ -24,8 +24,10 @@ object pretty {
         name
       case Fn(name, arg_t, body) =>
         s"(${name}: ${pretty_type(arg_t)}) => ${pretty_exp(body)}"
-      case Ap(fn, arg) =>
+      case Ap(fn: Fn, arg) =>
         s"{${pretty_exp(fn)}}(${pretty_exp(arg)})"
+      case Ap(target, arg) =>
+        s"${pretty_exp(target)}(${pretty_exp(arg)})"
     }
   }
 

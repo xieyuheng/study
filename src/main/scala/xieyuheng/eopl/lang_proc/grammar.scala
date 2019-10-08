@@ -27,6 +27,7 @@ object grammar {
       "let" -> List("let", identifier, "=", exp, "in", exp),
       "fn" -> List("(", identifier, ")", "=", ">", exp),
       "ap" -> List(exp, "(", exp, ")"),
+      "block_one" -> List("{", exp, "}"),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -49,6 +50,8 @@ object grammar {
         Fn(name, exp_matcher(body))},
       "ap" -> { case List(target, _, arg, _) =>
         Ap(exp_matcher(target), exp_matcher(arg)) },
+      "block_one" -> { case List(_, exp, _) =>
+        exp_matcher(exp) },
     ))
 
 }

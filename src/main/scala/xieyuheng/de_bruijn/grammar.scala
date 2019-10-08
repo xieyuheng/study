@@ -80,6 +80,8 @@ object grammar {
         List(rator, "(", exp, ")"),
       "ap_drop" ->
         List(rator, "(", non_empty_list(exp_comma), exp, ")"),
+      "block_one" ->
+        List("{", exp, "}"),
     ))
 
   def rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -94,6 +96,8 @@ object grammar {
         val fn = non_empty_list_matcher(exp_comma_matcher)(exp_comma_list)
           .foldLeft(rator_matcher(rator)) { case (fn, arg) => Ap(fn, arg) }
         Ap(fn, exp_matcher(exp)) },
+      "block_one" -> { case List(_, exp, _) =>
+        exp_matcher(exp) },
     ))
 
   def arg_entry: Rule = Rule(

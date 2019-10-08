@@ -20,6 +20,8 @@ object pretty {
         s"let ${name} = ${pretty_exp(exp1)} in ${pretty_exp(body)}"
       case Fn(name: String, body: Exp) =>
         s"(${name}) => ${pretty_exp(body)}"
+      case Ap(f: Fn, arg: Exp) =>
+        s"{${pretty_exp(f)}}(${pretty_exp(arg)})"
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
     }

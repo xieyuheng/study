@@ -1,4 +1,3 @@
-- eopl.lang_nameless -- show trans
 - eopl.lang_explicit_refs
 - eopl.lang_implicit_refs
 - how to implement call-by-name lambda calculus ?

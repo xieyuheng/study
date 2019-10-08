@@ -38,4 +38,27 @@ object pretty {
     }
   }
 
+  def pretty_idx(idx: Idx): String = {
+    idx match {
+      case IdxVar(name, index) =>
+        s"${index}#${name}"
+      case IdxNum(num) =>
+        num.toString
+      case IdxDiff(idx1, idx2) =>
+        s"diff(${pretty_idx(idx1)}, ${pretty_idx(idx2)})"
+      case IdxZeroP(idx1) =>
+        s"zero_p(${pretty_idx(idx1)})"
+      case IdxIf(idx1, idx2, idx3) =>
+        s"if ${pretty_idx(idx1)} then ${pretty_idx(idx2)} else ${pretty_idx(idx3)}"
+      case IdxLet(name, idx1, body) =>
+        s"let ${name} = ${pretty_idx(idx1)} in ${pretty_idx(body)}"
+      case IdxFn(name, body) =>
+        s"(${name}) => ${pretty_idx(body)}"
+      case IdxAp(f: IdxFn, arg) =>
+        s"{${pretty_idx(f)}}(${pretty_idx(arg)})"
+      case IdxAp(target, arg) =>
+        s"${pretty_idx(target)}(${pretty_idx(arg)})"
+    }
+  }
+
 }

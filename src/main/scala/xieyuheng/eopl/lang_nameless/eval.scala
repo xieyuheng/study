@@ -6,31 +6,32 @@ import xieyuheng.eopl.util._
 
 object eval {
 
-  def eval(exp: Exp, env: Env): Either[Err, Val] = {
-    exp match {
-      case Var(name: String) =>
-        env.lookup_val(name) match {
+  def eval_idx(idx: Idx, idx_env: IdxEnv): Either[Err, Val] = {
+    idx match {
+      case IdxVar(name: String, index: Int) =>
+        idx_env.lookup_val(index) match {
           case Some(value) =>
             Right(value)
           case None =>
             Left(Err(
-              s"[eval fail]\n" ++
-                s"undefined name: ${name}\n"
+              s"[eval_idx fail]\n" ++
+                s"undefined name: ${name}\n" ++
+                s"index out of bound: ${index}\n"
             ))
         }
-      case Num(num: Int) =>
+      case IdxNum(num: Int) =>
         Right(ValNum(num))
-      case Diff(exp1: Exp, exp2: Exp) =>
+      case IdxDiff(idx1: Idx, idx2: Idx) =>
         val result = for {
-          val1 <- eval(exp1, env)
-          val2 <- eval(exp2, env)
+          val1 <- eval_idx(idx1, idx_env)
+          val2 <- eval_idx(idx2, idx_env)
           result <- {
             (val1, val2) match {
               case (ValNum(x), ValNum(y)) =>
                 Right(ValNum(x - y))
               case (x, y) =>
                 Left(Err(
-                  s"[eval fail]\n" ++
+                  s"[eval_idx fail]\n" ++
                     s"diff(x, y) type mismatch\n" ++
                     s"expecting number\n" ++
                     s"x: ${pretty_val(x)}\n" ++
@@ -40,12 +41,12 @@ object eval {
           }
         } yield result
         result_maybe_err(result, Err(
-          s"[eval fail]\n" ++
-            s"exp: ${pretty_exp(exp)}\n"
+          s"[eval_idx fail]\n" ++
+            s"idx: ${pretty_idx(idx)}\n"
         ))
-      case ZeroP(exp1: Exp) =>
+      case IdxZeroP(idx1: Idx) =>
         val result = for {
-          val1 <- eval(exp1, env)
+          val1 <- eval_idx(idx1, idx_env)
           result <- {
             val1 match {
               case ValNum(x) =>
@@ -56,7 +57,7 @@ object eval {
                 }
               case x =>
                 Left(Err(
-                  s"[eval fail]\n" ++
+                  s"[eval_idx fail]\n" ++
                     s"zero_p(x, y) type mismatch\n" ++
                     s"expecting number\n" ++
                     s"x: ${pretty_val(x)}\n"
@@ -65,21 +66,21 @@ object eval {
           }
         } yield result
         result_maybe_err(result, Err(
-          s"[eval fail]\n" ++
-            s"exp: ${pretty_exp(exp)}\n"
+          s"[eval_idx fail]\n" ++
+            s"idx: ${pretty_idx(idx)}\n"
         ))
-      case If(exp1: Exp, exp2: Exp, exp3: Exp) =>
+      case IdxIf(idx1: Idx, idx2: Idx, idx3: Idx) =>
         val result = for {
-          val1 <- eval(exp1, env)
+          val1 <- eval_idx(idx1, idx_env)
           result <- {
             val1 match {
               case ValBool(true) =>
-                eval(exp2, env)
+                eval_idx(idx2, idx_env)
               case ValBool(false) =>
-                eval(exp3, env)
+                eval_idx(idx3, idx_env)
               case x =>
                 Left(Err(
-                  s"[eval fail]\n" ++
+                  s"[eval_idx fail]\n" ++
                     s"if x then _ else _ type mismatch\n" ++
                     s"expecting bool\n" ++
                     s"x: ${pretty_val(x)}\n"
@@ -88,31 +89,31 @@ object eval {
           }
         } yield result
         result_maybe_err(result, Err(
-          s"[eval fail]\n" ++
-            s"exp: ${pretty_exp(exp)}\n"
+          s"[eval_idx fail]\n" ++
+            s"idx: ${pretty_idx(idx)}\n"
         ))
-      case Let(name: String, exp1: Exp, body: Exp) =>
+      case IdxLet(name: String, idx1: Idx, body: Idx) =>
         val result = for {
-          val1 <- eval(exp1, env)
-          result <- eval(body, env.ext_let(name, val1))
+          val1 <- eval_idx(idx1, idx_env)
+          result <- eval_idx(body, idx_env.ext_let(val1))
         } yield result
         result_maybe_err(result, Err(
-          s"[eval fail]\n" ++
-            s"exp: ${pretty_exp(exp)}\n"
+          s"[eval_idx fail]\n" ++
+            s"idx: ${pretty_idx(idx)}\n"
         ))
-      case Fn(name, body) =>
-        Right(ValFn(name, body, env))
-      case Ap(target, arg) =>
+      case IdxFn(name: String, body: Idx) =>
+        Right(ValFn(name, body, idx_env))
+      case IdxAp(target: Idx, arg: Idx) =>
         val result = for {
-          f <- eval(target, env)
-          v <- eval(arg, env)
+          f <- eval_idx(target, idx_env)
+          v <- eval_idx(arg, idx_env)
           result <- {
             f match {
               case f: ValFn =>
-                eval(f.body, f.env.ext_let(f.name, v))
+                eval_idx(f.body, f.idx_env.ext_let(v))
               case _ =>
                 Left(Err(
-                  s"[eval fail]\n" ++
+                  s"[eval_idx fail]\n" ++
                     s"f(x) type mismatch\n" ++
                     s"expecting function\n" ++
                     s"f: ${pretty_val(f)}\n"
@@ -121,31 +122,9 @@ object eval {
           }
         } yield result
         result_maybe_err(result, Err(
-          s"[eval fail]\n" ++
-            s"exp: ${pretty_exp(exp)}\n"
+          s"[eval_idx fail]\n" ++
+            s"idx: ${pretty_idx(idx)}\n"
         ))
-    }
-  }
-
-
-  def eval_idx(idx: Idx, env: Env): Either[Err, Val] = {
-    idx match {
-      case IdxVar(name: String, index: Int) =>
-        ???
-      case IdxNum(num: Int) =>
-        ???
-      case IdxDiff(exp1: Idx, exp2: Idx) =>
-        ???
-      case IdxZeroP(exp1: Idx) =>
-        ???
-      case IdxIf(exp1: Idx, exp2: Idx, exp3: Idx) =>
-        ???
-      case IdxLet(name: String, exp1: Idx, body: Idx) =>
-        ???
-      case IdxFn(name: String, body: Idx) =>
-        ???
-      case IdxAp(target: Idx, arg: Idx) =>
-        ???
     }
   }
 

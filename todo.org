@@ -4,7 +4,8 @@
 - how to implement call-by-need lambda calculus ?
 - eopl about cps
 - jojo.untyped
-- jojo.simple
+- jojo.curry
+- jojo.de_bruijn
 - how to implement jojo calculus by rewriting ?
 - how to implement call-by-name jojo calculus ?
 - how to implement call-by-need jojo calculus ?

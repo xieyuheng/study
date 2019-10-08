@@ -4,7 +4,8 @@ programming language implementation practices
 
 ## Techniques
 
-> Remember, an engineer solve problem,<br>
+> Remember,<br>
+> an engineer solve problem,<br>
 > an engineer doesn't want just a religion about how to solve a problem.<br>
 > -- Gerry Sussman
 

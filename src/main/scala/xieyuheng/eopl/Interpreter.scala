@@ -1,6 +1,6 @@
 package xieyuheng.eopl
 
-class Lang(
+class Interpreter(
   name: String,
   version: String,
   run_code: String => Unit,

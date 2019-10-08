@@ -2,11 +2,11 @@ package xieyuheng.eopl.lang_let
 
 import pretty._
 
-import xieyuheng.eopl.Lang
+import xieyuheng.eopl.Interpreter
 
 import xieyuheng.partech.Parser
 
-object lang_let extends Lang(
+object lang_let extends Interpreter(
   "lang_let", "0.0.1", { case code =>
     Parser(grammar.lexer, grammar.exp).parse(code) match {
       case Right(tree) =>

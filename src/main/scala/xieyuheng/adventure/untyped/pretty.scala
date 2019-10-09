@@ -13,7 +13,8 @@ object pretty {
       case JoJo(list: List[Jo]) =>
         s"{ ${pretty_jo_list(list)} }"
       case Define(name: String, jojo: JoJo) =>
-        s"${name} = ${pretty_jo(jojo)}"
+        // s"${name} = ${pretty_jo(jojo)}"
+        s"def ${name}"
     }
   }
 
@@ -31,6 +32,21 @@ object pretty {
   def pretty_ds(ds: Ds): String = {
     val s = ds.list.reverse.map { case value => pretty_val(value) }.mkString(" ")
     s"  * ${ds.length} *  -- ${s} --"
+  }
+
+  def pretty_frame(frame: Frame): String = {
+    val s = frame.list.zipWithIndex.map { case (jo, index) =>
+      if (index == frame.index) {
+        s"@ ${pretty_jo(jo)}"
+      } else {
+        s"${pretty_jo(jo)}"
+      }
+    }.mkString(" ")
+    s"> { ${s} }"
+  }
+
+  def pretty_rs(rs: Rs): String = {
+    rs.list.reverse.map { case frame => pretty_frame(frame) }.mkString("\n")
   }
 
 }

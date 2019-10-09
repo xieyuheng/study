@@ -115,6 +115,7 @@ object exe {
   ): Either[Err, (Ds, Rs)] = {
     if (rs.length > limit) {
       if (show_step_p) {
+        println(pretty_rs(rs))
         println(pretty_ds(ds))
       }
       step(ds, rs) match {

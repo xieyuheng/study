@@ -72,6 +72,7 @@ programming language implementation practices
 ## Usage
 
 - Build: `sbt stage`
+  - test: `./dev t`
   - find executables at `./target/universal/stage/bin/`
 - Example code at: [example](https://github.com/xieyuheng/cicada/tree/master/example)
 

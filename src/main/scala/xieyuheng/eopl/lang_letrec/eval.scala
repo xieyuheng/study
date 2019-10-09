@@ -126,7 +126,15 @@ object eval {
         ))
       case LetRec(fn_name, arg_name, fn_body, body) =>
         val result = for {
-          result <- eval(body, env.ext_fn(fn_name, arg_name, fn_body))
+          result <- eval(body, env.ext_let_rec(fn_name, arg_name, fn_body))
+        } yield result
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+      case LetRecMutual(map, body) =>
+        val result = for {
+          result <- eval(body, env.ext_let_rec_mutual(map))
         } yield result
         result_maybe_err(result, Err(
           s"[eval fail]\n" ++

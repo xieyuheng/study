@@ -28,7 +28,10 @@ object grammar {
       "fn" -> List("(", identifier, ")", "=", ">", exp),
       "ap" -> List(exp, "(", exp, ")"),
       "block_one" -> List("{", exp, "}"),
-      "letrec" -> List("let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp, "in", exp),
+      "let_rec" -> List("let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp, "in", exp),
+      "let_rec_mutual" -> List(
+        "let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp,
+        non_empty_list(mutual_fn), "in", exp),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -53,8 +56,25 @@ object grammar {
         Ap(exp_matcher(target), exp_matcher(arg)) },
       "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
-      "letrec" -> { case List(_, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body, _, body) =>
+      "let_rec" -> { case List(_, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body, _, body) =>
         LetRec(fn_name, arg_name, exp_matcher(fn_body), exp_matcher(body))},
+      "let_rec_mutual" -> { case List(
+        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body,
+        mutual_fn_list, _, body) =>
+        val map = non_empty_list_matcher(mutual_fn_matcher)(mutual_fn_list).toMap
+        val map2 = map + (fn_name -> (arg_name, exp_matcher(fn_body)))
+        LetRecMutual(map2, exp_matcher(body))
+      },
     ))
 
+  def mutual_fn: Rule = Rule(
+    "mutual_fn", Map(
+      "and" -> List("and", identifier, "=", "(", identifier, ")", "=", ">", exp),
+    ))
+
+  def mutual_fn_matcher: Tree => (String, (String, Exp)) = Tree.matcher[(String, (String, Exp))](
+    "mutual_fn", Map(
+      "and" -> { case List(_, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body) =>
+        (fn_name, (arg_name, exp_matcher(fn_body))) },
+    ))
 }

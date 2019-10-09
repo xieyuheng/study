@@ -25,7 +25,12 @@ object pretty {
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
       case LetRec(fn_name, arg_name, fn_body, body) =>
-        s"fn ${fn_name}(${arg_name}) = ${pretty_exp(fn_body)} in ${pretty_exp(body)}"
+        s"let rec ${fn_name}(${arg_name}) = ${pretty_exp(fn_body)} in ${pretty_exp(body)}"
+      case LetRecMutual(map: Map[String, (String, Exp)], body: Exp) =>
+        val s = map.map { case (fn_name, (arg_name, fn_body)) =>
+          s"${fn_name}(${arg_name}) = ${pretty_exp(fn_body)}"
+        }.mkString(" and ")
+        s"let rec ${s} in ${pretty_exp(body)}"
     }
   }
 

@@ -20,7 +20,8 @@ t () {
         test_tartlet && \
         test_lambda && \
         test_syst && \
-        test_minitt
+        test_minitt && \
+        test_eopl
 }
 
 test_general () {
@@ -65,6 +66,28 @@ test_tartlet () {
 
 test_minitt () {
     test minitt
+}
+
+test_eopl () {
+    test_eopl_lang lang_let
+    test_eopl_lang lang_proc
+    test_eopl_lang lang_letrec
+}
+
+test_eopl_lang () {
+    name=$1
+
+    prog=./target/universal/stage/bin/${name}
+
+    for file in $(find . | grep "^\./example/eopl/${name}/" | grep "\.eopl$")
+    do
+        echo ""
+        echo "[${name}] $file"
+        if ! time $prog --eval $file
+        then
+            exit 1
+        fi
+    done
 }
 
 build_native_image () {

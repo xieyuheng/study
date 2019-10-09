@@ -19,7 +19,7 @@ object jojo_untyped extends Interpreter(
         val ds = Ds()
         exe.run(
           ds, rs,
-          show_step_p = true,
+          show_step_p = false,
         ) match {
           case Right(ds) =>
             println(pretty_ds(ds))

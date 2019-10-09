@@ -5,6 +5,7 @@
 - how to implement call-by-need lambda calculus ?
 - eopl about cps
 - more examples of eopl programs
+* rewriting
 * lambda
 - what are the lattice of type systems for lambda calculus ?
 - can norm-by-eval handle call-by-name terms ?

@@ -18,3 +18,5 @@ libraryDependencies ++= Seq(
 )
 
 enablePlugins(JavaAppPackaging)
+publishArtifact in packageDoc := false
+publishArtifact in packageSrc := false

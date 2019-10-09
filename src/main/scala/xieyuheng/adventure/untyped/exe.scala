@@ -64,28 +64,44 @@ case class Rs(list: List[Frame] = List()) {
 
   def next(): Rs = {
     val frame = list.head
-    this.drop().push(frame.copy(index = frame.index + 1))
-    // if (frame.index == frame.list.length - 1) {
-    //   // tail call
-    //   drop()
-    // } else {
-    //   drop().push(frame.copy(index = frame.index + 1))
-    // }
+    if (frame.index == frame.list.length - 1) {
+      // tail call
+      drop()
+    } else {
+      drop().push(frame.copy(index = frame.index + 1))
+    }
   }
 
 }
 
 object exe {
 
-  @tailrec
+  def frame_empty: Frame = {
+    Frame(0, List(), EnvEmpty())
+  }
+
   def run(ds: Ds, rs: Rs): Either[Err, Ds] = {
-    if (rs.empty_p()) {
-      Right(ds)
-    } else {
+    run_with_limit(ds, rs, 0) match {
+      case Right((ds, rs)) => Right(ds)
+      case Left(err) => Left(err)
+    }
+  }
+
+  def run_jo_list(ds: Ds, rs: Rs, list: List[Jo]): Either[Err, (Ds, Rs)] = {
+    val limit = rs.length
+    val frame = Frame(0, list, EnvEmpty())
+    run_with_limit(ds, rs.push(frame), limit)
+  }
+
+  @tailrec
+  def run_with_limit(ds: Ds, rs: Rs, limit: Int): Either[Err, (Ds, Rs)] = {
+    if (rs.length > limit) {
       step(ds, rs) match {
-        case Right((ds, rs)) => run(ds, rs)
+        case Right((ds, rs)) => run_with_limit(ds, rs, limit)
         case Left(err) => Left(err)
       }
+    } else {
+      Right(ds, rs)
     }
   }
 

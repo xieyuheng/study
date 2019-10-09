@@ -1,5 +1,3 @@
-- base_frame with empty jojo
-- fix tail call
 - @step
 - encoding like lambda calculus
 - adventure.dependent

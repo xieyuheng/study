@@ -3,4 +3,4 @@ id = { let x { x } }
 
 { } exe
 
-{ } { exe } id exe
+{ { } { exe } id exe }

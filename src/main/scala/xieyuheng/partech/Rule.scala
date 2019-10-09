@@ -68,7 +68,8 @@ sealed trait RulePart
 
 final case class RulePartStr(str: String) extends RulePart {
   override def toString = {
-    '"' + str + '"'
+    val doublequote = '"'
+    s"${doublequote}${str}${doublequote}"
   }
 }
 

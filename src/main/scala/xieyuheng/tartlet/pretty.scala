@@ -16,7 +16,8 @@ object pretty {
       case Atom() =>
         s"string_t"
       case Quote(sym: String) =>
-        '"' + s"${sym}" + '"'
+        val doublequote = '"'
+        s"${doublequote}${sym}${doublequote}"
       case Eqv(t: Exp, from: Exp, to: Exp) =>
         s"eqv_t(${pretty_exp(t)}, ${pretty_exp(from)}, ${pretty_exp(to)})"
       case Same() =>
@@ -110,7 +111,8 @@ object pretty {
       case ValAtom() =>
         s"string_t"
       case ValQuote(sym: String) =>
-        '"' + s"${sym}" + '"'
+        val doublequote = '"'
+        s"${doublequote}${sym}${doublequote}"
       case ValEqv(t: Val, from: Val, to: Val) =>
         s"eqv_t(${pretty_val(t)}, ${pretty_val(from)}, ${pretty_val(to)})"
       case ValSame() =>

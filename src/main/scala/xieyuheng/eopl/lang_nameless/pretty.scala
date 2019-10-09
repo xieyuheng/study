@@ -34,7 +34,7 @@ object pretty {
       case ValBool(bool: Boolean) =>
         bool.toString
       case ValFn(name, body, env) =>
-        s"(${name}) => ${pretty_exp(body)}"
+        s"(${name}) => ${pretty_idx(body)}"
     }
   }
 

@@ -18,7 +18,9 @@ object pretty {
 
   def pretty_tree(tree: Tree): String = {
     tree match {
-      case Leaf(str) => '"' + str + '"'
+      case Leaf(str) =>
+        val doublequote = '"'
+        s"${doublequote}${str}${doublequote}"
       case Node(rule, choice_name, children) =>
         val childrenStr = maybe_ln(children.map(pretty_tree).mkString("\n"))
         s"${rule.name}::${choice_name}${get_args_str(rule)} {${childrenStr}}"

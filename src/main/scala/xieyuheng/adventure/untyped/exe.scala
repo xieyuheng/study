@@ -1,5 +1,7 @@
 package xieyuheng.adventure.untyped
 
+import pretty._
+
 import xieyuheng.adventure.util._
 
 import scala.annotation.tailrec
@@ -65,10 +67,12 @@ case class Rs(list: List[Frame] = List()) {
   def next(): Rs = {
     val frame = list.head
     if (frame.index == frame.list.length - 1) {
-      // tail call
+      // NOTE tail call
       drop()
     } else {
-      drop().push(frame.copy(index = frame.index + 1))
+      val new_frame = frame.copy(index = frame.index + 1)
+      drop()
+        .push(new_frame)
     }
   }
 
@@ -80,25 +84,44 @@ object exe {
     Frame(0, List(), EnvEmpty())
   }
 
-  def run(ds: Ds, rs: Rs): Either[Err, Ds] = {
-    run_with_limit(ds, rs, 0) match {
+  def run(
+    ds: Ds,
+    rs: Rs,
+    show_step_p: Boolean = false,
+  ): Either[Err, Ds] = {
+    run_with_limit(ds, rs, 0, show_step_p) match {
       case Right((ds, rs)) => Right(ds)
       case Left(err) => Left(err)
     }
   }
 
-  def run_jo_list(ds: Ds, rs: Rs, list: List[Jo]): Either[Err, (Ds, Rs)] = {
+  def run_jo_list(
+    ds: Ds,
+    rs: Rs,
+    list: List[Jo],
+    show_step_p: Boolean = false,
+  ): Either[Err, (Ds, Rs)] = {
     val limit = rs.length
     val frame = Frame(0, list, EnvEmpty())
-    run_with_limit(ds, rs.push(frame), limit)
+    run_with_limit(ds, rs.push(frame), limit, show_step_p)
   }
 
   @tailrec
-  def run_with_limit(ds: Ds, rs: Rs, limit: Int): Either[Err, (Ds, Rs)] = {
+  def run_with_limit(
+    ds: Ds,
+    rs: Rs,
+    limit: Int,
+    show_step_p: Boolean = false,
+  ): Either[Err, (Ds, Rs)] = {
     if (rs.length > limit) {
+      if (show_step_p) {
+        println(pretty_ds(ds))
+      }
       step(ds, rs) match {
-        case Right((ds, rs)) => run_with_limit(ds, rs, limit)
-        case Left(err) => Left(err)
+        case Right((ds, rs)) =>
+          run_with_limit(ds, rs, limit, show_step_p)
+        case Left(err) =>
+          Left(err)
       }
     } else {
       Right(ds, rs)

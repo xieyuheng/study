@@ -17,7 +17,10 @@ object jojo_untyped extends Interpreter(
           .push(exe.frame_empty)
           .push(frame)
         val ds = Ds()
-        exe.run(ds, rs) match {
+        exe.run(
+          ds, rs,
+          show_step_p = true,
+        ) match {
           case Right(ds) =>
             println(pretty_ds(ds))
           case Left(err) =>

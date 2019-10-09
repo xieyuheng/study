@@ -1,4 +1,4 @@
-- @step
+- pretty_rs
 - encoding like lambda calculus
 - adventure.dependent
 - eopl.lang_explicit_refs

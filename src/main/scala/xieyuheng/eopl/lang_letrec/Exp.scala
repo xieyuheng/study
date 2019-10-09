@@ -9,4 +9,4 @@ final case class If(exp1: Exp, exp2: Exp, exp3: Exp) extends Exp
 final case class Let(name: String, exp1: Exp, body: Exp) extends Exp
 final case class Fn(name: String, body: Exp) extends Exp
 final case class Ap(target: Exp, arg: Exp) extends Exp
-final case class LetFn(fn_name: String, arg_name: String, fn_body: Exp, body: Exp) extends Exp
+final case class LetRec(fn_name: String, arg_name: String, fn_body: Exp, body: Exp) extends Exp

@@ -16,7 +16,7 @@ sealed trait Env {
         } else {
           rest.lookup_val(name)
         }
-      case EnvFn(fn_name, arg_name, fn_body, rest) =>
+      case EnvLetRec(fn_name, arg_name, fn_body, rest) =>
         if (name == fn_name) {
           Some(ValFn(arg_name, fn_body, env))
         } else {
@@ -32,11 +32,11 @@ sealed trait Env {
 
   def ext_fn(fn_name: String, arg_name: String, fn_body: Exp): Env = {
     val rest = this
-    EnvFn(fn_name, arg_name, fn_body, rest)
+    EnvLetRec(fn_name, arg_name, fn_body, rest)
   }
 
 }
 
 final case class EnvEmpty() extends Env
 final case class EnvLet(name: String, value: Val, rest: Env) extends Env
-final case class EnvFn(fn_name: String, arg_name: String, fn_body: Exp, rest: Env) extends Env
+final case class EnvLetRec(fn_name: String, arg_name: String, fn_body: Exp, rest: Env) extends Env

@@ -11,8 +11,7 @@ object grammar {
   def preserved: List[String] = List(
     "diff", "zero_p",
     "if", "then", "else",
-    "let", "in",
-    "fn",
+    "let", "in", "rec", "and",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -29,7 +28,7 @@ object grammar {
       "fn" -> List("(", identifier, ")", "=", ">", exp),
       "ap" -> List(exp, "(", exp, ")"),
       "block_one" -> List("{", exp, "}"),
-      "let_fn" -> List("fn", identifier, "(", identifier, ")", "=", exp, "in", exp),
+      "letrec" -> List("let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp, "in", exp),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -54,8 +53,8 @@ object grammar {
         Ap(exp_matcher(target), exp_matcher(arg)) },
       "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
-      "let_fn" -> { case List(_, Leaf(fn_name), _, Leaf(arg_name), _, _, fn_body, _, body) =>
-        LetFn(fn_name, arg_name, exp_matcher(fn_body), exp_matcher(body))},
+      "letrec" -> { case List(_, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body, _, body) =>
+        LetRec(fn_name, arg_name, exp_matcher(fn_body), exp_matcher(body))},
     ))
 
 }

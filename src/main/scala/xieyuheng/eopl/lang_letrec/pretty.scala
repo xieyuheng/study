@@ -24,7 +24,7 @@ object pretty {
         s"{${pretty_exp(f)}}(${pretty_exp(arg)})"
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
-      case LetFn(fn_name, arg_name, fn_body, body) =>
+      case LetRec(fn_name, arg_name, fn_body, body) =>
         s"fn ${fn_name}(${arg_name}) = ${pretty_exp(fn_body)} in ${pretty_exp(body)}"
     }
   }

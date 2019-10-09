@@ -124,7 +124,7 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
-      case LetFn(fn_name, arg_name, fn_body, body) =>
+      case LetRec(fn_name, arg_name, fn_body, body) =>
         val result = for {
           result <- eval(body, env.ext_fn(fn_name, arg_name, fn_body))
         } yield result

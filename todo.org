@@ -1,5 +1,6 @@
 * eopl
-- `if () {} else {}` instead of `if else then`
+- block of { let do return }
+- [maybe] `assert_eq`
 - eopl.lang_explicit_refs
 - eopl.lang_implicit_refs
 - how to implement call-by-name lambda calculus ?

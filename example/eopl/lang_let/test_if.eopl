@@ -1,6 +1,8 @@
 let p = 0 in
 let devil = 666 in
 let angel = 123 in
-if zero_p(p)
-then devil
-else angel
+if zero_p(p) {
+  devil
+} else {
+  angel
+}

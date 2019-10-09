@@ -1,0 +1,8 @@
+let p = 0 in
+let devil = 666 in
+let angel = 123 in
+if zero_p({(x) => 1}(p)) {
+  { { { devil } } }
+} else {
+  angel
+}

@@ -2,6 +2,8 @@ let p = 0 in
 let devil = 666 in
 let angel = 123 in
 let f = (x) => 1 in
-if zero_p(f(p))
-then devil
-else angel
+if zero_p(f(p)) {
+  devil
+} else {
+  angel
+}

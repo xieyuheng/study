@@ -23,7 +23,7 @@ object grammar {
       "minus_num" -> List("-", digit),
       "diff" -> List("diff", "(", exp, ",", exp, ")"),
       "zero_p" -> List("zero_p", "(", exp, ")"),
-      "if" -> List("if", exp, "then", exp, "else", exp),
+      "if" -> List("if", exp, "{", exp, "}", "else", "{", exp, "}"),
       "let" -> List("let", identifier, "=", exp, "in", exp),
       "block_one" -> List("{", exp, "}"),
     ))
@@ -40,7 +40,7 @@ object grammar {
         Diff(exp_matcher(exp1), exp_matcher(exp2))},
       "zero_p" -> { case List(_, _, exp1, _) =>
         ZeroP(exp_matcher(exp1)) },
-      "if" -> { case List(_, exp1, _, exp2, _, exp3) =>
+      "if" -> { case List(_, exp1, _, exp2, _, _, _, exp3, _) =>
         If(exp_matcher(exp1), exp_matcher(exp2), exp_matcher(exp3))},
       "let" -> { case List(_, Leaf(name), _, exp1, _, body) =>
         Let(name, exp_matcher(exp1), exp_matcher(body))},

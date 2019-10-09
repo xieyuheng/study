@@ -7,11 +7,6 @@ upload_api_doc () {
         surge target/scala-2.12/api/ cicada.surge.sh
 }
 
-get_classpath () {
-    mkdir -p target
-    sbt -error "export runtime:fullClasspath" > target/classpath
-}
-
 t () {
     rm -f target/universal/stage/bin/*
 
@@ -88,60 +83,6 @@ test_eopl_lang () {
             exit 1
         fi
     done
-}
-
-build_native_image () {
-    mkdir -p target/linux/bin/
-    get_classpath
-
-    name=$1
-
-    native-image \
-        -cp $(cat target/classpath) \
-        -H:Name="target/linux/bin/${name}" \
-        -H:Class="xieyuheng.${name}.${name}"
-}
-
-build_lambda () {
-    build_native_image lambda
-    native-image --server-shutdown-all
-}
-
-build_syst () {
-    build_native_image syst
-    native-image --server-shutdown-all
-}
-
-build_tartlet () {
-    build_native_image tartlet
-    native-image --server-shutdown-all
-}
-
-build_minitt () {
-    build_native_image minitt
-    native-image --server-shutdown-all
-}
-
-build_all () {
-    build_native_image lambda && \
-        build_native_image syst && \
-        build_native_image tartlet && \
-        build_native_image minitt
-
-    native-image --server-shutdown-all
-}
-
-release () {
-    cp -r target/linux/ ~/proj/cicada-release/ && \
-        pushd ~/proj/cicada-release/ && \
-        git add . && \
-        git commit -m "up" && \
-        git push && \
-        popd
-}
-
-install () {
-    cp target/linux/bin/* ~/bin
 }
 
 main () {

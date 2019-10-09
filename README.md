@@ -71,7 +71,8 @@ programming language implementation practices
 
 ## Usage
 
-- Pre-compiled binaries at: [cicada-release](https://github.com/xieyuheng/cicada-release)
+- Build: `sbt stage`
+  - find executables at `./target/universal/stage/bin/`
 - Example code at: [example](https://github.com/xieyuheng/cicada/tree/master/example)
 
 ## Community

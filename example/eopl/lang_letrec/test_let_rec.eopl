@@ -1,8 +1,8 @@
-let p = 9 in
-let devil = 666 in
-let angel = 123 in
-let true = zero_p(0) in
-let false = zero_p(1) in
+let p = 9
+let devil = 666
+let angel = 123
+let true = zero_p(0)
+let false = zero_p(1)
 let rec odd = (x) => {
   if zero_p(x) {
     false
@@ -13,7 +13,7 @@ let rec odd = (x) => {
       odd(diff(x, 2))
     }
   }
-} in
+}
 let rec even = (x) => {
   if zero_p(x) {
     true
@@ -24,7 +24,7 @@ let rec even = (x) => {
       even(diff(x, 2))
     }
   }
-} in
+}
 if even(p) {
   devil
 } else {

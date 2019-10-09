@@ -1,7 +1,8 @@
 * eopl
-- block of { let do return }
-- [maybe] `assert_eq`
 - eopl.lang_explicit_refs
+  - block of `let` `do` and last exp
+  - unit -- to make every exp have a value
+  - [maybe] `assert_eq` for testing
 - eopl.lang_implicit_refs
 - how to implement call-by-name lambda calculus ?
 - how to implement call-by-need lambda calculus ?

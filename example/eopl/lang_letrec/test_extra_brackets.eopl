@@ -1,6 +1,6 @@
-let p = 0 in
-let devil = 666 in
-let angel = 123 in
+let p = 0
+let devil = 666
+let angel = 123
 if zero_p({(x) => 1}(p)) {
   { { { devil } } }
 } else {

@@ -1,7 +1,7 @@
-let p = 0 in
-let devil = 666 in
-let angel = 123 in
-let f = (x) => 1 in
+let p = 0
+let devil = 666
+let angel = 123
+let f = (x) => 1
 if zero_p(f(p)) {
   devil
 } else {

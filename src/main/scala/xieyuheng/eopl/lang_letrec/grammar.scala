@@ -10,8 +10,8 @@ object grammar {
 
   def preserved: List[String] = List(
     "diff", "zero_p",
-    "if", "then", "else",
-    "let", "in", "rec", "and",
+    "if",
+    "let", "rec", "and",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -24,14 +24,14 @@ object grammar {
       "diff" -> List("diff", "(", exp, ",", exp, ")"),
       "zero_p" -> List("zero_p", "(", exp, ")"),
       "if" -> List("if", exp, "{", exp, "}", "else", "{", exp, "}"),
-      "let" -> List("let", identifier, "=", exp, "in", exp),
+      "let" -> List("let", identifier, "=", exp, exp),
       "fn" -> List("(", identifier, ")", "=", ">", exp),
       "ap" -> List(exp, "(", exp, ")"),
       "block_one" -> List("{", exp, "}"),
-      "let_rec" -> List("let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp, "in", exp),
+      "let_rec" -> List("let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp, exp),
       "let_rec_mutual" -> List(
         "let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp,
-        non_empty_list(mutual_fn), "in", exp),
+        non_empty_list(mutual_fn), exp),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -48,7 +48,7 @@ object grammar {
         ZeroP(exp_matcher(exp1)) },
       "if" -> { case List(_, exp1, _, exp2, _, _, _, exp3, _) =>
         If(exp_matcher(exp1), exp_matcher(exp2), exp_matcher(exp3))},
-      "let" -> { case List(_, Leaf(name), _, exp1, _, body) =>
+      "let" -> { case List(_, Leaf(name), _, exp1, body) =>
         Let(name, exp_matcher(exp1), exp_matcher(body))},
       "fn" -> { case List(_, Leaf(name), _, _, _, body) =>
         Fn(name, exp_matcher(body))},
@@ -56,11 +56,11 @@ object grammar {
         Ap(exp_matcher(target), exp_matcher(arg)) },
       "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
-      "let_rec" -> { case List(_, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body, _, body) =>
+      "let_rec" -> { case List(_, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body, body) =>
         LetRec(fn_name, arg_name, exp_matcher(fn_body), exp_matcher(body))},
       "let_rec_mutual" -> { case List(
         _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body,
-        mutual_fn_list, _, body) =>
+        mutual_fn_list, body) =>
         val map = non_empty_list_matcher(mutual_fn_matcher)(mutual_fn_list).toMap
         val map2 = map + (fn_name -> (arg_name, exp_matcher(fn_body)))
         LetRecMutual(map2, exp_matcher(body))

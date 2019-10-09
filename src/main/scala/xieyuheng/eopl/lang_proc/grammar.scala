@@ -10,8 +10,8 @@ object grammar {
 
   def preserved: List[String] = List(
     "diff", "zero_p",
-    "if", "then", "else",
-    "let", "in",
+    "if",
+    "let",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -24,7 +24,7 @@ object grammar {
       "diff" -> List("diff", "(", exp, ",", exp, ")"),
       "zero_p" -> List("zero_p", "(", exp, ")"),
       "if" -> List("if", exp, "{", exp, "}", "else", "{", exp, "}"),
-      "let" -> List("let", identifier, "=", exp, "in", exp),
+      "let" -> List("let", identifier, "=", exp, exp),
       "fn" -> List("(", identifier, ")", "=", ">", exp),
       "ap" -> List(exp, "(", exp, ")"),
       "block_one" -> List("{", exp, "}"),
@@ -44,7 +44,7 @@ object grammar {
         ZeroP(exp_matcher(exp1)) },
       "if" -> { case List(_, exp1, _, exp2, _, _, _, exp3, _) =>
         If(exp_matcher(exp1), exp_matcher(exp2), exp_matcher(exp3))},
-      "let" -> { case List(_, Leaf(name), _, exp1, _, body) =>
+      "let" -> { case List(_, Leaf(name), _, exp1, body) =>
         Let(name, exp_matcher(exp1), exp_matcher(body))},
       "fn" -> { case List(_, Leaf(name), _, _, _, body) =>
         Fn(name, exp_matcher(body))},

@@ -1,7 +1,7 @@
-- pretty_jo
 - base_frame with empty jojo
 - fix tail call
 - @step
+- encoding like lambda calculus
 - adventure.dependent
 - eopl.lang_explicit_refs
 - eopl.lang_implicit_refs

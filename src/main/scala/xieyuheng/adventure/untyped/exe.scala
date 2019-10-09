@@ -6,6 +6,8 @@ import scala.annotation.tailrec
 
 case class Ds(list: List[Val] = List()) {
 
+  def length: Int = list.length
+
   def empty_p(): Boolean = {
     list.length == 0
   }
@@ -31,6 +33,8 @@ case class Ds(list: List[Val] = List()) {
 case class Frame(index: Int, list: List[Jo], env: Env)
 
 case class Rs(list: List[Frame] = List()) {
+
+  def length: Int = list.length
 
   def empty_p(): Boolean = {
     list.length == 0

@@ -1,6 +1,6 @@
 package xieyuheng.adventure.untyped
 
-// import pretty._
+import pretty._
 
 import xieyuheng.adventure.Interpreter
 import xieyuheng.adventure.util._
@@ -18,7 +18,7 @@ object jojo_untyped extends Interpreter(
         val ds = Ds()
         exe.run(ds, rs) match {
           case Right(ds) =>
-            println(s"-- ${ds}")
+            println(pretty_ds(ds))
           case Left(err) =>
             println(s"${err.msg}")
             System.exit(1)

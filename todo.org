@@ -28,11 +28,11 @@
     function's arity and
     the number of return values might be not fixed
 * eopl
-- eopl.lang_explicit_refs
+- [eopl.lang_explicit_refs]
   - block of `let` `do` and last exp
   - unit -- to make every exp have a value
 - `assert_eq` for testing
-- eopl.lang_implicit_refs
+- [eopl.lang_implicit_refs]
 - how to implement call-by-name lambda calculus ?
 - how to implement call-by-need lambda calculus ?
 - eopl about cps

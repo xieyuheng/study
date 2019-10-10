@@ -1,11 +1,10 @@
 * jojo
-- [adventure.untyped] add string_t
-- [adventure.untyped] add car cdr cons to
-- [adventure.untyped_minimal_one_return_value]
-- [adventure.untyped_minimal_one_return_value] equivalent_val
+- [adventure.untyped] add string
+- [adventure.untyped] add car cdr cons
+- [adventure.untyped] infer arity and co-arity
+- [adventure.untyped] equivalent_val
+- [adventure.untyped] `assert_eq` for testing
 - [adventure.simple]
-- [adventure.untyped_minimal] equivalent_val
-- `assert_eq` for testing
 - [adventure.dependent]
 - encoding like lambda calculus
 - how to implement call-by-name jojo calculus ?
@@ -14,21 +13,11 @@
 - how to encode lambda calculus by jojo calculus ?
 - how to encode pure type system by jojo calculus ?
 - how to eval jojo with neutral ?
-- how to handle local variable when eval-ing jojo ?
 - for lambda calculus,
   we have a lattice of type systems.
   how to get a lattice of type systems for jojo ?
   use something like pure type system ?
 - how to implement jojo calculus by rewriting ?
-- lazy eval will be not needed in language with termination check
-  thus for a pie like version of jojo
-  we are good
-- if we want to implement lazy eval
-  we must infer the number of args for each function
-  and function's arity must be fixed
-  - if we use eager eval
-    function's arity and
-    the number of return values might be not fixed
 * eopl
 - [eopl.lang_explicit_refs]
   - block of `let` `do` and last exp

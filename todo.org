@@ -1,6 +1,8 @@
 * jojo
 - [adventure.untyped] add string_t
 - [adventure.untyped] add car cdr cons to
+- [adventure.untyped_minimal_one_return_value]
+- [adventure.untyped_minimal_one_return_value] equivalent_val
 - [adventure.simple]
 - [adventure.untyped_minimal] equivalent_val
 - `assert_eq` for testing

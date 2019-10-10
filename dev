@@ -16,7 +16,8 @@ t () {
         test_lambda && \
         test_syst && \
         test_minitt && \
-        test_eopl
+        test_eopl && \
+        test_adventure
 }
 
 test_general () {
@@ -67,6 +68,27 @@ test_eopl () {
     test_eopl_lang lang_let
     test_eopl_lang lang_proc
     test_eopl_lang lang_letrec
+}
+
+test_adventure () {
+    test_adventure_jojo jojo_untyped_minimal
+    test_adventure_jojo jojo_untyped
+}
+
+test_adventure_jojo () {
+    name=$1
+
+    prog=./target/universal/stage/bin/${name}
+
+    for file in $(find . | grep "^\./example/adventure/${name}/" | grep "\.jo$")
+    do
+        echo ""
+        echo "[${name}] $file"
+        if ! time $prog --eval $file
+        then
+            exit 1
+        fi
+    done
 }
 
 test_eopl_lang () {

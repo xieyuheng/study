@@ -1,11 +1,10 @@
-- adventure.untyped_minimal
 * jojo
-- add string_t to adventure.untyped
-- add car cdr cons to adventure.untyped
-- adventure.simple
-- equivalent_val
+- [adventure.untyped] add string_t
+- [adventure.untyped] add car cdr cons to
+- [adventure.simple]
+- [adventure.untyped_minimal] equivalent_val
 - `assert_eq` for testing
-- adventure.dependent
+- [adventure.dependent]
 - encoding like lambda calculus
 - how to implement call-by-name jojo calculus ?
 - how to implement call-by-need jojo calculus ?

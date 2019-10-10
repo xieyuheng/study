@@ -2,7 +2,7 @@ package xieyuheng.eopl.lang_letrec
 
 import pretty._
 
-import xieyuheng.eopl.util._
+import xieyuheng.util.err._
 
 object eval {
 

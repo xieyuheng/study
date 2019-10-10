@@ -1,6 +1,6 @@
 package xieyuheng.eopl.lang_let
 
-import xieyuheng.eopl.util._
+import xieyuheng.util.err._
 import pretty._
 
 object eval {

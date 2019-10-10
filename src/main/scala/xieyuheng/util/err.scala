@@ -1,6 +1,6 @@
-package xieyuheng.adventure
+package xieyuheng.util
 
-object util {
+object err {
 
   case class Err(msg: String) {
     def append_cause(cause: Err): Err = {

@@ -1,6 +1,6 @@
-package xieyuheng.adventure
+package xieyuheng.util
 
-class Interpreter(
+class mini_interpreter(
   name: String,
   version: String,
   run_code: String => Unit,

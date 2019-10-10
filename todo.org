@@ -1,19 +1,10 @@
-* eopl
-- eopl.lang_explicit_refs
-  - block of `let` `do` and last exp
-  - unit -- to make every exp have a value
-  - [maybe] `assert_eq` for testing
-- eopl.lang_implicit_refs
-- how to implement call-by-name lambda calculus ?
-- how to implement call-by-need lambda calculus ?
-- eopl about cps
-- more examples of eopl programs
-* rewriting
-* lambda
-- what are the lattice of type systems for lambda calculus ?
-- can norm-by-eval handle call-by-name terms ?
-- what are examples of call-by-value bad terms ?
+- adventure.untyped_minimal
 * jojo
+- add string_t to adventure.untyped
+- add car cdr cons to adventure.untyped
+- adventure.simple
+- equivalent_val
+- `assert_eq` for testing
 - adventure.dependent
 - encoding like lambda calculus
 - how to implement call-by-name jojo calculus ?
@@ -21,9 +12,6 @@
 - what are continuation and cps in jojo calculus ?
 - how to encode lambda calculus by jojo calculus ?
 - how to encode pure type system by jojo calculus ?
-- how to check equivalence of jojo ?
-- can we use norm-by-eval to check equivalence of jojo ?
-- how to define normal form of jojo ?
 - how to eval jojo with neutral ?
 - how to handle local variable when eval-ing jojo ?
 - for lambda calculus,
@@ -40,6 +28,21 @@
   - if we use eager eval
     function's arity and
     the number of return values might be not fixed
+* eopl
+- eopl.lang_explicit_refs
+  - block of `let` `do` and last exp
+  - unit -- to make every exp have a value
+- `assert_eq` for testing
+- eopl.lang_implicit_refs
+- how to implement call-by-name lambda calculus ?
+- how to implement call-by-need lambda calculus ?
+- eopl about cps
+- more examples of eopl programs
+* rewriting
+* lambda
+- what are the lattice of type systems for lambda calculus ?
+- can norm-by-eval handle call-by-name terms ?
+- what are examples of call-by-value bad terms ?
 * de_bruijn
 - representing data types
 - synth

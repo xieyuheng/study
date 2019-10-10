@@ -2,12 +2,11 @@ package xieyuheng.adventure.untyped
 
 import pretty._
 
-import xieyuheng.adventure.Interpreter
-import xieyuheng.adventure.util._
+import xieyuheng.util.mini_interpreter
 
 import xieyuheng.partech.Parser
 
-object jojo_untyped extends Interpreter(
+object jojo_untyped extends mini_interpreter (
   "jojo_untyped", "0.0.1", { case code =>
     Parser(grammar.lexer, grammar.jo_list).parse(code) match {
       case Right(tree) =>

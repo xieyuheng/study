@@ -62,12 +62,17 @@ programming language implementation practices
 ### bizarre techniques
 
 - [adventure](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure):
-  - [untyped](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/untyped):
+  - [untyped_minimal](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/untyped_minimal):
     de bruijn notation with threaded code implementation
-  - [dependent](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/dependent):
+  - [untyped](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/untyped):
+    `untyped_minimal` plus string literal and `cons` `car` `cdr`
+  - [simple](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/simple):
     two levels of computations -- `exe` and `cut`
     - `exe` level computation is just computation
     - `cut` level computation is type checking
+    - `let` is not allowed in `cut` level computation
+  - [dependent](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/dependent):
+    the same as `simple`, but allow `let` in `cut`
 
 ## Usage
 

@@ -2,12 +2,12 @@ package xieyuheng.eopl.lang_letrec
 
 import pretty._
 
-import xieyuheng.eopl.Interpreter
-import xieyuheng.eopl.util._
+import xieyuheng.util.mini_interpreter
+import xieyuheng.util.err._
 
 import xieyuheng.partech.Parser
 
-object lang_letrec extends Interpreter(
+object lang_letrec extends mini_interpreter(
   "lang_letrec", "0.0.1", { case code =>
     Parser(grammar.lexer, grammar.exp).parse(code) match {
       case Right(tree) =>

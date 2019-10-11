@@ -42,7 +42,7 @@ programming language implementation practices
 - [syst](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/syst):
   Kurt Gödel's system T
   - simply typed lambda calculus with natural number,
-  - for details about system T, see "Gödel’s system T as a precursor of modern type theory", by Gilles Dowek
+  - for details about system T, see "Gödel’s system T as a precursor of modern type theory", by Gilles Dowek
   - with typed norm-by-eval (a step toward tartlet and pie).
 - [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet):
   Little pie
@@ -53,7 +53,7 @@ programming language implementation practices
 - [minitt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/minitt):
   The dependently typed Mini-TT language
   - described in paper: "A simple type-theoretic language: Mini-TT",
-    by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
+    by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama.
   - no termination check, thus when viewed as logic it is unsound.
 - [de_bruijn](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/de_bruijn):
   De Bruijn stype simple type lambda calculus
@@ -62,10 +62,8 @@ programming language implementation practices
 ### bizarre techniques
 
 - [adventure](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure):
-  - [untyped_minimal](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/untyped_minimal):
-    de bruijn notation with threaded code implementation
   - [untyped](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/untyped):
-    `untyped_minimal` plus string literal and `cons` `car` `cdr`
+    de bruijn notation implemented by threaded code
   - [simple](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/simple):
     two levels of computations -- `exe` and `cut`
     - `exe` level computation is just computation

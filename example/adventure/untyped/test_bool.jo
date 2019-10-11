@@ -24,3 +24,5 @@ drop drop
 zero = { { } }
 one = { { zero } }
 two = { { one } }
+
+"123" "23" swap exe drop exe drop

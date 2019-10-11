@@ -1,5 +1,4 @@
 * jojo
-- [adventure.untyped] string
 - [adventure.untyped] car cdr cons
 - [adventure.untyped] infer arity and co-arity
 - [adventure.untyped] equivalent_val

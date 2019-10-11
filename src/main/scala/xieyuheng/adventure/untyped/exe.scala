@@ -60,8 +60,8 @@ object exe {
     jo match {
       case Var(name: String) =>
         env.lookup_val(name) match {
-          case Some(jojo: ValJoJo) =>
-            Right(ds, rs.push(Frame(0, jojo.list, jojo.env)))
+          case Some(value) =>
+            ap(ds, rs, env, value)
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
@@ -82,6 +82,17 @@ object exe {
         Right(ds.push(ValJoJo(list, env)), rs)
       case Define(name: String, jojo: JoJo) =>
         Right(ds, rs.toc_ext(name, ValJoJo(jojo.list, env)))
+      case Str(str: String) =>
+        Right(ds.push(ValStr(str)), rs)
+    }
+  }
+
+  def ap(ds: Ds, rs: Rs, env: Env, value: Val): Either[Err, (Ds, Rs)] = {
+    value match {
+      case jojo: ValJoJo =>
+        Right(ds, rs.push(Frame(0, jojo.list, jojo.env)))
+      case ValStr(str) =>
+        Right(ds.push(ValStr(str)), rs)
     }
   }
 

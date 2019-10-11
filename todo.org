@@ -1,10 +1,12 @@
 * jojo
-- [adventure.untyped] add string
-- [adventure.untyped] add car cdr cons
+- [adventure.untyped] string
+- [adventure.untyped] car cdr cons
 - [adventure.untyped] infer arity and co-arity
 - [adventure.untyped] equivalent_val
 - [adventure.untyped] `assert_eq` for testing
-- [adventure.simple]
+- [adventure.simple] string_t
+- [adventure.simple] cons_t car cdr cons
+- [adventure.simple] list_t list_tail list_head list_cons
 - [adventure.dependent]
 - encoding like lambda calculus
 - how to implement call-by-name jojo calculus ?

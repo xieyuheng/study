@@ -31,6 +31,8 @@ object pretty {
           s"${fn_name}(${arg_name}) = ${pretty_exp(fn_body)}"
         }.mkString(" and ")
         s"let rec ${s} in ${pretty_exp(body)}"
+      case Sole() =>
+        s"sole"
     }
   }
 
@@ -42,6 +44,8 @@ object pretty {
         bool.toString
       case ValFn(name, body, env) =>
         s"(${name}) => ${pretty_exp(body)}"
+      case ValSole() =>
+        s"sole"
     }
   }
 

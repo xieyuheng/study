@@ -1,26 +1,8 @@
-* jojo
-- [adventure.simple]
-- [adventure.simple] just like de_bruijn and nothing more
-- [adventure.simple] infer arg_count and ret_count
-- [adventure.dependent]
-- [adventure.dependent] infer arg_count and ret_count
-- [adventure.dependent] equivalent_val
-- [adventure.dependent] `assert_eq` for testing
-- encoding like lambda calculus
-- how to implement call-by-name jojo calculus ?
-- how to implement call-by-need jojo calculus ?
-- what are continuation and cps in jojo calculus ?
-- how to encode lambda calculus by jojo calculus ?
-- how to encode pure type system by jojo calculus ?
-- for lambda calculus,
-  we have a lattice of type systems.
-  how to get a lattice of type systems for jojo ?
-  use something like pure type system ?
-- how to implement jojo calculus by rewriting ?
 * eopl
-- [eopl.lang_explicit_refs] block of `let` `do` and last exp
-- [eopl.lang_explicit_refs] unit -- to make every exp have a value
-- [eopl] `assert_eq` for testing
+- [eopl.lang_letrec] block of `let` `do` and last exp
+- [eopl.lang_letrec] `assert_eq` for testing
+- [eopl.*] `assert_eq` for testing
+- [eopl.lang_explicit_refs]
 - [eopl.lang_implicit_refs]
 - [eopl.lang_mutimplicit_refs]
 - [eopl.lang_mutable_pairs]
@@ -29,9 +11,11 @@
   - how to implement call-by-need lambda calculus ?
 - eopl about cps
 - more examples of eopl programs
-* rewriting
+* jojo
+- [adventure.simple]
+- [adventure.simple] just like de_bruijn and nothing more
+- [adventure.simple] infer arg_count and ret_count
 * lambda
-- what are the lattice of type systems for lambda calculus ?
 - can norm-by-eval handle call-by-name terms ?
 - what are examples of call-by-value bad terms ?
 * de_bruijn
@@ -44,6 +28,8 @@
     congruence
     beta_reduction
     eta_reduction
+* miniml
+- about type infer
 * curry
 - type system of curry style need type variable
   and unification over type variables
@@ -65,8 +51,6 @@
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
 * pure
 - in addition to a file to eval, also a file of config of sorts, axioms and rules
-* miniml
-- about type infer
 * sysf
 * minitt
 - [note] why we *do not need* "type directed norm-by-eval" here ?
@@ -95,3 +79,4 @@
 - cook's machine for trans algo to lin-algo
 * lambda machine
 - new machine for call-by-name or call-by-need lambda
+* rewriting

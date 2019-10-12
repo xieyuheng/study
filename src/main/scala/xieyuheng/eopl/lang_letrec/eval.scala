@@ -140,6 +140,8 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
+      case Sole() =>
+        Right(ValSole())
     }
   }
 

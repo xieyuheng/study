@@ -1,0 +1,50 @@
+drop : { - {A} }
+drop = { let x }
+
+swap : {- {A} - {B} {A} {B}}
+swap = {
+  let x: {A}
+  let y: {B}
+  {x} {y}
+}
+
+exe : {- {A} A}
+exe = {
+  let x: {A}
+  x }
+
+id : {- {A} {A}}
+id = {
+  let x: {A}
+  {x}
+}
+
+true : {- {A} - {A} {A}}
+true = {
+  let x: {A}
+  let y: {A}
+  {x}
+}
+
+false : {- {A} - {A} {A}}
+false = {
+  let x: {A}
+  let y: {A}
+  {y}
+}
+
+not : {- {- {A} - {A} {A}} - {A} - {A} {A}}
+not = {
+  let a: {- {A} - {A} {A}}
+  let x: {A}
+  let y: {A}
+  {x} {y} a
+}
+
+{ { } } { { { } } } true exe
+{ { } } { { { } } } { false } not exe
+drop drop
+
+{ { } } { { { } } } false exe
+{ { } } { { { } } } { true } not exe
+drop drop

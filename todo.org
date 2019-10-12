@@ -12,9 +12,6 @@
 - what are continuation and cps in jojo calculus ?
 - how to encode lambda calculus by jojo calculus ?
 - how to encode pure type system by jojo calculus ?
-- how to eval jojo with neutral ?
-  - need infer arg_count and ret_count
-  - need projection to handle multi return value
 - for lambda calculus,
   we have a lattice of type systems.
   how to get a lattice of type systems for jojo ?

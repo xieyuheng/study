@@ -22,6 +22,7 @@
 - can norm-by-eval handle call-by-name terms ?
 - what are examples of call-by-value bad terms ?
 * de_bruijn
+- view type atom as logic and use unification 
 - representing data types
 - synth
 - theory about equality between lambda terms

@@ -1,13 +1,14 @@
 * eopl
+- [eopl.lang_explicit_refs] test_counter.eopl
+- [eopl.lang_explicit_refs] test_even.eopl
 - [eopl] `assert_eq` for testing
 - [eopl.lang_implicit_refs]
-- [eopl.lang_mutimplicit_refs]
+- [eopl.lang_mutable_pairs]
   pair_new
   pair_fst
   pair_snd
   pair_set_fst
   pair_set_snd
-- [eopl.lang_mutable_pairs]
 - [eopl.lang_lazy]
   - how to implement call-by-name lambda calculus ?
   - how to implement call-by-need lambda calculus ?

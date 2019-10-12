@@ -1,18 +1,14 @@
-- [eopl] `assert_eq` for testing
-- [eopl.lang_mutable_pairs]
-- [eopl.lang_lazy]
 * eopl
+- [eopl] `assert_eq` for testing
+- [eopl] `println` for testing
 - [eopl.lang_mutable_pairs]
   pair_new
   pair_fst
   pair_snd
   pair_set_fst
   pair_set_snd
-- [eopl.lang_lazy]
-  - how to implement call-by-name lambda calculus ?
-  - how to implement call-by-need lambda calculus ?
-- [eopl] about cps
-- more examples of eopl programs
+- [eopl.lang_call_by_reference]
+- [eopl.lang_call_by_need]
 * miniml
 - learn about type infer
 * jojo

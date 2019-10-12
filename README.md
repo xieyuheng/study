@@ -38,9 +38,11 @@ programming language implementation practices
     - [lang_mutable_pairs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_mutable_pairs):<br>
       remember Dan's paper "Cons should not evaluate its arguments" ? <br>
       this is preparation for the paper.
-    - [lang_lazy](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_lazy):<br>
+    - [lang_call_by_need](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_call_by_need):<br>
       remember Dan's paper "Cons should not evaluate its arguments" ? <br>
       this is about the paper.
+    - [lang_call_by_reference](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_call_by_reference):<br>
+      caller can mutate reference passed as arg into it.
 
 ### type checking techniques
 

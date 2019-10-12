@@ -143,6 +143,7 @@ object eval {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
+      // NOTE this can also be implemented by assignment
       case LetRec(fn_name, arg_name, fn_body, body) =>
         val result = eval(body, env.ext_let_rec(fn_name, arg_name, fn_body), store)
         result_maybe_err(result, Err(
@@ -150,6 +151,7 @@ object eval {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
+      // NOTE this can also be implemented by assignment
       case LetRecMutual(map, body) =>
         val result = eval(body, env.ext_let_rec_mutual(map), store)
         result_maybe_err(result, Err(

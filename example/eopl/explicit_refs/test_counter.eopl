@@ -1,0 +1,17 @@
+let minus = (x) => diff(0, x)
+let add = (x) => (y) => diff(x, minus(y))
+let counter = {
+  let c = ref_new(0) {
+    (_) => {
+      let n = ref_get(c)
+      do ref_set(c, add(n)(1)) {
+        n
+      }
+    }
+  }
+}
+do counter(sole)
+do counter(sole)
+do counter(sole) {
+  counter(sole)
+}

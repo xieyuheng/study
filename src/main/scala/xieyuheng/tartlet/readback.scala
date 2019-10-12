@@ -1,5 +1,7 @@
 package xieyuheng.tartlet
 
+import xieyuheng.util.err._
+
 object readback {
 
   def readback_val(value: Val, t: Val, ctx: Ctx): Either[Err, Exp] = {

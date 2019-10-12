@@ -1,6 +1,6 @@
 package xieyuheng.minitt
 
-import xieyuheng.minitt.pretty._
+import pretty._
 
 import scala.annotation.tailrec
 

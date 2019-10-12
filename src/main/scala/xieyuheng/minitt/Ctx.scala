@@ -1,6 +1,8 @@
 package xieyuheng.minitt
 
-import xieyuheng.minitt.pretty._
+import pretty._
+
+import xieyuheng.util.err._
 
 sealed trait Ctx {
 

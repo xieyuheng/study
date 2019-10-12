@@ -1,6 +1,6 @@
 package xieyuheng.minitt
 
-import xieyuheng.minitt.expDSL._
+import expDSL._
 
 object paper_without_parser_test extends Module with App {
 

@@ -3,6 +3,8 @@ package xieyuheng.tartlet
 import pretty._
 import readback._
 
+import xieyuheng.util.err._
+
 object conversion_check {
 
   def apply(ctx: Ctx, t: Val, v1: Val, v2: Val): Either[Err, Unit] =

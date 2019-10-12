@@ -2,6 +2,8 @@ package xieyuheng.tartlet
 
 import readback._
 
+import xieyuheng.util.err._
+
 object infer {
 
   def apply(exp: Exp, ctx: Ctx): Either[Err, The] =

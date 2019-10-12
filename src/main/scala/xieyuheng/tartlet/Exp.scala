@@ -1,5 +1,7 @@
 package xieyuheng.tartlet
 
+import xieyuheng.util.err._
+
 sealed trait Exp
 final case class Var(name: String) extends Exp
 final case class Atom() extends Exp

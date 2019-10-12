@@ -1,5 +1,7 @@
 package xieyuheng.tartlet
 
+import xieyuheng.util.err._
+
 object check {
 
   def apply(exp: Exp, ctx: Ctx, t: Val): Either[Err, Exp] =

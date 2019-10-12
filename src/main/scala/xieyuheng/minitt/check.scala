@@ -1,7 +1,9 @@
 package xieyuheng.minitt
 
-import xieyuheng.minitt.pretty._
-import xieyuheng.minitt.readback._
+import pretty._
+import readback._
+
+import xieyuheng.util.err._
 
 object check {
 

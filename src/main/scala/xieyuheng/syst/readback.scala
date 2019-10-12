@@ -1,5 +1,7 @@
 package xieyuheng.syst
 
+import xieyuheng.util.err._
+
 object readback {
 
   def readback_val(value: Val, used_names: Set[String], t: Type): Either[Err, Exp] = {

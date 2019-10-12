@@ -1,5 +1,7 @@
 package xieyuheng.tartlet
 
+import xieyuheng.util.err._
+
 object eval {
 
   def apply(exp: Exp, env: Env): Either[Err, Val] =

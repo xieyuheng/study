@@ -1,5 +1,7 @@
 package xieyuheng.tartlet
 
+import xieyuheng.util.err._
+
 sealed trait Val
 final case class TheNeu(t: Val, neu: Neu) extends Val
 final case class ValAbsurd() extends Val

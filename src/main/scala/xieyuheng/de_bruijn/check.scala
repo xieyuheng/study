@@ -2,6 +2,8 @@ package xieyuheng.de_bruijn
 
 import pretty._
 
+import xieyuheng.util.err._
+
 import scala.annotation.tailrec
 
 case class Ctx(map: Map[String, Type] = Map())

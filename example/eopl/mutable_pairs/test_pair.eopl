@@ -1,0 +1,7 @@
+let pair = pair_new(0, 0)
+do pair_set_fst(pair, 666)
+do pair_set_snd(pair, 123)
+let fst = pair_fst(pair)
+let snd = pair_snd(pair) {
+  diff(fst, snd)
+}

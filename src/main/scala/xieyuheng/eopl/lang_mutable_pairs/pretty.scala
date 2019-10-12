@@ -37,6 +37,16 @@ object pretty {
         s"do ${pretty_exp(exp1)} ${pretty_exp(body)}"
       case Assign(name, exp1: Exp) =>
         s"set ${name} = ${pretty_exp(exp1)}"
+      case PairNew(exp1: Exp, exp2: Exp) =>
+        s"pair_new(${pretty_exp(exp1)}, ${pretty_exp(exp2)})"
+      case PairFst(exp1: Exp) =>
+        s"pair_fst(${pretty_exp(exp1)})"
+      case PairSnd(exp1: Exp) =>
+        s"pair_snd(${pretty_exp(exp1)})"
+      case PairSetFst(exp1: Exp, exp2: Exp) =>
+        s"pair_set_new(${pretty_exp(exp1)}, ${pretty_exp(exp2)})"
+      case PairSetSnd(exp1: Exp, exp2: Exp) =>
+        s"pair_set_snd(${pretty_exp(exp1)}, ${pretty_exp(exp2)})"
     }
   }
 
@@ -52,6 +62,8 @@ object pretty {
         s"sole"
       case ValRef(address) =>
         s"ref(${address})"
+      case ValPair(fst, snd) =>
+        s"pair(${pretty_val(fst)}, ${pretty_val(snd)})"
     }
   }
 

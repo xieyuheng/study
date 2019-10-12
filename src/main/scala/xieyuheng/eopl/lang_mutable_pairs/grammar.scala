@@ -12,9 +12,12 @@ object grammar {
     "diff", "zero_p",
     "if",
     "let", "rec", "and",
-    "sole",
-    "do",
-    "set",
+    "sole", "do", "set",
+    "pair_new",
+    "pair_fst",
+    "pair_snd",
+    "pair_set_fst",
+    "pair_set_snd",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -38,6 +41,11 @@ object grammar {
       "sole" -> List("sole"),
       "do" -> List("do", exp, exp),
       "set" -> List("set", identifier, "=", exp),
+      "pair_new" -> List("pair_new", "(", exp, ",", exp, ")"),
+      "pair_fst" -> List("pair_fst", "(", exp, ")"),
+      "pair_snd" -> List("pair_snd", "(", exp, ")"),
+      "pair_set_fst" -> List("pair_set_fst", "(", exp, ",", exp, ")"),
+      "pair_set_snd" -> List("pair_set_snd", "(", exp, ",", exp, ")"),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -75,6 +83,16 @@ object grammar {
       "do" -> { case List(_, exp1, body) => Do(exp_matcher(exp1), exp_matcher(body)) },
       "set" -> { case List(_, Leaf(name), _, exp1) =>
         Assign(name, exp_matcher(exp1)) },
+      "pair_new" -> { case List(_, _, exp1, _, exp2, _) =>
+        PairNew(exp_matcher(exp1), exp_matcher(exp2)) },
+      "pair_fst" -> { case List(_, _, exp1, _) =>
+        PairFst(exp_matcher(exp1)) },
+      "pair_snd" -> { case List(_, _, exp1, _) =>
+        PairSnd(exp_matcher(exp1)) },
+      "pair_set_fst" -> { case List(_, _, exp1, _, exp2, _) =>
+        PairSetFst(exp_matcher(exp1), exp_matcher(exp2)) },
+      "pair_set_snd" -> { case List(_, _, exp1, _, exp2, _) =>
+        PairSetSnd(exp_matcher(exp1), exp_matcher(exp2)) },
     ))
 
   def mutual_fn: Rule = Rule(

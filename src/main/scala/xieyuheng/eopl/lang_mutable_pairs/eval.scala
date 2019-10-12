@@ -197,6 +197,127 @@ object eval {
             ))
         }
 
+      case PairNew(exp1: Exp, exp2: Exp) =>
+        val result = eval(exp1, env, store).flatMap {
+          case (store1, val1) =>
+            eval(exp2, env, store1).flatMap {
+              case (store2, val2) =>
+                val (store3, address_fst) = store2.ref_new(val1)
+                val (store4, address_snd) = store3.ref_new(val2)
+                Right(store4, ValPair(
+                  ValRef(address_fst),
+                  ValRef(address_snd)))
+            }
+        }
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
+      case PairFst(exp1: Exp) =>
+        val result = eval(exp1, env, store).flatMap {
+          case (store1, val1) =>
+            val1 match {
+              case ValPair(ValRef(address), snd) =>
+                store1.ref_get(address) match {
+                  case Some(value) =>
+                    Right(store1, value)
+                  case None =>
+                    Left(Err(
+                      s"[eval fail]\n" ++
+                        s"undefined address: ${address}\n"
+                    ))
+                }
+              case x =>
+                Left(Err(
+                  s"[eval fail]\n" ++
+                    s"pair_fst(x) type mismatch\n" ++
+                    s"expecting pair\n" ++
+                    s"x: ${pretty_val(x)}\n"
+                ))
+            }
+        }
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
+      case PairSnd(exp1: Exp) =>
+        val result = eval(exp1, env, store).flatMap {
+          case (store1, val1) =>
+            val1 match {
+              case ValPair(fst, ValRef(address)) =>
+                store1.ref_get(address) match {
+                  case Some(value) =>
+                    Right(store1, value)
+                  case None =>
+                    Left(Err(
+                      s"[eval fail]\n" ++
+                        s"undefined address: ${address}\n"
+                    ))
+                }
+              case x =>
+                Left(Err(
+                  s"[eval fail]\n" ++
+                    s"pair_snd(x) type mismatch\n" ++
+                    s"expecting pair\n" ++
+                    s"x: ${pretty_val(x)}\n"
+                ))
+            }
+        }
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
+      case PairSetFst(exp1: Exp, exp2: Exp) =>
+        val result = eval(exp1, env, store).flatMap {
+          case (store1, val1) =>
+            val1 match {
+              case ValPair(ValRef(address), snd) =>
+                eval(exp2, env, store1).flatMap {
+                  case (store2, val2) =>
+                    val store3 = store2.ref_set(address, val2)
+                    Right(store3, ValSole())
+                }
+              case x =>
+                Left(Err(
+                  s"[eval fail]\n" ++
+                    s"pair_set_fst(x, y) type mismatch\n" ++
+                    s"expecting x to be pair\n" ++
+                    s"x: ${pretty_val(x)}\n"
+                ))
+            }
+        }
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
+      case PairSetSnd(exp1: Exp, exp2: Exp) =>
+        val result = eval(exp1, env, store).flatMap {
+          case (store1, val1) =>
+            val1 match {
+              case ValPair(fst, ValRef(address)) =>
+                eval(exp2, env, store1).flatMap {
+                  case (store2, val2) =>
+                    val store3 = store2.ref_set(address, val2)
+                    Right(store3, ValSole())
+                }
+              case x =>
+                Left(Err(
+                  s"[eval fail]\n" ++
+                    s"pair_set_snd(x, y) type mismatch\n" ++
+                    s"expecting x to be pair\n" ++
+                    s"x: ${pretty_val(x)}\n"
+                ))
+            }
+        }
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
     }
   }
 

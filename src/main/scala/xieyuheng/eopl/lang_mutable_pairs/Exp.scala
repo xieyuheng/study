@@ -14,3 +14,8 @@ final case class LetRecMutual(map: Map[String, (String, Exp)], body: Exp) extend
 final case class Sole() extends Exp
 final case class Do(exp1: Exp, body: Exp) extends Exp
 final case class Assign(name: String, exp1: Exp) extends Exp
+final case class PairNew(exp1: Exp, exp2: Exp) extends Exp
+final case class PairFst(exp1: Exp) extends Exp
+final case class PairSnd(exp1: Exp) extends Exp
+final case class PairSetFst(exp1: Exp, exp2: Exp) extends Exp
+final case class PairSetSnd(exp1: Exp, exp2: Exp) extends Exp

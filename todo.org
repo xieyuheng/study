@@ -1,12 +1,6 @@
 * eopl
 - [eopl] `assert_eq` for testing
 - [eopl] `println` for testing
-- [eopl.lang_mutable_pairs]
-  pair_new
-  pair_fst
-  pair_snd
-  pair_set_fst
-  pair_set_snd
 - [eopl.lang_call_by_reference]
 - [eopl.lang_call_by_need]
 * miniml

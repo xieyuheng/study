@@ -34,8 +34,7 @@ programming language implementation practices
     - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):<br>
       explicit reference (address)
     - [lang_implicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_implicit_refs):<br>
-      distinguish expressed value from denoted value, <br>
-      distinguish left value and right value (like c).
+      distinguish `denoted value` from `expressed value` for mutable variable.
     - [lang_mutable_pairs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_mutable_pairs):<br>
       remember Dan's paper "Cons should not evaluate its arguments" ? <br>
       this is preparation for the paper.

@@ -1,5 +1,4 @@
 - [eopl] `assert_eq` for testing
-- [eopl.lang_implicit_refs]
 - [eopl.lang_mutable_pairs]
 - [eopl.lang_lazy]
 * eopl

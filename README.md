@@ -29,7 +29,7 @@ programming language implementation practices
     - [lang_letrec](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_letrec):<br>
       recursive scope! (by a trick in the env lookup function)
     - [lang_nameless](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_nameless):<br>
-      nameless scope! (de bruijn index)
+      nameless scope! (a.k.a. de bruijn index)
   - the study of assignment:
     - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):<br>
       explicit reference (address)

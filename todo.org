@@ -1,6 +1,9 @@
-* eopl
+- use mini_interpreter.scala as much as possible
 - [eopl] `assert_eq` for testing
 - [eopl.lang_implicit_refs]
+- [eopl.lang_mutable_pairs]
+- [eopl.lang_lazy]
+* eopl
 - [eopl.lang_mutable_pairs]
   pair_new
   pair_fst

@@ -104,6 +104,13 @@
   ------------------------------
   ctx |- (- A) : (- A2)
 
+* dependent type
+
+  we need two new jo in exe: `dep` and `lit`
+
+  dep x: {A} =cut=> let x: {A}
+  lit { f } =cut=> { f }
+
 * [todo] semantic of eval
 
   - operational semantic

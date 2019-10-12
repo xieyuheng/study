@@ -23,13 +23,13 @@ programming language implementation practices
   - by Daniel P. Friedman and Mitchell Wand
   - the study of scope:
     - [lang_let](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_let):<br>
-      simple scope
+      scope!
     - [lang_proc](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_proc):<br>
-      closure
+      lexical scope! (closure)
     - [lang_letrec](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_letrec):<br>
-      recursive closure
+      recursive scope! (by a trick in the env lookup function)
     - [lang_nameless](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_nameless):<br>
-      de bruijn index
+      nameless scope! (de bruijn index)
   - the study of assignment:
     - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):<br>
       explicit reference (address)

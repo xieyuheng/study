@@ -17,6 +17,7 @@
 * miniml
 - learn about type infer
 * jojo
+- [adventure.untyped] `assert_eq` for testing
 - [adventure.simple]
 - [adventure.simple] just like de_bruijn and nothing more
 - [adventure.simple] infer arg_count and ret_count

@@ -31,14 +31,17 @@ programming language implementation practices
     - [lang_nameless](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_nameless):
       de bruijn index
   - study of assignment to a location in memory (most basic kind of effect):
-    - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):
+    - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):<br>
       explicit reference (address)
-    - [lang_implicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_implicit_refs):
-      distinguish value from denoted value, distinguish left value and right value (like c).
-    - [lang_mutable_pairs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_mutable_pairs):
-      remember Dan's paper "Cons should not evaluate its arguments" ? this is preparation for the paper.
-    - [lang_lazy](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_lazy):
-      remember Dan's paper "Cons should not evaluate its arguments" ? this is about the paper.
+    - [lang_implicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_implicit_refs):<br>
+      distinguish value from denoted value, <br>
+      distinguish left value and right value (like c).
+    - [lang_mutable_pairs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_mutable_pairs):<br>
+      remember Dan's paper "Cons should not evaluate its arguments" ? <br>
+      this is preparation for the paper.
+    - [lang_lazy](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_lazy):<br>
+      remember Dan's paper "Cons should not evaluate its arguments" ? <br>
+      this is about the paper.
 
 ### type checking techniques
 

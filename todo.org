@@ -1,8 +1,16 @@
 * eopl
-- [eopl] `assert_eq` for testing
 - [eopl.lang_explicit_refs]
+  ref_new
+  ref_get
+  ref_set
+- [eopl] `assert_eq` for testing
 - [eopl.lang_implicit_refs]
 - [eopl.lang_mutimplicit_refs]
+  pair_new
+  pair_fst
+  pair_snd
+  pair_set_fst
+  pair_set_snd
 - [eopl.lang_mutable_pairs]
 - [eopl.lang_lazy]
   - how to implement call-by-name lambda calculus ?

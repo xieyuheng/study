@@ -1,0 +1,7 @@
+let x = sole
+do {
+  let y = x
+  do x
+  y
+}
+x

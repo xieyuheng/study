@@ -1,0 +1,12 @@
+let p = 9
+let devil = 666
+let angel = 123
+let true = zero_p(0)
+let false = zero_p(1)
+let rec odd = (x) => if zero_p(x) { false } else { even(diff(x, 1)) }
+and even = (x) => if zero_p(x) { true } else { odd(diff(x, 1)) }
+if even(p) {
+  devil
+} else {
+  angel
+}

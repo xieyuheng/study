@@ -67,7 +67,9 @@ test_minitt () {
 test_eopl () {
     test_eopl_lang let
     test_eopl_lang proc
+    test_eopl_lang nameless
     test_eopl_lang letrec
+    test_eopl_lang explicit_refs
 }
 
 test_eopl_lang () {
@@ -87,8 +89,8 @@ test_eopl_lang () {
 }
 
 test_adventure () {
-    test_adventure_jojo untyped_minimal
     test_adventure_jojo untyped
+    # test_adventure_jojo simple
 }
 
 test_adventure_jojo () {

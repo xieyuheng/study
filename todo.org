@@ -1,8 +1,4 @@
 * eopl
-- [eopl.lang_explicit_refs]
-  ref_new
-  ref_get
-  ref_set
 - [eopl] `assert_eq` for testing
 - [eopl.lang_implicit_refs]
 - [eopl.lang_mutimplicit_refs]

@@ -1,0 +1,5 @@
+{}
+"a" cons
+"b" cons
+"c" cons
+cdr

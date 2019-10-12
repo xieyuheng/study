@@ -1,17 +1,8 @@
-drop = { let x }
 exe = { let x x }
-id = { let x { x } }
-swap = { let x let y { x } { y } }
 
 true = { let x let y { x } }
 false = { let x let y { y } }
 not = { let a let x let y { x } { y } a }
-
-// { } exe
-
-// { { } { exe } id exe } exe
-
-// { exe } { swap } swap
 
 { { } } { { { } } } true exe
 { { } } { { { } } } { false } not exe
@@ -20,9 +11,3 @@ drop drop
 { { } } { { { } } } false exe
 { { } } { { { } } } { true } not exe
 drop drop
-
-zero = { { } }
-one = { { zero } }
-two = { { one } }
-
-"123" "23" swap exe drop exe drop

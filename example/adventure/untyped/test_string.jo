@@ -1,0 +1,5 @@
+drop = { let x }
+exe = { let x x }
+swap = { let x let y { x } { y } }
+
+"123" "23" swap exe drop exe drop

@@ -1,0 +1,8 @@
+drop = { let x }
+exe = { let x x }
+id = { let x { x } }
+swap = { let x let y { x } { y } }
+
+{ } exe
+{ { } { exe } id exe } exe
+{ exe } { swap } swap

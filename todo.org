@@ -1,12 +1,11 @@
 * jojo
-- [adventure.untyped] car cdr cons
-- [adventure.untyped] infer arity and co-arity
-- [adventure.untyped] equivalent_val
-- [adventure.untyped] `assert_eq` for testing
-- [adventure.simple] string_t
-- [adventure.simple] cons_t car cdr cons
-- [adventure.simple] list_t list_tail list_head list_cons
+- [adventure.simple]
+- [adventure.simple] just like de_bruijn and nothing more
+- [adventure.simple] infer arg_count and ret_count
 - [adventure.dependent]
+- [adventure.dependent] infer arg_count and ret_count
+- [adventure.dependent] equivalent_val
+- [adventure.dependent] `assert_eq` for testing
 - encoding like lambda calculus
 - how to implement call-by-name jojo calculus ?
 - how to implement call-by-need jojo calculus ?
@@ -14,19 +13,23 @@
 - how to encode lambda calculus by jojo calculus ?
 - how to encode pure type system by jojo calculus ?
 - how to eval jojo with neutral ?
+  - need infer arg_count and ret_count
+  - need projection to handle multi return value
 - for lambda calculus,
   we have a lattice of type systems.
   how to get a lattice of type systems for jojo ?
   use something like pure type system ?
 - how to implement jojo calculus by rewriting ?
 * eopl
-- [eopl.lang_explicit_refs]
-  - block of `let` `do` and last exp
-  - unit -- to make every exp have a value
-- `assert_eq` for testing
+- [eopl.lang_explicit_refs] block of `let` `do` and last exp
+- [eopl.lang_explicit_refs] unit -- to make every exp have a value
+- [eopl] `assert_eq` for testing
 - [eopl.lang_implicit_refs]
-- how to implement call-by-name lambda calculus ?
-- how to implement call-by-need lambda calculus ?
+- [eopl.lang_mutimplicit_refs]
+- [eopl.lang_mutable_pairs]
+- [eopl.lang_lazy]
+  - how to implement call-by-name lambda calculus ?
+  - how to implement call-by-need lambda calculus ?
 - eopl about cps
 - more examples of eopl programs
 * rewriting

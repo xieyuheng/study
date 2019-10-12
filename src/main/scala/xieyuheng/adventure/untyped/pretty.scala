@@ -13,11 +13,16 @@ object pretty {
       case JoJo(list: List[Jo]) =>
         s"{ ${pretty_jo_list(list)} }"
       case Define(name: String, jojo: JoJo) =>
-        // s"${name} = ${pretty_jo(jojo)}"
-        s"def ${name}"
+        s"${name} = ${pretty_jo(jojo)}"
       case Str(str) =>
         val doublequote = '"'
         s"${doublequote}${str}${doublequote}"
+      case Cons() =>
+        s"cons"
+      case Car() =>
+        s"car"
+      case Cdr() =>
+        s"cdr"
     }
   }
 
@@ -32,6 +37,8 @@ object pretty {
       case ValStr(str) =>
         val doublequote = '"'
         s"${doublequote}${str}${doublequote}"
+      case ValCons(car, cdr) =>
+        s"cons(${pretty_val(car)}, ${pretty_val(cdr)})"
     }
   }
 

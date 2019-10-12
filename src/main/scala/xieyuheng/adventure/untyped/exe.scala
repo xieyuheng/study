@@ -84,6 +84,56 @@ object exe {
         Right(ds, rs.toc_ext(name, ValJoJo(jojo.list, env)))
       case Str(str: String) =>
         Right(ds.push(ValStr(str)), rs)
+      case Cons() =>
+        ds.toc() match {
+          case Some(car) =>
+            ds.drop().toc() match {
+              case Some(cdr) =>
+                Right(ds.drop().drop().push(ValCons(car, cdr)), rs)
+              case None =>
+                Left(Err(
+                  s"[exe fail]\n" ++
+                    s"stack underflow\n"
+                ))
+            }
+          case None =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"stack underflow\n"
+            ))
+        }
+      case Car() =>
+        ds.toc() match {
+          case Some(ValCons(car, cdr)) =>
+            Right(ds.drop().push(car), rs)
+          case Some(value) =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"type mismatch match, excepting cons\n" ++
+                s"value: ${pretty_val(value)}\n"
+            ))
+          case None =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"stack underflow\n"
+            ))
+        }
+      case Cdr() =>
+        ds.toc() match {
+          case Some(ValCons(car, cdr)) =>
+            Right(ds.drop().push(cdr), rs)
+          case Some(value) =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"type mismatch match, excepting cons\n" ++
+                s"value: ${pretty_val(value)}\n"
+            ))
+          case None =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"stack underflow\n"
+            ))
+        }
     }
   }
 
@@ -93,6 +143,8 @@ object exe {
         Right(ds, rs.push(Frame(0, jojo.list, jojo.env)))
       case ValStr(str) =>
         Right(ds.push(ValStr(str)), rs)
+      case ValCons(car, cdr) =>
+        Right(ds.push(ValCons(car, cdr)), rs)
     }
   }
 

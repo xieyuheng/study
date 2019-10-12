@@ -10,6 +10,7 @@ object grammar {
 
   def preserved: List[String] = List(
     "let",
+    "cons", "car", "cdr",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -23,6 +24,9 @@ object grammar {
       "define" -> List(identifier, "=", "{", jo_list, "}"),
       "define_empty" -> List(identifier, "=", "{", "}"),
       "string" -> List(double_quoted_string),
+      "cons" -> List("cons"),
+      "car" -> List("car"),
+      "cdr" -> List("cdr"),
     ))
 
   def jo_list = non_empty_list(jo)
@@ -40,6 +44,9 @@ object grammar {
       "define_empty" -> { case List(Leaf(name), _, _, _) =>
         Define(name, JoJo(List())) },
       "string" -> { case List(Leaf(str)) => Str(trim_double_quote(str)) },
+      "cons" -> { case List(_) => Cons() },
+      "car" -> { case List(_) => Car() },
+      "cdr" -> { case List(_) => Cdr() },
     ))
 
 }

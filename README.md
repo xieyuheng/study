@@ -34,9 +34,11 @@ programming language implementation practices
     - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):
       explicit reference (address)
     - [lang_implicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_implicit_refs):
-      distinguish value from denoted value
+      distinguish value from denoted value, distinguish left value and right value (like c).
     - [lang_mutable_pairs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_mutable_pairs):
-      remember Dan's paper "Cons should not evaluate its arguments" ?
+      remember Dan's paper "Cons should not evaluate its arguments" ? this is preparation for the paper.
+    - [lang_lazy](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_lazy):
+      remember Dan's paper "Cons should not evaluate its arguments" ? this is about the paper.
 
 ### type checking techniques
 

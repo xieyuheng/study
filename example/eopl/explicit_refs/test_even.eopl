@@ -1,0 +1,20 @@
+let x = ref_new(0)
+let true = zero_p(0)
+let false = zero_p(1)
+let rec even = (_) => {
+  if zero_p(ref_get(x)) { true } else {
+    do ref_set(x, diff(ref_get(x), 1)) {
+      odd(sole)
+    }
+  }
+}
+and odd = (_) => {
+  if zero_p(ref_get(x)) { false } else {
+    do ref_set(x, diff(ref_get(x), 1)) {
+      even(sole)
+    }
+  }
+}
+do ref_set(x, 12) {
+  even(sole)
+}

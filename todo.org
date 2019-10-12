@@ -1,6 +1,5 @@
 * eopl
 - [eopl.lang_explicit_refs] test_counter.eopl
-- [eopl.lang_explicit_refs] test_even.eopl
 - [eopl] `assert_eq` for testing
 - [eopl.lang_implicit_refs]
 - [eopl.lang_mutable_pairs]
@@ -12,8 +11,10 @@
 - [eopl.lang_lazy]
   - how to implement call-by-name lambda calculus ?
   - how to implement call-by-need lambda calculus ?
-- eopl about cps
+- [eopl] about cps
 - more examples of eopl programs
+* miniml
+- learn about type infer
 * jojo
 - [adventure.simple]
 - [adventure.simple] just like de_bruijn and nothing more
@@ -22,7 +23,7 @@
 - can norm-by-eval handle call-by-name terms ?
 - what are examples of call-by-value bad terms ?
 * de_bruijn
-- view type atom as logic and use unification 
+- view type atom as logic and use unification
 - representing data types
 - synth
 - theory about equality between lambda terms
@@ -32,9 +33,8 @@
     congruence
     beta_reduction
     eta_reduction
-* miniml
-- about type infer
 * curry
+- view type atom as logic and use unification
 - type system of curry style need type variable
   and unification over type variables
 * joy

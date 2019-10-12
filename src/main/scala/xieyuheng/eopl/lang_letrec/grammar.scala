@@ -12,8 +12,8 @@ object grammar {
     "diff", "zero_p",
     "if",
     "let", "rec", "and",
-    "do",
     "sole",
+    "do",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -35,6 +35,7 @@ object grammar {
         "let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp,
         non_empty_list(mutual_fn), exp),
       "sole" -> List("sole"),
+      "do" -> List("do", exp, exp),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -69,6 +70,7 @@ object grammar {
         LetRecMutual(map2, exp_matcher(body))
       },
       "sole" -> { case List(_) => Sole() },
+      "do" -> { case List(_, exp, body) => Do(exp_matcher(exp), exp_matcher(body)) },
     ))
 
   def mutual_fn: Rule = Rule(

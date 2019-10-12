@@ -17,7 +17,7 @@ object pretty {
       case If(exp1: Exp, exp2: Exp, exp3: Exp) =>
         s"if ${pretty_exp(exp1)} then ${pretty_exp(exp2)} else ${pretty_exp(exp3)}"
       case Let(name: String, exp1: Exp, body: Exp) =>
-        s"let ${name} = ${pretty_exp(exp1)} in ${pretty_exp(body)}"
+        s"let ${name} = ${pretty_exp(exp1)} ${pretty_exp(body)}"
       case Fn(name: String, body: Exp) =>
         s"(${name}) => ${pretty_exp(body)}"
       case Ap(f: Fn, arg: Exp) =>
@@ -25,14 +25,16 @@ object pretty {
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
       case LetRec(fn_name, arg_name, fn_body, body) =>
-        s"let rec ${fn_name}(${arg_name}) = ${pretty_exp(fn_body)} in ${pretty_exp(body)}"
+        s"let rec ${fn_name}(${arg_name}) = ${pretty_exp(fn_body)} ${pretty_exp(body)}"
       case LetRecMutual(map: Map[String, (String, Exp)], body: Exp) =>
         val s = map.map { case (fn_name, (arg_name, fn_body)) =>
           s"${fn_name}(${arg_name}) = ${pretty_exp(fn_body)}"
         }.mkString(" and ")
-        s"let rec ${s} in ${pretty_exp(body)}"
+        s"let rec ${s} ${pretty_exp(body)}"
       case Sole() =>
         s"sole"
+      case Do(exp, body) =>
+        s"do ${pretty_exp(exp)} ${pretty_exp(body)}"
     }
   }
 

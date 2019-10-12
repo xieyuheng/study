@@ -142,6 +142,15 @@ object eval {
         ))
       case Sole() =>
         Right(ValSole())
+      case Do(exp: Exp, body: Exp) =>
+        val result = for {
+          _ <- eval(exp, env)
+          result <- eval(body, env)
+        } yield result
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
     }
   }
 

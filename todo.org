@@ -1,7 +1,5 @@
 * eopl
-- [eopl.lang_letrec] block of `let` `do` and last exp
-- [eopl.lang_letrec] `assert_eq` for testing
-- [eopl.*] `assert_eq` for testing
+- [eopl] `assert_eq` for testing
 - [eopl.lang_explicit_refs]
 - [eopl.lang_implicit_refs]
 - [eopl.lang_mutimplicit_refs]

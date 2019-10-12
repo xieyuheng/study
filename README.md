@@ -21,7 +21,7 @@ programming language implementation practices
 - [eopl](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl):<br>
   Essentials of Programming Languages
   - by Daniel P. Friedman and Mitchell Wand
-  - study of the binding and scoping of variables:
+  - the study of scope:
     - [lang_let](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_let):<br>
       simple scope
     - [lang_proc](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_proc):<br>
@@ -30,17 +30,17 @@ programming language implementation practices
       recursive closure
     - [lang_nameless](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_nameless):<br>
       de bruijn index
-  - study of assignment to a location in memory (most basic kind of effect):
+  - the study of assignment:
     - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):<br>
       explicit reference (address)
     - [lang_implicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_implicit_refs):<br>
       distinguish `denoted value` from `expressed value` for mutable variable.
     - [lang_mutable_pairs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_mutable_pairs):<br>
       remember Dan's paper "Cons should not evaluate its arguments" ? <br>
-      this is preparation for the paper.
+      this is preparation for it.
     - [lang_call_by_need](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_call_by_need):<br>
       remember Dan's paper "Cons should not evaluate its arguments" ? <br>
-      this is about the paper.
+      this is about it.
     - [lang_call_by_reference](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_call_by_reference):<br>
       caller can mutate reference passed as arg into it.
 

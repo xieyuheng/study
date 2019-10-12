@@ -1,4 +1,3 @@
-- use mini_interpreter.scala as much as possible
 - [eopl] `assert_eq` for testing
 - [eopl.lang_implicit_refs]
 - [eopl.lang_mutable_pairs]

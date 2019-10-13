@@ -12,7 +12,7 @@ study of programming language design and implementation
 - [partech](src/main/scala/xieyuheng/partech)<br>
   A parser generator, with various parsing techniques
   - [Earley parser](src/main/scala/xieyuheng/partech/parsing_techniques/Earley.scala)<br>
-    O(n^3) for general context free grammar
+    O(n^3) for context free grammar
 
 ### study of scope
 

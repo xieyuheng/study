@@ -116,6 +116,31 @@ object tran {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
+      case AssertEq(exp1, exp2) =>
+        val result = for {
+          idx1 <- tran_nameless(exp1, idx_ctx)
+          idx2 <- tran_nameless(exp2, idx_ctx)
+          result <- {
+            Right(IdxAssertEq(idx1, idx2))
+          }
+        } yield result
+        result_maybe_err(result, Err(
+          s"[tran_nameless fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
+      case Show(exp1) =>
+        val result = for {
+          idx1 <- tran_nameless(exp1, idx_ctx)
+          result <- {
+            Right(IdxShow(idx1))
+          }
+        } yield result
+        result_maybe_err(result, Err(
+          s"[tran_nameless fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
     }
   }
 

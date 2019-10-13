@@ -19,3 +19,5 @@ final case class PairFst(exp1: Exp) extends Exp
 final case class PairSnd(exp1: Exp) extends Exp
 final case class PairSetFst(exp1: Exp, exp2: Exp) extends Exp
 final case class PairSetSnd(exp1: Exp, exp2: Exp) extends Exp
+final case class AssertEq(exp1: Exp, exp2: Exp) extends Exp
+final case class Show(exp1: Exp) extends Exp

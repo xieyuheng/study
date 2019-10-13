@@ -16,5 +16,5 @@ and odd = (_) => {
   }
 }
 do set x = 12 {
-  even(sole)
+  assert_eq(even(sole), true)
 }

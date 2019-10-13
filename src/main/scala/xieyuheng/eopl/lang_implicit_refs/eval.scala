@@ -197,6 +197,41 @@ object eval {
             ))
         }
 
+      case AssertEq(exp1, exp2) =>
+        val result = eval(exp1, env, store).flatMap {
+          case (store1, val1) =>
+            eval(exp2, env, store1).flatMap {
+              case (store2, val2) =>
+                if (val1 == val2) {
+                  Right(store2, ValSole())
+                } else {
+                  Left(Err(
+                    s"[assert_eq fail]\n" ++
+                      s">>> ${pretty_exp(exp1)}\n" ++
+                      s"=== ${pretty_val(val1)}\n" ++
+                      s">>> ${pretty_exp(exp2)}\n" ++
+                      s"=== ${pretty_val(val2)}\n"
+                  ))
+                }
+            }
+        }
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
+      case Show(exp1) =>
+        val result = eval(exp1, env, store).flatMap {
+          case (store1, val1) =>
+            println(s">>> ${pretty_exp(exp1)}")
+            println(s"=== ${pretty_val(val1)}")
+            Right(store1, ValSole())
+        }
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
     }
   }
 

@@ -4,4 +4,4 @@ do {
   do x
   y
 }
-x
+assert_eq(sole, x)

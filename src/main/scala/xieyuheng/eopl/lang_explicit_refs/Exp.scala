@@ -16,3 +16,5 @@ final case class Do(exp1: Exp, body: Exp) extends Exp
 final case class RefNew(exp1: Exp) extends Exp
 final case class RefGet(exp1: Exp) extends Exp
 final case class RefSet(exp1: Exp, exp2: Exp) extends Exp
+final case class AssertEq(exp1: Exp, exp2: Exp) extends Exp
+final case class Show(exp1: Exp) extends Exp

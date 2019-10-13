@@ -2,7 +2,7 @@ let p = 0
 let devil = 666
 let angel = 123
 let f = (x) => 1
-do sole {
+do assert_eq(f(555), 1) {
   if zero_p(f(p)) {
     devil
   } else {

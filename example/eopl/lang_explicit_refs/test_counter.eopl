@@ -10,8 +10,8 @@ let counter = {
     }
   }
 }
-do counter(sole)
-do counter(sole)
-do counter(sole) {
-  counter(sole)
+do assert_eq(counter(sole), 0)
+do assert_eq(counter(sole), 1)
+do assert_eq(counter(sole), 2) {
+  show(counter(sole))
 }

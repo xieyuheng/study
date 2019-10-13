@@ -1,4 +1,3 @@
-- [eopl.*] `assert_eq` and `show` for testing
 - [adventure.untyped] `assert_eq`, `report_rs`, `report_ds` for testing
 * jojo
 - [adventure.simple]

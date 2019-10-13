@@ -15,6 +15,7 @@ object grammar {
     "sole",
     "do",
     "set",
+    "assert_eq", "show",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -38,6 +39,8 @@ object grammar {
       "sole" -> List("sole"),
       "do" -> List("do", exp, exp),
       "set" -> List("set", identifier, "=", exp),
+      "assert_eq" -> List("assert_eq", "(", exp, ",", exp, ")"),
+      "show" -> List("show", "(", exp, ")"),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -75,6 +78,10 @@ object grammar {
       "do" -> { case List(_, exp1, body) => Do(exp_matcher(exp1), exp_matcher(body)) },
       "set" -> { case List(_, Leaf(name), _, exp1) =>
         Assign(name, exp_matcher(exp1)) },
+      "assert_eq" -> { case List(_, _, exp1, _, exp2, _) =>
+        AssertEq(exp_matcher(exp1), exp_matcher(exp2)) },
+      "show" -> { case List(_, _, exp1, _) =>
+        Show(exp_matcher(exp1)) },
     ))
 
   def mutual_fn: Rule = Rule(

@@ -28,6 +28,10 @@ object pretty {
         s"sole"
       case Do(exp1, body) =>
         s"do ${pretty_exp(exp1)} ${pretty_exp(body)}"
+      case AssertEq(exp1, exp2) =>
+        s"assert_eq(${pretty_exp(exp1)}, ${pretty_exp(exp2)})"
+      case Show(exp1) =>
+        s"println(${pretty_exp(exp1)})"
     }
   }
 
@@ -68,6 +72,10 @@ object pretty {
         s"sole"
       case IdxDo(idx1, body) =>
         s"do ${pretty_idx(idx1)} ${pretty_idx(body)}"
+      case IdxAssertEq(idx1, idx2) =>
+        s"assert_eq(${pretty_idx(idx1)}, ${pretty_idx(idx2)})"
+      case IdxShow(idx1) =>
+        s"println(${pretty_idx(idx1)})"
     }
   }
 

@@ -41,6 +41,10 @@ object pretty {
         s"ref_get(${pretty_exp(exp1)})"
       case RefSet(exp1: Exp, exp2: Exp) =>
         s"ref_set(${pretty_exp(exp1)}, ${pretty_exp(exp2)})"
+      case AssertEq(exp1, exp2) =>
+        s"assert_eq(${pretty_exp(exp1)}, ${pretty_exp(exp2)})"
+      case Show(exp1) =>
+        s"println(${pretty_exp(exp1)})"
     }
   }
 

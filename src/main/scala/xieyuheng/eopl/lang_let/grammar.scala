@@ -13,6 +13,7 @@ object grammar {
     "if",
     "let",
     "sole", "do",
+    "assert_eq", "show",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)

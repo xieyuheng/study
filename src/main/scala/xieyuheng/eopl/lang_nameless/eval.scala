@@ -148,6 +148,43 @@ object eval {
             s"idx: ${pretty_idx(idx)}\n"
         ))
 
+      case IdxAssertEq(idx1, idx2) =>
+        val result = for {
+          val1 <- eval_idx(idx1, idx_env)
+          val2 <- eval_idx(idx2, idx_env)
+          result <- {
+            if (val1 == val2) {
+              Right(ValSole())
+            } else {
+              Left(Err(
+                s"[assert_eq fail]\n" ++
+                  s">>> ${pretty_idx(idx1)}\n" ++
+                  s"=== ${pretty_val(val1)}\n" ++
+                  s">>> ${pretty_idx(idx2)}\n" ++
+                  s"=== ${pretty_val(val2)}\n"
+              ))
+            }
+          }
+        } yield result
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"idx: ${pretty_idx(idx)}\n"
+        ))
+
+      case IdxShow(idx1) =>
+        val result = for {
+          val1 <- eval_idx(idx1, idx_env)
+          result <- {
+            println(s">>> ${pretty_idx(idx1)}")
+            println(s"=== ${pretty_val(val1)}")
+            Right(ValSole())
+          }
+        } yield result
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"idx: ${pretty_idx(idx)}\n"
+        ))
+
     }
   }
 

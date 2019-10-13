@@ -164,6 +164,43 @@ object eval {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
+      case AssertEq(exp1, exp2) =>
+        val result = for {
+          val1 <- eval(exp1, env)
+          val2 <- eval(exp2, env)
+          result <- {
+            if (val1 == val2) {
+              Right(ValSole())
+            } else {
+              Left(Err(
+                s"[assert_eq fail]\n" ++
+                  s">>> ${pretty_exp(exp1)}\n" ++
+                  s"=== ${pretty_val(val1)}\n" ++
+                  s">>> ${pretty_exp(exp2)}\n" ++
+                  s"=== ${pretty_val(val2)}\n"
+              ))
+            }
+          }
+        } yield result
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
+      case Show(exp1) =>
+        val result = for {
+          val1 <- eval(exp1, env)
+          result <- {
+            println(s">>> ${pretty_exp(exp1)}")
+            println(s"=== ${pretty_val(val1)}")
+            Right(ValSole())
+          }
+        } yield result
+        result_maybe_err(result, Err(
+          s"[eval fail]\n" ++
+            s"exp: ${pretty_exp(exp)}\n"
+        ))
+
     }
   }
 

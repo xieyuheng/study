@@ -37,6 +37,10 @@ object pretty {
         s"do ${pretty_exp(exp1)} ${pretty_exp(body)}"
       case Assign(name, exp1: Exp) =>
         s"set ${name} = ${pretty_exp(exp1)}"
+      case AssertEq(exp1, exp2) =>
+        s"assert_eq(${pretty_exp(exp1)}, ${pretty_exp(exp2)})"
+      case Show(exp1) =>
+        s"println(${pretty_exp(exp1)})"
     }
   }
 

@@ -22,3 +22,5 @@ final case class IdxFn(name: String, body: Idx) extends Idx
 final case class IdxAp(target: Idx, arg: Idx) extends Idx
 final case class IdxSole() extends Idx
 final case class IdxDo(idx1: Idx, body: Idx) extends Idx
+final case class IdxAssertEq(idx1: Idx, idx2: Idx) extends Idx
+final case class IdxShow(idx1: Idx) extends Idx

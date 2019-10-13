@@ -1,8 +1,11 @@
 let p = 0
 let devil = 666
 let angel = 123
-if zero_p({(x) => 1}(p)) {
-  { { { devil } } }
-} else {
-  angel
+let result = {
+  if zero_p({(x) => 1}(p)) {
+    { { { devil } } }
+  } else {
+    angel
+  }
 }
+assert_eq(result, angel)

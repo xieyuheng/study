@@ -18,6 +18,7 @@ object grammar {
     "pair_snd",
     "pair_set_fst",
     "pair_set_snd",
+    "assert_eq", "show",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -46,6 +47,8 @@ object grammar {
       "pair_snd" -> List("pair_snd", "(", exp, ")"),
       "pair_set_fst" -> List("pair_set_fst", "(", exp, ",", exp, ")"),
       "pair_set_snd" -> List("pair_set_snd", "(", exp, ",", exp, ")"),
+      "assert_eq" -> List("assert_eq", "(", exp, ",", exp, ")"),
+      "show" -> List("show", "(", exp, ")"),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -93,6 +96,10 @@ object grammar {
         PairSetFst(exp_matcher(exp1), exp_matcher(exp2)) },
       "pair_set_snd" -> { case List(_, _, exp1, _, exp2, _) =>
         PairSetSnd(exp_matcher(exp1), exp_matcher(exp2)) },
+      "assert_eq" -> { case List(_, _, exp1, _, exp2, _) =>
+        AssertEq(exp_matcher(exp1), exp_matcher(exp2)) },
+      "show" -> { case List(_, _, exp1, _) =>
+        Show(exp_matcher(exp1)) },
     ))
 
   def mutual_fn: Rule = Rule(

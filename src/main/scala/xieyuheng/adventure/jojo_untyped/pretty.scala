@@ -35,6 +35,10 @@ object pretty {
         s"report_ds"
       case ReportRs() =>
         s"report_rs"
+      case Print() =>
+        s"print"
+      case Newline() =>
+        s"ln"
     }
   }
 

@@ -4,9 +4,8 @@
 "c" cons
 (let cba)
 
+cba print ln
+
 cba car "c" assert_eq
 cba cdr car "b" assert_eq
 cba cdr cdr car "a" assert_eq
-
-"123"
-report_ds

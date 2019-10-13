@@ -225,6 +225,24 @@ object exe {
         println(pretty_rs(rs))
         Right(ds, rs)
 
+      case Print() =>
+        ds.toc() match {
+          case Some(value) =>
+            print(pretty_val(value))
+            Right(ds.drop(), rs)
+          case None =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"stack underflow\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
+            ))
+        }
+
+      case Newline() =>
+        println("")
+        Right(ds, rs)
+
     }
   }
 
@@ -232,10 +250,8 @@ object exe {
     value match {
       case jojo: ValJoJo =>
         Right(ds, rs.push(Frame(0, jojo.list, jojo.env)))
-      case ValStr(str) =>
-        Right(ds.push(ValStr(str)), rs)
-      case ValCons(car, cdr) =>
-        Right(ds.push(ValCons(car, cdr)), rs)
+      case value =>
+        Right(ds.push(value), rs)
     }
   }
 

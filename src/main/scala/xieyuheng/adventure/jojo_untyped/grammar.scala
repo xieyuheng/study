@@ -14,6 +14,8 @@ object grammar {
     "assert_eq",
     "report_ds",
     "report_rs",
+    "print",
+    "ln",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -34,6 +36,8 @@ object grammar {
       "assert_eq" -> List("assert_eq"),
       "report_ds" -> List("report_ds"),
       "report_rs" -> List("report_rs"),
+      "print" -> List("print"),
+      "ln" -> List("ln"),
     ))
 
   def jo_list = non_empty_list(jo)
@@ -58,6 +62,8 @@ object grammar {
       "assert_eq" -> { case List(_) => AssertEq() },
       "report_ds" -> { case List(_) => ReportDs() },
       "report_rs" -> { case List(_) => ReportRs() },
+      "print" -> { case List(_) => Print() },
+      "ln" -> { case List(_) => Newline() },
     ))
 
 }

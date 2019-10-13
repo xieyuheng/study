@@ -13,3 +13,5 @@ final case class Cdr() extends Jo
 final case class AssertEq() extends Jo
 final case class ReportDs() extends Jo
 final case class ReportRs() extends Jo
+final case class Print() extends Jo
+final case class Newline() extends Jo

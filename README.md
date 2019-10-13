@@ -1,6 +1,6 @@
 # cicada
 
-programming language implementation practices
+study of programming language design and implementation
 
 ## Techniques
 

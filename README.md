@@ -9,18 +9,15 @@ programming language implementation practices
 > an engineer does not want just a religion about how to solve a problem.<br>
 > -- Gerry Sussman
 
-### parsing techniques
+### study of parsing
 
 - [partech](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech):<br>
   A parser generator, with various parsing techniques
   - [Earley parser](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/partech/parsing_techniques/Earley.scala)
     - O(n^3) for general context free grammar
 
-### interpreting techniques
+### study of scope
 
-#### EOPL
-
-study of scope:
 - [lang_let](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_let):<br>
   scope!
 - [lang_proc](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_proc):<br>
@@ -30,7 +27,8 @@ study of scope:
 - [lang_nameless](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_nameless):<br>
   nameless scope! (a.k.a. de bruijn index)
 
-study of assignment:
+### study of assignment
+
 - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):<br>
   explicit reference (address)
 - [lang_implicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_implicit_refs):<br>
@@ -47,19 +45,20 @@ study of assignment:
   caller can mutate reference passed as arg into it. <br>
   this is often seen in imperative language.
 
-### type checking techniques
+### study of simple type
 
-study of simple type:
 - [de_bruijn](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/de_bruijn):<br>
   De Bruijn stype simple type lambda calculus
   - implemented by term rewriting
 
-study of type inference:
+### study of type inference
+
 - [miniml](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/miniml):<br>
   "A simple applicative language: Mini-ML"
   - by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn
 
-study of normalization by evaluation (a.k.a. norm-by-eval (a.k.a. NbE)):
+### study of normalization by evaluation (a.k.a. norm-by-eval (a.k.a. NbE))
+
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):<br>
   The untyped lambda calculus
 - [syst](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/syst):<br>
@@ -75,9 +74,8 @@ study of normalization by evaluation (a.k.a. norm-by-eval (a.k.a. NbE)):
   - by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama
   - no termination check, thus when viewed as logic it is unsound.
 
-### bizarre techniques
+### study of function composition and stack machine
 
-study of function composition and stack machine:
 - [untyped](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/untyped):<br>
   de bruijn notation implemented by threaded code
 - [simple](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/simple):<br>
@@ -92,9 +90,10 @@ study of function composition and stack machine:
 
 ### references
 
+- Parsing Techniques -- A Practical Guide, Second Edition
+  - by Dick Grune and Ceriel J.H. Jacobs
 - Essentials of Programming Languages (a.k.a. EOPL)
   - by Daniel P. Friedman and Mitchell Wand
-
 - Lambda Calculus with Types
   - by Henk Barendregt, Wil Dekkers and Richard Statman
 

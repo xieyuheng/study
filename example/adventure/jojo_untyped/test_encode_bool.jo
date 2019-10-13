@@ -3,5 +3,5 @@ false = { (let x) (let y) y }
 not = { (let a) (let x) (let y) x y a exe }
 
 "a" "b" true
-"a" "b" {false} not
+"a" "b" { false } not
 assert_eq

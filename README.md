@@ -35,11 +35,11 @@ study of programming language design and implementation
 - [eopl/lang_mutable_pairs](src/main/scala/xieyuheng/eopl/lang_mutable_pairs)<br>
   remember Dan's paper "Cons should not evaluate its arguments" ? <br>
   this is preparation for it.
-- [eopl/lang_call_by_need](src/main/scala/xieyuheng/eopl/lang_call_by_need)<br>
+- TODO [eopl/lang_call_by_need](src/main/scala/xieyuheng/eopl/lang_call_by_need)<br>
   remember Dan's paper "Cons should not evaluate its arguments" ? <br>
   this is about it. <br>
   call-by-need is also called lazy-eval.
-- [eopl/lang_call_by_reference](src/main/scala/xieyuheng/eopl/lang_call_by_reference)<br>
+- TODO [eopl/lang_call_by_reference](src/main/scala/xieyuheng/eopl/lang_call_by_reference)<br>
   caller can mutate reference passed as arg into it. <br>
   this is often seen in imperative language.
 
@@ -51,7 +51,7 @@ study of programming language design and implementation
 
 ### study of type inference
 
-- [miniml](src/main/scala/xieyuheng/miniml)<br>
+- TODO [miniml](src/main/scala/xieyuheng/miniml)<br>
   "A simple applicative language: Mini-ML"
   - by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn
 
@@ -76,14 +76,14 @@ study of programming language design and implementation
 
 - [adventure/jojo_untyped](src/main/scala/xieyuheng/adventure/jojo_untyped)<br>
   de bruijn notation implemented by threaded code
-- [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple)<br>
+- TODO [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple)<br>
   two levels of computations -- `exe` and `cut`
   - `exe` level computation is just computation
   - `cut` level computation is type checking <br>
     thinking about how we implement type checking, <br>
     type checking is compile time computation with good error report, is it not ?
   - `let` is not allowed in `cut` level computation
-- [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent)<br>
+- TODO [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent)<br>
   the same as `simple`, but allow `let` in `cut`
 
 ### references

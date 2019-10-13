@@ -1,47 +1,43 @@
-// drop : { (- A) }
-// drop = {
-//   (let x : A)
-// }
+drop : { (- A) }
+drop = {
+  (let x : A)
+}
 
-// swap : { (- A) (- A) A A }
-// swap = {
-//   (let x : A)
-//   (let y : A)
-//   x y
-// }
+swap : { (- A) (- A) A A }
+swap = {
+  (let x : A)
+  (let y : A)
+  x y
+}
 
-// id : { (- A) A }
-// id = {
-//   (let x : A)
-//   x
-// }
+id : { (- A) A }
+id = {
+  (let x : A)
+  x
+}
 
-// true : { (- A) (- A) A }
-// true = {
-//   (let x : A)
-//   (let y : A)
-//   x
-// }
+true : { (- A) (- A) A }
+true = {
+  (let x : A)
+  (let y : A)
+  x
+}
 
-// false : { (- A) (- A) A }
-// false = {
-//   (let x : A)
-//   (let y : A)
-//   y
-// }
+false : { (- A) (- A) A }
+false = {
+  (let x : A)
+  (let y : A)
+  y
+}
 
-// not : { (- { (- A) (- A) A }) (- A) (- A) A }
-// not = {
-//   (let a : (- A) (- A) A)
-//   (let x : A)
-//   (let y : A)
-//   { x } { y } a
-// }
+not : { (- { (- A) (- A) A }) (- A) (- A) A }
+not = {
+  (let a : (- A) (- A) A)
+  (let x : A)
+  (let y : A)
+  x y a exe
+}
 
-// { { } } { { { } } } true
-// { { } } { { { } } } { false } not
-// drop drop
-
-// { { } } { { { } } } false
-// { { } } { { { } } } { true } not
-// drop drop
+(atom A "a") (atom A "b") true
+(atom A "a") (atom A "b") {false} not
+assert_eq

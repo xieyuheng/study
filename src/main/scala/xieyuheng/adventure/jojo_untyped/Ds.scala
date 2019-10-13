@@ -1,4 +1,4 @@
-package xieyuheng.adventure.untyped
+package xieyuheng.adventure.jojo_untyped
 
 case class Ds(list: List[Val] = List()) {
 

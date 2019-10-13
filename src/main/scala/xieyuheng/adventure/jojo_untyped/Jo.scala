@@ -1,4 +1,4 @@
-package xieyuheng.adventure.untyped
+package xieyuheng.adventure.jojo_untyped
 
 sealed trait Jo
 final case class Var(name: String) extends Jo

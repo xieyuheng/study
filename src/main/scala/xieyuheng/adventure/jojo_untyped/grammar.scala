@@ -1,4 +1,4 @@
-package xieyuheng.adventure.untyped
+package xieyuheng.adventure.jojo_untyped
 
 import xieyuheng.partech._
 import xieyuheng.partech.ruleDSL._

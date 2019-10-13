@@ -75,12 +75,12 @@ test_eopl () {
 test_eopl_lang () {
     name=$1
 
-    prog=./target/universal/stage/bin/lang_${name}
+    prog=./target/universal/stage/bin/${name}
 
     for file in $(find . | grep "^\./example/eopl/${name}/" | grep "\.eopl$")
     do
         echo ""
-        echo "[eopl/${name}] $file"
+        echo "[${name}] $file"
         if ! time $prog --eval $file
         then
             exit 1
@@ -96,12 +96,12 @@ test_adventure () {
 test_adventure_jojo () {
     name=$1
 
-    prog=./target/universal/stage/bin/jojo_${name}
+    prog=./target/universal/stage/bin/${name}
 
     for file in $(find . | grep "^\./example/adventure/${name}/" | grep "\.jo$")
     do
         echo ""
-        echo "[adventure/${name}] $file"
+        echo "[${name}] $file"
         if ! time $prog --eval $file
         then
             exit 1

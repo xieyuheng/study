@@ -1,4 +1,3 @@
-- [adventure.untyped] report_ds and rs on error
 * jojo
 - [adventure.simple]
 - [adventure.simple] type check -- just like de_bruijn and nothing more

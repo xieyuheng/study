@@ -51,7 +51,9 @@ object exe {
       case None =>
         Left(Err(
           s"[step fail]\n" ++
-            s"stack underflow\n"
+            s"stack underflow\n" ++
+            s"${pretty_rs(rs)}\n" ++
+            s"${pretty_ds(ds)}\n"
         ))
     }
   }
@@ -66,7 +68,9 @@ object exe {
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
-                s"undefined name: ${name}\n"
+                s"undefined name: ${name}\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
             ))
         }
 
@@ -77,7 +81,9 @@ object exe {
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
-                s"stack underflow\n"
+                s"stack underflow\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
             ))
         }
 
@@ -99,13 +105,17 @@ object exe {
               case None =>
                 Left(Err(
                   s"[exe fail]\n" ++
-                    s"stack underflow\n"
+                    s"stack underflow\n" ++
+                    s"${pretty_rs(rs)}\n" ++
+                    s"${pretty_ds(ds)}\n"
                 ))
             }
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
-                s"stack underflow\n"
+                s"stack underflow\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
             ))
         }
 
@@ -117,12 +127,16 @@ object exe {
             Left(Err(
               s"[exe fail]\n" ++
                 s"type mismatch match, excepting cons\n" ++
-                s"value: ${pretty_val(value)}\n"
+                s"value: ${pretty_val(value)}\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
             ))
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
-                s"stack underflow\n"
+                s"stack underflow\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
             ))
         }
 
@@ -134,12 +148,16 @@ object exe {
             Left(Err(
               s"[exe fail]\n" ++
                 s"type mismatch match, excepting cons\n" ++
-                s"value: ${pretty_val(value)}\n"
+                s"value: ${pretty_val(value)}\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
             ))
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
-                s"stack underflow\n"
+                s"stack underflow\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
             ))
         }
 
@@ -154,19 +172,25 @@ object exe {
                   Left(Err(
                     s"[assert_eq fail]\n" ++
                       s">>> ${pretty_val(x)}\n" ++
-                      s"=/= ${pretty_val(y)}\n"
+                      s"=/= ${pretty_val(y)}\n" ++
+                      s"${pretty_rs(rs)}\n" ++
+                      s"${pretty_ds(ds)}\n"
                   ))
                 }
               case None =>
                 Left(Err(
                   s"[exe fail]\n" ++
-                    s"stack underflow\n"
+                    s"stack underflow\n" ++
+                    s"${pretty_rs(rs)}\n" ++
+                    s"${pretty_ds(ds)}\n"
                 ))
             }
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
-                s"stack underflow\n"
+                s"stack underflow\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
             ))
         }
 

@@ -17,8 +17,7 @@ object jojo_untyped extends mini_interpreter (
           .push(frame)
         val ds = Ds()
         exe.run(ds, rs) match {
-          case Right(ds) =>
-            println(pretty_ds(ds))
+          case Right(ds) => // do nothing
           case Left(err) =>
             println(s"${err.msg}")
             System.exit(1)

@@ -1,4 +1,4 @@
-- [adventure.untyped] `assert_eq`, `report_rs`, `report_ds` for testing
+- [adventure.untyped] report_ds and rs on error
 * jojo
 - [adventure.simple]
 - [adventure.simple] type check -- just like de_bruijn and nothing more

@@ -58,6 +58,7 @@ object exe {
 
   def exe(ds: Ds, rs: Rs, env: Env, jo: Jo): Either[Err, (Ds, Rs)] = {
     jo match {
+
       case Var(name: String) =>
         env.lookup_val(name) match {
           case Some(value) =>
@@ -68,6 +69,7 @@ object exe {
                 s"undefined name: ${name}\n"
             ))
         }
+
       case Let(name: String) =>
         ds.toc() match {
           case Some(value) =>
@@ -78,12 +80,16 @@ object exe {
                 s"stack underflow\n"
             ))
         }
+
       case JoJo(list: List[Jo]) =>
         Right(ds.push(ValJoJo(list, env)), rs)
+
       case Define(name: String, jojo: JoJo) =>
         Right(ds, rs.toc_ext(name, ValJoJo(jojo.list, env)))
+
       case Str(str: String) =>
         Right(ds.push(ValStr(str)), rs)
+
       case Cons() =>
         ds.toc() match {
           case Some(car) =>
@@ -102,6 +108,7 @@ object exe {
                 s"stack underflow\n"
             ))
         }
+
       case Car() =>
         ds.toc() match {
           case Some(ValCons(car, cdr)) =>
@@ -118,6 +125,7 @@ object exe {
                 s"stack underflow\n"
             ))
         }
+
       case Cdr() =>
         ds.toc() match {
           case Some(ValCons(car, cdr)) =>
@@ -134,6 +142,42 @@ object exe {
                 s"stack underflow\n"
             ))
         }
+
+      case AssertEq() =>
+        ds.toc() match {
+          case Some(x) =>
+            ds.drop().toc() match {
+              case Some(y) =>
+                if (x == y) {
+                  Right(ds.drop().drop(), rs)
+                } else {
+                  Left(Err(
+                    s"[assert_eq fail]\n" ++
+                      s">>> ${pretty_val(x)}\n" ++
+                      s"=/= ${pretty_val(y)}\n"
+                  ))
+                }
+              case None =>
+                Left(Err(
+                  s"[exe fail]\n" ++
+                    s"stack underflow\n"
+                ))
+            }
+          case None =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"stack underflow\n"
+            ))
+        }
+
+      case ReportDs() =>
+        println(pretty_ds(ds))
+        Right(ds, rs)
+
+      case ReportRs() =>
+        println(pretty_rs(rs))
+        Right(ds, rs)
+
     }
   }
 

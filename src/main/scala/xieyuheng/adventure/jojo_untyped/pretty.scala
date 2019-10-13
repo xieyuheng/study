@@ -23,6 +23,12 @@ object pretty {
         s"car"
       case Cdr() =>
         s"cdr"
+      case AssertEq() =>
+        s"assert_eq"
+      case ReportDs() =>
+        s"report_ds"
+      case ReportRs() =>
+        s"report_rs"
     }
   }
 

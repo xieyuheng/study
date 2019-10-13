@@ -11,6 +11,9 @@ object grammar {
   def preserved: List[String] = List(
     "let",
     "cons", "car", "cdr",
+    "assert_eq",
+    "report_ds",
+    "report_rs",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -27,6 +30,9 @@ object grammar {
       "cons" -> List("cons"),
       "car" -> List("car"),
       "cdr" -> List("cdr"),
+      "assert_eq" -> List("assert_eq"),
+      "report_ds" -> List("report_ds"),
+      "report_rs" -> List("report_rs"),
     ))
 
   def jo_list = non_empty_list(jo)
@@ -47,6 +53,9 @@ object grammar {
       "cons" -> { case List(_) => Cons() },
       "car" -> { case List(_) => Car() },
       "cdr" -> { case List(_) => Cdr() },
+      "assert_eq" -> { case List(_) => AssertEq() },
+      "report_ds" -> { case List(_) => ReportDs() },
+      "report_rs" -> { case List(_) => ReportRs() },
     ))
 
 }

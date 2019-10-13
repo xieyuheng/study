@@ -109,9 +109,9 @@ object eval {
       case Sole() =>
         Right(ValSole())
 
-      case Do(exp: Exp, body: Exp) =>
+      case Do(exp1: Exp, body: Exp) =>
         val result = for {
-          _ <- eval(exp, env)
+          _ <- eval(exp1, env)
           result <- eval(body, env)
         } yield result
         result_maybe_err(result, Err(

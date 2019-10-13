@@ -8,4 +8,4 @@ final case class ZeroP(exp1: Exp) extends Exp
 final case class If(exp1: Exp, exp2: Exp, exp3: Exp) extends Exp
 final case class Let(name: String, exp1: Exp, body: Exp) extends Exp
 final case class Sole() extends Exp
-final case class Do(exp: Exp, body: Exp) extends Exp
+final case class Do(exp1: Exp, body: Exp) extends Exp

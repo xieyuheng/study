@@ -12,4 +12,4 @@ final case class Ap(target: Exp, arg: Exp) extends Exp
 final case class LetRec(fn_name: String, arg_name: String, fn_body: Exp, body: Exp) extends Exp
 final case class LetRecMutual(map: Map[String, (String, Exp)], body: Exp) extends Exp
 final case class Sole() extends Exp
-final case class Do(exp: Exp, body: Exp) extends Exp
+final case class Do(exp1: Exp, body: Exp) extends Exp

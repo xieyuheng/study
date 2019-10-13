@@ -1,4 +1,3 @@
-- [eopl] `do` and `sole` for all lang_nameless
 - [eopl] fix pretty_val with store
 - [eopl] `assert_eq` and `println` for testing
 - [adventure.untyped] `assert_eq`, `report_rs`, `report_ds` for testing

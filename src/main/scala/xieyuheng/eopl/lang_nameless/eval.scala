@@ -8,6 +8,7 @@ object eval {
 
   def eval_idx(idx: Idx, idx_env: IdxEnv): Either[Err, Val] = {
     idx match {
+
       case IdxVar(name: String, index: Int) =>
         idx_env.lookup_val(index) match {
           case Some(value) =>
@@ -19,8 +20,10 @@ object eval {
                 s"index out of bound: ${index}\n"
             ))
         }
+
       case IdxNum(num: Int) =>
         Right(ValNum(num))
+
       case IdxDiff(idx1: Idx, idx2: Idx) =>
         val result = for {
           val1 <- eval_idx(idx1, idx_env)
@@ -44,6 +47,7 @@ object eval {
           s"[eval_idx fail]\n" ++
             s"idx: ${pretty_idx(idx)}\n"
         ))
+
       case IdxZeroP(idx1: Idx) =>
         val result = for {
           val1 <- eval_idx(idx1, idx_env)
@@ -69,6 +73,7 @@ object eval {
           s"[eval_idx fail]\n" ++
             s"idx: ${pretty_idx(idx)}\n"
         ))
+
       case IdxIf(idx1: Idx, idx2: Idx, idx3: Idx) =>
         val result = for {
           val1 <- eval_idx(idx1, idx_env)
@@ -92,6 +97,7 @@ object eval {
           s"[eval_idx fail]\n" ++
             s"idx: ${pretty_idx(idx)}\n"
         ))
+
       case IdxLet(name: String, idx1: Idx, body: Idx) =>
         val result = for {
           val1 <- eval_idx(idx1, idx_env)
@@ -101,8 +107,10 @@ object eval {
           s"[eval_idx fail]\n" ++
             s"idx: ${pretty_idx(idx)}\n"
         ))
+
       case IdxFn(name: String, body: Idx) =>
         Right(ValFn(name, body, idx_env))
+
       case IdxAp(target: Idx, arg: Idx) =>
         val result = for {
           f <- eval_idx(target, idx_env)
@@ -125,6 +133,21 @@ object eval {
           s"[eval_idx fail]\n" ++
             s"idx: ${pretty_idx(idx)}\n"
         ))
+
+
+      case IdxSole() =>
+        Right(ValSole())
+
+      case IdxDo(idx1: Idx, body: Idx) =>
+        val result = for {
+          _ <- eval_idx(idx1, idx_env)
+          result <- eval_idx(body, idx_env)
+        } yield result
+        result_maybe_err(result, Err(
+          s"[eval_idx fail]\n" ++
+            s"idx: ${pretty_idx(idx)}\n"
+        ))
+
     }
   }
 

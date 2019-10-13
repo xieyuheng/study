@@ -49,8 +49,10 @@ object grammar {
         Let(name, exp_matcher(exp1), exp_matcher(body))},
       "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
-      "sole" -> { case List(_) => Sole() },
-      "do" -> { case List(_, exp, body) => Do(exp_matcher(exp), exp_matcher(body)) },
+      "sole" -> { case List(_) =>
+        Sole() },
+      "do" -> { case List(_, exp1, body) =>
+        Do(exp_matcher(exp1), exp_matcher(body)) },
     ))
 
 }

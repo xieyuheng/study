@@ -68,8 +68,10 @@ object grammar {
         val map2 = map + (fn_name -> (arg_name, exp_matcher(fn_body)))
         LetRecMutual(map2, exp_matcher(body))
       },
-      "sole" -> { case List(_) => Sole() },
-      "do" -> { case List(_, exp, body) => Do(exp_matcher(exp), exp_matcher(body)) },
+      "sole" -> { case List(_) =>
+        Sole() },
+      "do" -> { case List(_, exp1, body) =>
+        Do(exp_matcher(exp1), exp_matcher(body)) },
     ))
 
   def mutual_fn: Rule = Rule(

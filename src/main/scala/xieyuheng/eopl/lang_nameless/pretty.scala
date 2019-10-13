@@ -24,6 +24,10 @@ object pretty {
         s"{${pretty_exp(f)}}(${pretty_exp(arg)})"
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
+      case Sole() =>
+        s"sole"
+      case Do(exp1, body) =>
+        s"do ${pretty_exp(exp1)} ${pretty_exp(body)}"
     }
   }
 
@@ -35,6 +39,8 @@ object pretty {
         bool.toString
       case ValFn(name, body, env) =>
         s"(${name}) => ${pretty_idx(body)}"
+      case ValSole() =>
+        s"sole"
     }
   }
 
@@ -58,6 +64,10 @@ object pretty {
         s"{${pretty_idx(f)}}(${pretty_idx(arg)})"
       case IdxAp(target, arg) =>
         s"${pretty_idx(target)}(${pretty_idx(arg)})"
+      case IdxSole() =>
+        s"sole"
+      case IdxDo(idx1, body) =>
+        s"do ${pretty_idx(idx1)} ${pretty_idx(body)}"
     }
   }
 

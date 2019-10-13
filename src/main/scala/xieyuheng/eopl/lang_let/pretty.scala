@@ -20,8 +20,8 @@ object pretty {
         s"let ${name} = ${pretty_exp(exp1)} in ${pretty_exp(body)}"
       case Sole() =>
         s"sole"
-      case Do(exp, body) =>
-        s"do ${pretty_exp(exp)} ${pretty_exp(body)}"
+      case Do(exp1, body) =>
+        s"do ${pretty_exp(exp1)} ${pretty_exp(body)}"
     }
   }
 

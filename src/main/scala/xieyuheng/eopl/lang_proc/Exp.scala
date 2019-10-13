@@ -10,4 +10,4 @@ final case class Let(name: String, exp1: Exp, body: Exp) extends Exp
 final case class Fn(name: String, body: Exp) extends Exp
 final case class Ap(target: Exp, arg: Exp) extends Exp
 final case class Sole() extends Exp
-final case class Do(exp: Exp, body: Exp) extends Exp
+final case class Do(exp1: Exp, body: Exp) extends Exp

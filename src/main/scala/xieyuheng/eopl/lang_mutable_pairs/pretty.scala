@@ -50,6 +50,9 @@ object pretty {
     }
   }
 
+  // NOTE `pretty_val` does not implicitly deref `ValRef`
+  //   we need to pass store as arg to do this
+  //   and we need to handle circular reference
   def pretty_val(value: Val): String = {
     value match {
       case ValNum(num: Int) =>

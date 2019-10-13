@@ -1,50 +1,47 @@
-drop : { - {A} }
-drop = { let x }
+drop : { (- A) }
+drop = {
+  (let x : A)
+}
 
-swap : {- {A} - {B} {A} {B}}
+swap : { (- A) (- A) A A }
 swap = {
-  let x: {A}
-  let y: {B}
-  {x} {y}
+  (let x : A)
+  (let y : A)
+  x y
 }
 
-exe : {- {A} A}
-exe = {
-  let x: {A}
-  x }
-
-id : {- {A} {A}}
+id : { (- A) A }
 id = {
-  let x: {A}
-  {x}
+  (let x : A)
+  x
 }
 
-true : {- {A} - {A} {A}}
+true : { (- A) (- A) A }
 true = {
-  let x: {A}
-  let y: {A}
-  {x}
+  (let x : A)
+  (let y : A)
+  x
 }
 
-false : {- {A} - {A} {A}}
+false : { (- A) (- A) A }
 false = {
-  let x: {A}
-  let y: {A}
-  {y}
+  (let x : A)
+  (let y : A)
+  y
 }
 
-not : {- {- {A} - {A} {A}} - {A} - {A} {A}}
+not : { (- { (- A) (- A) A }) (- A) (- A) A }
 not = {
-  let a: {- {A} - {A} {A}}
-  let x: {A}
-  let y: {A}
-  {x} {y} a
+  (let a : (- A) (- A) A)
+  (let x : A)
+  (let y : A)
+  { x } { y } a
 }
 
-{ { } } { { { } } } true exe
-{ { } } { { { } } } { false } not exe
+{ { } } { { { } } } true
+{ { } } { { { } } } { false } not
 drop drop
 
-{ { } } { { { } } } false exe
-{ { } } { { { } } } { true } not exe
+{ { } } { { { } } } false
+{ { } } { { { } } } { true } not
 drop drop

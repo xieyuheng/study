@@ -1,0 +1,50 @@
+list_t : { (- type) type }
+list_t = {
+  (let A : type)
+  datatype {
+    list_null : { datacons {} }
+    list_cons : { (- A) (- A list_t) datacons {} }
+  }
+}
+
+list_append : {
+  (let A : type)
+  (- A list_t)
+  (- A list_t)
+  A list_t
+}
+list_append = {
+  (dep A : type)
+  (let x: A list_t)
+  (let y: A list_t)
+  x match {
+    case list_null => { y }
+    case list_case => {
+      (let head: A) (let tail: A list_t)
+      y tail (lit A) list_append
+      head list_cons
+    }
+  }
+}
+
+list_map : {
+  (let A : type)
+  (let B : type)
+  (- { (- A) B })
+  (- A list_t)
+  B list_t
+}
+list_map = {
+  (dep A : type)
+  (dep B : type)
+  (let f : { (- A) B })
+  (let x : A list_t)
+  x match {
+    case list_null => { x }
+    case list_case => {
+      (let head: A) (let tail: A list_t)
+      tail f (lit B) (lit A) list_map
+      head f exe list_cons
+    }
+  }
+}

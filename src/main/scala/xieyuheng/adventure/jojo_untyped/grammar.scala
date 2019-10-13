@@ -21,7 +21,7 @@ object grammar {
   def jo: Rule = Rule(
     "jo", Map(
       "var" -> List(identifier),
-      "let" -> List("let", identifier),
+      "let" -> List("(", "let", identifier. ")"),
       "jojo" -> List("{", jo_list, "}"),
       "jojo_empty" -> List("{", "}"),
       "define" -> List(identifier, "=", "{", jo_list, "}"),
@@ -41,7 +41,7 @@ object grammar {
   def jo_matcher: Tree => Jo = Tree.matcher[Jo](
     "jo", Map(
       "var" -> { case List(Leaf(name)) => Var(name) },
-      "let" -> { case List(_, Leaf(name)) => Let(name) },
+      "let" -> { case List(_, _, Leaf(name), _) => Let(name) },
       "jojo" -> { case List(_, jo_list, _) =>
         JoJo(jo_list_matcher(jo_list)) },
       "jojo_empty" -> { case List(_, _) => JoJo(List()) },

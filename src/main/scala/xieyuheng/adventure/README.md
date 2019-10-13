@@ -2,17 +2,15 @@
 
 ## untyped
 
-- implicit `exe` can be confusing
-
 - explicit `exe` will make
-  local function definition different from
-  global function definition
+  lookup of local definition (`let`) is different from
+  lookup of global definition ( <name> = { ... } )
 
 - when using `let` in definition of type and function,
   the order of `let` are matched.
   but when using function,
   the args must be supplied in reversed order
-  - how about let function take args in reversed order ?
+  - this is a feature for algebraicity
 
 ## simple
 

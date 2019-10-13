@@ -1,11 +1,9 @@
-exe = { let x x }
+true = { (let x) (let y) x }
+false = { (let x) (let y) y }
+not = { (let a) (let x) (let y) x y a exe }
 
-true = { let x let y { x } }
-false = { let x let y { y } }
-not = { let a let x let y { x } { y } a }
+// {{}} {{{}}} true
+// {{}} {{{}}} {false} not
 
-{ { } } { { { } } } true exe
-{ { } } { { { } } } { false } not exe
-
-{ { } } { { { } } } false exe
-{ { } } { { { } } } { true } not exe
+// {{}} {{{}}} false
+// {{}} {{{}}} {true} not

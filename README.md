@@ -18,73 +18,85 @@ programming language implementation practices
 
 ### interpreting techniques
 
-- [eopl](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl):<br>
-  Essentials of Programming Languages
-  - by Daniel P. Friedman and Mitchell Wand
-  - the study of scope:
-    - [lang_let](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_let):<br>
-      scope!
-    - [lang_proc](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_proc):<br>
-      lexical scope! (closure)
-    - [lang_letrec](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_letrec):<br>
-      recursive scope! (by a trick in the env lookup function)
-    - [lang_nameless](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_nameless):<br>
-      nameless scope! (a.k.a. de bruijn index)
-  - the study of assignment:
-    - [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):<br>
-      explicit reference (address)
-    - [lang_implicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_implicit_refs):<br>
-      distinguish `denoted value` from `expressed value` for mutable variable. <br>
-      this is also called call-by-value parameter-passing.
-    - [lang_mutable_pairs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_mutable_pairs):<br>
-      remember Dan's paper "Cons should not evaluate its arguments" ? <br>
-      this is preparation for it.
-    - [lang_call_by_need](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_call_by_need):<br>
-      remember Dan's paper "Cons should not evaluate its arguments" ? <br>
-      this is about it. <br>
-      call-by-need is also called lazy-eval.
-    - [lang_call_by_reference](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_call_by_reference):<br>
-      caller can mutate reference passed as arg into it. <br>
-      this is often seen in imperative language.
+#### EOPL
+
+study of scope:
+- [lang_let](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_let):<br>
+  scope!
+- [lang_proc](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_proc):<br>
+  lexical scope! (closure)
+- [lang_letrec](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_letrec):<br>
+  recursive scope! (by a trick in the env lookup function)
+- [lang_nameless](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_nameless):<br>
+  nameless scope! (a.k.a. de bruijn index)
+
+study of assignment:
+- [lang_explicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_explicit_refs):<br>
+  explicit reference (address)
+- [lang_implicit_refs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_implicit_refs):<br>
+  distinguish `denoted value` from `expressed value` for mutable variable. <br>
+  this is also called call-by-value parameter-passing.
+- [lang_mutable_pairs](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_mutable_pairs):<br>
+  remember Dan's paper "Cons should not evaluate its arguments" ? <br>
+  this is preparation for it.
+- [lang_call_by_need](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_call_by_need):<br>
+  remember Dan's paper "Cons should not evaluate its arguments" ? <br>
+  this is about it. <br>
+  call-by-need is also called lazy-eval.
+- [lang_call_by_reference](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/eopl/lang_call_by_reference):<br>
+  caller can mutate reference passed as arg into it. <br>
+  this is often seen in imperative language.
 
 ### type checking techniques
 
+study of simple type:
+- [de_bruijn](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/de_bruijn):<br>
+  De Bruijn stype simple type lambda calculus
+  - implemented by term rewriting
+
+study of type inference:
+- [miniml](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/miniml):<br>
+  "A simple applicative language: Mini-ML"
+  - by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn
+
+study of normalization by evaluation (a.k.a. norm-by-eval (a.k.a. NbE)):
 - [lambda](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/lambda):<br>
   The untyped lambda calculus
-  - with norm-by-eval (normalization by evaluation) to test equivalence between lambda terms.
 - [syst](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/syst):<br>
   Kurt Gödel's system T
   - simply typed lambda calculus with natural number,
-  - for details about system T, see "Gödel’s system T as a precursor of modern type theory", by Gilles Dowek
-  - with typed norm-by-eval.
 - [tartlet](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/tartlet):<br>
   "Checking Dependent Types with Normalization by Evaluation: A Tutorial"
   - this is the little pie, recursion is also not an option here.
   - by David Thrane Christiansen.
     ([the original tutorial](http://davidchristiansen.dk/tutorials/nbe))
-- [miniml](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/miniml):<br>
-  "A simple applicative language: Mini-ML"
-  - by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn
 - [minitt](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/minitt):<br>
   "A simple type-theoretic language: Mini-TT"
   - by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama
   - no termination check, thus when viewed as logic it is unsound.
-- [de_bruijn](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/de_bruijn):<br>
-  De Bruijn stype simple type lambda calculus
-  - implemented by term rewriting
 
 ### bizarre techniques
 
-- [adventure](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure):<br>
-  - [untyped](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/untyped):<br>
-    de bruijn notation implemented by threaded code
-  - [simple](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/simple):<br>
-    two levels of computations -- `exe` and `cut`
-    - `exe` level computation is just computation
-    - `cut` level computation is type checking
-    - `let` is not allowed in `cut` level computation
-  - [dependent](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/dependent):<br>
-    the same as `simple`, but allow `let` in `cut`
+study of function composition and stack machine:
+- [untyped](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/untyped):<br>
+  de bruijn notation implemented by threaded code
+- [simple](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/simple):<br>
+  two levels of computations -- `exe` and `cut`
+  - `exe` level computation is just computation
+  - `cut` level computation is type checking <br>
+    thinking about how we implement type checking, <br>
+    type checking is compile time computation with good error report, is it not ?
+  - `let` is not allowed in `cut` level computation
+- [dependent](https://github.com/xieyuheng/cicada/tree/master/src/main/scala/xieyuheng/adventure/dependent):<br>
+  the same as `simple`, but allow `let` in `cut`
+
+### references
+
+- Essentials of Programming Languages (a.k.a. EOPL)
+  - by Daniel P. Friedman and Mitchell Wand
+
+- Lambda Calculus with Types
+  - by Henk Barendregt, Wil Dekkers and Richard Statman
 
 ## Usage
 

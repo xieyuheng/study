@@ -1,10 +1,13 @@
-* eopl
-- [eopl] `assert_eq` for testing
-- [eopl] `println` for testing
-- [eopl.lang_call_by_reference]
-- [eopl.lang_call_by_need]
 * miniml
 - learn about type infer
+* eopl
+- [eopl] `assert_eq` and `println` for testing
+- [eopl.lang_call_by_reference]
+- [eopl.lang_call_by_need]
+- [eopl.lang_checked]
+- [eopl.lang_infered]
+- [eopl.lang_module]
+- [eopl.lang_class]
 * jojo
 - [adventure.untyped] `assert_eq` for testing
 - [adventure.simple]
@@ -28,10 +31,6 @@
 - view type atom as logic and use unification
 - type system of curry style need type variable
   and unification over type variables
-* joy
-- for simple typed
-- how to specify rules ?
-  - need to use stack ?
 * tartlet
 - lazy eval will be not needed in language with termination check
 - [note] why we *do need* "type directed norm-by-eval" here ?

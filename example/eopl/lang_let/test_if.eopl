@@ -1,8 +1,10 @@
 let p = 0
 let devil = 666
 let angel = 123
-if zero_p(p) {
-  devil
-} else {
-  angel
+do sole {
+  if zero_p(p) {
+    devil
+  } else {
+    angel
+  }
 }

@@ -1,12 +1,13 @@
-- [adventure.untyped] `assert_eq` for testing
-- [adventure.untyped] `report_rs` for testing
-- [adventure.untyped] `report_ds` for testing
+- [eopl] `do` and `sole` for all lang_let lang_proc
+- [eopl] `do` and `sole` for all lang_nameless
+- [eopl] fix pretty_val with store
+- [eopl] `assert_eq` and `println` for testing
+- [adventure.untyped] `assert_eq`, `report_rs`, `report_ds` for testing
 * jojo
 - [adventure.simple]
 - [adventure.simple] just like de_bruijn and nothing more
 - [adventure.simple] infer arg_count and ret_count
 * eopl
-- [eopl] `assert_eq` and `println` for testing
 - [eopl.lang_call_by_reference]
 - [eopl.lang_call_by_need]
 - [eopl.lang_checked]

@@ -2,8 +2,10 @@ let p = 0
 let devil = 666
 let angel = 123
 let f = (x) => 1
-if zero_p(f(p)) {
-  devil
-} else {
-  angel
+do sole {
+  if zero_p(f(p)) {
+    devil
+  } else {
+    angel
+  }
 }

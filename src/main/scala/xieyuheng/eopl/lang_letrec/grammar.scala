@@ -12,8 +12,7 @@ object grammar {
     "diff", "zero_p",
     "if",
     "let", "rec", "and",
-    "sole",
-    "do",
+    "sole", "do",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)

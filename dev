@@ -65,11 +65,15 @@ test_minitt () {
 }
 
 test_eopl () {
-    test_eopl_lang let
-    test_eopl_lang proc
-    test_eopl_lang nameless
-    test_eopl_lang letrec
-    test_eopl_lang explicit_refs
+    test_eopl_lang lang_let
+    test_eopl_lang lang_proc
+    test_eopl_lang lang_nameless
+    test_eopl_lang lang_letrec
+    test_eopl_lang lang_explicit_refs
+    test_eopl_lang lang_implicit_refs
+    test_eopl_lang lang_mutable_pairs
+    # test_eopl_lang lang_call_by_reference
+    # test_eopl_lang lang_call_by_need
 }
 
 test_eopl_lang () {
@@ -89,8 +93,8 @@ test_eopl_lang () {
 }
 
 test_adventure () {
-    test_adventure_jojo untyped
-    # test_adventure_jojo simple
+    test_adventure_jojo jojo_untyped
+    # test_adventure_jojo jojo_simple
 }
 
 test_adventure_jojo () {

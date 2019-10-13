@@ -18,6 +18,10 @@ object pretty {
         s"if ${pretty_exp(exp1)} then ${pretty_exp(exp2)} else ${pretty_exp(exp3)}"
       case Let(name: String, exp1: Exp, body: Exp) =>
         s"let ${name} = ${pretty_exp(exp1)} in ${pretty_exp(body)}"
+      case Sole() =>
+        s"sole"
+      case Do(exp, body) =>
+        s"do ${pretty_exp(exp)} ${pretty_exp(body)}"
     }
   }
 
@@ -27,6 +31,8 @@ object pretty {
         num.toString
       case ValBool(bool: Boolean) =>
         bool.toString
+      case ValSole() =>
+        s"sole"
     }
   }
 

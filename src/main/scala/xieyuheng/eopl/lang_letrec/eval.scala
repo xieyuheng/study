@@ -8,6 +8,7 @@ object eval {
 
   def eval(exp: Exp, env: Env): Either[Err, Val] = {
     exp match {
+
       case Var(name: String) =>
         env.lookup_val(name) match {
           case Some(value) =>
@@ -18,8 +19,10 @@ object eval {
                 s"undefined name: ${name}\n"
             ))
         }
+
       case Num(num: Int) =>
         Right(ValNum(num))
+
       case Diff(exp1: Exp, exp2: Exp) =>
         val result = for {
           val1 <- eval(exp1, env)
@@ -43,6 +46,7 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
+
       case ZeroP(exp1: Exp) =>
         val result = for {
           val1 <- eval(exp1, env)
@@ -68,6 +72,7 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
+
       case If(exp1: Exp, exp2: Exp, exp3: Exp) =>
         val result = for {
           val1 <- eval(exp1, env)
@@ -91,6 +96,7 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
+
       case Let(name: String, exp1: Exp, body: Exp) =>
         val result = for {
           val1 <- eval(exp1, env)
@@ -100,8 +106,10 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
+
       case Fn(name, body) =>
         Right(ValFn(name, body, env))
+
       case Ap(target, arg) =>
         val result = for {
           f <- eval(target, env)
@@ -124,6 +132,7 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
+
       case LetRec(fn_name, arg_name, fn_body, body) =>
         val result = for {
           result <- eval(body, env.ext_let_rec(fn_name, arg_name, fn_body))
@@ -132,6 +141,7 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
+
       case LetRecMutual(map, body) =>
         val result = for {
           result <- eval(body, env.ext_let_rec_mutual(map))
@@ -140,8 +150,10 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
+
       case Sole() =>
         Right(ValSole())
+
       case Do(exp: Exp, body: Exp) =>
         val result = for {
           _ <- eval(exp, env)
@@ -151,6 +163,7 @@ object eval {
           s"[eval fail]\n" ++
             s"exp: ${pretty_exp(exp)}\n"
         ))
+
     }
   }
 

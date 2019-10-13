@@ -1,3 +1,5 @@
 let devil = 666
 let angel = 123
-diff(devil, 123)
+do sole {
+  diff(devil, 123)
+}

@@ -12,6 +12,7 @@ object grammar {
     "diff", "zero_p",
     "if",
     "let",
+    "sole", "do",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -26,6 +27,8 @@ object grammar {
       "if" -> List("if", exp, "{", exp, "}", "else", "{", exp, "}"),
       "let" -> List("let", identifier, "=", exp, exp),
       "block_one" -> List("{", exp, "}"),
+      "sole" -> List("sole"),
+      "do" -> List("do", exp, exp),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -46,6 +49,8 @@ object grammar {
         Let(name, exp_matcher(exp1), exp_matcher(body))},
       "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
+      "sole" -> { case List(_) => Sole() },
+      "do" -> { case List(_, exp, body) => Do(exp_matcher(exp), exp_matcher(body)) },
     ))
 
 }

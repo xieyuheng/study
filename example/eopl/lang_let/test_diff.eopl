@@ -1,5 +1,8 @@
+let z = 0
 let devil = 666
 let angel = 123
-do sole {
-  diff(devil, 123)
+let true = zero_p(0)
+do assert_eq(zero_p(z), true)
+do assert_eq(diff(devil, 123), 543) {
+  show(diff(devil, 123))
 }

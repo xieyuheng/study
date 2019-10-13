@@ -29,6 +29,8 @@ object grammar {
       "block_one" -> List("{", exp, "}"),
       "sole" -> List("sole"),
       "do" -> List("do", exp, exp),
+      "assert_eq" -> List("assert_eq", "(", exp, ",", exp, ")"),
+      "show" -> List("show", "(", exp, ")"),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -53,6 +55,10 @@ object grammar {
         Sole() },
       "do" -> { case List(_, exp1, body) =>
         Do(exp_matcher(exp1), exp_matcher(body)) },
+      "assert_eq" -> { case List(_, _, exp1, _, exp2, _) =>
+        AssertEq(exp_matcher(exp1), exp_matcher(exp2)) },
+      "show" -> { case List(_, _, exp1, _) =>
+        Show(exp_matcher(exp1)) },
     ))
 
 }

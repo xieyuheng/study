@@ -11,81 +11,81 @@ programming language implementation practices
 
 ### study of parsing
 
-- [partech](partech):<br>
+- [partech](src/main/scala/xieyuheng/partech):<br>
   A parser generator, with various parsing techniques
-  - [Earley parser](partech/parsing_techniques/Earley.scala)
+  - [Earley parser](src/main/scala/xieyuheng/partech/parsing_techniques/Earley.scala)
     - O(n^3) for general context free grammar
 
 ### study of scope
 
-- [eopl/lang_let](eopl/lang_let):<br>
+- [eopl/lang_let](src/main/scala/xieyuheng/eopl/lang_let):<br>
   scope!
-- [eopl/lang_proc](eopl/lang_proc):<br>
+- [eopl/lang_proc](src/main/scala/xieyuheng/eopl/lang_proc):<br>
   lexical scope! (closure)
-- [eopl/lang_letrec](eopl/lang_letrec):<br>
+- [eopl/lang_letrec](src/main/scala/xieyuheng/eopl/lang_letrec):<br>
   recursive scope! (by a trick in the env lookup function)
-- [eopl/lang_nameless](eopl/lang_nameless):<br>
+- [eopl/lang_nameless](src/main/scala/xieyuheng/eopl/lang_nameless):<br>
   nameless scope! (a.k.a. de bruijn index)
 
 ### study of assignment
 
-- [eopl/lang_explicit_refs](eopl/lang_explicit_refs):<br>
+- [eopl/lang_explicit_refs](src/main/scala/xieyuheng/eopl/lang_explicit_refs):<br>
   explicit reference (address)
-- [eopl/lang_implicit_refs](eopl/lang_implicit_refs):<br>
+- [eopl/lang_implicit_refs](src/main/scala/xieyuheng/eopl/lang_implicit_refs):<br>
   distinguish `denoted value` from `expressed value` for mutable variable. <br>
   this is also called call-by-value parameter-passing.
-- [eopl/lang_mutable_pairs](eopl/lang_mutable_pairs):<br>
+- [eopl/lang_mutable_pairs](src/main/scala/xieyuheng/eopl/lang_mutable_pairs):<br>
   remember Dan's paper "Cons should not evaluate its arguments" ? <br>
   this is preparation for it.
-- [eopl/lang_call_by_need](eopl/lang_call_by_need):<br>
+- [eopl/lang_call_by_need](src/main/scala/xieyuheng/eopl/lang_call_by_need):<br>
   remember Dan's paper "Cons should not evaluate its arguments" ? <br>
   this is about it. <br>
   call-by-need is also called lazy-eval.
-- [eopl/lang_call_by_reference](eopl/lang_call_by_reference):<br>
+- [eopl/lang_call_by_reference](src/main/scala/xieyuheng/eopl/lang_call_by_reference):<br>
   caller can mutate reference passed as arg into it. <br>
   this is often seen in imperative language.
 
 ### study of simple type
 
-- [de_bruijn](de_bruijn):<br>
+- [de_bruijn](src/main/scala/xieyuheng/de_bruijn):<br>
   De Bruijn stype simple type lambda calculus
   - implemented by term rewriting
 
 ### study of type inference
 
-- [miniml](miniml):<br>
+- [miniml](src/main/scala/xieyuheng/miniml):<br>
   "A simple applicative language: Mini-ML"
   - by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn
 
 ### study of normalization by evaluation (a.k.a. norm-by-eval (a.k.a. NbE))
 
-- [lambda](lambda):<br>
+- [lambda](src/main/scala/xieyuheng/lambda):<br>
   The untyped lambda calculus
-- [syst](syst):<br>
+- [syst](src/main/scala/xieyuheng/syst):<br>
   Kurt Gödel's system T
   - simply typed lambda calculus with natural number,
-- [tartlet](tartlet):<br>
+- [tartlet](src/main/scala/xieyuheng/tartlet):<br>
   "Checking Dependent Types with Normalization by Evaluation: A Tutorial"
   - this is the little pie, recursion is also not an option here.
   - by David Thrane Christiansen.
     ([the original tutorial](http://davidchristiansen.dk/tutorials/nbe))
-- [minitt](minitt):<br>
+- [minitt](src/main/scala/xieyuheng/minitt):<br>
   "A simple type-theoretic language: Mini-TT"
   - by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama
   - no termination check, thus when viewed as logic it is unsound.
 
 ### study of function composition and stack machine
 
-- [adventure/jojo_untyped](adventure/jojo_untyped):<br>
+- [adventure/jojo_untyped](src/main/scala/xieyuheng/adventure/jojo_untyped):<br>
   de bruijn notation implemented by threaded code
-- [adventure/jojo_simple](adventure/jojo_simple):<br>
+- [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple):<br>
   two levels of computations -- `exe` and `cut`
   - `exe` level computation is just computation
   - `cut` level computation is type checking <br>
     thinking about how we implement type checking, <br>
     type checking is compile time computation with good error report, is it not ?
   - `let` is not allowed in `cut` level computation
-- [adventure/jojo_dependent](adventure/jojo_dependent):<br>
+- [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent):<br>
   the same as `simple`, but allow `let` in `cut`
 
 ### references
@@ -102,7 +102,7 @@ programming language implementation practices
 - Build: `sbt stage`
   - test: `./dev t`
   - find executables at `./target/universal/stage/bin/`
-- Example code at: [example](https://github.com/xieyuheng/cicada/tree/master/example)
+- Example code at: [example](example)
 
 ## Community
 

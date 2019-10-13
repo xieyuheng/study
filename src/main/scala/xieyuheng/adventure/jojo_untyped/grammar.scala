@@ -9,7 +9,7 @@ object grammar {
   val lexer = Lexer.default
 
   def preserved: List[String] = List(
-    "let",
+    "let", "exe",
     "cons", "car", "cdr",
     "assert_eq",
     "report_ds",
@@ -21,7 +21,7 @@ object grammar {
   def jo: Rule = Rule(
     "jo", Map(
       "var" -> List(identifier),
-      "let" -> List("(", "let", identifier. ")"),
+      "let" -> List("(", "let", identifier, ")"),
       "jojo" -> List("{", jo_list, "}"),
       "jojo_empty" -> List("{", "}"),
       "define" -> List(identifier, "=", "{", jo_list, "}"),

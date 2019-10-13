@@ -2,14 +2,12 @@
 
 study of programming language design and implementation
 
-## Techniques
-
 > Remember,<br>
 > an engineer solve problem,<br>
 > an engineer does not want just a religion about how to solve a problem.<br>
 > -- Gerry Sussman
 
-### study of parsing
+### study of parsing techniques
 
 - [partech](src/main/scala/xieyuheng/partech)<br>
   A parser generator, with various parsing techniques
@@ -45,7 +43,7 @@ study of programming language design and implementation
   caller can mutate reference passed as arg into it. <br>
   this is often seen in imperative language.
 
-### study of simple type
+### study of lambda calculus with types
 
 - [de_bruijn](src/main/scala/xieyuheng/de_bruijn)<br>
   De Bruijn stype simple type lambda calculus

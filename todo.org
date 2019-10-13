@@ -1,5 +1,10 @@
-* miniml
-- learn about type infer
+- [adventure.untyped] `assert_eq` for testing
+- [adventure.untyped] `report_rs` for testing
+- [adventure.untyped] `report_ds` for testing
+* jojo
+- [adventure.simple]
+- [adventure.simple] just like de_bruijn and nothing more
+- [adventure.simple] infer arg_count and ret_count
 * eopl
 - [eopl] `assert_eq` and `println` for testing
 - [eopl.lang_call_by_reference]
@@ -8,11 +13,10 @@
 - [eopl.lang_infered]
 - [eopl.lang_module]
 - [eopl.lang_class]
-* jojo
-- [adventure.untyped] `assert_eq` for testing
-- [adventure.simple]
-- [adventure.simple] just like de_bruijn and nothing more
-- [adventure.simple] infer arg_count and ret_count
+* miniml
+- learn about type infer
+* the little mler
+- as test for some of the languages
 * lambda
 - can norm-by-eval handle call-by-name terms ?
 - what are examples of call-by-value bad terms ?
@@ -35,7 +39,6 @@
 - lazy eval will be not needed in language with termination check
 - [note] why we *do need* "type directed norm-by-eval" here ?
 - extend tartlet to pie
-- the little typer as test
 - use `TODO` as un-implemented
 - block of let and return
 - be sure about the use of TheVal and friends
@@ -43,6 +46,8 @@
 - extend tartlet to define new types
   - keep it subrecursive, but be generic about data and ind, rec and iter
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
+* the little typer
+- as test for dependently typed language
 * pure
 - in addition to a file to eval, also a file of config of sorts, axioms and rules
 * sysf

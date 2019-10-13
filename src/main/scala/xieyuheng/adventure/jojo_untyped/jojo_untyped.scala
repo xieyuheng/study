@@ -11,7 +11,7 @@ object jojo_untyped extends mini_interpreter (
     Parser(grammar.lexer, grammar.jo_list).parse(code) match {
       case Right(tree) =>
         val jo_list = grammar.jo_list_matcher(tree)
-        val frame = Frame(0, jo_list, EnvEmpty())
+        val frame = Frame(0, jo_list, Env())
         val rs = Rs()
           .push(exe.frame_empty)
           .push(frame)

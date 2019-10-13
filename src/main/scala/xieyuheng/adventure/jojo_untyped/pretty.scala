@@ -9,11 +9,17 @@ object pretty {
       case Var(name: String) =>
         name
       case Let(name: String) =>
-        s"let ${name}"
+        s"(let ${name})"
       case JoJo(list: List[Jo]) =>
-        s"{ ${pretty_jo_list(list)} }"
+        if (list.length == 0) {
+          s"{ }"
+        } else {
+          s"{ ${pretty_jo_list(list)} }"
+        }
       case Define(name: String, jojo: JoJo) =>
         s"${name} = ${pretty_jo(jojo)}"
+      case Execute() =>
+        s"exe"
       case Str(str) =>
         val doublequote = '"'
         s"${doublequote}${str}${doublequote}"

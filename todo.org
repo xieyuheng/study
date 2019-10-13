@@ -1,7 +1,5 @@
 * jojo
-- [adventure.untyped] no implicit `exe`
-  this means, `let` is different from `define`
-- [adventure.untyped] `exe` as primitive
+- [adventure.untyped] println
 - [adventure.simple]
 - [adventure.simple] type check -- just like de_bruijn and nothing more
 - [adventure.simple] infer arg_count and ret_count

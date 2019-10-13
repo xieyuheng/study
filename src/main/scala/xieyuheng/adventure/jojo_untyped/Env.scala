@@ -1,29 +1,24 @@
 package xieyuheng.adventure.jojo_untyped
 
-import scala.annotation.tailrec
+sealed trait EnvEntry
+final case class EnvEntryLet(value: Val) extends EnvEntry
+final case class EnvEntryDefine(value: Val) extends EnvEntry
 
-sealed trait Env {
+case class Env(map: Map[String, EnvEntry] = Map()) {
 
-  @tailrec
-  def lookup_val(name: String): Option[Val] = {
-    val env = this
-    env match {
-      case EnvEmpty() =>
-        None
-      case EnvLet(name2: String, value: Val, rest: Env) =>
-        if (name == name2) {
-          Some(value)
-        } else {
-          rest.lookup_val(name)
-        }
-    }
+  def lookup_val(name: String): Option[EnvEntry] = {
+    map.get(name)
+  }
+
+  def ext(name: String, entry: EnvEntry): Env = {
+    Env(map + (name -> entry))
   }
 
   def ext_let(name: String, value: Val): Env = {
-    val rest = this
-    EnvLet(name, value, rest)
+    ext(name, EnvEntryLet(value))
+  }
+
+  def ext_define(name: String, value: Val): Env = {
+    ext(name, EnvEntryDefine(value))
   }
 }
-
-final case class EnvEmpty() extends Env
-final case class EnvLet(name: String, value: Val, rest: Env) extends Env

@@ -2,8 +2,6 @@ true = { (let x) (let y) x }
 false = { (let x) (let y) y }
 not = { (let a) (let x) (let y) x y a exe }
 
-// {{}} {{{}}} true
-// {{}} {{{}}} {false} not
-
-// {{}} {{{}}} false
-// {{}} {{{}}} {true} not
+"a" "b" true
+"a" "b" {false} not
+assert_eq

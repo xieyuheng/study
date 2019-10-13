@@ -9,7 +9,7 @@ import scala.annotation.tailrec
 object exe {
 
   def frame_empty: Frame = {
-    Frame(0, List(), EnvEmpty())
+    Frame(0, List(), Env())
   }
 
   def run(ds: Ds, rs: Rs): Either[Err, Ds] = {
@@ -21,7 +21,7 @@ object exe {
 
   def run_jo_list(ds: Ds, rs: Rs, list: List[Jo]): Either[Err, (Ds, Rs)] = {
     val limit = rs.length
-    val frame = Frame(0, list, EnvEmpty())
+    val frame = Frame(0, list, Env())
     run_with_limit(ds, rs.push(frame), limit)
   }
 
@@ -63,8 +63,10 @@ object exe {
 
       case Var(name: String) =>
         env.lookup_val(name) match {
-          case Some(value) =>
+          case Some(EnvEntryDefine(value)) =>
             ap(ds, rs, env, value)
+          case Some(EnvEntryLet(value)) =>
+            Right(ds.push(value), rs)
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
@@ -77,7 +79,7 @@ object exe {
       case Let(name: String) =>
         ds.toc() match {
           case Some(value) =>
-            Right(ds.drop(), rs.toc_ext(name, value))
+            Right(ds.drop(), rs.toc_ext_let(name, value))
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
@@ -91,7 +93,28 @@ object exe {
         Right(ds.push(ValJoJo(list, env)), rs)
 
       case Define(name: String, jojo: JoJo) =>
-        Right(ds, rs.toc_ext(name, ValJoJo(jojo.list, env)))
+        Right(ds, rs.toc_ext_define(name, ValJoJo(jojo.list, env)))
+
+      case Execute() =>
+        ds.toc() match {
+          case Some(jojo: ValJoJo) =>
+            Right(ds.drop(), rs.push(Frame(0, jojo.list, jojo.env)))
+          case Some(value) =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"exe type mismatch match, excepting jojo\n" ++
+                s"value: ${pretty_val(value)}\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
+            ))
+          case None =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"stack underflow\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
+            ))
+        }
 
       case Str(str: String) =>
         Right(ds.push(ValStr(str)), rs)
@@ -126,7 +149,7 @@ object exe {
           case Some(value) =>
             Left(Err(
               s"[exe fail]\n" ++
-                s"type mismatch match, excepting cons\n" ++
+                s"car type mismatch match, excepting cons\n" ++
                 s"value: ${pretty_val(value)}\n" ++
                 s"${pretty_rs(rs)}\n" ++
                 s"${pretty_ds(ds)}\n"
@@ -147,7 +170,7 @@ object exe {
           case Some(value) =>
             Left(Err(
               s"[exe fail]\n" ++
-                s"type mismatch match, excepting cons\n" ++
+                s"cdr type mismatch match, excepting cons\n" ++
                 s"value: ${pretty_val(value)}\n" ++
                 s"${pretty_rs(rs)}\n" ++
                 s"${pretty_ds(ds)}\n"

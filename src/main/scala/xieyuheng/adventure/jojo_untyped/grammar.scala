@@ -26,6 +26,7 @@ object grammar {
       "jojo_empty" -> List("{", "}"),
       "define" -> List(identifier, "=", "{", jo_list, "}"),
       "define_empty" -> List(identifier, "=", "{", "}"),
+      "exe" -> List("exe"),
       "string" -> List(double_quoted_string),
       "cons" -> List("cons"),
       "car" -> List("car"),
@@ -49,6 +50,7 @@ object grammar {
         Define(name, JoJo(jo_list_matcher(jo_list))) },
       "define_empty" -> { case List(Leaf(name), _, _, _) =>
         Define(name, JoJo(List())) },
+      "exe" -> { case List(_) => Execute() },
       "string" -> { case List(Leaf(str)) => Str(trim_double_quote(str)) },
       "cons" -> { case List(_) => Cons() },
       "car" -> { case List(_) => Car() },

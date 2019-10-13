@@ -88,13 +88,13 @@
 
   ctx, x: A |- f : (- B) C
   ----------------------------------- (let)
-  ctx |- let x: {A} f : (- A) (- B) C
+  ctx |- (let x: A) f : (- A) (- B) C
 
   ctx, x: A |- f : C
   ----------------------------------- (let-simple)
-  ctx |- let x: {A} f : (- A) C
+  ctx |- (let x: A) f : (- A) C
 
-  so we have let x: {A} : (- A)
+  so we have (let x: A) : (- A)
 
   how about (- A) : ???
 
@@ -108,8 +108,11 @@
 
   we need two new jo in exe: `dep` and `lit`
 
-  dep x: {A} =cut=> let x: {A}
-  lit { f } =cut=> { f }
+  (dep x: A)
+  cut ==> (let x: A)
+
+  {lit A}
+  cut ==> A
 
 * [todo] semantic of eval
 
@@ -123,7 +126,7 @@
 
     { X (- X) } => { }
 
-    { {a} let x: {X} f } => { x = {a} f }
+    { a (let x: X) f } => { [x = a] f }
 
 * [todo] encoding simple type system in jojo type system
 

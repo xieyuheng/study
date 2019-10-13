@@ -31,7 +31,7 @@ study of programming language design and implementation
   - explicit reference (address)
 - [eopl/lang_implicit_refs](src/main/scala/xieyuheng/eopl/lang_implicit_refs) <br>
   - distinguish `denoted value` from `expressed value` for mutable variable. <br>
-  - this is also called call-by-value parameter-passing.
+    this is also called call-by-value parameter-passing.
 - [eopl/lang_mutable_pairs](src/main/scala/xieyuheng/eopl/lang_mutable_pairs) <br>
   - remember Dan's paper "Cons should not evaluate its arguments" ? <br>
     this is preparation for it.
@@ -65,7 +65,7 @@ study of programming language design and implementation
 - [tartlet](src/main/scala/xieyuheng/tartlet) <br>
   - "Checking Dependent Types with Normalization by Evaluation: A Tutorial" <br>
   - by David Thrane Christiansen ([the original tutorial](http://davidchristiansen.dk/tutorials/nbe)) <br>
-  - this is the little pie, recursion is also not an option here.
+  - since tartlet is little pie, recursion is also not an option here.
 - [minitt](src/main/scala/xieyuheng/minitt) <br>
   - "A simple type-theoretic language: Mini-TT" <br>
   - by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama <br>

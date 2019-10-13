@@ -2,7 +2,7 @@
 
 ## untyped
 
-- implicit `exe` is confusing
+- implicit `exe` can be confusing
 
 - explicit `exe` will make
   local function definition different from

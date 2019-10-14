@@ -8,7 +8,7 @@ t () {
         test_tartlet && \
         test_lambda && \
         test_syst && \
-        # test_minitt && \
+        test_minitt && \
         test_eopl && \
         test_adventure
 }

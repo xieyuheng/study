@@ -5,6 +5,7 @@ case class Rule(
   choices: Map[String, List[RulePart]],
   args: Map[String, Rule] = Map(),
 ) {
+
   if (choices.size == 0) {
     println("Rule should not have empty choices")
     println(s"name: ${name}")
@@ -20,12 +21,25 @@ case class Rule(
     }
   }
 
-  // - to get lower bound
-  // - we can not use `==`, because we can not compare lambda (rule_gen)
-  //   but it is ok to mis-comparing some rules to be the same
-  //   the lower bound will not be the greatest lower bound
+  // IMPORTANT BUG
+  // - we can not use `==`
+  //   because we can not compare lambda (rule_gen)
+  // - equivalent relation between circular data is problematic
+  //   and equivalent is important in for the correctness of the parser
+  // - even with the following `metters`
+  //   we can not ensure the parser is right
 
-  val matters = (name, choices.keys.toSet, args)
+  val choices_matter: Set[(String, Int)] = {
+    choices.map { case (choice_name, list) =>
+      (choice_name, list.length)
+    }.toSet
+  }
+
+  val choices_matter2: Set[String] = {
+    choices.keys.toSet
+  }
+
+  val matters = (name, choices_matter, choices_matter2, args)
 
   override def equals(that: Any): Boolean = {
     that match {
@@ -35,34 +49,7 @@ case class Rule(
   }
 
   override def hashCode = matters.hashCode
-
-  lazy val lower_bound: Int = Rule.lower_bound(this, List(this))
 }
-
-object Rule {
-  def list(name: String, parts: List[RulePart]): Rule = {
-    Rule(name, Map(name -> parts))
-  }
-
-  private def lower_bound(rule: Rule, occured: List[Rule]): Int = {
-    rule.choices.map { case (_name, parts) =>
-      parts.foldLeft(0) { case (bound, part) =>
-        part match {
-          case RulePartStr(str) => bound + 1
-          case RulePartRule(rule_gen) =>
-            val r = rule_gen()
-            if (occured.exists(r == _)) {
-              bound
-            } else {
-              bound + Rule.lower_bound(r, r :: occured)
-            }
-          case RulePartPred(word_pred) => bound + 1
-        }
-      }
-    }.min
-  }
-}
-
 
 sealed trait RulePart
 

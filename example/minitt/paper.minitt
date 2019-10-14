@@ -208,3 +208,12 @@ let and_commute_2: (
     (x, y) => conj(Q, P, y, x)
   }
 }
+
+// let rec vec_t: (A: type_t, n: nat_t) -> type_t = {
+//   A => datatype {
+//     case vec_null { n = zero }
+//     case vec_cons $[A, prev: nat_t, vec_t(A, prev)] {
+//       n = succ[prev]
+//     }
+//   }
+// }

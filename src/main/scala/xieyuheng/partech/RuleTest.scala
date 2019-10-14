@@ -26,9 +26,10 @@ object RuleTest extends App {
       "ap" -> List(exp, "(", non_empty_list(arg), ")"),
     ))
 
-  def case_clause = Rule.list(
-    "case_clause", List(
-      identifier, "=", ">", exp))
+  def case_clause = Rule(
+    "case_clause", Map(
+      "case_clause" -> List(identifier, "=", ">", exp),
+    ))
 
   case class Item(rule: Rule, choice_name: String, parts: List[RulePart], index: Int) {
     val matters = (rule, choice_name, parts.length, index)

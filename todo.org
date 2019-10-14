@@ -1,7 +1,3 @@
-- [partech] ErrMsg and Span
-- [partech] better report with ErrMsg in context
-- [partech] [important] fix equals between rules -- how ? by ruleGen with uuid ?
-
 - [de_bruijn] type alias `let type`
 - [de_bruijn] add literal atom -- to play with
   - atom(A, "abc")
@@ -73,6 +69,8 @@
 - [maybe] concrete syntax for rule
   - to use partech as more general tool out side scala
     (like the rosie pattern language)
+- [partech] ErrMsg and Span
+- [partech] better report with ErrMsg in context
 * compile with cps
 * sat
 - sat solver vis (how it is vis-ed?)

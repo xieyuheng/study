@@ -5,6 +5,7 @@ case class LexTable(
   ignorer: String => String)
 
 case class Span(lo: Int, hi: Int)
+
 case class Word(str: String, span: Span) {
   override def toString: String = {
     val doublequote = '"'
@@ -13,6 +14,7 @@ case class Word(str: String, span: Span) {
 }
 
 case class Lexer(table: LexTable) {
+
   def lex(text: String): Either[ErrMsg, List[Word]] = {
     var remain: String = text
     var tokens: List[Word] = List()
@@ -39,6 +41,7 @@ case class Lexer(table: LexTable) {
       case None => Right(tokens)
     }
   }
+
 }
 
 object Lexer {
@@ -150,4 +153,5 @@ object Lexer {
     word_matcher_with_string,
     ignore_space_and_line_comment,
   ))
+
 }

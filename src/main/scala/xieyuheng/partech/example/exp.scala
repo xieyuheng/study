@@ -73,9 +73,10 @@ object exp extends ExampleRule {
       "ap" -> List(exp, "(", non_empty_list(arg), ")"),
     ))
 
-  def case_clause = Rule.list(
-    "case_clause", List(
-      identifier, "=", ">", exp))
+  def case_clause = Rule(
+    "case_clause", Map(
+      "case_clause" -> List(identifier, "=", ">", exp),
+    ))
 
   def arg = Rule(
     "arg", Map(

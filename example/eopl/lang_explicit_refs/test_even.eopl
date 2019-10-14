@@ -15,9 +15,17 @@ and odd = (_) => {
     }
   }
 }
+
 do ref_set(x, 13)
 do assert_eq(even(sole), false)
+do assert_eq(ref_get(x), 0)
+
+do ref_set(x, 13)
+do assert_eq(odd(sole), true)
+do assert_eq(ref_get(x), 0)
+
 do ref_set(x, 12)
-do assert_eq(even(sole), true) {
+do assert_eq(even(sole), true)
+do assert_eq(ref_get(x), 0) {
   sole
 }

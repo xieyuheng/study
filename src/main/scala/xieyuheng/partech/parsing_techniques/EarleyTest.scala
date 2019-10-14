@@ -15,7 +15,7 @@ object EarleyTest extends App {
     }
   }
 
-  def parseShow(rule: Rule, text: String): Unit = {
+  def parse_show(rule: Rule, text: String): Unit = {
     Earley.init(lex(text), rule).parse() match {
       case Right(tree) =>
         println(pretty_tree(tree))
@@ -61,8 +61,8 @@ object EarleyTest extends App {
     assert(Earley.init(lex("a-a+a+a-a+a"), S).recognize)
     assert(!Earley.init(lex("a-a+a+aa+a"), S).recognize)
 
-    parseShow(S, "a-a+a")
-    parseShow(S, "a-a+a+a-a+a")
+    parse_show(S, "a-a+a")
+    parse_show(S, "a-a+a+a-a+a")
   }
 
   val `Sb` = {
@@ -81,8 +81,8 @@ object EarleyTest extends App {
     assert(Earley.init(lex("b b b"), S).recognize)
     assert(Earley.init(lex("b b b b"), S).recognize)
 
-    parseShow(S, "b")
-    parseShow(S, "b b")
-    parseShow(S, "b b b")
+    parse_show(S, "b")
+    parse_show(S, "b b")
+    parse_show(S, "b b b")
   }
 }

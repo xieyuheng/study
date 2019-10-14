@@ -22,7 +22,7 @@ object Earley {
     parts: List[RulePart],
     dot: Int,
     origin: Int,
-    completedBy: Option[Item] = None,
+    completed_by: Option[Item] = None,
   ) {
     val matters = (rule, choice_name, parts.length, dot, origin)
 
@@ -49,8 +49,8 @@ object Earley {
         s = s + "• "
       }
       s = s + s"[${origin}]"
-      completedBy match {
-        case Some(causeOfCompletion) => s = s + s" { ${causeOfCompletion} }"
+      completed_by match {
+        case Some(cause_of_completion) => s = s + s" { ${cause_of_completion} }"
         case None => {}
       }
       s
@@ -70,28 +70,28 @@ case class Earley(words: List[Word], rule: Rule) {
   def predict(index: Int): Unit = {
     val itemset = active(index)
 
-    var beforeSize: Option[Int] = Some(itemset.size)
-    var afterSize: Option[Int] = None
+    var before_size: Option[Int] = Some(itemset.size)
+    var after_size: Option[Int] = None
 
-    while (beforeSize != afterSize) {
-      beforeSize = Some(itemset.size)
+    while (before_size != after_size) {
+      before_size = Some(itemset.size)
       itemset.foreach { case item =>
-        predictItem(item, index)
+        predict_item(item, index)
       }
-      afterSize = Some(itemset.size)
+      after_size = Some(itemset.size)
     }
   }
 
-  def predictItem(item: Item, index: Int): Unit = {
+  def predict_item(item: Item, index: Int): Unit = {
     item.parts(item.dot) match {
-      case RulePartRule(ruleGen) =>
-        val rule = ruleGen()
-        expendRule(rule, index)
+      case RulePartRule(rule_gen) =>
+        val rule = rule_gen()
+        expend_rule(rule, index)
       case _ => {}
     }
   }
 
-  def expendRule(rule: Rule, index: Int): Unit = {
+  def expend_rule(rule: Rule, index: Int): Unit = {
     rule.choices.foreach { case (choice_name, parts) =>
       active(index) += Item(rule, choice_name, parts, 0, index)
     }
@@ -99,26 +99,26 @@ case class Earley(words: List[Word], rule: Rule) {
 
   def scan(index: Int): Unit = {
     active(index).foreach { case item =>
-      scanItem(item, index)
+      scan_item(item, index)
     }
   }
 
-  def scanItem(item: Item, index: Int): Unit = {
+  def scan_item(item: Item, index: Int): Unit = {
     item.parts(item.dot) match {
       case RulePartStr(str) =>
         if (str == words(index).str) {
-          bringForwardItem(item, index)
+          bring_forward_item(item, index)
         }
-      case RulePartPred(wordPred) =>
-        if (wordPred.pred(words(index).str)) {
+      case RulePartPred(word_pred) =>
+        if (word_pred.pred(words(index).str)) {
           val newParts = item.parts.patch(item.dot, List(RulePartStr(words(index).str)), 1)
-          bringForwardItem(item.copy(parts = newParts), index)
+          bring_forward_item(item.copy(parts = newParts), index)
         }
       case _ => {}
     }
   }
 
-  def bringForwardItem(item: Item, index: Int): Unit = {
+  def bring_forward_item(item: Item, index: Int): Unit = {
     val itemset = if (item.dot + 1 == item.parts.length) {
       completed(index + 1)
     } else {
@@ -130,26 +130,26 @@ case class Earley(words: List[Word], rule: Rule) {
   def complete(index: Int): Unit = {
     val itemset = completed(index + 1)
 
-    var beforeSize: Option[Int] = Some(itemset.size)
-    var afterSize: Option[Int] = None
+    var before_size: Option[Int] = Some(itemset.size)
+    var after_size: Option[Int] = None
 
-    while (beforeSize != afterSize) {
-      beforeSize = Some(itemset.size)
+    while (before_size != after_size) {
+      before_size = Some(itemset.size)
       itemset.foreach { case item =>
-        completeItem(item, index)
+        complete_item(item, index)
       }
-      afterSize = Some(itemset.size)
+      after_size = Some(itemset.size)
     }
   }
 
-  def completeItem(causeOfCompletion: Item, index: Int): Unit = {
-    val rule = causeOfCompletion.rule
-    val itemset = active(causeOfCompletion.origin)
+  def complete_item(cause_of_completion: Item, index: Int): Unit = {
+    val rule = cause_of_completion.rule
+    val itemset = active(cause_of_completion.origin)
     itemset.foreach { case item =>
       item.parts(item.dot) match {
-        case RulePartRule(ruleGen) =>
-          if (rule == ruleGen()) {
-            bringForwardItem(item.copy(completedBy = Some(causeOfCompletion)), index)
+        case RulePartRule(rule_gen) =>
+          if (rule == rule_gen()) {
+            bring_forward_item(item.copy(completed_by = Some(cause_of_completion)), index)
           }
         case _ => {}
       }
@@ -157,7 +157,7 @@ case class Earley(words: List[Word], rule: Rule) {
   }
 
   def run(): Unit = {
-    expendRule(start, 0)
+    expend_rule(start, 0)
     val indexes = 0 until words.length
     indexes.foreach { case index =>
       predict(index)
@@ -198,7 +198,7 @@ case class Earley(words: List[Word], rule: Rule) {
 
   run()
 
-  val completedStarts: List[Item] = {
+  val completed_starts: List[Item] = {
     val index = words.length
     completed(index).filter { case item =>
       item.rule == start &&
@@ -207,20 +207,20 @@ case class Earley(words: List[Word], rule: Rule) {
     }.toList
   }
 
-  val recognize: Boolean = completedStarts.length > 0
+  val recognize: Boolean = completed_starts.length > 0
 
   def parse(): Either[ErrMsg, Tree] = {
-    if (completedStarts.length == 0) {
+    if (completed_starts.length == 0) {
       Left(ErrMsg("Earley.parse",
         s"fail to recognize",
         Span(0, 0)))
-    } else if (completedStarts.length > 1) {
+    } else if (completed_starts.length > 1) {
       Left(ErrMsg("Earley.parse",
-        s"grammar is ambiguous, found ${completedStarts.length} parse trees",
+        s"grammar is ambiguous, found ${completed_starts.length} parse trees",
         Span(0, 0)))
     } else {
-      val startItem = completedStarts(0)
-      collectNode(startItem).flatMap { case tree =>
+      val startItem = completed_starts(0)
+      collect_node(startItem).flatMap { case tree =>
         if (tree.children.length != 1) {
           Left(ErrMsg("Earley.parse",
             s"collected multiple nodes under start, number of nodes: ${tree.children.length}",
@@ -232,14 +232,14 @@ case class Earley(words: List[Word], rule: Rule) {
     }
   }
 
-  def collectNode(item: Item): Either[ErrMsg, Node] = {
-    item.completedBy match {
-      case Some(causeOfCompletion) =>
+  def collect_node(item: Item): Either[ErrMsg, Node] = {
+    item.completed_by match {
+      case Some(cause_of_completion) =>
         for {
-          pair <- collectChildren(item)
+          pair <- collect_children(item)
           (newItem, children) = pair
 
-          itemset = active(causeOfCompletion.origin) ++ completed(causeOfCompletion.origin)
+          itemset = active(cause_of_completion.origin) ++ completed(cause_of_completion.origin)
 
           prevList = itemset.filter { case prev =>
             prev.dot == newItem.dot - 1 &&
@@ -251,7 +251,7 @@ case class Earley(words: List[Word], rule: Rule) {
             if (prevList.length == 0) {
               val msg = {
                 s"newItem: ${newItem}" ::
-                s"causeOfCompletion: ${causeOfCompletion}" ::
+                s"cause_of_completion: ${cause_of_completion}" ::
                 s"itemset:" ::
                 itemset.map { case item => s"  ${item}"}.toList
               }.mkString("\n")
@@ -263,7 +263,7 @@ case class Earley(words: List[Word], rule: Rule) {
                   s"prevList:" ::
                   prevList.map { case item => s"  ${item}"} ++
                   s"newItem: ${newItem}" ::
-                  s"causeOfCompletion: ${causeOfCompletion}" ::
+                  s"cause_of_completion: ${cause_of_completion}" ::
                   s"itemset:" ::
                   itemset.map { case item => s"  ${item}"}.toList
                 }.mkString("\n")
@@ -271,8 +271,8 @@ case class Earley(words: List[Word], rule: Rule) {
               } else {
                 val prev = prevList(0)
                 for {
-                  node <- collectNode(prev)
-                  mid <- collectNode(causeOfCompletion)
+                  node <- collect_node(prev)
+                  mid <- collect_node(cause_of_completion)
                 } yield node.copy(
                   children = (node.children :+ mid) ++ children)
               }
@@ -283,38 +283,38 @@ case class Earley(words: List[Word], rule: Rule) {
 
       case None =>
         for {
-          pair <- collectChildren(item)
+          pair <- collect_children(item)
           (_newItem, children) = pair
         } yield Node(item.rule, item.choice_name, children)
     }
   }
 
-  def collectChildren(item: Item): Either[ErrMsg, (Item, List[Tree])] = {
+  def collect_children(item: Item): Either[ErrMsg, (Item, List[Tree])] = {
     import scala.annotation.tailrec
 
     @tailrec
-    def countStrBeforeDot(n: Int, parts: List[RulePart], dot: Int): Int = {
+    def count_str_before_dot(n: Int, parts: List[RulePart], dot: Int): Int = {
       if (dot == 0) {
         n
       } else {
         parts(dot - 1) match {
           case RulePartStr(str) =>
-            countStrBeforeDot(n + 1, parts, dot - 1)
-          case RulePartRule(ruleGen) =>
+            count_str_before_dot(n + 1, parts, dot - 1)
+          case RulePartRule(rule_gen) =>
             n
-          case RulePartPred(wordPred) =>
+          case RulePartPred(word_pred) =>
             throw new Exception()
         }
       }
     }
 
-    val n = countStrBeforeDot(0, item.parts, item.dot)
+    val n = count_str_before_dot(0, item.parts, item.dot)
 
     val children: List[Tree] = item.parts.slice(item.dot - n, item.dot).map {
       case RulePartStr(str) => Leaf(str)
-      case RulePartRule(ruleGen) =>
+      case RulePartRule(rule_gen) =>
         throw new Exception()
-      case RulePartPred(wordPred) =>
+      case RulePartPred(word_pred) =>
         throw new Exception()
     }
 

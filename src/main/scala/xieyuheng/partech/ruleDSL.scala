@@ -10,8 +10,8 @@ object ruleDSL {
     RulePartRule(() => rule)
   }
 
-  implicit def RulePartPredFromWordPred(wordPred: WordPred): RulePartPred = {
-    RulePartPred(wordPred)
+  implicit def RulePartPredFromWordPred(word_pred: WordPred): RulePartPred = {
+    RulePartPred(word_pred)
   }
 
 }

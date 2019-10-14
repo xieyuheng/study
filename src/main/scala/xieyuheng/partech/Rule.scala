@@ -21,7 +21,7 @@ case class Rule(
   }
 
   // - to get lower bound
-  // - we can not use `==`, because we can not compare lambda (ruleGen)
+  // - we can not use `==`, because we can not compare lambda (rule_gen)
   //   but it is ok to mis-comparing some rules to be the same
   //   the lower bound will not be the greatest lower bound
 
@@ -36,7 +36,7 @@ case class Rule(
 
   override def hashCode = matters.hashCode
 
-  lazy val lowerBound: Int = Rule.lowerBound(this, List(this))
+  lazy val lower_bound: Int = Rule.lower_bound(this, List(this))
 }
 
 object Rule {
@@ -44,19 +44,19 @@ object Rule {
     Rule(name, Map(name -> parts))
   }
 
-  private def lowerBound(rule: Rule, occured: List[Rule]): Int = {
+  private def lower_bound(rule: Rule, occured: List[Rule]): Int = {
     rule.choices.map { case (_name, parts) =>
       parts.foldLeft(0) { case (bound, part) =>
         part match {
           case RulePartStr(str) => bound + 1
-          case RulePartRule(ruleGen) =>
-            val r = ruleGen()
+          case RulePartRule(rule_gen) =>
+            val r = rule_gen()
             if (occured.exists(r == _)) {
               bound
             } else {
-              bound + Rule.lowerBound(r, r :: occured)
+              bound + Rule.lower_bound(r, r :: occured)
             }
-          case RulePartPred(wordPred) => bound + 1
+          case RulePartPred(word_pred) => bound + 1
         }
       }
     }.min
@@ -73,10 +73,10 @@ final case class RulePartStr(str: String) extends RulePart {
   }
 }
 
-final case class RulePartRule(ruleGen: () => Rule) extends RulePart {
+final case class RulePartRule(rule_gen: () => Rule) extends RulePart {
   override def toString = {
-    ruleGen().name
+    rule_gen().name
   }
 }
 
-final case class RulePartPred(wordPred: WordPred) extends RulePart
+final case class RulePartPred(word_pred: WordPred) extends RulePart

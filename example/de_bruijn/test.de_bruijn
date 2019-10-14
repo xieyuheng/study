@@ -1,3 +1,5 @@
+let type bool_t = (A) -> (A) -> A
+
 let true: (A) -> (A) -> A =
   (x: A) => (y: A) => x
 

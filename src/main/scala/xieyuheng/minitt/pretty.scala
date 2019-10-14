@@ -60,7 +60,7 @@ object pretty {
       case DeclLet(pat: Pat, t: Exp, e: Exp) =>
         s"let ${pretty_pat(pat)}: ${pretty_exp(t)} = ${pretty_exp(e)}"
       case DeclLetrec(pat: Pat, t: Exp, e: Exp) =>
-        s"letrec ${pretty_pat(pat)}: ${pretty_exp(t)} = ${pretty_exp(e)}"
+        s"let rec ${pretty_pat(pat)}: ${pretty_exp(t)} = ${pretty_exp(e)}"
     }
   }
 

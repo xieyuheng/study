@@ -1,3 +1,11 @@
+- [partech] ErrMsg and Span
+- [partech] better report with ErrMsg in context
+- [partech] [important] fix equals between rules -- how ? by ruleGen with uuid ?
+
+- [de_bruijn] type alias `let type`
+- [de_bruijn] add literal atom -- to play with
+  - atom(A, "abc")
+- [de_bruijn] representing data types
 * jojo
 - [adventure.simple]
 - [adventure.simple] type check -- just like de_bruijn and nothing more
@@ -18,9 +26,9 @@
 - can norm-by-eval handle call-by-name terms ?
 - what are examples of call-by-value bad terms ?
 * de_bruijn
-- view type atom as logic and use unification
-- representing data types
-- synth
+- [de_bruijn_logical] view type atom as logic variable and use unification
+  - this should be a different language from [de_bruijn]
+- [de_bruijn] synth
 - theory about equality between lambda terms
   - reflexivity
     symmetry
@@ -29,9 +37,9 @@
     beta_reduction
     eta_reduction
 * curry
-- view type atom as logic and use unification
-- type system of curry style need type variable
-  and unification over type variables
+- [curry] view type atom as logic variable and use unification
+  - type system of curry style need type variable
+    there is no version of curry style without type variable
 * tartlet
 - lazy eval will be not needed in language with termination check
 - [note] why we *do need* "type directed norm-by-eval" here ?
@@ -39,7 +47,7 @@
 - use `TODO` as un-implemented
 - block of let and return
 - be sure about the use of TheVal and friends
-- test proof: f == (x) => f(x)
+- [test proof] eta conversion: f == (x) => f(x)
 - extend tartlet to define new types
   - keep it subrecursive, but be generic about data and ind, rec and iter
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
@@ -62,10 +70,7 @@
 * module system
 - module as value with opaque module_t is not enough -- learn from EOPL
 * partech
-- ErrMsg and Span
-- better report with ErrMsg in context
-- [important] fix equals between rules -- how ? by ruleGen with uuid ?
-- concrete syntax for rule
+- [maybe] concrete syntax for rule
   - to use partech as more general tool out side scala
     (like the rosie pattern language)
 * compile with cps

@@ -33,7 +33,7 @@ let bool_elim: (
   }
 }
 
-letrec nat_t: type_t = datatype {
+let rec nat_t: type_t = datatype {
   case zero
   case succ[nat_t]
 }
@@ -65,7 +65,7 @@ let bool_to_nat: (bool_t) -> nat_t = {
 @assert_eq bool_to_nat(true) succ[zero]
 @assert_eq bool_to_nat(false) zero
 
-letrec nat_rec: (
+let rec nat_rec: (
   C: (nat_t) -> type_t,
   C(zero),
   (n: nat_t, C(n)) -> C(succ[n]),
@@ -77,7 +77,7 @@ letrec nat_rec: (
   }
 }
 
-letrec nat_add: (nat_t, nat_t) -> nat_t = {
+let rec nat_add: (nat_t, nat_t) -> nat_t = {
   case zero[] => y => y
   case succ[prev] => y => succ[nat_add(prev, y)]
 }
@@ -91,7 +91,7 @@ let nat_double: (nat_t) -> nat_t =
 @assert_eq nat_double(two) four
 @assert_eq nat_double(three) six
 
-letrec nat_mul: (nat_t, nat_t) -> nat_t = {
+let rec nat_mul: (nat_t, nat_t) -> nat_t = {
   case zero[] => y => zero
   case succ[prev] => y => nat_add(y, nat_mul(prev, y))
 }
@@ -103,7 +103,7 @@ let nat_square: (nat_t) -> nat_t =
 @assert_eq nat_square(two) four
 @assert_eq nat_square(three) nine
 
-letrec nat_eq: (nat_t, nat_t) -> bool_t = {
+let rec nat_eq: (nat_t, nat_t) -> bool_t = {
   case zero[] => {
     case zero[] => true
     case succ[_] => false
@@ -119,14 +119,14 @@ letrec nat_eq: (nat_t, nat_t) -> bool_t = {
 @assert_eq nat_eq(one, two) false
 @assert_eq nat_eq(two, one) false
 
-letrec list_t: (A: type_t) -> type_t = {
+let rec list_t: (A: type_t) -> type_t = {
   A => datatype {
     case null
     case cons $[A, list_t(A)]
   }
 }
 
-letrec list_append: (
+let rec list_append: (
   A: type_t,
   list_t(A),
   list_t(A),
@@ -208,12 +208,3 @@ let and_commute_2: (
     (x, y) => conj(Q, P, y, x)
   }
 }
-
-// letrec vec_t: (A: type_t, n: nat_t) -> type_t = {
-//   A => datatype {
-//     case vec_null { n = zero }
-//     case vec_cons $[A, prev: nat_t, vec_t(A, prev)] {
-//       n = succ[prev]
-//     }
-//   }
-// }

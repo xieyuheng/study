@@ -9,7 +9,7 @@ object grammar {
   val lexer = Lexer.default
 
   def preserved: List[String] = List(
-    "let", "letrec",
+    "let", "rec",
     "car", "cdr",
     "datatype", "type_t",
     "case",
@@ -52,14 +52,14 @@ object grammar {
   def decl = Rule(
     "decl", Map(
       "let" -> List("let", pat, ":", exp, "=", exp),
-      "letrec" -> List("letrec", pat, ":", exp, "=", exp),
+      "letrec" -> List("let", "rec", pat, ":", exp, "=", exp),
     ))
 
   def decl_matcher = Tree.matcher[Decl](
     "decl", Map(
       "let" -> { case List(_, p, _, e, _, t) =>
         DeclLet(pat_matcher(p), exp_matcher(e), exp_matcher(t)) },
-      "letrec" -> { case List(_, p, _, e, _, t) =>
+      "letrec" -> { case List(_, _, p, _, e, _, t) =>
         DeclLetrec(pat_matcher(p), exp_matcher(e), exp_matcher(t)) },
     ))
 

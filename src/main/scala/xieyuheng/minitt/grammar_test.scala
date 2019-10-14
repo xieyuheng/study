@@ -49,7 +49,7 @@ object grammar_test extends App {
     """,
 
     s"""
-    letrec nat_t: type_t = datatype {
+    let rec nat_t: type_t = datatype {
       case zero
       case succ[nat_t]
     }
@@ -100,7 +100,7 @@ object grammar_test extends App {
     """,
 
     s"""
-    letrec nat_rec:
+    let rec nat_rec:
       (C: (_: nat_t) -> type_t) ->
       (a: C(zero)) ->
       (g: (n: nat_t) -> (_: C(n)) -> C(succ[n])) ->
@@ -112,14 +112,14 @@ object grammar_test extends App {
     """,
 
     s"""
-    letrec add: (x: nat_t) -> (y: nat_t) -> nat_t = {
+    let rec add: (x: nat_t) -> (y: nat_t) -> nat_t = {
       case zero[] => y => y
       case succ[prev] => y => succ[add(prev, y)]
     }
     """,
 
     s"""
-    letrec nat_eq: (x: nat_t) -> (y: nat_t) -> bool_t =
+    let rec nat_eq: (x: nat_t) -> (y: nat_t) -> bool_t =
     {
       case zero[] => {
         case zero[] => true
@@ -133,7 +133,7 @@ object grammar_test extends App {
     """,
 
     s"""
-    letrec _: _ = [A , list_t(A) ,]
+    let rec _: _ = [A , list_t(A) ,]
     """,
 
     s"""
@@ -182,14 +182,14 @@ object grammar_test extends App {
     """,
 
     s"""
-    letrec list_t: type_t = datatype {
+    let rec list_t: type_t = datatype {
       case nil
       case cons $$[A, list_t(A)]
     }
     """,
 
     s"""
-    letrec list_append: (A: type_t) -> (x: list_t(A)) -> (y: list_t(A)) -> list_t(A) =
+    let rec list_append: (A: type_t) -> (x: list_t(A)) -> (y: list_t(A)) -> list_t(A) =
     A => {
       case nil[] => y => y
       case cons[head, tail] => y => cons[head, list_append(A, tail, y)]
@@ -381,7 +381,7 @@ object grammar_test extends App {
 
     assert_decl_to_tree(
       s"""
-      letrec nat_t: type_t = datatype {
+      let rec nat_t: type_t = datatype {
         case zero
         case succ[nat_t]
       }

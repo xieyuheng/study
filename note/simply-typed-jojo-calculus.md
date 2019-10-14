@@ -1,1 +1,0 @@
-Simply Typed JoJo Calculus

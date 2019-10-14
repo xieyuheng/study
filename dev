@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-upload_api_doc () {
-    sbt doc && \
-        now switch xieyuheng && \
-        now -n cicada target/scala-2.12/api/ && \
-        surge target/scala-2.12/api/ cicada.surge.sh
-}
-
 t () {
     rm -f target/universal/stage/bin/*
 

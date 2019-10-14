@@ -5,7 +5,7 @@ vec_t = {
   datatype {
     vec_null : { datacons { n == zero } }
     vec_cons : {
-      {let prev : nat_t}
+      (let prev : nat_t)
       (- A) (- prev A vec_t)
       datacons { n == prev succ }
     }
@@ -29,7 +29,7 @@ vec_append = {
   x match {
     case vec_null { y }
     case vec_cons {
-      {let prev : nat_t}
+      (let prev : nat_t)
       (let head : A) (let tail : prev A vec_t)
       y tail n prev A vec_append
       head prev vec_cons

@@ -1,10 +1,11 @@
-* jojo
 - [adventure.simple] (atom A "123")
-- [adventure.simple] representing data types
-* de_bruijn
 - [de_bruijn] type alias `let type`
-- [de_bruijn] atom(A, "abc")
+- [adventure.simple] type alias `type <name> = `
 - [de_bruijn] representing data types
+- [adventure.simple] representing data types
+* jojo
+- [paper for adventure.simple]
+* de_bruijn
 - [de_bruijn_logical] view type atom as logic variable and use unification
   - this should be a different language from [de_bruijn]
 - [de_bruijn] synth

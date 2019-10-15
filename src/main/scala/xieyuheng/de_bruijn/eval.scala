@@ -12,6 +12,8 @@ object eval {
         free_variables(target) ++ free_variables(arg)
       case Fn(arg_name, arg_t, body) =>
         free_variables(body) - arg_name
+      case atom: Atom =>
+        Set()
     }
   }
 
@@ -48,6 +50,8 @@ object eval {
           val new_body = subst(body2, arg_name2, Var(new_name))
           Fn(new_name, arg_t, subst(new_body, arg_name, arg))
         }
+      case atom: Atom =>
+        atom
     }
   }
 
@@ -67,6 +71,8 @@ object eval {
         }
       case Fn(arg_name: String, arg_t: Type, body: Exp) =>
         Fn(arg_name, arg_t, beta_step(body))
+      case atom: Atom =>
+        atom
     }
   }
 
@@ -104,6 +110,8 @@ object eval {
         }
       case Fn(arg_name, arg_t, body) =>
         Fn(arg_name, arg_t, eta_step(body))
+      case atom: Atom =>
+        atom
     }
   }
 

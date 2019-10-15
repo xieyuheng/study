@@ -10,6 +10,7 @@ object grammar {
 
   def preserved: List[String] = List(
     "let",
+    "atom",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -130,6 +131,7 @@ object grammar {
   def non_rator: Rule = Rule(
     "non_rator", Map(
       "fn" -> List("(", non_empty_list(arg_entry), ")", "=", ">", exp),
+      "atom" -> List("atom", "(", identifier, ",", double_quoted_string, ")"),
     ))
 
   def non_rator_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -137,6 +139,8 @@ object grammar {
       "fn" -> { case List(_, arg_entry_list, _, _, _, body) =>
         non_empty_list_matcher(arg_entry_matcher)(arg_entry_list)
           .foldRight(exp_matcher(body)) { case ((name, arg_t), exp) => Fn(name, arg_t, exp) } },
+      "atom" -> { case List(_, _, Leaf(name), _, Leaf(str), _) =>
+        Atom(name, trim_double_quote(str)) },
     ))
 
   def exp_comma = Rule(

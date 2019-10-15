@@ -28,6 +28,9 @@ object pretty {
         s"{${pretty_exp(fn)}}(${pretty_exp(arg)})"
       case Ap(target, arg) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
+      case Atom(name, str) =>
+        val doublequote = '"'
+        s"atom(${name}, ${doublequote}${str}${doublequote})"
     }
   }
 

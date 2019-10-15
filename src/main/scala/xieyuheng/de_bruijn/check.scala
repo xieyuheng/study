@@ -20,6 +20,7 @@ object check {
 
   def check(ctx: Ctx, exp: Exp, t: Type): Either[Err, Unit] = {
     exp match {
+
       case Var(name: String) =>
         lookup_type(ctx, name) match {
           case Some(t2) =>
@@ -40,6 +41,7 @@ object check {
                 s"excepting type: ${pretty_type(t)}\n"
             ))
         }
+
       case Ap(target: Exp, arg: Exp) =>
         infer(ctx, target) match {
           case Left(err) =>
@@ -68,6 +70,7 @@ object check {
                 ).append_cause(err))
             }
         }
+
       case Fn(arg_name: String, arg_t, body: Exp) =>
         t match {
           case TypeAtom(name) =>
@@ -99,11 +102,33 @@ object check {
               ))
             }
         }
+
+      case Atom(name: String, str: String) =>
+        t match {
+          case TypeAtom(name2) =>
+            if (name == name2) {
+              Right(())
+            } else {
+              Left(Err(
+                "[check fail]\n" ++
+                  s"atom name: ${name}\n" ++
+                  s"type atom name: ${name2}\n"
+              ))
+            }
+          case t =>
+            Left(Err(
+              "[check fail]\n" ++
+                s"exp: ${pretty_exp(exp)}\n" ++
+                s"excepting type: ${pretty_type(t)}\n"
+            ))
+        }
+
     }
   }
 
   def infer(ctx: Ctx, exp: Exp): Either[Err, Type] = {
     exp match {
+
       case Var(name: String) =>
         lookup_type(ctx, name) match {
           case Some(t) => Right(t)
@@ -113,6 +138,7 @@ object check {
                 s"undefined name: ${name}\n"
             ))
         }
+
       case Ap(target: Exp, arg: Exp) =>
         infer(ctx, target) match {
           case Left(err) =>
@@ -148,6 +174,7 @@ object check {
                 }
             }
         }
+
       case Fn(arg_name: String, arg_t, body: Exp) =>
         infer(ctx_ext(ctx, arg_name, arg_t), body) match {
           case Right(t) => Right(t)
@@ -157,6 +184,10 @@ object check {
                 s"exp: ${pretty_exp(exp)}\n"
             ).append_cause(err))
         }
+
+      case Atom(name: String, str: String) =>
+        Right(TypeAtom(name))
+
     }
   }
 

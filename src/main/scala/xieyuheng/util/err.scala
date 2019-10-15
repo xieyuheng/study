@@ -7,8 +7,9 @@ object err {
     def append_cause(cause: Err): Err = {
       Err(
         msg ++
-          "because:\n" ++
-          cause.msg)
+          "------------\n" ++
+          cause.msg
+      )
     }
 
   }

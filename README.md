@@ -45,7 +45,7 @@ study of programming language design and implementation
 
 ### study of lambda calculus with types
 
-- [de_bruijn](src/main/scala/xieyuheng/de_bruijn) <br>
+- [barendregt/de_bruijn](src/main/scala/xieyuheng/barendregt/de_bruijn) <br>
   - de bruijn stype simple type lambda calculus <br>
   - implemented by term rewriting
 

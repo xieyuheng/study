@@ -15,6 +15,9 @@ and odd = (_) => {
     }
   }
 }
-do set x = 12 {
-  assert_eq(even(sole), true)
+do set x = 12
+do assert_eq(even(sole), true)
+do set x = 11
+do assert_eq(even(sole), false) {
+  sole
 }

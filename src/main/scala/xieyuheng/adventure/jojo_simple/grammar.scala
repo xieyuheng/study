@@ -16,6 +16,7 @@ object grammar {
     "print",
     "ln",
     "cut",
+    "atom",
   )
 
   def identifier = identifier_with_preserved("identifier", preserved)
@@ -36,6 +37,7 @@ object grammar {
       "report_rs" -> List("report_rs"),
       "print" -> List("print"),
       "ln" -> List("ln"),
+      "atom" -> List("(", "atom", identifier, double_quoted_string, ")"),
     ))
 
   def jo_matcher: Tree => Jo = Tree.matcher[Jo](
@@ -68,6 +70,8 @@ object grammar {
         Print() },
       "ln" -> { case List(_) =>
         Newline() },
+      "atom" -> { case List(_, _, Leaf(name), Leaf(str), _) =>
+        Atom(name, trim_double_quote(str)) },
     ))
 
   def jo_list = non_empty_list(jo)

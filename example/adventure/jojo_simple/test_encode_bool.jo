@@ -48,8 +48,12 @@ true_not_not = {
   { { true } not } not
 }
 
-report_ds
 
-// (atom A "a") (atom A "b") true
-// (atom A "a") (atom A "b") { false } not
-// assert_eq
+test_atom : { }
+test_atom = {
+  (atom A "a") (atom A "b") true
+  (atom A "a") (atom A "b") { false } not
+  assert_eq
+}
+
+test_atom

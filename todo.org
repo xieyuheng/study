@@ -1,4 +1,3 @@
-- [adventure.simple] (atom A "123")
 - [de_bruijn] type alias `let type`
 - [adventure.simple] type alias `type <name> = `
 - [de_bruijn] representing data types

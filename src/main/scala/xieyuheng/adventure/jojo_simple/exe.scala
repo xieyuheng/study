@@ -216,6 +216,9 @@ object exe {
         println("")
         Right(ds, rs)
 
+      case Atom(name, str) =>
+        Right(ds.push(ValAtom(name, str)), rs)
+
     }
   }
 

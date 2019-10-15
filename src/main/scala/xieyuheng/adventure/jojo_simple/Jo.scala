@@ -12,3 +12,4 @@ final case class ReportDs() extends Jo
 final case class ReportRs() extends Jo
 final case class Print() extends Jo
 final case class Newline() extends Jo
+final case class Atom(name: String, str: String) extends Jo

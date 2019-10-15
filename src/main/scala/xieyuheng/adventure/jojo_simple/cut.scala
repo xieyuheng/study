@@ -34,6 +34,7 @@ object cut {
 
   def cut_jo(jo: Jo, ctx: Ctx): Either[Err, (Ctx, List[Ty])] = {
     jo match {
+
       case Var(name: String) =>
         ctx.lookup(name) match {
           case Some(CtxEntryLet(t)) =>
@@ -46,38 +47,55 @@ object cut {
                 s"un-claimed name: ${name}\n"
             ))
         }
+
       case Let(name: String, t: Ty) =>
         Right(ctx.ext(name, CtxEntryLet(t)), List(TyMinus(t)))
+
       case jojo: JoJo =>
         cut_jojo(jojo, ctx).flatMap {
           case tyty =>
             Right(ctx, List(tyty))
         }
+
       case Claim(name: String, tyty: TyTy) =>
         Right(ctx, List())
+
       case Define(name: String, jojo: JoJo) =>
         Right(ctx, List())
+
       case Execute() =>
         Right(ctx, List(TyCut()))
+
       case AssertEq() =>
         Right(ctx, List(TyAssertEq()))
+
       case ReportDs() =>
         Right(ctx, List())
+
       case ReportRs() =>
         Right(ctx, List())
+
       case Print() =>
         Right(ctx, List(TyPrint()))
+
       case Newline() =>
         Right(ctx, List())
+
+      case Atom(name, str) =>
+        Right(ctx, List(TyAtom(name)))
+
     }
   }
 
   def step_ty_in_ts(ts: Ts, ty: Ty): Either[Err, Ts] = {
     ty match {
+
       case TyAtom(name: String) =>
         Right(ts.push(ty))
+
       case TyTy(list: List[Ty]) =>
         Right(ts.push(ty))
+
       case TyCut() =>
         ts.toc() match {
           case Some(t2: TyAtom) =>
@@ -93,6 +111,7 @@ object cut {
           case None =>
             Right(ts.push(ty))
         }
+
       case TyMinus(t: Ty) =>
         ts.toc() match {
           case Some(t2: TyAtom) =>
@@ -130,6 +149,7 @@ object cut {
           case None =>
             Right(ts.push(ty))
         }
+
       case TyAssertEq() =>
         // NOTE we enforc eq for the same type
         if (ts.length < 2) {
@@ -141,6 +161,7 @@ object cut {
           // TODO
           Right(ts.drop().drop())
         }
+
       case TyPrint() =>
         if (ts.length < 1) {
           Left(Err(
@@ -150,6 +171,7 @@ object cut {
         } else {
           Right(ts.drop())
         }
+
     }
   }
 

@@ -32,6 +32,9 @@ object pretty {
         s"print"
       case Newline() =>
         s"ln"
+      case Atom(name: String, str: String) =>
+        val doublequote = '"'
+        s"(atom ${name} ${doublequote}${str}${doublequote})"
     }
   }
 
@@ -68,6 +71,9 @@ object pretty {
     value match {
       case ValJoJo(list: List[Jo], env: Env, ctx: Ctx) =>
         s"{ ${pretty_jo_list(list)} }"
+      case ValAtom(name, str) =>
+        val doublequote = '"'
+        s"(atom ${name} ${doublequote}${str}${doublequote})"
     }
   }
 

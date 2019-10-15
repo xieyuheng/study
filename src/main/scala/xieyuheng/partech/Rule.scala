@@ -12,8 +12,8 @@ case class Rule(
     throw new Exception()
   }
 
-  choices.foreach { case (choice_name, ruleParts) =>
-    if (ruleParts.length == 0) {
+  choices.foreach { case (choice_name, rule_parts) =>
+    if (rule_parts.length == 0) {
       println("Rule's choice should not have empty List")
       println(s"name: ${name}")
       println(s"choice: ${choice_name}")
@@ -39,7 +39,13 @@ case class Rule(
     choices.keys.toSet
   }
 
-  val matters = (name, choices_matter, choices_matter2, args)
+  val choices_matter3: Map[String, List[RulePart]] = {
+    choices.map { case (choice_name, list) =>
+      (choice_name, list.filter(_.isInstanceOf[RulePartStr]))
+    }
+  }
+
+  val matters = (name, choices_matter3, args)
 
   override def equals(that: Any): Boolean = {
     that match {

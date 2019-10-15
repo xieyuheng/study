@@ -30,5 +30,4 @@ let not: ((A) -> (A) -> A) -> (A) -> (A) -> A = {
 @assert_eq not(not(not(false))) true
 
 @show atom(A, "abc")
-@show atom(A, "abc")
 @show atom(A, "123")

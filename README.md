@@ -78,6 +78,8 @@ study of programming language design and implementation
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - two levels of computations -- `exe` and `cut` <br>
     `cut` is simple
+  - [**paper**](src/main/scala/xieyuheng/docs/paper/simply-typed-jojo-calculus.md):
+    "Simply Typed JoJo Calculus", by Xie Yuheng
 - **TODO** [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
   - two levels of computations -- `exe` and `cut` <br>
     `cut` is as powerful as `exe`

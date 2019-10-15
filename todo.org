@@ -1,6 +1,21 @@
 * jojo
 - [adventure.simple] (atom A "123")
 - [adventure.simple] re-factor `cut`
+- [adventure.simple] representing data types
+* de_bruijn
+- [de_bruijn] type alias `let type`
+- [de_bruijn] atom(A, "abc")
+- [de_bruijn] representing data types
+- [de_bruijn_logical] view type atom as logic variable and use unification
+  - this should be a different language from [de_bruijn]
+- [de_bruijn] synth
+- theory about equality between lambda terms
+  - reflexivity
+    symmetry
+    transitivity
+    congruence
+    beta_reduction
+    eta_reduction
 * eopl
 - [eopl.lang_call_by_reference]
 - [eopl.lang_call_by_need]
@@ -15,21 +30,6 @@
 * lambda
 - can norm-by-eval handle call-by-name terms ?
 - what are examples of call-by-value bad terms ?
-* de_bruijn
-- [de_bruijn] type alias `let type`
-- [de_bruijn] add literal atom -- to play with
-  - atom(A, "abc")
-- [de_bruijn] representing data types
-- [de_bruijn_logical] view type atom as logic variable and use unification
-  - this should be a different language from [de_bruijn]
-- [de_bruijn] synth
-- theory about equality between lambda terms
-  - reflexivity
-    symmetry
-    transitivity
-    congruence
-    beta_reduction
-    eta_reduction
 * curry
 - [curry] view type atom as logic variable and use unification
   - type system of curry style need type variable

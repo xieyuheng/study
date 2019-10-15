@@ -9,6 +9,7 @@ t () {
         test_lambda && \
         test_syst && \
         test_minitt && \
+        test_barendregt && \
         test_eopl && \
         test_adventure
 }
@@ -75,6 +76,26 @@ test_eopl_lang () {
     prog=./target/universal/stage/bin/${name}
 
     for file in $(find . | grep "^\./example/eopl/${name}/" | grep "\.eopl$")
+    do
+        echo ""
+        echo "[${name}] $file"
+        if ! time $prog --eval $file
+        then
+            exit 1
+        fi
+    done
+}
+
+test_barendregt () {
+    test_barendregt_lambda de_bruijn
+}
+
+test_barendregt_lambda () {
+    name=$1
+
+    prog=./target/universal/stage/bin/${name}
+
+    for file in $(find . | grep "^\./example/barendregt/${name}/")
     do
         echo ""
         echo "[${name}] $file"

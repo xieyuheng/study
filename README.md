@@ -76,9 +76,9 @@ study of programming language design and implementation
 - [adventure/jojo_untyped](src/main/scala/xieyuheng/adventure/jojo_untyped) <br>
   - de bruijn notation implemented by threaded code
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
-  - two levels of computations -- `exe` and `cut`, where `cut` is simple.
   - [**paper**](docs/paper/simply-typed-jojo-calculus.md):
     "Simply Typed JoJo Calculus", by Xie Yuheng
+  - two levels of computations -- `exe` and `cut`, where `cut` is simple.
 - **TODO** [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
   - two levels of computations -- `exe` and `cut`, where `cut` is as powerful as `exe`.
 

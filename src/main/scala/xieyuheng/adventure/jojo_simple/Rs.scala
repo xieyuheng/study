@@ -1,6 +1,6 @@
 package xieyuheng.adventure.jojo_simple
 
-case class Frame(index: Int, list: List[Jo], env: Env)
+case class Frame(index: Int, list: List[Jo], env: Env, ctx: Ctx)
 
 case class Rs(list: List[Frame] = List()) {
 
@@ -26,16 +26,16 @@ case class Rs(list: List[Frame] = List()) {
     Rs(frame :: list)
   }
 
-  def toc_ext_let(name: String, value: Val): Rs = {
+  def toc_ext_env(name: String, entry: EnvEntry): Rs = {
     val frame = list.head
-    val new_env = frame.env.ext_let(name, value)
+    val new_env = frame.env.ext(name, entry)
     Rs(frame.copy(env = new_env) :: list.tail)
   }
 
-  def toc_ext_define(name: String, value: Val): Rs = {
+  def toc_ext_ctx(name: String, entry: CtxEntry): Rs = {
     val frame = list.head
-    val new_env = frame.env.ext_define(name, value)
-    Rs(frame.copy(env = new_env) :: list.tail)
+    val new_ctx = frame.ctx.ext(name, entry)
+    Rs(frame.copy(ctx = new_ctx) :: list.tail)
   }
 
   def next(): Rs = {

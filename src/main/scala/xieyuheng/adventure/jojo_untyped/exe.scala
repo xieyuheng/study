@@ -62,7 +62,7 @@ object exe {
     jo match {
 
       case Var(name: String) =>
-        env.lookup_val(name) match {
+        env.lookup(name) match {
           case Some(EnvEntryDefine(value)) =>
             ap(ds, rs, env, value)
           case Some(EnvEntryLet(value)) =>
@@ -79,7 +79,7 @@ object exe {
       case Let(name: String) =>
         ds.toc() match {
           case Some(value) =>
-            Right(ds.drop(), rs.toc_ext_let(name, value))
+            Right(ds.drop(), rs.toc_ext_env(name, EnvEntryLet(value)))
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
@@ -93,7 +93,7 @@ object exe {
         Right(ds.push(ValJoJo(list, env)), rs)
 
       case Define(name: String, jojo: JoJo) =>
-        Right(ds, rs.toc_ext_define(name, ValJoJo(jojo.list, env)))
+        Right(ds, rs.toc_ext_env(name, EnvEntryDefine(ValJoJo(jojo.list, env))))
 
       case Execute() =>
         ds.toc() match {

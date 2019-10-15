@@ -26,15 +26,9 @@ case class Rs(list: List[Frame] = List()) {
     Rs(frame :: list)
   }
 
-  def toc_ext_let(name: String, value: Val): Rs = {
+  def toc_ext_env(name: String, entry: EnvEntry): Rs = {
     val frame = list.head
-    val new_env = frame.env.ext_let(name, value)
-    Rs(frame.copy(env = new_env) :: list.tail)
-  }
-
-  def toc_ext_define(name: String, value: Val): Rs = {
-    val frame = list.head
-    val new_env = frame.env.ext_define(name, value)
+    val new_env = frame.env.ext(name, entry)
     Rs(frame.copy(env = new_env) :: list.tail)
   }
 

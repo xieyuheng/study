@@ -8,27 +8,20 @@ object pretty {
     jo match {
       case Var(name: String) =>
         name
-      case Let(name: String) =>
-        s"(let ${name})"
+      case Let(name: String, tyty: TyTy) =>
+        s"(let ${name} : ${pretty_ty_list(tyty.list)})"
       case JoJo(list: List[Jo]) =>
         if (list.length == 0) {
           s"{ }"
         } else {
           s"{ ${pretty_jo_list(list)} }"
         }
+      case Claim(name: String, tyty: TyTy) =>
+        s"${name} : ${pretty_ty(tyty)}"
       case Define(name: String, jojo: JoJo) =>
         s"${name} = ${pretty_jo(jojo)}"
       case Execute() =>
         s"exe"
-      case Str(str) =>
-        val doublequote = '"'
-        s"${doublequote}${str}${doublequote}"
-      case Cons() =>
-        s"cons"
-      case Car() =>
-        s"car"
-      case Cdr() =>
-        s"cdr"
       case AssertEq() =>
         s"assert_eq"
       case ReportDs() =>
@@ -46,15 +39,31 @@ object pretty {
     list.map { case jo => pretty_jo(jo) }.mkString(" ")
   }
 
+  def pretty_ty(t: Ty): String = {
+    t match {
+      case TyAtom(name: String) =>
+        name
+      case TyTy(list: List[Ty]) =>
+        if (list.length == 0) {
+          s"{ }"
+        } else {
+          s"{ ${pretty_ty_list(list)} }"
+        }
+      case TyCut() =>
+        s"cut"
+      case TyMinus(t: Ty) =>
+        s"(- ${pretty_ty(t)})"
+    }
+  }
+
+  def pretty_ty_list(list: List[Ty]): String = {
+    list.map { case t => pretty_ty(t) }.mkString(" ")
+  }
+
   def pretty_val(value: Val): String = {
     value match {
-      case ValJoJo(list: List[Jo], env: Env) =>
+      case ValJoJo(list: List[Jo], env: Env, ctx: Ctx) =>
         s"{ ${pretty_jo_list(list)} }"
-      case ValStr(str) =>
-        val doublequote = '"'
-        s"${doublequote}${str}${doublequote}"
-      case ValCons(car, cdr) =>
-        s"cons(${pretty_val(car)}, ${pretty_val(cdr)})"
     }
   }
 

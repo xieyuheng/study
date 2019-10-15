@@ -45,25 +45,38 @@ object grammar {
 
   def jo_matcher: Tree => Jo = Tree.matcher[Jo](
     "jo", Map(
-      "var" -> { case List(Leaf(name)) => Var(name) },
-      "let" -> { case List(_, _, Leaf(name), _) => Let(name) },
+      "var" -> { case List(Leaf(name)) =>
+        Var(name) },
+      "let" -> { case List(_, _, Leaf(name), _) =>
+        Let(name) },
       "jojo" -> { case List(_, jo_list, _) =>
         JoJo(jo_list_matcher(jo_list)) },
-      "jojo_empty" -> { case List(_, _) => JoJo(List()) },
+      "jojo_empty" -> { case List(_, _) =>
+        JoJo(List()) },
       "define" -> { case List(Leaf(name), _, _, jo_list, _) =>
         Define(name, JoJo(jo_list_matcher(jo_list))) },
       "define_empty" -> { case List(Leaf(name), _, _, _) =>
         Define(name, JoJo(List())) },
-      "exe" -> { case List(_) => Execute() },
-      "string" -> { case List(Leaf(str)) => Str(trim_double_quote(str)) },
-      "cons" -> { case List(_) => Cons() },
-      "car" -> { case List(_) => Car() },
-      "cdr" -> { case List(_) => Cdr() },
-      "assert_eq" -> { case List(_) => AssertEq() },
-      "report_ds" -> { case List(_) => ReportDs() },
-      "report_rs" -> { case List(_) => ReportRs() },
-      "print" -> { case List(_) => Print() },
-      "ln" -> { case List(_) => Newline() },
+      "exe" -> { case List(_) =>
+        Execute() },
+      "string" -> { case List(Leaf(str)) =>
+        Str(trim_double_quote(str)) },
+      "cons" -> { case List(_) =>
+        Cons() },
+      "car" -> { case List(_) =>
+        Car() },
+      "cdr" -> { case List(_) =>
+        Cdr() },
+      "assert_eq" -> { case List(_) =>
+        AssertEq() },
+      "report_ds" -> { case List(_) =>
+        ReportDs() },
+      "report_rs" -> { case List(_) =>
+        ReportRs() },
+      "print" -> { case List(_) =>
+        Print() },
+      "ln" -> { case List(_) =>
+        Newline() },
     ))
 
 }

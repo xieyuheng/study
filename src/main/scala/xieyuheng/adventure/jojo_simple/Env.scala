@@ -6,7 +6,7 @@ final case class EnvEntryDefine(value: Val) extends EnvEntry
 
 case class Env(map: Map[String, EnvEntry] = Map()) {
 
-  def lookup_val(name: String): Option[EnvEntry] = {
+  def lookup(name: String): Option[EnvEntry] = {
     map.get(name)
   }
 
@@ -14,11 +14,4 @@ case class Env(map: Map[String, EnvEntry] = Map()) {
     Env(map + (name -> entry))
   }
 
-  def ext_let(name: String, value: Val): Env = {
-    ext(name, EnvEntryLet(value))
-  }
-
-  def ext_define(name: String, value: Val): Env = {
-    ext(name, EnvEntryDefine(value))
-  }
 }

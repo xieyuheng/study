@@ -1,5 +1,4 @@
 * jojo
-- [adventure.simple] `exe` with `cut` during define -- test
 - [adventure.simple] (atom A "123")
 * eopl
 - [eopl.lang_call_by_reference]

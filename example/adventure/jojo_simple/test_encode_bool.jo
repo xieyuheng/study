@@ -32,15 +32,21 @@ false = {
 
 not : { (- { (- A) (- A) A }) (- A) (- A) A }
 not = {
-  (let a : (- A) (- A) A)
+  (let a : { (- A) (- A) A })
   (let x : A)
   (let y : A)
   x y a exe
 }
 
+true_not : { (- A) (- A) A }
+true_not = {
+  { true } not
+}
 
-
-report_ds
+true_not_not : { (- A) (- A) A }
+true_not_not = {
+  { { true } not } not
+}
 
 // (atom A "a") (atom A "b") true
 // (atom A "a") (atom A "b") { false } not

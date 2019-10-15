@@ -23,7 +23,7 @@ object grammar {
   def jo: Rule = Rule(
     "jo", Map(
       "var" -> List(identifier),
-      "let" -> List("(", "let", identifier, ":", ty_list, ")"),
+      "let" -> List("(", "let", identifier, ":", ty, ")"),
       "jojo" -> List("{", jo_list, "}"),
       "jojo_empty" -> List("{", "}"),
       "claim" -> List(identifier, ":", "{", ty_list, "}"),
@@ -42,8 +42,8 @@ object grammar {
     "jo", Map(
       "var" -> { case List(Leaf(name)) =>
         Var(name) },
-      "let" -> { case List(_, _, Leaf(name), _, ty_list, _) =>
-        Let(name, TyTy(ty_list_matcher(ty_list))) },
+      "let" -> { case List(_, _, Leaf(name), _, ty, _) =>
+        Let(name, ty_matcher(ty)) },
       "jojo" -> { case List(_, jo_list, _) =>
         JoJo(jo_list_matcher(jo_list)) },
       "jojo_empty" -> { case List(_, _) =>

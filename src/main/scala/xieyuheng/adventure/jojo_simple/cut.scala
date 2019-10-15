@@ -9,20 +9,20 @@ import scala.annotation.tailrec
 object cut {
 
   def cut_jojo(jojo: JoJo, ctx: Ctx): Either[Err, TyTy] = {
-    val init_result: Either[Err, List[Ty]] = Right(List())
-    val result: Either[Err, List[Ty]]  =
+    val init_result: Either[Err, (Ctx, List[Ty])] = Right(ctx, List())
+    val result: Either[Err, (Ctx, List[Ty])]  =
       jojo.list.foldLeft(init_result) { case (result, jo) =>
-        result.flatMap { case ty_list =>
+        result.flatMap { case (ctx, ty_list) =>
           cut_jo(jo, ctx) match {
-            case Right(ty_list2) =>
-              Right(ty_list ++ ty_list2)
+            case Right((ctx2, ty_list2)) =>
+              Right(ctx2, ty_list ++ ty_list2)
             case Left(err) =>
               Left(err)
           }
         }
       }
     result match {
-      case Right(ty_list) =>
+      case Right((ctx, ty_list)) =>
         Right(TyTy(ty_list))
       case Left(err) =>
         Left(Err(
@@ -32,43 +32,43 @@ object cut {
     }
   }
 
-  def cut_jo(jo: Jo, ctx: Ctx): Either[Err, List[Ty]] = {
+  def cut_jo(jo: Jo, ctx: Ctx): Either[Err, (Ctx, List[Ty])] = {
     jo match {
       case Var(name: String) =>
         ctx.lookup(name) match {
-          case Some(CtxEntryLet(tyty)) =>
-            Right(tyty.list)
+          case Some(CtxEntryLet(t)) =>
+            Right(ctx, List(t))
           case Some(CtxEntryClaim(tyty)) =>
-            Right(tyty.list)
+            Right(ctx, tyty.list)
           case None =>
             Left(Err(
               s"[cut_jo fail]\n" ++
                 s"un-claimed name: ${name}\n"
             ))
         }
-      case Let(name: String, tyty: TyTy) =>
-        Right(tyty.list)
+      case Let(name: String, t: Ty) =>
+        Right(ctx.ext(name, CtxEntryLet(t)), List(TyMinus(t)))
       case jojo: JoJo =>
         cut_jojo(jojo, ctx).flatMap {
           case tyty =>
-            Right(List(tyty))
+            Right(ctx, List(tyty))
         }
       case Claim(name: String, tyty: TyTy) =>
-        Right(List())
+        Right(ctx, List())
       case Define(name: String, jojo: JoJo) =>
-        Right(List())
+        Right(ctx, List())
       case Execute() =>
-        Right(List(TyCut()))
+        Right(ctx, List(TyCut()))
       case AssertEq() =>
-        Right(List(TyAssertEq()))
+        Right(ctx, List(TyAssertEq()))
       case ReportDs() =>
-        Right(List())
+        Right(ctx, List())
       case ReportRs() =>
-        Right(List())
+        Right(ctx, List())
       case Print() =>
-        Right(List(TyPrint()))
+        Right(ctx, List(TyPrint()))
       case Newline() =>
-        Right(List())
+        Right(ctx, List())
     }
   }
 
@@ -106,20 +106,25 @@ object cut {
                     Left(Err(
                       s"[step_tyty fail]\n" ++
                         s"(- ...) mismatch\n" ++
-                        s"t in (- t): ${pretty_ty(t)}\n" ++
-                        s"t to match: ${pretty_ty(t2)}\n"
+                        s"t in (- t):\n" ++
+                        s">>> ${pretty_ty(t)}\n" ++
+                        s"=/= ${pretty_ty(t2)}\n"
                     ))
                   }
-                case Some(t2: TyTy) =>
-                  if (t == t2) {
-                    Right(ts.drop())
-                  } else {
-                    Left(Err(
-                      s"[step_tyty fail]\n" ++
-                        s"(- ...) mismatch\n" ++
-                        s"t in (- t): ${pretty_ty(t)}\n" ++
-                        s"t to match: ${pretty_ty(t2)}\n"
-                    ))
+                case Some(tyty: TyTy) =>
+                  // TODO the use of `reduce_tyty` here makes the `step_tyty` not one step
+                  reduce_tyty(tyty).flatMap { case tyty2 =>
+                    if (t == tyty2) {
+                      Right(ts.drop())
+                    } else {
+                      Left(Err(
+                        s"[step_tyty fail]\n" ++
+                          s"(- ...) mismatch\n" ++
+                          s"t in (- t):\n" ++
+                          s">>> ${pretty_ty(t)}\n" ++
+                          s"=/= ${pretty_ty(tyty2)}\n"
+                      ))
+                    }
                   }
                 case Some(t2) =>
                   Right(ts.push(ty))

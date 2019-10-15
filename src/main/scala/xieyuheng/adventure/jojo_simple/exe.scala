@@ -77,12 +77,12 @@ object exe {
             ))
         }
 
-      case Let(name: String, tyty: TyTy) =>
+      case Let(name: String, t: Ty) =>
         ds.toc() match {
           case Some(value) =>
             val new_rs = rs
               .toc_ext_env(name, EnvEntryLet(value))
-              .toc_ext_ctx(name, CtxEntryLet(tyty))
+              .toc_ext_ctx(name, CtxEntryLet(t))
             Right(ds.drop(), new_rs)
           case None =>
             Left(Err(

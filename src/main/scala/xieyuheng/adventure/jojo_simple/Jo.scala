@@ -2,7 +2,7 @@ package xieyuheng.adventure.jojo_simple
 
 sealed trait Jo
 final case class Var(name: String) extends Jo
-final case class Let(name: String, tyty: TyTy) extends Jo
+final case class Let(name: String, t: Ty) extends Jo
 final case class JoJo(list: List[Jo]) extends Jo
 final case class Claim(name: String, tyty: TyTy) extends Jo
 final case class Define(name: String, jojo: JoJo) extends Jo

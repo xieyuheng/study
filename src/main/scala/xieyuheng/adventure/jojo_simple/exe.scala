@@ -1,5 +1,6 @@
 package xieyuheng.adventure.jojo_simple
 
+import cut._
 import pretty._
 
 import xieyuheng.util.err._
@@ -79,7 +80,10 @@ object exe {
       case Let(name: String, tyty: TyTy) =>
         ds.toc() match {
           case Some(value) =>
-            Right(ds.drop(), rs.toc_ext_env(name, EnvEntryLet(value)))
+            val new_rs = rs
+              .toc_ext_env(name, EnvEntryLet(value))
+              .toc_ext_ctx(name, CtxEntryLet(tyty))
+            Right(ds.drop(), new_rs)
           case None =>
             Left(Err(
               s"[exe fail]\n" ++
@@ -93,10 +97,44 @@ object exe {
         Right(ds.push(ValJoJo(list, env, ctx)), rs)
 
       case Claim(name: String, tyty: TyTy) =>
-        Right(ds, rs.toc_ext_ctx(name, CtxEntryClaim(tyty)))
+        val new_rs = rs
+          .toc_ext_ctx(name, CtxEntryClaim(tyty))
+        Right(ds, new_rs)
 
       case Define(name: String, jojo: JoJo) =>
-        Right(ds, rs.toc_ext_env(name, EnvEntryDefine(ValJoJo(jojo.list, env, ctx))))
+        ctx.lookup(name) match {
+          case Some(CtxEntryClaim(tyty: TyTy)) =>
+            cut_jojo(jojo, ctx).flatMap { case infered_tyty =>
+              reduce_tyty(tyty).flatMap { case tyty2 =>
+                reduce_tyty(infered_tyty).flatMap { case infered_tyty2 =>
+                  if (tyty2 == infered_tyty2) {
+                    Right(ds, rs.toc_ext_env(name, EnvEntryDefine(ValJoJo(jojo.list, env, ctx))))
+                  } else {
+                    Left(Err(
+                      s"[exe fail]\n" ++
+                        s"can not define ${name}\n" ++
+                        s"the claimed type\n" ++
+                        s">>> ${pretty_ty(tyty)}\n" ++
+                        s"=== ${pretty_ty(tyty2)}\n" ++
+                        s"is not equal to the infered type\n" ++
+                        s">>> ${pretty_ty(infered_tyty)}\n" ++
+                        s"=== ${pretty_ty(infered_tyty2)}\n" ++
+                        s"${pretty_rs(rs)}\n" ++
+                        s"${pretty_ds(ds)}\n"
+                    ))
+                  }
+                }
+              }
+            }
+          case _ =>
+            Left(Err(
+              s"[exe fail]\n" ++
+                s"can not define ${name}\n" ++
+                s"the name is not claimed\n" ++
+                s"${pretty_rs(rs)}\n" ++
+                s"${pretty_ds(ds)}\n"
+            ))
+        }
 
       case Execute() =>
         ds.toc() match {

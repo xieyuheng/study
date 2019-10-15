@@ -53,6 +53,10 @@ object pretty {
         s"cut"
       case TyMinus(t: Ty) =>
         s"(- ${pretty_ty(t)})"
+      case TyAssertEq() =>
+        s"ty_assert_eq"
+      case TyPrint() =>
+        s"ty_print"
     }
   }
 

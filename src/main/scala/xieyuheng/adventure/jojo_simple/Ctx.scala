@@ -1,8 +1,8 @@
 package xieyuheng.adventure.jojo_simple
 
 sealed trait CtxEntry
-final case class CtxEntryLet(t: Ty) extends CtxEntry
-final case class CtxEntryClaim(t: Ty) extends CtxEntry
+final case class CtxEntryLet(tyty: TyTy) extends CtxEntry
+final case class CtxEntryClaim(tyty: TyTy) extends CtxEntry
 
 case class Ctx(map: Map[String, CtxEntry] = Map()) {
 

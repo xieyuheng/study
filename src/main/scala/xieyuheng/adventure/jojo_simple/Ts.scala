@@ -24,4 +24,7 @@ case class Ts(list: List[Ty] = List()) {
     Ts(t :: list)
   }
 
+  def push_list(list: List[Ty]): Ts = {
+    Ts(list.reverse ++ this.list)
+  }
 }

@@ -1,8 +1,6 @@
 * jojo
+- [adventure.simple] `exe` with `cut` during define -- test
 - [adventure.simple] (atom A "123")
-- [adventure.simple] `exe` with `cut` during define
-- [adventure.simple] type check -- just like de_bruijn and nothing more
-- [adventure.simple] infer arg_count and ret_count
 * eopl
 - [eopl.lang_call_by_reference]
 - [eopl.lang_call_by_need]

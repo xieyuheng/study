@@ -1,3 +1,10 @@
+* eopl
+- [eopl.lang_call_by_reference]
+- [eopl.lang_call_by_need]
+- [eopl.lang_checked]
+- [eopl.lang_infered]
+- [eopl.lang_module]
+- [eopl.lang_class]
 * jojo
 - [adventure.simple] type alias `type <name> = ...`
 - [adventure.simple] representing data types
@@ -15,13 +22,6 @@
     congruence
     beta_reduction
     eta_reduction
-* eopl
-- [eopl.lang_call_by_reference]
-- [eopl.lang_call_by_need]
-- [eopl.lang_checked]
-- [eopl.lang_infered]
-- [eopl.lang_module]
-- [eopl.lang_class]
 * miniml
 - learn about type infer
 * the little mler

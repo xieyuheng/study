@@ -1,5 +1,5 @@
-- [de_bruijn] type alias `let type`
-- [adventure.simple] type alias `type <name> = `
+- [de_bruijn] type alias `let type <name> = ...`
+- [adventure.simple] type alias `type <name> = ...`
 - [de_bruijn] representing data types
 - [adventure.simple] representing data types
 * jojo

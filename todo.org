@@ -1,6 +1,5 @@
 * jojo
 - [adventure.simple] (atom A "123")
-- [adventure.simple] re-factor `cut`
 - [adventure.simple] representing data types
 * de_bruijn
 - [de_bruijn] type alias `let type`

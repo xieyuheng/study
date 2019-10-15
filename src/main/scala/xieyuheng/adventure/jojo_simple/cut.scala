@@ -72,86 +72,93 @@ object cut {
     }
   }
 
+  def step_ty_in_ts(ts: Ts, ty: Ty): Either[Err, Ts] = {
+    ty match {
+      case TyAtom(name: String) =>
+        Right(ts.push(ty))
+      case TyTy(list: List[Ty]) =>
+        Right(ts.push(ty))
+      case TyCut() =>
+        ts.toc() match {
+          case Some(t2: TyAtom) =>
+            Left(Err(
+              s"[step_tyty fail]\n" ++
+                s"cut type mismatch\n" ++
+                s"t to match: ${pretty_ty(t2)}\n"
+            ))
+          case Some(tyty: TyTy) =>
+            Right(ts.drop().push_list(tyty.list))
+          case Some(t2) =>
+            Right(ts.push(ty))
+          case None =>
+            Right(ts.push(ty))
+        }
+      case TyMinus(t: Ty) =>
+        ts.toc() match {
+          case Some(t2: TyAtom) =>
+            if (t == t2) {
+              Right(ts.drop())
+            } else {
+              Left(Err(
+                s"[step_tyty fail]\n" ++
+                  s"(- ...) mismatch\n" ++
+                  s"t in (- t):\n" ++
+                  s">>> ${pretty_ty(t)}\n" ++
+                  s"=/= ${pretty_ty(t2)}\n"
+              ))
+            }
+          case Some(tyty: TyTy) =>
+            // NOTE
+            //   the use of `reduce_tyty` here
+            //   makes the `step_tyty` not one step
+            //   but many steps
+            reduce_tyty(tyty).flatMap { case tyty2 =>
+              if (t == tyty2) {
+                Right(ts.drop())
+              } else {
+                Left(Err(
+                  s"[step_tyty fail]\n" ++
+                    s"(- ...) mismatch\n" ++
+                    s"t in (- t):\n" ++
+                    s">>> ${pretty_ty(t)}\n" ++
+                    s"=/= ${pretty_ty(tyty2)}\n"
+                ))
+              }
+            }
+          case Some(t2) =>
+            Right(ts.push(ty))
+          case None =>
+            Right(ts.push(ty))
+        }
+      case TyAssertEq() =>
+        // NOTE we enforc eq for the same type
+        if (ts.length < 2) {
+          Left(Err(
+            s"[step_tyty fail]\n" ++
+              s"ts underflow during ty_assert_eq\n"
+          ))
+        } else {
+          // TODO
+          Right(ts.drop().drop())
+        }
+      case TyPrint() =>
+        if (ts.length < 1) {
+          Left(Err(
+            s"[step_tyty fail]\n" ++
+              s"ts underflow during ty_print\n"
+          ))
+        } else {
+          Right(ts.drop())
+        }
+    }
+  }
+
   def step_tyty(tyty: TyTy): Either[Err, TyTy] = {
     val init_result: Either[Err, Ts] = Right(Ts())
     val result: Either[Err, Ts] =
       tyty.list.foldLeft(init_result) { case (result, ty) =>
         result.flatMap { case ts =>
-          ty match {
-            case TyAtom(name: String) =>
-              Right(ts.push(ty))
-            case TyTy(list: List[Ty]) =>
-              Right(ts.push(ty))
-            case TyCut() =>
-              ts.toc() match {
-                case Some(t2: TyAtom) =>
-                  Left(Err(
-                    s"[step_tyty fail]\n" ++
-                      s"cut type mismatch\n" ++
-                      s"t to match: ${pretty_ty(t2)}\n"
-                  ))
-                case Some(tyty: TyTy) =>
-                  Right(ts.drop().push_list(tyty.list))
-                case Some(t2) =>
-                  Right(ts.push(ty))
-                case None =>
-                  Right(ts.push(ty))
-              }
-            case TyMinus(t: Ty) =>
-              ts.toc() match {
-                case Some(t2: TyAtom) =>
-                  if (t == t2) {
-                    Right(ts.drop())
-                  } else {
-                    Left(Err(
-                      s"[step_tyty fail]\n" ++
-                        s"(- ...) mismatch\n" ++
-                        s"t in (- t):\n" ++
-                        s">>> ${pretty_ty(t)}\n" ++
-                        s"=/= ${pretty_ty(t2)}\n"
-                    ))
-                  }
-                case Some(tyty: TyTy) =>
-                  // TODO the use of `reduce_tyty` here makes the `step_tyty` not one step
-                  reduce_tyty(tyty).flatMap { case tyty2 =>
-                    if (t == tyty2) {
-                      Right(ts.drop())
-                    } else {
-                      Left(Err(
-                        s"[step_tyty fail]\n" ++
-                          s"(- ...) mismatch\n" ++
-                          s"t in (- t):\n" ++
-                          s">>> ${pretty_ty(t)}\n" ++
-                          s"=/= ${pretty_ty(tyty2)}\n"
-                      ))
-                    }
-                  }
-                case Some(t2) =>
-                  Right(ts.push(ty))
-                case None =>
-                  Right(ts.push(ty))
-              }
-            case TyAssertEq() =>
-              // NOTE we enforc eq for the same type
-              if (ts.length < 2) {
-                Left(Err(
-                  s"[step_tyty fail]\n" ++
-                    s"ts underflow during ty_assert_eq\n"
-                ))
-              } else {
-                // TODO
-                Right(ts.drop().drop())
-              }
-            case TyPrint() =>
-              if (ts.length < 1) {
-                Left(Err(
-                  s"[step_tyty fail]\n" ++
-                    s"ts underflow during ty_print\n"
-                ))
-              } else {
-                Right(ts.drop())
-              }
-          }
+          step_ty_in_ts(ts, ty)
         }
       }
     result match {

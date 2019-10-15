@@ -1,5 +1,6 @@
 * jojo
 - [adventure.simple] (atom A "123")
+- [adventure.simple] re-factor `cut`
 * eopl
 - [eopl.lang_call_by_reference]
 - [eopl.lang_call_by_need]

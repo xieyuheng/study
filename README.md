@@ -75,7 +75,7 @@ study of programming language design and implementation
 
 - [adventure/jojo_untyped](src/main/scala/xieyuheng/adventure/jojo_untyped) <br>
   - de bruijn notation implemented by threaded code
-- **TODO** [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
+- [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - two levels of computations -- `exe` and `cut` <br>
     `cut` is simple
 - **TODO** [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>

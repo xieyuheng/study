@@ -1,0 +1,6 @@
+let rec infinite_loop = (x) => {
+  infinite_loop(diff(x, -1))
+}
+let f = (z) => 11 {
+  assert_eq(f(infinite_loop(0)), 11)
+}

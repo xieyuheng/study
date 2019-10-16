@@ -1,6 +1,7 @@
 * eopl
 - [eopl.lang_call_by_need]
-- [eopl.lang_call_by_need] test laziness by the simple version of Y
+  var is handled special
+  thunk frozen thawed
 - [eopl.lang_checked]
 - [eopl.lang_infered]
 - [eopl.lang_module]

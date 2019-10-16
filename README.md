@@ -37,7 +37,7 @@ study of programming language design and implementation
     this is preparation for it.
 - [eopl/lang_call_by_reference](src/main/scala/xieyuheng/eopl/lang_call_by_reference) <br>
   - marking an variable `ref` when passing it to a function, <br>
-    will not create new `ref` and reuse the ref of the variable, <br>
+    will not create new `ref` and reuse the `ref` of the variable, <br>
     thus make callee be able to set caller's variable.
 - **TODO** [eopl/lang_call_by_need](src/main/scala/xieyuheng/eopl/lang_call_by_need) <br>
   - remember Dan's paper "Cons should not evaluate its arguments" ? <br>

@@ -5,10 +5,7 @@ t () {
 
     sbt stage && \
         test_general && \
-        test_tartlet && \
-        test_lambda && \
-        test_syst && \
-        test_minitt && \
+        test_nbe && \
         test_barendregt && \
         test_eopl && \
         test_adventure
@@ -42,31 +39,38 @@ test () {
     done
 }
 
-test_lambda () {
-    test lambda
+test_nbe () {
+    test_nbe_lang lambda &&\
+        test_nbe_lang syst &&\
+        test_nbe_lang tartlet &&\
+        test_nbe_lang minitt
 }
 
-test_syst () {
-    test syst
-}
+test_nbe_lang () {
+    name=$1
 
-test_tartlet () {
-    test tartlet
-}
+    prog=./target/universal/stage/bin/${name}
 
-test_minitt () {
-    test minitt
+    for file in $(find . | grep "^\./example/nbe/${name}/")
+    do
+        echo ""
+        echo "[${name}] $file"
+        if ! time $prog --eval $file
+        then
+            exit 1
+        fi
+    done
 }
 
 test_eopl () {
-    test_eopl_lang lang_let
-    test_eopl_lang lang_proc
-    test_eopl_lang lang_nameless
-    test_eopl_lang lang_letrec
-    test_eopl_lang lang_explicit_refs
-    test_eopl_lang lang_implicit_refs
-    test_eopl_lang lang_mutable_pairs
-    test_eopl_lang lang_call_by_reference
+    test_eopl_lang lang_let &&\
+        test_eopl_lang lang_proc &&\
+        test_eopl_lang lang_nameless &&\
+        test_eopl_lang lang_letrec &&\
+        test_eopl_lang lang_explicit_refs &&\
+        test_eopl_lang lang_implicit_refs &&\
+        test_eopl_lang lang_mutable_pairs &&\
+        test_eopl_lang lang_call_by_reference
     # test_eopl_lang lang_call_by_need
 }
 
@@ -87,10 +91,10 @@ test_eopl_lang () {
 }
 
 test_barendregt () {
-    test_barendregt_lambda de_bruijn
+    test_barendregt_lang de_bruijn
 }
 
-test_barendregt_lambda () {
+test_barendregt_lang () {
     name=$1
 
     prog=./target/universal/stage/bin/${name}
@@ -107,8 +111,8 @@ test_barendregt_lambda () {
 }
 
 test_adventure () {
-    test_adventure_jojo jojo_untyped
-    test_adventure_jojo jojo_simple
+    test_adventure_jojo jojo_untyped &&\
+        test_adventure_jojo jojo_simple
     # test_adventure_jojo jojo_dependent
 }
 

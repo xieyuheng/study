@@ -56,18 +56,18 @@ study of programming language design and implementation
   - "A simple applicative language: Mini-ML" <br>
   - by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn
 
-### study of normalization by evaluation (a.k.a. norm-by-eval (a.k.a. NbE))
+### study of normalization by evaluation (a.k.a. nbe)
 
-- [lambda](src/main/scala/xieyuheng/lambda) <br>
+- [nbe/lambda](src/main/scala/xieyuheng/nbe/lambda) <br>
   - The untyped lambda calculus
-- [syst](src/main/scala/xieyuheng/syst) <br>
+- [nbe/syst](src/main/scala/xieyuheng/nbe/syst) <br>
   - Kurt Gödel's system T <br>
   - simply typed lambda calculus with natural number
-- [tartlet](src/main/scala/xieyuheng/tartlet) <br>
+- [nbe/tartlet](src/main/scala/xieyuheng/nbe/tartlet) <br>
   - "Checking Dependent Types with Normalization by Evaluation: A Tutorial" <br>
   - by David Thrane Christiansen ([the original tutorial](http://davidchristiansen.dk/tutorials/nbe)) <br>
   - since tartlet is little pie, recursion is also not an option here.
-- [minitt](src/main/scala/xieyuheng/minitt) <br>
+- [nbe/minitt](src/main/scala/xieyuheng/nbe/minitt) <br>
   - "A simple type-theoretic language: Mini-TT" <br>
   - by Thierry Coquand, Yoshiki Kinoshita, Bengt Nordström, Makoto Takeyama <br>
   - no termination check, thus when viewed as logic it is unsound.

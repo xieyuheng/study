@@ -39,9 +39,6 @@ study of programming language design and implementation
   - remember Dan's paper "Cons should not evaluate its arguments" ? <br>
     this is about it. <br>
   - call-by-need is also called lazy-eval.
-- **TODO** [eopl/lang_call_by_reference](src/main/scala/xieyuheng/eopl/lang_call_by_reference) <br>
-  - caller can mutate reference passed as arg into it. <br>
-    this is often seen in imperative language.
 
 ### study of lambda calculus with types
 
@@ -76,7 +73,7 @@ study of programming language design and implementation
 - [adventure/jojo_untyped](src/main/scala/xieyuheng/adventure/jojo_untyped) <br>
   - de bruijn notation implemented by threaded code
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
-  - [**paper**](docs/paper/simply-typed-jojo-calculus.md):
+  - **TODO** [**paper**](docs/paper/simply-typed-jojo-calculus.md):
     "Simply Typed JoJo Calculus", by Xie Yuheng
   - two levels of computations -- `exe` and `cut`, where `cut` is simple.
 - **TODO** [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>

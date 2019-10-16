@@ -1,0 +1,16 @@
+let a = 0
+let b = 1
+let swap = (x) => (y) => {
+  let temp = x
+  do set x = y
+  do set y = temp {
+    sole
+  }
+}
+do assert_eq(a, 0)
+do assert_eq(b, 1)
+do swap(ref a)(ref b)
+do assert_eq(a, 1)
+do assert_eq(b, 0) {
+  sole
+}

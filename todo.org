@@ -1,6 +1,4 @@
 * eopl
-- [eopl.lang_call_by_reference]
-  marking an arg `ref` when passing it to a function, will make it be a ref like in `explicit_refs`
 - [eopl.lang_call_by_need]
 - [eopl.lang_call_by_need] test laziness by the simple version of Y
 - [eopl.lang_checked]

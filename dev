@@ -66,7 +66,7 @@ test_eopl () {
     test_eopl_lang lang_explicit_refs
     test_eopl_lang lang_implicit_refs
     test_eopl_lang lang_mutable_pairs
-    # test_eopl_lang lang_call_by_reference
+    test_eopl_lang lang_call_by_reference
     # test_eopl_lang lang_call_by_need
 }
 

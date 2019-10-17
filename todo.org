@@ -1,17 +1,17 @@
 * inductive type
-- [tobe sure] how can lambda cube encode type constructors and data constructors ?
-- [tobe sure] in "a general formulation of simultaneous inductive-recursive definitions in type theory" of dybjer
+- [to be sure] how can lambda cube encode type constructors and data constructors ?
+- [to be sure] in "a general formulation of simultaneous inductive-recursive definitions in type theory" of dybjer
   - simultaneous means define a type constructor and its data constructors at the same time
   - eliminators (elimination rules) are not generated
-
-
-
 * eopl
 - [eopl.lang_checked]
 - [eopl.lang_infered]
 - [eopl.lang_module] this is import for my interpreter framework
 - [eopl.lang_class]
 * jojo
+- [adventure.untyped] infer arg_count and ret_count
+- [adventure.untyped] eq by eval
+- [adventure.untyped] encode permutation group
 - [adventure.simple] type alias `type <name> = ...`
 - [adventure.simple] representing data types
 - [paper/adventure.simple] learn about how to write good story from knuth

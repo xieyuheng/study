@@ -15,6 +15,11 @@ object eval {
             value match {
               case ValRef(address) =>
                 store.ref_get(address) match {
+                  case Some(thunk: ValThunk) =>
+                    eval(thunk.body, thunk.env, store).flatMap {
+                      case (store1, value) =>
+                        Right(store, value)
+                    }
                   case Some(value) =>
                     Right(store, value)
                   case None =>
@@ -123,19 +128,18 @@ object eval {
       case Ap(target, arg) =>
         val result = eval(target, env, store).flatMap {
           case (store1, f) =>
-            eval(arg, env, store1).flatMap {
-              case (store2, v) =>
-                f match {
-                  case f: ValFn =>
-                    eval(f.body, f.env.ext_let(f.name, v), store2)
-                  case _ =>
-                    Left(Err(
-                      s"[eval fail]\n" ++
-                        s"f(x) type mismatch\n" ++
-                        s"expecting function\n" ++
-                        s"f: ${pretty_val(f)}\n"
-                    ))
-                }
+            val (store2, address) = store1.ref_new(ValThunk(arg, env))
+            val v = ValRef(address)
+            f match {
+              case f: ValFn =>
+                eval(f.body, f.env.ext_let(f.name, v), store2)
+              case _ =>
+                Left(Err(
+                  s"[eval fail]\n" ++
+                    s"f(x) type mismatch\n" ++
+                    s"expecting function\n" ++
+                    s"f: ${pretty_val(f)}\n"
+                ))
             }
         }
         result_maybe_err(result, Err(

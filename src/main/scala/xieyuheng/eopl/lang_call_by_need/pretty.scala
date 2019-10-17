@@ -56,6 +56,9 @@ object pretty {
         s"sole"
       case ValRef(address) =>
         s"ref(${address})"
+      case ValThunk(body, env) =>
+        s"thunk(${pretty_exp(body)})"
+
     }
   }
 

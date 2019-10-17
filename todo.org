@@ -1,7 +1,4 @@
 * eopl
-- [eopl.lang_call_by_need]
-  var is handled special
-  thunk frozen thawed
 - [eopl.lang_checked]
 - [eopl.lang_infered]
 - [eopl.lang_module]

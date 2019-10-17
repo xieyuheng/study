@@ -33,15 +33,15 @@ study of programming language design and implementation
   - distinguish `denoted value` from `expressed value` for mutable variable. <br>
     this is also called call-by-value parameter-passing.
 - [eopl/lang_mutable_pairs](src/main/scala/xieyuheng/eopl/lang_mutable_pairs) <br>
-  - remember Dan's paper "Cons should not evaluate its arguments" ? <br>
-    this is preparation for it.
+  - Lisp's `cons`, `car` and `cdr`, with `set-car!` and `set-cdr!`
 - [eopl/lang_call_by_reference](src/main/scala/xieyuheng/eopl/lang_call_by_reference) <br>
   - marking an variable `ref` when passing it to a function, <br>
     will not create new `ref` and reuse the `ref` of the variable, <br>
     thus make callee be able to set caller's variable.
-- **TODO** [eopl/lang_call_by_need](src/main/scala/xieyuheng/eopl/lang_call_by_need) <br>
-  - remember Dan's paper "Cons should not evaluate its arguments" ? <br>
-    this is about it. <br>
+- [eopl/lang_call_by_need](src/main/scala/xieyuheng/eopl/lang_call_by_need) <br>
+  - when an expression occurs as argument of an application, <br>
+    do not eval it, but make it into a `thunk`. <br>
+    and only eval it when needed (during variable lookup).
   - call-by-need is also called lazy-eval.
 
 ### study of lambda calculus with types

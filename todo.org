@@ -1,7 +1,7 @@
 * eopl
 - [eopl.lang_checked]
 - [eopl.lang_infered]
-- [eopl.lang_module]
+- [eopl.lang_module] this is import for my interpreter framework
 - [eopl.lang_class]
 * jojo
 - [adventure.simple] type alias `type <name> = ...`

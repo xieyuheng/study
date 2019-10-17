@@ -49,6 +49,8 @@ Study of programming language design and implementation
 - [barendregt/de_bruijn](src/main/scala/xieyuheng/barendregt/de_bruijn) <br>
   - De Bruijn stype simple type lambda calculus, <br>
     implemented by term rewriting.
+- **TODO** [barendregt/curry](src/main/scala/xieyuheng/barendregt/curry) <br>
+  - Curry stype simple type lambda calculus.
 
 ### Study of type inference
 

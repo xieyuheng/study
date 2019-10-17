@@ -82,8 +82,8 @@ Study of programming language design and implementation
     which is an implementation techniques commonly used for
     [Forth (programming language)](https://en.wikipedia.org/wiki/Forth_(programming_language)).
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
-  - "Simply Typed JoJo Calculus", by Xie Yuheng ([the paper](docs/paper/simply-typed-jojo-calculus.md)).
   - Two levels of computations -- `exe` and `cut`, where `cut` is simple.
+  - "Simply Typed JoJo Calculus", by Xie Yuheng ([the paper](docs/paper/simply-typed-jojo-calculus.md)).
 - **TODO** [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
   - Two levels of computations -- `exe` and `cut`, where `cut` is as powerful as `exe`.
 

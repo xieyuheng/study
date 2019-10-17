@@ -108,7 +108,8 @@ Study of programming language design and implementation
 
 - We enforce C4 as collaboration protocol.
   - [The C4 RFC](https://rfc.zeromq.org/spec:42/C4)
-- [Style Guide](STYLE-GUIDE.md) -- Observe the style of existing code and respect it.
+- [Style Guide](STYLE-GUIDE.md)
+  - Observe the style of existing code and respect it.
 - [Code of Conduct](CODE-OF-CONDUCT.md)
 - [Travis CI](https://travis-ci.org/xieyuheng/cicada)
 

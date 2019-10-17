@@ -18,13 +18,13 @@
 
 ## Adding function composition into De Bruijn notation
 
-- **claim** When translating lambda expressions to De Bruijn notation, function composition does not occur.
-- **proof** TODO
+- **[claim]** When translating lambda expressions to De Bruijn notation, function composition does not occur.
+- **[proof]** TODO
 
 ## The algebraic structure of the space of simple type
 
-- **claim** The algebraic structure of the space of simple type, is freely generated group with thunk.
-- **demonstration** TODO
+- **[claim]** The algebraic structure of the space of simple type, is freely generated group with thunk.
+- **[demonstration]** TODO
 
 - we can also say the "simple" in "simple type" means the space is freely generated,
   i.e. there are no equations between types. (such as conversion relations in the case of lambda expressions)

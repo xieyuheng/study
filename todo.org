@@ -77,4 +77,9 @@
 - cook's machine for trans algo to lin-algo
 * lambda machine
 - new machine for call-by-name or call-by-need lambda
-* rewriting
+* term rewriting
+* dsl
+- generative art
+- formal concept analysis
+- cell complex
+- four dancing circles

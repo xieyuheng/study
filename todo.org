@@ -1,3 +1,11 @@
+* inductive type
+- [tobe sure] how can lambda cube encode type constructors and data constructors ?
+- [tobe sure] in "a general formulation of simultaneous inductive-recursive definitions in type theory" of dybjer
+  - simultaneous means define a type constructor and its data constructors at the same time
+  - eliminators (elimination rules) are not generated
+
+
+
 * eopl
 - [eopl.lang_checked]
 - [eopl.lang_infered]
@@ -6,8 +14,7 @@
 * jojo
 - [adventure.simple] type alias `type <name> = ...`
 - [adventure.simple] representing data types
-- [paper/adventure.simple]
-  learn about how to write good story from knuth
+- [paper/adventure.simple] learn about how to write good story from knuth
 * de_bruijn
 - [de_bruijn] type alias `let type <name> = ...`
 - [de_bruijn] representing data types
@@ -26,6 +33,7 @@
 * the little mler
 - as test for some of the languages
 * lambda
+- church's encoding and the unsolvable problem paper
 - can norm-by-eval handle call-by-name terms ?
 - what are examples of call-by-value bad terms ?
 * curry
@@ -45,8 +53,12 @@
 - add cumulative (maybe non-cumulative) levels of types -- type_t(n)
 * the little typer
 - as test for dependently typed language
-* pure
+* pure type system
 - in addition to a file to eval, also a file of config of sorts, axioms and rules
+- logic framework is a special case of pure type system ?
+  plus a single subtyping-like rule
+  A: Set --> A: Type
+  - where `Set` is inductively generate datatype
 * sysf
 * minitt
 - [note] why we *do not need* "type directed norm-by-eval" here ?

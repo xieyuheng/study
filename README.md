@@ -52,6 +52,12 @@ Study of programming language design and implementation
 - **TODO** [barendregt/curry](src/main/scala/xieyuheng/barendregt/curry) <br>
   - Curry stype simple type lambda calculus.
 
+### Study of pure type system
+
+- **TODO** [pure](src/main/scala/xieyuheng/pure) <br>
+  - A framework for the essence of dependent type system, <br>
+    which can be viewed as an extension of Barendregt's lambda cube.
+
 ### Study of type inference
 
 - **TODO** [miniml](src/main/scala/xieyuheng/miniml) <br>

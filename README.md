@@ -100,8 +100,9 @@ Study of programming language design and implementation
 ## Usage
 
 - Build: `sbt stage`
-  - test: `./dev t`
-  - find executables at `./target/universal/stage/bin/`
+  - Then you can find executable files in `./target/universal/stage/bin/`
+- Test: `./dev t`
+  - [Bug report](https://github.com/xieyuheng/cicada/issues)
 - Example code at: [example](example)
 
 ## Community

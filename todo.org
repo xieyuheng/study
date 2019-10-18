@@ -1,3 +1,4 @@
+* formal specification
 * inductive type
 - [to be sure] how can lambda cube encode type constructors and data constructors ?
 - [to be sure] in "a general formulation of simultaneous inductive-recursive definitions in type theory" of dybjer

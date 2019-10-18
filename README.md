@@ -7,12 +7,6 @@ Study of programming language design and implementation
 > an engineer does not want just a religion about how to solve a problem. <br>
 > -- Gerry Sussman
 
-> When you think in categories, you underestimate how different two facts are when they fall in the same category. <br>
-> When you think in categories, you overestimate how different two facts are when there happens to be a boundary in between them. <br>
-> And when you pay too much attention to categorical boundaries, you don't see big pictures. <br>
-> Our goal in this class is to study behavior without falling into thinking in categories. <br>
-> -- Robert Sapolsky
-
 ### Study of parsing techniques
 
 - [partech](src/main/scala/xieyuheng/partech) <br>

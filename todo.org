@@ -1,3 +1,4 @@
+* formal concept analysis
 * formal specification
 * inductive type
 - [to be sure] how can lambda cube encode type constructors and data constructors ?
@@ -10,9 +11,10 @@
 - [eopl.lang_module] this is import for my interpreter framework
 - [eopl.lang_class]
 * jojo
-- [adventure.untyped] infer arg_count and ret_count
-- [adventure.untyped] eq by eval
-- [adventure.untyped] encode permutation group
+- [adventure.counted] annotation for arg_count and ret_count
+- [adventure.counted] infer arg_count and ret_count
+- [adventure.counted] eq by eval
+- [adventure.counted] encode permutation group
 - [adventure.simple] type alias `type <name> = ...`
 - [adventure.simple] representing data types
 - [paper/adventure.simple] learn about how to write good story from knuth
@@ -75,9 +77,8 @@
 * module system
 - module as value with opaque module_t is not enough -- learn from EOPL
 * partech
-- [maybe] concrete syntax for rule
-  - to use partech as more general tool out side scala
-    (like the rosie pattern language)
+- [partech] [maybe] fix eq of rule
+  by avoiding implicit conversion from A to () => A
 - [partech] ErrMsg and Span
 - [partech] better report with ErrMsg in context
 * compile with cps

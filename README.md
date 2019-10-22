@@ -58,11 +58,25 @@ Study of programming language design and implementation
   - A framework for the essence of dependent type system, <br>
     which can be viewed as an extension of Barendregt's lambda cube.
 
+### Study of type checking
+
+- **TODO** [eopl/lang_checked](src/main/scala/xieyuheng/eopl/lang_checked) <br>
+
 ### Study of type inference
+
+- **TODO** [eopl/lang_infered](src/main/scala/xieyuheng/eopl/lang_infered) <br>
 
 - **TODO** [miniml](src/main/scala/xieyuheng/miniml) <br>
   - "A simple applicative language: Mini-ML", <br>
     by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn.
+
+### Study of module system
+
+- **TODO** [eopl/lang_module](src/main/scala/xieyuheng/eopl/lang_module) <br>
+
+### Study of object and subtyping
+
+- **TODO** [eopl/lang_class](src/main/scala/xieyuheng/eopl/lang_class) <br>
 
 ### Study of normalization by evaluation (a.k.a. nbe)
 

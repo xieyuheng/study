@@ -1,3 +1,8 @@
+- [eopl.lang_checked]
+- [eopl.lang_infered]
+* eopl
+- [eopl.lang_module] this is import for my interpreter framework
+- [eopl.lang_class]
 * formal concept analysis
 * formal specification
 * inductive type
@@ -5,11 +10,6 @@
 - [to be sure] in "a general formulation of simultaneous inductive-recursive definitions in type theory" of dybjer
   - simultaneous means define a type constructor and its data constructors at the same time
   - eliminators (elimination rules) are not generated
-* eopl
-- [eopl.lang_checked]
-- [eopl.lang_infered]
-- [eopl.lang_module] this is import for my interpreter framework
-- [eopl.lang_class]
 * jojo
 - [adventure.counted] annotation for arg_count and ret_count
 - [adventure.counted] infer arg_count and ret_count

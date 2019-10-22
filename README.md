@@ -60,7 +60,8 @@ Study of programming language design and implementation
 
 ### Study of type checking
 
-- **TODO** [eopl/lang_checked](src/main/scala/xieyuheng/eopl/lang_checked) <br>
+- [eopl/lang_checked](src/main/scala/xieyuheng/eopl/lang_checked) <br>
+  - A type-checked Language derived from `lang_letrec`.
 
 ### Study of type inference
 

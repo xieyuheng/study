@@ -1,6 +1,6 @@
 # Cicada
 
-Study of programming language design and implementation
+Study of language design and implementation
 
 > Remember, <br>
 > an engineer solve problem, <br>

@@ -17,7 +17,8 @@
 - [adventure.counted] encode permutation group
 - [adventure.simple] type alias `type <name> = ...`
 - [adventure.simple] representing data types
-- [paper/adventure.simple] learn about how to write good story from knuth
+- [adventure.simple] paper
+  learn about how to write good story from knuth
 * de_bruijn
 - [de_bruijn] type alias `let type <name> = ...`
 - [de_bruijn] representing data types
@@ -77,8 +78,6 @@
 * module system
 - module as value with opaque module_t is not enough -- learn from EOPL
 * partech
-- [partech] [maybe] fix eq of rule
-  by avoiding implicit conversion from A to () => A
 - [partech] ErrMsg and Span
 - [partech] better report with ErrMsg in context
 * compile with cps

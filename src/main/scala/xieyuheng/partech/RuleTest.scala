@@ -19,6 +19,7 @@ object RuleTest extends App {
     "exp", Map(
       "type" -> List("type"),
       "var" -> List(identifier),
+      "block" -> List("{", exp, "}"),
       "case" -> List(exp, "case", "{", non_empty_list(case_clause), "}"),
       "dot" -> List(exp, ".", identifier),
       "pi" -> List("pi", "(", non_empty_list(arg), ")", ":", exp),

@@ -55,6 +55,7 @@ case class Rule(
   }
 
   override def hashCode = matters.hashCode
+
 }
 
 sealed trait RulePart

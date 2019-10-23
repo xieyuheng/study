@@ -1,4 +1,3 @@
-- [eopl.lang_checked]
 - [eopl.lang_infered]
 * eopl
 - [eopl.lang_module] this is import for my interpreter framework
@@ -11,6 +10,7 @@
   - simultaneous means define a type constructor and its data constructors at the same time
   - eliminators (elimination rules) are not generated
 * jojo
+- we can do a practical jojo with ml-like type system
 - [adventure.counted] annotation for arg_count and ret_count
 - [adventure.counted] infer arg_count and ret_count
 - [adventure.counted] eq by eval
@@ -78,6 +78,7 @@
 * module system
 - module as value with opaque module_t is not enough -- learn from EOPL
 * partech
+- [partech] rewrite in c
 - [partech] ErrMsg and Span
 - [partech] better report with ErrMsg in context
 * compile with cps

@@ -27,12 +27,14 @@ object grammar {
       "zero_p" -> List("zero_p", "(", exp, ")"),
       "if" -> List("if", exp, "{", exp, "}", "else", "{", exp, "}"),
       "let" -> List("let", identifier, "=", exp, exp),
-      "fn" -> List("(", identifier, ")", "=", ">", exp),
+      "fn" -> List("(", identifier, ":", ty, ")", "=", ">", exp),
       "ap" -> List(exp, "(", exp, ")"),
       "block_one" -> List("{", exp, "}"),
-      "let_rec" -> List("let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp, exp),
+      "let_rec" -> List(
+        "let", "rec", identifier, "=", "(", identifier, ":", ty, ")", ":", ty, "=", ">", exp,
+        exp),
       "let_rec_mutual" -> List(
-        "let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp,
+        "let", "rec", identifier, "=", "(", identifier, ":", ty, ")", ":", ty, "=", ">", exp,
         non_empty_list(mutual_fn), exp),
       "sole" -> List("sole"),
       "do" -> List("do", exp, exp),
@@ -56,19 +58,22 @@ object grammar {
         If(exp_matcher(exp1), exp_matcher(exp2), exp_matcher(exp3))},
       "let" -> { case List(_, Leaf(name), _, exp1, body) =>
         Let(name, exp_matcher(exp1), exp_matcher(body))},
-      "fn" -> { case List(_, Leaf(name), _, _, _, body) =>
-        Fn(name, exp_matcher(body))},
+      "fn" -> { case List(_, Leaf(name), _, arg_t, _, _, _, body) =>
+        Fn(name, ty_matcher(arg_t), exp_matcher(body))},
       "ap" -> { case List(target, _, arg, _) =>
         Ap(exp_matcher(target), exp_matcher(arg)) },
       "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
-      "let_rec" -> { case List(_, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body, body) =>
-        LetRec(fn_name, arg_name, exp_matcher(fn_body), exp_matcher(body))},
+      "let_rec" -> { case List(
+        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, ret_t, _, _, fn_body,
+        body) =>
+        LetRec(fn_name, arg_name, ty_matcher(arg_t), ty_matcher(ret_t), exp_matcher(fn_body),
+          exp_matcher(body))},
       "let_rec_mutual" -> { case List(
-        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body,
+        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, ret_t, _, _, fn_body,
         mutual_fn_list, body) =>
         val map = non_empty_list_matcher(mutual_fn_matcher)(mutual_fn_list).toMap
-        val map2 = map + (fn_name -> (arg_name, exp_matcher(fn_body)))
+        val map2 = map + (fn_name -> (arg_name, ty_matcher(arg_t), ty_matcher(ret_t), exp_matcher(fn_body)))
         LetRecMutual(map2, exp_matcher(body))
       },
       "sole" -> { case List(_) =>
@@ -83,12 +88,35 @@ object grammar {
 
   def mutual_fn: Rule = Rule(
     "mutual_fn", Map(
-      "and" -> List("and", identifier, "=", "(", identifier, ")", "=", ">", exp),
+      "and" -> List("and", identifier, "=", "(", identifier, ":", ty, ")", ":", ty, "=", ">", exp),
     ))
 
-  def mutual_fn_matcher: Tree => (String, (String, Exp)) = Tree.matcher[(String, (String, Exp))](
-    "mutual_fn", Map(
-      "and" -> { case List(_, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body) =>
-        (fn_name, (arg_name, exp_matcher(fn_body))) },
+  def mutual_fn_matcher: Tree => (String, (String, Type, Type, Exp)) =
+    Tree.matcher[(String, (String, Type, Type, Exp))](
+      "mutual_fn", Map(
+        "and" -> { case List(
+          _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, ret_t, _, _, fn_body) =>
+          (fn_name, (arg_name, ty_matcher(arg_t), ty_matcher(ret_t), exp_matcher(fn_body))) },
+      ))
+
+  def ty: Rule = Rule(
+    "ty", Map(
+      "int_t" -> List("int_t"),
+      "bool_t" -> List("bool_t"),
+      "sole_t" -> List("sole_t"),
+      "arrow" -> List("(", ty, ")", "-", ">", ty),
     ))
+
+  def ty_matcher: Tree => Type = Tree.matcher[Type](
+    "ty", Map(
+      "int_t" -> { case List(_) =>
+        TypeInt() },
+      "bool_t" -> { case List(_) =>
+        TypeBool() },
+      "sole_t" -> { case List(_) =>
+        TypeSole() },
+      "arrow" -> { case List(_, arg_t, _, _, _, ret_t) =>
+        TypeArrow(ty_matcher(arg_t), ty_matcher(ret_t)) },
+    ))
+
 }

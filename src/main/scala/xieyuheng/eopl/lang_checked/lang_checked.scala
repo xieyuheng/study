@@ -12,11 +12,18 @@ object lang_checked extends mini_interpreter(
     Parser(grammar.lexer, grammar.exp).parse(code) match {
       case Right(tree) =>
         val env = EnvEmpty()
+        val ctx = Ctx()
         val exp = grammar.exp_matcher(tree)
-        eval.eval(exp, env) match {
-          case Right(value) =>
-            println(s">>> ${pretty_exp(exp)}")
-            println(s"=== ${pretty_val(value)}")
+        check.infer(ctx, exp) match {
+          case Right(_) =>
+            eval.eval(exp, env) match {
+              case Right(value) =>
+                println(s">>> ${pretty_exp(exp)}")
+                println(s"=== ${pretty_val(value)}")
+              case Left(err) =>
+                println(s"${err.msg}")
+                System.exit(1)
+            }
           case Left(err) =>
             println(s"${err.msg}")
             System.exit(1)

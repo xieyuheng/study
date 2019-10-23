@@ -107,8 +107,8 @@ object eval {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
-      case Fn(name, body) =>
-        Right(ValFn(name, body, env))
+      case Fn(name, arg_t, body) =>
+        Right(ValFn(name, arg_t, body, env))
 
       case Ap(target, arg) =>
         val result = for {
@@ -133,9 +133,9 @@ object eval {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
-      case LetRec(fn_name, arg_name, fn_body, body) =>
+      case LetRec(fn_name, arg_name, arg_t, ret_t, fn_body, body) =>
         val result = for {
-          result <- eval(body, env.ext_let_rec(fn_name, arg_name, fn_body))
+          result <- eval(body, env.ext_let_rec(fn_name, arg_name, arg_t, ret_t, fn_body))
         } yield result
         result_maybe_err(result, Err(
           s"[eval fail]\n" ++

@@ -102,6 +102,9 @@ Study of language design and implementation
     implemented by stack machine and threaded code techniques, <br>
     which is an implementation techniques commonly used for
     [Forth (programming language)](https://en.wikipedia.org/wiki/Forth_(programming_language)).
+- **TODO** [adventure/jojo_counted](src/main/scala/xieyuheng/adventure/jojo_counted) <br>
+  - `jojo_untyped` + annotation for number of arguments and number of return values.
+  - A `nbe` inspired equivalent predicate between jojo.
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - Two levels of computations -- `exe` and `cut`, where `cut` is simple.
   - "Simply Typed JoJo Calculus", by Xie Yuheng ([the paper](docs/paper/simply-typed-jojo-calculus.md)).

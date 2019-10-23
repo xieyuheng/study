@@ -228,22 +228,6 @@ object check {
     }
   }
 
-  //             if (infered_return_type_map == annotated_return_type_map) {
-  //             } else {
-  //               val s1 = annotated_return_type_map.map {
-  //                 case (fn_name, ret_t) => s"${fn_name}: ... -> ${pretty_type(ret_t)}"
-  //               }.mkString(", ")
-  //               val s2 = infered_return_type_map.map {
-  //                 case (fn_name, ret_t) => s"${fn_name}: ... -> ${pretty_type(ret_t)}"
-  //               }.mkString(", ")
-  //               Left(Err(
-  //                 s"[infer fail]\n" ++
-  //                   s"let rec mutual return type mismatch\n" ++
-  //                   s"annotated_return_type_map: { ${s1} }\n" ++
-  //                   s"infered_return_type_map: { ${s2} }\n"
-  //               ))
-  //             }
-
   def check(ctx: Ctx, exp: Exp, annotated: Type): Either[Err, Unit] = {
     infer(ctx, exp).flatMap { case infered =>
       if (annotated == infered) {

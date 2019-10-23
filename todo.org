@@ -1,7 +1,8 @@
+ * eopl
 - [eopl.lang_infered]
-* eopl
-- [eopl.lang_module] this is import for my interpreter framework
+- [eopl.lang_module]
 - [eopl.lang_class]
+- note about further reading
 * formal concept analysis
 * formal specification
 * inductive type

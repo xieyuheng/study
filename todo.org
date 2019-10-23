@@ -1,9 +1,10 @@
- * eopl
+* eopl
 - [eopl.lang_infered]
 - [eopl.lang_module]
 - [eopl.lang_class]
 - note about further reading
 * formal concept analysis
+* method of analytic tableaux
 * formal specification
 * inductive type
 - [to be sure] how can lambda cube encode type constructors and data constructors ?

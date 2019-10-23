@@ -55,4 +55,24 @@ object pretty {
     }
   }
 
+  def pretty_type(t: Type): String = {
+    t match {
+      case TypeVar(serial, aka) =>
+        aka match {
+          case Some(name) =>
+            s"${name}#${serial}"
+          case None =>
+            s"#${serial}"
+        }
+      case TypeInt() =>
+        s"int_t"
+      case TypeBool() =>
+        s"bool_t"
+      case TypeSole() =>
+        s"sole_t"
+      case TypeArrow(arg_t: Type, ret_t: Type) =>
+        s"(${pretty_type(arg_t)}) -> ${pretty_type(ret_t)}"
+    }
+  }
+
 }

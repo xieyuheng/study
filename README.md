@@ -12,7 +12,7 @@ Study of language design and implementation
 - [partech](src/main/scala/xieyuheng/partech) <br>
   A parser generator, with various parsing techniques.
   - [Earley parser](src/main/scala/xieyuheng/partech/parsing_techniques/Earley.scala) <br>
-    Its time complexity is O(n^3) in general for context free grammar.
+    Its time complexity is `O(n^3)` in general for context free grammar.
 
 ### Study of scope
 
@@ -104,8 +104,8 @@ Study of language design and implementation
     which is an implementation techniques commonly used for
     [Forth (programming language)](https://en.wikipedia.org/wiki/Forth_(programming_language)).
 - **TODO** [adventure/jojo_counted](src/main/scala/xieyuheng/adventure/jojo_counted) <br>
-  - `jojo_untyped` plus annotation for number of arguments and number of return values.
-  - A `nbe` inspired equivalent predicate for jojo.
+  - The language `jojo_untyped` plus annotation for number of arguments and number of return values.
+  - An equivalent predicate for jojo, inspired by `nbe`.
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - Two levels of computations -- `exe` and `cut`, where `cut` is simple.
   - "Simply Typed JoJo Calculus", by Xie Yuheng ([the paper](docs/paper/simply-typed-jojo-calculus.md)).

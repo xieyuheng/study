@@ -24,6 +24,7 @@ object Earley {
     origin: Int,
     completed_by: Option[Item] = None,
   ) {
+
     val matters = (rule, choice_name, parts.length, dot, origin)
 
     override def equals(that: Any): Boolean = {
@@ -57,6 +58,7 @@ object Earley {
     }
 
   }
+
 }
 
 case class Earley(words: List[Word], rule: Rule) {

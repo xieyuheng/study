@@ -108,7 +108,8 @@ object eval {
         ))
 
       case Fn(name, arg_t, body) =>
-        Right(ValFn(name, arg_t, body, env))
+        // Right(ValFn(name, arg_t, body, env))
+        Right(ValFn(name, body, env))
 
       case Ap(target, arg) =>
         val result = for {

@@ -107,7 +107,7 @@ object eval {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
-      case Fn(name, body) =>
+      case Fn(name, anno_arg_t, body) =>
         Right(ValFn(name, body, env))
 
       case Ap(target, arg) =>
@@ -133,7 +133,7 @@ object eval {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
-      case LetRec(fn_name, arg_name, fn_body, body) =>
+      case LetRec(fn_name, arg_name, anno_arg_t, anno_ret_t, fn_body, body) =>
         val result = for {
           result <- eval(body, env.ext_let_rec(fn_name, arg_name, fn_body))
         } yield result

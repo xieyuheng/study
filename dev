@@ -72,8 +72,8 @@ test_eopl () {
         test_eopl_lang lang_mutable_pairs &&\
         test_eopl_lang lang_call_by_reference &&\
         test_eopl_lang lang_call_by_need &&\
-        test_eopl_lang lang_checked
-    # test_eopl_lang lang_infered
+        test_eopl_lang lang_checked &&\
+        test_eopl_lang lang_infered
     # test_eopl_lang lang_module
     # test_eopl_lang lang_class
 }

@@ -67,7 +67,9 @@ object grammar {
       "let_rec" -> { case List(
         _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, ret_t, _, _, fn_body,
         body) =>
-        LetRec(fn_name, arg_name, ty_matcher(arg_t), ty_matcher(ret_t), exp_matcher(fn_body),
+        LetRec(fn_name, arg_name,
+          ty_matcher(arg_t), ty_matcher(ret_t),
+          exp_matcher(fn_body),
           exp_matcher(body))},
       "let_rec_mutual" -> { case List(
         _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, ret_t, _, _, fn_body,

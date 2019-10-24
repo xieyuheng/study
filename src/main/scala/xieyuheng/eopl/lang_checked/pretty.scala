@@ -48,8 +48,8 @@ object pretty {
         num.toString
       case ValBool(bool: Boolean) =>
         bool.toString
-      case ValFn(name, arg_t, body, env) =>
-        s"(${name}: ${pretty_type(arg_t)}) => ${pretty_exp(body)}"
+      case ValFn(name, body, env) =>
+        s"(${name}) => ${pretty_exp(body)}"
       case ValSole() =>
         s"sole"
     }
@@ -67,4 +67,5 @@ object pretty {
         s"(${pretty_type(arg_t)}) -> ${pretty_type(ret_t)}"
     }
   }
+
 }

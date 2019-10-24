@@ -124,14 +124,136 @@ object infer {
     }
   }
 
+  val new_serial: () => Int = {
+    var serial: Int = 0
+    val serial_gen = () => {
+      serial = serial + 1
+      serial
+    }
+    serial_gen
+  }
+
+  def fresh_type_var(
+    aka: Option[String] = None,
+  ): Type = {
+    TypeVar(new_serial(), aka)
+  }
+
+  def anno_refine(
+    anno_type: Option[Type],
+    aka: Option[String] = None,
+  ): Type = {
+    anno_type match {
+      case Some(t) =>
+        t
+      case None =>
+        fresh_type_var(aka)
+    }
+  }
+
+  def infer(bind: Bind, ctx: Ctx, exp: Exp): Either[Err, (Bind, Type)] = {
+    exp match {
+      case Var(name: String) =>
+        ctx.lookup_type(name) match {
+          case Some(t) =>
+            Right(bind, t)
+          case None =>
+            Left(Err(
+              s"[infer fail]\n" ++
+                s"undefined name: ${name}\n"
+            ))
+        }
+
+      case Num(num: Int) =>
+        Right(bind, TypeInt())
+
+      case Diff(exp1: Exp, exp2: Exp) =>
+        infer(bind, ctx, exp1).flatMap { case (bind, t1) =>
+          unify(bind, t1, TypeInt(), exp).flatMap { case bind =>
+            infer(bind, ctx, exp2).flatMap { case (bind, t2) =>
+              unify(bind, t2, TypeInt(), exp).flatMap { case bind =>
+                Right(bind, TypeInt())
+              }
+            }
+          }
+        }
+
+      case ZeroP(exp1: Exp) =>
+        infer(bind, ctx, exp1).flatMap { case (bind, t1) =>
+          unify(bind, t1, TypeInt(), exp).flatMap { case bind =>
+            Right(bind, TypeBool())
+          }
+        }
+
+      case If(exp1: Exp, exp2: Exp, exp3: Exp) =>
+        infer(bind, ctx, exp1).flatMap { case (bind, t1) =>
+          unify(bind, t1, TypeBool(), exp).flatMap { case bind =>
+            infer(bind, ctx, exp2).flatMap { case (bind, t2) =>
+              infer(bind, ctx, exp3).flatMap { case (bind, t3) =>
+                unify(bind, t2, t3, exp).flatMap { case bind =>
+                  Right(bind, t2)
+                }
+              }
+            }
+          }
+        }
+
+      case Let(name: String, exp1: Exp, body: Exp) =>
+        infer(bind, ctx, exp1).flatMap { case (bind, t1) =>
+          val ctx2 = ctx.ext(name, t1)
+          infer(bind, ctx2, body)
+        }
+
+      case Fn(name: String, anno_arg_t: Option[Type], body: Exp) =>
+        val arg_t = anno_refine(anno_arg_t)
+        val ctx2 = ctx.ext(name, arg_t)
+        infer(bind, ctx2, body).flatMap { case (bind, ret_t) =>
+          Right(bind, TypeArrow(arg_t, ret_t))
+        }
+
+      case Ap(target: Exp, arg: Exp) =>
+        val ret_t = fresh_type_var()
+        infer(bind, ctx, target).flatMap { case (bind, arrow_t) =>
+          infer(bind, ctx, arg).flatMap { case (bind, arg_t) =>
+            unify(bind, arrow_t, TypeArrow(arg_t, ret_t), exp).flatMap { case bind =>
+              Right(bind, ret_t)
+            }
+          }
+        }
+
+      case LetRec(fn_name, arg_name, anno_arg_t, anno_ret_t, fn_body, body) =>
+        val arg_t = anno_refine(anno_arg_t)
+        val ret_t = anno_refine(anno_ret_t)
+        val ctx2 = ctx.ext(fn_name, TypeArrow(arg_t, ret_t))
+        val ctx3 = ctx2.ext(arg_name, arg_t)
+        infer(bind, ctx3, fn_body).flatMap { case (bind, t2) =>
+          unify(bind, t2, ret_t, fn_body).flatMap { case bind =>
+            infer(bind, ctx2, body)
+          }
+        }
+
+      case LetRecMutual(map: Map[String, (String, Exp)], body: Exp) =>
+        ???
+
+      case Sole() =>
+        Right(bind, TypeSole())
+
+      case Do(exp1: Exp, body: Exp) =>
+        infer(bind, ctx, body)
+
+      case AssertEq(exp1: Exp, exp2: Exp) =>
+        Right(bind, TypeSole())
+
+      case Show(exp1: Exp) =>
+        Right(bind, TypeSole())
+
+    }
+  }
+
   def type_eq(map: Map[Int, Int], x: Type, y: Type): Boolean = {
     ???
   }
 
   // def exp_equation(exp: Exp): = {}
-
-  def infer(seed: Int, bind: Bind, ctx: Ctx, exp: Exp): Either[Err, (Bind, Type)] = {
-    ???
-  }
 
 }

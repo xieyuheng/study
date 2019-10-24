@@ -18,17 +18,20 @@ object pretty {
         s"if ${pretty_exp(exp1)} then ${pretty_exp(exp2)} else ${pretty_exp(exp3)}"
       case Let(name: String, exp1: Exp, body: Exp) =>
         s"let ${name} = ${pretty_exp(exp1)} ${pretty_exp(body)}"
-      case Fn(name: String, body: Exp) =>
-        s"(${name}) => ${pretty_exp(body)}"
+      case Fn(name: String, anno_arg_t: Option[Type], body: Exp) =>
+        val s = pretty_anno_type(anno_arg_t)
+        s"(${name}${s}) => ${pretty_exp(body)}"
       case Ap(f: Fn, arg: Exp) =>
         s"{${pretty_exp(f)}}(${pretty_exp(arg)})"
       case Ap(target: Exp, arg: Exp) =>
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
-      case LetRec(fn_name, arg_name, fn_body, body) =>
-        s"let rec ${fn_name}(${arg_name}) = ${pretty_exp(fn_body)} ${pretty_exp(body)}"
+      case LetRec(fn_name, arg_name, anno_arg_t, anno_ret_t, fn_body, body) =>
+        val s1 = pretty_anno_type(anno_arg_t)
+        val s2 = pretty_anno_type(anno_ret_t)
+        s"let rec ${fn_name} = (${arg_name}${s1})${s2} => ${pretty_exp(fn_body)} ${pretty_exp(body)}"
       case LetRecMutual(map: Map[String, (String, Exp)], body: Exp) =>
         val s = map.map { case (fn_name, (arg_name, fn_body)) =>
-          s"${fn_name}(${arg_name}) = ${pretty_exp(fn_body)}"
+          s"${fn_name} = (${arg_name}) => ${pretty_exp(fn_body)}"
         }.mkString(" and ")
         s"let rec ${s} ${pretty_exp(body)}"
       case Sole() =>
@@ -52,6 +55,15 @@ object pretty {
         s"(${name}) => ${pretty_exp(body)}"
       case ValSole() =>
         s"sole"
+    }
+  }
+
+  def pretty_anno_type(anno_type: Option[Type]): String = {
+    anno_type match {
+      case Some(t) =>
+        s": ${pretty_type(t)}"
+      case None =>
+        s""
     }
   }
 

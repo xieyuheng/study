@@ -18,14 +18,14 @@ sealed trait Env {
         }
       case EnvLetRec(fn_name, arg_name, arg_t, ret_t, fn_body, rest) =>
         if (name == fn_name) {
-          Some(ValFn(arg_name, arg_t, fn_body, env))
+          Some(ValFn(arg_name, fn_body, env))
         } else {
           rest.lookup_val(name)
         }
       case EnvLetRecMutual(map, rest) =>
         map.get(name) match {
           case Some((arg_name, arg_t, ret_t, fn_body)) =>
-            Some(ValFn(arg_name, arg_t, fn_body, env))
+            Some(ValFn(arg_name, fn_body, env))
           case None =>
             rest.lookup_val(name)
         }

@@ -30,7 +30,9 @@ object grammar {
       "fn" -> List("(", identifier, ")", "=", ">", exp),
       "ap" -> List(exp, "(", exp, ")"),
       "block_one" -> List("{", exp, "}"),
-      "let_rec" -> List("let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp, exp),
+      "let_rec" -> List(
+        "let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp,
+        exp),
       "let_rec_mutual" -> List(
         "let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp,
         non_empty_list(mutual_fn), exp),
@@ -62,7 +64,9 @@ object grammar {
         Ap(exp_matcher(target), exp_matcher(arg)) },
       "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
-      "let_rec" -> { case List(_, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body, body) =>
+      "let_rec" -> { case List(
+        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body,
+        body) =>
         LetRec(fn_name, arg_name, exp_matcher(fn_body), exp_matcher(body))},
       "let_rec_mutual" -> { case List(
         _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body,
@@ -91,4 +95,5 @@ object grammar {
       "and" -> { case List(_, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body) =>
         (fn_name, (arg_name, exp_matcher(fn_body))) },
     ))
+
 }

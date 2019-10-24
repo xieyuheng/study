@@ -28,9 +28,21 @@ object grammar {
       "if" -> List("if", exp, "{", exp, "}", "else", "{", exp, "}"),
       "let" -> List("let", identifier, "=", exp, exp),
       "fn" -> List("(", identifier, ")", "=", ">", exp),
+      "fn_anno" -> List("(", identifier, ":", ty, ")", "=", ">", exp),
       "ap" -> List(exp, "(", exp, ")"),
       "block_one" -> List("{", exp, "}"),
-      "let_rec" -> List("let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp, exp),
+      "let_rec" -> List(
+        "let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp,
+        exp),
+      "let_rec_anno_ret" -> List(
+        "let", "rec", identifier, "=", "(", identifier, ")", ":", ty, "=", ">", exp,
+        exp),
+      "let_rec_anno_arg" -> List(
+        "let", "rec", identifier, "=", "(", identifier, ":", ty, ")", "=", ">", exp,
+        exp),
+      "let_rec_anno_both" -> List(
+        "let", "rec", identifier, "=", "(", identifier, ":", ty, ")", ":", ty, "=", ">", exp,
+        exp),
       "let_rec_mutual" -> List(
         "let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp,
         non_empty_list(mutual_fn), exp),
@@ -57,13 +69,41 @@ object grammar {
       "let" -> { case List(_, Leaf(name), _, exp1, body) =>
         Let(name, exp_matcher(exp1), exp_matcher(body))},
       "fn" -> { case List(_, Leaf(name), _, _, _, body) =>
-        Fn(name, exp_matcher(body))},
+        Fn(name, None, exp_matcher(body))},
+      "fn_anno" -> { case List(_, Leaf(name), _, arg_t, _, _, _, body) =>
+        Fn(name, Some(ty_matcher(arg_t)), exp_matcher(body))},
       "ap" -> { case List(target, _, arg, _) =>
         Ap(exp_matcher(target), exp_matcher(arg)) },
       "block_one" -> { case List(_, exp, _) =>
         exp_matcher(exp) },
-      "let_rec" -> { case List(_, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body, body) =>
-        LetRec(fn_name, arg_name, exp_matcher(fn_body), exp_matcher(body))},
+      "let_rec" -> { case List(
+        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body,
+        body) =>
+        LetRec(fn_name, arg_name,
+          None, None,
+          exp_matcher(fn_body),
+          exp_matcher(body))},
+      "let_rec_anno_ret" -> { case List(
+        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, ret_t, _, _, fn_body,
+        body) =>
+        LetRec(fn_name, arg_name,
+          None, Some(ty_matcher(ret_t)),
+          exp_matcher(fn_body),
+          exp_matcher(body))},
+      "let_rec_anno_arg" -> { case List(
+        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, _, fn_body,
+        body) =>
+        LetRec(fn_name, arg_name,
+          Some(ty_matcher(arg_t)), None,
+          exp_matcher(fn_body),
+          exp_matcher(body))},
+      "let_rec_anno_both" -> { case List(
+        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, ret_t, _, _, fn_body,
+        body) =>
+        LetRec(fn_name, arg_name,
+          Some(ty_matcher(arg_t)), Some(ty_matcher(ret_t)),
+          exp_matcher(fn_body),
+          exp_matcher(body))},
       "let_rec_mutual" -> { case List(
         _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body,
         mutual_fn_list, body) =>
@@ -91,4 +131,25 @@ object grammar {
       "and" -> { case List(_, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body) =>
         (fn_name, (arg_name, exp_matcher(fn_body))) },
     ))
+
+  def ty: Rule = Rule(
+    "ty", Map(
+      "int_t" -> List("int_t"),
+      "bool_t" -> List("bool_t"),
+      "sole_t" -> List("sole_t"),
+      "arrow" -> List("(", ty, ")", "-", ">", ty),
+    ))
+
+  def ty_matcher: Tree => Type = Tree.matcher[Type](
+    "ty", Map(
+      "int_t" -> { case List(_) =>
+        TypeInt() },
+      "bool_t" -> { case List(_) =>
+        TypeBool() },
+      "sole_t" -> { case List(_) =>
+        TypeSole() },
+      "arrow" -> { case List(_, arg_t, _, _, _, ret_t) =>
+        TypeArrow(ty_matcher(arg_t), ty_matcher(ret_t)) },
+    ))
+
 }

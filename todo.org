@@ -85,3 +85,17 @@
 - formal concept analysis
 - cell complex
 - four dancing circles
+* for readme
+- [barendregt/curry](src/main/scala/xieyuheng/barendregt/curry) <br>
+  - Curry style simple type lambda calculus.
+- [pure](src/main/scala/xieyuheng/pure) <br>
+  - A framework for the essence of dependent type system, <br>
+    which can be viewed as an extension of Barendregt's lambda cube.
+- [miniml](src/main/scala/xieyuheng/miniml) <br>
+  - "A simple applicative language: Mini-ML", <br>
+    by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn.
+- [adventure/jojo_counted](src/main/scala/xieyuheng/adventure/jojo_counted) <br>
+  - The language `jojo_untyped` plus annotation for number of arguments and number of return values.
+  - An equivalent predicate for jojo, inspired by `nbe`.
+- [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
+  - Two levels of computations -- `exe` and `cut`, where `cut` is as powerful as `exe`.

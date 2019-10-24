@@ -49,14 +49,6 @@ Study of language design and implementation
 - [barendregt/de_bruijn](src/main/scala/xieyuheng/barendregt/de_bruijn) <br>
   - De Bruijn style simple type lambda calculus, <br>
     implemented by term rewriting.
-- **TODO** [barendregt/curry](src/main/scala/xieyuheng/barendregt/curry) <br>
-  - Curry style simple type lambda calculus.
-
-### Study of pure type system
-
-- **TODO** [pure](src/main/scala/xieyuheng/pure) <br>
-  - A framework for the essence of dependent type system, <br>
-    which can be viewed as an extension of Barendregt's lambda cube.
 
 ### Study of type checking
 
@@ -67,18 +59,6 @@ Study of language design and implementation
 
 - [eopl/lang_infered](src/main/scala/xieyuheng/eopl/lang_infered) <br>
   - A type-infered language derived from `lang_letrec`.
-
-- **TODO** [miniml](src/main/scala/xieyuheng/miniml) <br>
-  - "A simple applicative language: Mini-ML", <br>
-    by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn.
-
-### Study of module system
-
-- **TODO** [eopl/lang_module](src/main/scala/xieyuheng/eopl/lang_module) <br>
-
-### Study of object and subtyping
-
-- **TODO** [eopl/lang_class](src/main/scala/xieyuheng/eopl/lang_class) <br>
 
 ### Study of normalization by evaluation (a.k.a. nbe)
 
@@ -103,13 +83,8 @@ Study of language design and implementation
     implemented by stack machine and threaded code techniques, <br>
     which is an implementation techniques commonly used for
     [Forth (programming language)](https://en.wikipedia.org/wiki/Forth_(programming_language)).
-- **TODO** [adventure/jojo_counted](src/main/scala/xieyuheng/adventure/jojo_counted) <br>
-  - The language `jojo_untyped` plus annotation for number of arguments and number of return values.
-  - An equivalent predicate for jojo, inspired by `nbe`.
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - Two levels of computations -- `exe` and `cut`, where `cut` is simple.
-- **TODO** [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
-  - Two levels of computations -- `exe` and `cut`, where `cut` is as powerful as `exe`.
 
 ### references
 

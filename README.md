@@ -81,8 +81,7 @@ Study of language design and implementation
 - [adventure/jojo_untyped](src/main/scala/xieyuheng/adventure/jojo_untyped) <br>
   - De Bruijn notation extended by function composition, <br>
     implemented by stack machine and threaded code techniques, <br>
-    which is an implementation techniques commonly used for
-    [Forth (programming language)](https://en.wikipedia.org/wiki/Forth_(programming_language)).
+    which is commonly used for [Forth (programming language)](https://en.wikipedia.org/wiki/Forth_(programming_language)).
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - Two levels of computations -- `exe` and `cut`, where `cut` is simple.
 

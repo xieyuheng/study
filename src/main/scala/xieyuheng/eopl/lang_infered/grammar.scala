@@ -11,7 +11,7 @@ object grammar {
   def preserved: List[String] = List(
     "diff", "zero_p",
     "if",
-    "let", "rec", "and",
+    "let", "rec",
     "sole", "do",
     "assert_eq", "show",
   )

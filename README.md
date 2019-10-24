@@ -65,7 +65,7 @@ Study of language design and implementation
 
 ### Study of type inference
 
-- **TODO** [eopl/lang_infered](src/main/scala/xieyuheng/eopl/lang_infered) <br>
+- [eopl/lang_infered](src/main/scala/xieyuheng/eopl/lang_infered) <br>
   - A type-infered language derived from `lang_letrec`.
 
 - **TODO** [miniml](src/main/scala/xieyuheng/miniml) <br>

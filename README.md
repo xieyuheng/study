@@ -99,7 +99,6 @@ Study of language design and implementation
 - Build: `sbt stage`
   - Then you can find executable files in `./target/universal/stage/bin/`
 - Test: `./dev t`
-  - [Bug report](https://github.com/xieyuheng/cicada/issues)
 - Example code at: [example](example)
 
 ## Community
@@ -109,7 +108,7 @@ Study of language design and implementation
 - [Style Guide](STYLE-GUIDE.md)
   - Observe the style of existing code and respect it.
 - [Code of Conduct](CODE-OF-CONDUCT.md)
-- [Travis CI](https://travis-ci.org/xieyuheng/cicada)
+- [Travis CI](https://travis-ci.org/xieyuheng/cicada-study)
 
 ## License
 

@@ -1,6 +1,7 @@
+- [de_bruijn] representing data types
+* eopl
 - [eopl.lang_module]
 - [eopl.lang_class]
-* eopl
 - [eopl] note about further reading
 * formal concept analysis
 * method of analytic tableaux
@@ -16,13 +17,10 @@
 - [adventure.counted] infer arg_count and ret_count
 - [adventure.counted] eq by eval
 - [adventure.counted] encode permutation group
-- [adventure.simple] type alias `type <name> = ...`
 - [adventure.simple] representing data types
 - [adventure.simple] paper
   learn about how to write good story from knuth
 * de_bruijn
-- [de_bruijn] type alias `let type <name> = ...`
-- [de_bruijn] representing data types
 - [de_bruijn_logical] view type atom as logic variable and use unification
   - this should be a different language from [de_bruijn]
 - [de_bruijn] synth
@@ -77,14 +75,13 @@
   - Norm do not use Pattern
   - note about how letrec is handled at lookup-time
 * module system
-- module as value with opaque module_t is not enough -- learn from EOPL
 * partech
 - [partech] rewrite in c
 - [partech] ErrMsg and Span
 - [partech] better report with ErrMsg in context
 * compile with cps
 * sat
-- sat solver vis (how it is vis-ed?)
+- sat solver visualization (how ?)
 * complexity
 - cook's machine for trans algo to lin-algo
 * lambda machine

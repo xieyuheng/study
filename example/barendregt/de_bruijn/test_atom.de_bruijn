@@ -1,0 +1,2 @@
+@show atom(A, "abc")
+@show atom(A, "123")

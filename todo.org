@@ -1,9 +1,7 @@
-- [eopl.lang_checked] fix scope of check for `let rec and`
-- [eopl.lang_infered] infer for `let rec and`
 - [eopl.lang_module]
 - [eopl.lang_class]
 * eopl
-- note about further reading
+- [eopl] note about further reading
 * formal concept analysis
 * method of analytic tableaux
 * formal specification

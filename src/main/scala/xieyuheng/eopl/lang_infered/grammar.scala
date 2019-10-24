@@ -43,18 +43,6 @@ object grammar {
       "let_rec_anno_both" -> List(
         "let", "rec", identifier, "=", "(", identifier, ":", ty, ")", ":", ty, "=", ">", exp,
         exp),
-      "let_rec_mutual" -> List(
-        "let", "rec", identifier, "=", "(", identifier, ")", "=", ">", exp,
-        non_empty_list(mutual_fn), exp),
-      "let_rec_mutual_anno_ret" -> List(
-        "let", "rec", identifier, "=", "(", identifier, ")", ":", ty, "=", ">", exp,
-        non_empty_list(mutual_fn), exp),
-      "let_rec_mutual_anno_arg" -> List(
-        "let", "rec", identifier, "=", "(", identifier, ":", ty, ")", "=", ">", exp,
-        non_empty_list(mutual_fn), exp),
-      "let_rec_mutual_anno_both" -> List(
-        "let", "rec", identifier, "=", "(", identifier, ":", ty, ")", ":", ty, "=", ">", exp,
-        non_empty_list(mutual_fn), exp),
       "sole" -> List("sole"),
       "do" -> List("do", exp, exp),
       "assert_eq" -> List("assert_eq", "(", exp, ",", exp, ")"),
@@ -113,42 +101,6 @@ object grammar {
           Some(ty_matcher(arg_t)), Some(ty_matcher(ret_t)),
           exp_matcher(fn_body),
           exp_matcher(body))},
-      "let_rec_mutual" -> { case List(
-        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body,
-        mutual_fn_list, body) =>
-        val map = non_empty_list_matcher(mutual_fn_matcher)(mutual_fn_list).toMap
-        val map2 = map + (fn_name -> (
-          arg_name, None, None,
-          exp_matcher(fn_body)))
-        LetRecMutual(map2, exp_matcher(body))
-      },
-      "let_rec_mutual_anno_ret" -> { case List(
-        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, ret_t, _, _, fn_body,
-        mutual_fn_list, body) =>
-        val map = non_empty_list_matcher(mutual_fn_matcher)(mutual_fn_list).toMap
-        val map2 = map ++ Map((fn_name, (
-          arg_name, None, Some(ty_matcher(ret_t)),
-          exp_matcher(fn_body))))
-        LetRecMutual(map2, exp_matcher(body))
-      },
-      "let_rec_mutual_anno_arg" -> { case List(
-        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, _, fn_body,
-        mutual_fn_list, body) =>
-        val map = non_empty_list_matcher(mutual_fn_matcher)(mutual_fn_list).toMap
-        val map2 = map ++ Map ((fn_name, (
-          arg_name, Some(ty_matcher(arg_t)), None,
-          exp_matcher(fn_body))))
-        LetRecMutual(map2, exp_matcher(body))
-      },
-      "let_rec_mutual_anno_both" -> { case List(
-        _, _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, ret_t, _, _, fn_body,
-        mutual_fn_list, body) =>
-        val map = non_empty_list_matcher(mutual_fn_matcher)(mutual_fn_list).toMap
-        val map2 = map ++ Map ((fn_name, (
-          arg_name, Some(ty_matcher(arg_t)), Some(ty_matcher(ret_t)),
-          exp_matcher(fn_body))))
-        LetRecMutual(map2, exp_matcher(body))
-      },
       "sole" -> { case List(_) =>
         Sole() },
       "do" -> { case List(_, exp1, body) =>
@@ -159,32 +111,6 @@ object grammar {
         Show(exp_matcher(exp1)) },
     ))
 
-  def mutual_fn: Rule = Rule(
-    "mutual_fn", Map(
-      "and" -> List(
-        "and", identifier, "=", "(", identifier, ")", "=", ">", exp),
-      "and_anno_ret" -> List(
-        "and", identifier, "=", "(", identifier, ")", ":", ty, "=", ">", exp),
-      "and_anno_arg" -> List(
-        "and", identifier, "=", "(", identifier, ":", ty, ")", "=", ">", exp),
-      "and_anno_both" -> List(
-        "and", identifier, "=", "(", identifier, ":", ty, ")", ":", ty, "=", ">", exp),
-    ))
-
-  def mutual_fn_matcher = Tree.matcher[(String, (String, Option[Type], Option[Type], Exp))](
-    "mutual_fn", Map(
-      "and" -> { case List(_, Leaf(fn_name), _, _, Leaf(arg_name), _, _, _, fn_body) =>
-        (fn_name, (arg_name, None, None, exp_matcher(fn_body))) },
-      "and_anno_ret" -> { case List(
-        _, Leaf(fn_name), _, _, Leaf(arg_name), _, _, ret_t, _, _, fn_body) =>
-        (fn_name, (arg_name, None, Some(ty_matcher(ret_t)), exp_matcher(fn_body))) },
-      "and_anno_arg" -> { case List(
-        _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, _, fn_body) =>
-        (fn_name, (arg_name, Some(ty_matcher(arg_t)), None, exp_matcher(fn_body))) },
-      "and_anno_both" -> { case List(
-        _, Leaf(fn_name), _, _, Leaf(arg_name), _, arg_t, _, _, ret_t, _, _, fn_body) =>
-        (fn_name, (arg_name, Some(ty_matcher(arg_t)), Some(ty_matcher(ret_t)), exp_matcher(fn_body))) },
-    ))
 
   def ty: Rule = Rule(
     "ty", Map(

@@ -142,15 +142,6 @@ object eval {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
-      case LetRecMutual(map, body) =>
-        val result = for {
-          result <- eval(body, env.ext_let_rec_mutual(map))
-        } yield result
-        result_maybe_err(result, Err(
-          s"[eval fail]\n" ++
-            s"exp: ${pretty_exp(exp)}\n"
-        ))
-
       case Sole() =>
         Right(ValSole())
 

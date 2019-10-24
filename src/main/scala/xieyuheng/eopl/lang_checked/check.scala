@@ -172,30 +172,6 @@ object check {
             s"exp: ${pretty_exp(exp)}\n"
         ))
 
-      case LetRecMutual(map: Map[String, (String, Type, Type, Exp)], body: Exp) =>
-        val ctx2 = ctx.ext_map(map.map {
-          case (fn_name, (arg_name, arg_t, ret_t, fn_body)) =>
-            (fn_name, TypeArrow(arg_t, ret_t))
-        })
-        // BUG not all arg_name are in scope of all fn_body
-        // TODO
-        val ctx3 = ctx2.ext_map(map.map {
-          case (fn_name, (arg_name, arg_t, ret_t, fn_body)) =>
-            (arg_name, arg_t)
-        })
-        val annotated_return_type_map = map.map {
-          case (fn_name, (arg_name, arg_t, ret_t, fn_body)) =>
-            (fn_name, ret_t)
-        }
-        val result = check_map(ctx3, map).flatMap {
-          case ok =>
-            infer(ctx2, body)
-        }
-        result_maybe_err(result, Err(
-          s"[infer fail]\n" ++
-            s"exp: ${pretty_exp(exp)}\n"
-        ))
-
       case Sole() =>
         Right(TypeSole())
 
@@ -227,31 +203,6 @@ object check {
       case Show(exp1: Exp) =>
         Right(TypeSole())
 
-    }
-  }
-
-  def check(ctx: Ctx, exp: Exp, annotated: Type): Either[Err, Unit] = {
-    infer(ctx, exp).flatMap { case infered =>
-      if (annotated == infered) {
-        Right(())
-      } else {
-        Left(Err(
-          s"[check fail]\n" ++
-            s"annotated type: ${pretty_type(annotated)}\n" ++
-            s"infered type: ${pretty_type(infered)}\n"
-        ))
-      }
-    }
-  }
-
-  def check_map(
-    ctx: Ctx,
-    map: Map[String, (String, Type, Type, Exp)],
-  ): Either[Err, Unit] = {
-    val init_result: Either[Err, Unit] = Right(())
-    map.foldLeft(init_result) {
-      case (result, (fn_name, (arg_name, arg_t, ret_t, body))) =>
-        check(ctx, body, ret_t)
     }
   }
 

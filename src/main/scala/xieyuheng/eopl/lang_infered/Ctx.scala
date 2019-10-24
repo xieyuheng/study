@@ -10,8 +10,4 @@ case class Ctx(map: Map[String, Type] = Map()) {
     Ctx(map + (name -> t))
   }
 
-  def ext_map(map: Map[String, Type]): Ctx = {
-    Ctx(this.map ++ map)
-  }
-
 }

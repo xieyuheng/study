@@ -26,11 +26,6 @@ object pretty {
         s"${pretty_exp(target)}(${pretty_exp(arg)})"
       case LetRec(fn_name, arg_name, arg_t, ret_t, fn_body, body) =>
         s"let rec ${fn_name} = (${arg_name}: ${pretty_type(arg_t)}): ${pretty_type(ret_t)} => ${pretty_exp(fn_body)}\n${pretty_exp(body)}"
-      case LetRecMutual(map: Map[String, (String, Type, Type, Exp)], body: Exp) =>
-        val s = map.map { case (fn_name, (arg_name, arg_t, ret_t, fn_body)) =>
-          s"${fn_name} = (${arg_name}: ${pretty_type(arg_t)}): ${pretty_type(ret_t)} => ${pretty_exp(fn_body)}"
-        }.mkString("\nand ")
-        s"let rec ${s}\n${pretty_exp(body)}"
       case Sole() =>
         s"sole"
       case Do(exp1, body) =>

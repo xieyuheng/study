@@ -29,13 +29,6 @@ object pretty {
         val s1 = pretty_anno_type(anno_arg_t)
         val s2 = pretty_anno_type(anno_ret_t)
         s"let rec ${fn_name} = (${arg_name}${s1})${s2} => ${pretty_exp(fn_body)} ${pretty_exp(body)}"
-      case LetRecMutual(map: Map[String, (String, Option[Type], Option[Type], Exp)], body: Exp) =>
-        val s = map.map { case (fn_name, (arg_name, anno_arg_t, anno_ret_t, fn_body)) =>
-          val s1 = pretty_anno_type(anno_arg_t)
-          val s2 = pretty_anno_type(anno_ret_t)
-          s"${fn_name} = (${arg_name}${s1})${s2} => ${pretty_exp(fn_body)}"
-        }.mkString(" and ")
-        s"let rec ${s} ${pretty_exp(body)}"
       case Sole() =>
         s"sole"
       case Do(exp1, body) =>

@@ -33,7 +33,7 @@ TODO When postfix notation occur we can use stack machine to give semantics.
 
 - **[Claim]** The algebraic structure of the space of simple type is freely generated group with quotation.
 - **[Demonstration]** We can claim this, because we break the arrow type `A -> B` into two `(- A)` and `B`.
-  By "quotation", I mean `{A}`.
+  By "quotation", I mean `{ A }`.
 - **[Example]** TODO
 - **[Note]** We can also say,
   by "simple" we means the space is freely generated,

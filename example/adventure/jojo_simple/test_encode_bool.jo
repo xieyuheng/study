@@ -16,6 +16,9 @@ id = {
   x
 }
 
+// type bool_t = { (- A) (- A) A }
+
+// true : { bool_t }
 true : { (- A) (- A) A }
 true = {
   (let x : A)
@@ -23,6 +26,7 @@ true = {
   x
 }
 
+// false : { bool_t }
 false : { (- A) (- A) A }
 false = {
   (let x : A)
@@ -30,6 +34,7 @@ false = {
   y
 }
 
+// not : { (- bool_t) bool_t }
 not : { (- { (- A) (- A) A }) (- A) (- A) A }
 not = {
   (let a : { (- A) (- A) A })

@@ -108,7 +108,6 @@ Study of language design and implementation
   - An equivalent predicate for jojo, inspired by `nbe`.
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - Two levels of computations -- `exe` and `cut`, where `cut` is simple.
-  - "Simply Typed JoJo Calculus", by Xie Yuheng ([the paper](docs/paper/simply-typed-jojo-calculus.md)).
 - **TODO** [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
   - Two levels of computations -- `exe` and `cut`, where `cut` is as powerful as `exe`.
 

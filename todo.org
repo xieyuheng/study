@@ -37,16 +37,16 @@
   - type system of curry style need type variable
     there is no version of curry style without type variable
 * tartlet
-- lazy eval will be not needed in language with termination check
-- [note] why we *do need* "type directed norm-by-eval" here ?
-- extend tartlet to pie
-- use `TODO` as un-implemented
-- block of let and return
-- be sure about the use of TheVal and friends
-- [test proof] eta conversion: f == (x) => f(x)
-- extend tartlet to define new types
-  - keep it subrecursive, but be generic about data and ind, rec and iter
-- add cumulative (maybe non-cumulative) levels of types -- type_t(n)
+- [tartlet] extend tartlet to pie
+- [tartlet] use `TODO` as un-implemented
+- [tartlet] block of let and return
+- [tartlet] extend tartlet to define new inductive types
+  - keep it subrecursive
+  - generate data and ind, rec and iter
+- [tartlet] add cumulative (maybe non-cumulative) levels of types -- type^n
+- [to be sure] why we *do need* "type directed norm-by-eval" here ?
+- [to be sure] about the use of TheVal and friends
+- [test] eta conversion: f == (x) => f(x)
 * the little typer
 - as test for dependently typed language
 * pure type system

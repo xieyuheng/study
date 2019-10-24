@@ -177,6 +177,8 @@ object check {
           case (fn_name, (arg_name, arg_t, ret_t, fn_body)) =>
             (fn_name, TypeArrow(arg_t, ret_t))
         })
+        // BUG not all arg_name are in scope of all fn_body
+        // TODO
         val ctx3 = ctx2.ext_map(map.map {
           case (fn_name, (arg_name, arg_t, ret_t, fn_body)) =>
             (arg_name, arg_t)

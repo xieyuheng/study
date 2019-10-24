@@ -90,7 +90,8 @@ object grammar {
 
   def mutual_fn: Rule = Rule(
     "mutual_fn", Map(
-      "and" -> List("and", identifier, "=", "(", identifier, ":", ty, ")", ":", ty, "=", ">", exp),
+      "and" -> List(
+        "and", identifier, "=", "(", identifier, ":", ty, ")", ":", ty, "=", ">", exp),
     ))
 
   def mutual_fn_matcher: Tree => (String, (String, Type, Type, Exp)) =

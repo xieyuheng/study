@@ -1,6 +1,5 @@
-- [eopl.lang_infered] `let rec and`
-- [eopl.lang_infered] explicit type var -- upper case identifier
-- [eopl.lang_infered] factor equation out of infer
+- [eopl.lang_checked] fix scope of check for `let rec and`
+- [eopl.lang_infered] infer for `let rec and`
 - [eopl.lang_module]
 - [eopl.lang_class]
 * eopl

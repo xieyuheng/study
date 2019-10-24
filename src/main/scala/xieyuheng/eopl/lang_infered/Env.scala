@@ -42,9 +42,13 @@ sealed trait Env {
     EnvLetRec(fn_name, arg_name, fn_body, rest)
   }
 
-  def ext_let_rec_mutual(map: Map[String, (String, Exp)]): Env = {
+  def ext_let_rec_mutual(map: Map[String, (String, Option[Type], Option[Type], Exp)]): Env = {
     val rest = this
-    EnvLetRecMutual(map, rest)
+    val runtime_map: Map[String, (String, Exp)] = map.map {
+      case (fn_name, (arg_name, anno_arg_t, anno_ret_t, body)) =>
+        (fn_name, (arg_name, body))
+    }
+    EnvLetRecMutual(runtime_map, rest)
   }
 
 }

@@ -232,7 +232,7 @@ object infer {
           }
         }
 
-      case LetRecMutual(map: Map[String, (String, Exp)], body: Exp) =>
+      case LetRecMutual(map: Map[String, (String, Option[Type], Option[Type], Exp)], body: Exp) =>
         ???
 
       case Sole() =>

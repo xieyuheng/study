@@ -108,7 +108,7 @@ Study of language design and implementation
 - [Style Guide](STYLE-GUIDE.md)
   - Observe the style of existing code and respect it.
 - [Code of Conduct](CODE-OF-CONDUCT.md)
-- [Travis CI](https://travis-ci.org/xieyuheng/cicada-study)
+- [Travis CI](https://travis-ci.org/xieyuheng/study)
 
 ## License
 

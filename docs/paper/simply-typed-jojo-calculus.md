@@ -12,10 +12,26 @@
 
 ## Introduction
 
+## A Review of Lambda Calculus
+
+We assume the reader has a basic familiarity with the lambda calculus
+and the concepts of bound variables, alpha-, beta- and eta-reduction.
+
+We give a review of lambda calculus in this section,
+to let the reader be familiar with our notations.
+
+Since lambda application is not associative,
+we use non-symmetrical syntax to avoid ambiguity.
+
+- **[Definition]** lambda expression
+  - variable: `x`
+  - lambda application: `f(x)`
+  - lambda abstraction: `(x) => body`
+
 ## A Review of De Bruijn notation
 
 De Bruijn notation is a useful translation of lambda expression,
-after which the name of a variable binding is placed close to the argument it binds.
+after which the name of a variable binding is placed near to the argument it binds.
 
 - **[Example]** TODO
 
@@ -41,7 +57,5 @@ TODO When postfix notation occur we can use stack machine to give semantics.
   such as conversion relations in the case of lambda expressions.
 
 ## Appendixes
-
-### A Review of Lambda Calculus
 
 ## References

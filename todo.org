@@ -1,20 +1,22 @@
-- [de_bruijn] `let type <name> = ...`
-- [de_bruijn] representing data types
-- [adventure.simple] `type <name> = { ... }`
-- [adventure.simple] representing data types
-- [adventure.simple] paper
+* eopl
 - [eopl.lang_module]
 - [eopl.lang_class]
 - [eopl] note about further reading
+* jojo
+- [adventure.simple] `type <name> = { ... }`
+- [adventure.simple] representing data types
+- [adventure.simple] paper
 - [adventure.counted] annotation for arg_count and ret_count
 - [adventure.counted] infer arg_count and ret_count
 - [adventure.counted] eq by eval
 - [adventure.counted] encode permutation group
-* formal concept analysis
-* method of analytic tableaux
-* formal specification
+- [adventure.jojo_untyped] [bug] tail-call (let x) is not correct
+  - [maybe] use explicit tail call
 * de_bruijn
-- [de_bruijn_logical] view type atom as logic variable and use unification
+- [de_bruijn] `let type <name> = ...`
+- [de_bruijn] representing data types
+- [de_bruijn_logical]
+  - view type atom as logic variable and use unification
   - this should be a different language from [de_bruijn]
 - [de_bruijn] synth
 - theory about equality between lambda terms
@@ -99,3 +101,6 @@
   - An equivalent predicate for jojo, inspired by `nbe`.
 - [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
   - Two levels of computations -- `exe` and `cut`, where `cut` is as powerful as `exe`.
+* formal concept analysis
+* method of analytic tableaux
+* formal specification

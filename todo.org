@@ -1,3 +1,6 @@
+* DIY type theory
+- implement proof checker first
+  and view type checker as generating proofs
 * eopl
 - [eopl.lang_module]
 - [eopl.lang_class]

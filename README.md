@@ -92,7 +92,7 @@ Study of language design and implementation.
 - "Essentials of Programming Languages" (a.k.a. EOPL)
   - by Daniel P. Friedman and Mitchell Wand.
 - "Lambda Calculus with Types"
-  - by Henk Barendregt, Wil Dekkers and Richard Statman.
+  - by Henk Barendregt, Wil Dekkers and Richard Statman. 2010.
 - "Do-it-yourself Type Theory"
   - by Roland Backhouse, Paul Chisholm, Erik Saaman and Grant Malcolm, 1988.
 - "Computation and Reasoning -- A Type Theory for Computer Science"

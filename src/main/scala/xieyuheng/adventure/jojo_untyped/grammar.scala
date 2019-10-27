@@ -9,7 +9,7 @@ object grammar {
   val lexer = Lexer.default
 
   def preserved: List[String] = List(
-    "let", "exe",
+    "exe",
     "cons", "car", "cdr",
     "assert_eq",
     "report_ds",
@@ -23,7 +23,7 @@ object grammar {
   def jo: Rule = Rule(
     "jo", Map(
       "var" -> List(identifier),
-      "let" -> List("(", "let", identifier, ")"),
+      "let" -> List("[", identifier, "]"),
       "jojo" -> List("{", jo_list, "}"),
       "jojo_empty" -> List("{", "}"),
       "define" -> List(identifier, "=", "{", jo_list, "}"),
@@ -47,7 +47,7 @@ object grammar {
     "jo", Map(
       "var" -> { case List(Leaf(name)) =>
         Var(name) },
-      "let" -> { case List(_, _, Leaf(name), _) =>
+      "let" -> { case List(_, Leaf(name), _) =>
         Let(name) },
       "jojo" -> { case List(_, jo_list, _) =>
         JoJo(jo_list_matcher(jo_list)) },

@@ -1,7 +1,5 @@
 * jojo
-- [adventure.jojo_untyped] syntax for explicit tail call
-- [adventure.jojo_untyped] use [x] instead of (let x)
-- [adventure.simple] use [x] instead of (let x)
+- [adventure] syntax for explicit tail call
 - [adventure.simple] `type <name> = { ... }`
 - [adventure.simple] representing data types
 - [adventure.simple] paper

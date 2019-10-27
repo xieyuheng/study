@@ -2,7 +2,7 @@
 "a" cons
 "b" cons
 "c" cons
-(let cba)
+[cba]
 
 cba print ln
 

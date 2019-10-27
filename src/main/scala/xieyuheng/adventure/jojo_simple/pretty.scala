@@ -9,7 +9,7 @@ object pretty {
       case Var(name: String) =>
         name
       case Let(name: String, t: Ty) =>
-        s"(let ${name} : ${pretty_ty(t)})"
+        s"[${name} : ${pretty_ty(t)}]"
       case JoJo(list: List[Jo]) =>
         if (list.length == 0) {
           s"{ }"

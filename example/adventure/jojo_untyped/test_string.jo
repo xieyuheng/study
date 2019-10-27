@@ -1,9 +1,9 @@
 drop = {
-  (let x)
+  [x]
 }
 
 swap = {
-  (let x) (let y)
+  [x] [y]
   x y
 }
 

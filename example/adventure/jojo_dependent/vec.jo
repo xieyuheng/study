@@ -1,7 +1,7 @@
 vec_t : { (- type) (- nat_t) type }
 vec_t = {
-  {let A : type}
-  {let n : nat_t}
+  [A : type]
+  [n : nat_t]
   datatype {
     vec_null : { datacons { n == zero } }
     vec_cons : {
@@ -13,9 +13,9 @@ vec_t = {
 }
 
 vec_append : {
-  (let A : type)
-  (let m : nat_t)
-  (let n : nat_t)
+  [A : type]
+  [m : nat_t]
+  [n : nat_t]
   (- m A vec_t)
   (- n A vec_t)
   m n nat_add A vec_t
@@ -24,13 +24,13 @@ vec_append = {
   (dep A : type)
   (dep m : nat_t)
   (dep n : nat_t)
-  (let x : m A vec_t)
-  (let y : n A vec_t)
+  [x : m A vec_t]
+  [y : n A vec_t]
   x match {
     case vec_null { y }
     case vec_cons {
-      (let prev : nat_t)
-      (let head : A) (let tail : prev A vec_t)
+      [prev : nat_t]
+      [head : A] [tail : prev A vec_t]
       y tail n prev A vec_append
       head prev vec_cons
     }

@@ -1,18 +1,18 @@
 drop : { (- A) }
 drop = {
-  (let x : A)
+  [x : A]
 }
 
 swap : { (- A) (- A) A A }
 swap = {
-  (let x : A)
-  (let y : A)
+  [x : A]
+  [y : A]
   x y
 }
 
 id : { (- A) A }
 id = {
-  (let x : A)
+  [x : A]
   x
 }
 
@@ -21,25 +21,25 @@ id = {
 // true : { bool_t }
 true : { (- A) (- A) A }
 true = {
-  (let x : A)
-  (let y : A)
+  [x : A]
+  [y : A]
   x
 }
 
 // false : { bool_t }
 false : { (- A) (- A) A }
 false = {
-  (let x : A)
-  (let y : A)
+  [x : A]
+  [y : A]
   y
 }
 
 // not : { (- bool_t) bool_t }
 not : { (- { (- A) (- A) A }) (- A) (- A) A }
 not = {
-  (let a : { (- A) (- A) A })
-  (let x : A)
-  (let y : A)
+  [a : { (- A) (- A) A }]
+  [x : A]
+  [y : A]
   x y a exe
 }
 

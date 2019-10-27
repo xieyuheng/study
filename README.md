@@ -85,14 +85,18 @@ Study of language design and implementation.
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - Two levels of computations -- `exe` and `cut`, where `cut` is simple.
 
-### references
+### References
 
-- "Parsing Techniques -- A Practical Guide, Second Edition", <br>
-  by Dick Grune and Ceriel J.H. Jacobs.
-- "Essentials of Programming Languages (a.k.a. EOPL)", <br>
-  by Daniel P. Friedman and Mitchell Wand.
-- "Lambda Calculus with Types", <br>
-  by Henk Barendregt, Wil Dekkers and Richard Statman.
+- "Parsing Techniques -- A Practical Guide"
+  - by Dick Grune and Ceriel J.H. Jacobs.
+- "Essentials of Programming Languages"
+  - a.k.a. EOPL.
+  - by Daniel P. Friedman and Mitchell Wand.
+- "Lambda Calculus with Types"
+  - by Henk Barendregt, Wil Dekkers and Richard Statman.
+- "Do-it-yourself Type Theory"
+  - by Roland Backhouse, Paul Chisholm, Erik Saaman and Grant Malcolm.
+  - 1988.
 
 ## Usage
 

@@ -15,7 +15,7 @@ and_t = (P, Q) => (R: type) -> ((P, Q) -> R) -> R
 conj : (P: type, Q: type, P, Q) -> and_t(P, Q)
 conj = (P, Q, x, y) => (z, f) => f(x, y)
 
-vec_t : (type, nat_t) -> type_t
+vec_t : (type, nat_t) -> type
 vec_t = (A) => datatype {
   vec_null : datacons { n == zero }
   vec_cons : (A, prev: nat_t, vec_t(A, prev)) -> datacons {
@@ -42,7 +42,7 @@ and_t = [P, Q] (R: type) -> ((P, Q) -> R) -> R
 conj : (P: type, Q: type, P, Q) -> and_t(P, Q)
 conj = [P, Q, x, y] [z, f] f(x, y)
 
-vec_t : (type, nat_t) -> type_t
+vec_t : (type, nat_t) -> type
 vec_t = [A] datatype {
   vec_null : datacons { n == zero }
   vec_cons : (A, prev: nat_t, vec_t(A, prev)) -> datacons {

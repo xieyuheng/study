@@ -34,14 +34,8 @@ case class Rs(list: List[Frame] = List()) {
 
   def next(): Rs = {
     val frame = list.head
-    if (frame.index == frame.list.length - 1) {
-      // NOTE tail call
-      drop()
-    } else {
-      val new_frame = frame.copy(index = frame.index + 1)
-      drop()
-        .push(new_frame)
-    }
+    val new_frame = frame.copy(index = frame.index + 1)
+    drop().push(new_frame)
   }
 
 }

@@ -1,11 +1,7 @@
-* DIY type theory
-- implement proof checker first
-  and view type checker as generating proofs
-* eopl
-- [eopl.lang_module]
-- [eopl.lang_class]
-- [eopl] note about further reading
 * jojo
+- [adventure.jojo_untyped] syntax for explicit tail call
+- [adventure.jojo_untyped] use [x] instead of (let x)
+- [adventure.simple] use [x] instead of (let x)
 - [adventure.simple] `type <name> = { ... }`
 - [adventure.simple] representing data types
 - [adventure.simple] paper
@@ -13,8 +9,13 @@
 - [adventure.counted] infer arg_count and ret_count
 - [adventure.counted] eq by eval
 - [adventure.counted] encode permutation group
-- [adventure.jojo_untyped] [bug] tail-call (let x) is not correct
-  - [maybe] use explicit tail call
+* DIY type theory
+- implement proof checker first
+  and view type checker as generating proofs
+* eopl
+- [eopl.lang_module]
+- [eopl.lang_class]
+- [eopl] note about further reading
 * de_bruijn
 - [de_bruijn] `let type <name> = ...`
 - [de_bruijn] representing data types

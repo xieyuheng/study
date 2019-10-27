@@ -89,8 +89,7 @@ Study of language design and implementation.
 
 - "Parsing Techniques -- A Practical Guide"
   - by Dick Grune and Ceriel J.H. Jacobs.
-- "Essentials of Programming Languages"
-  - a.k.a. EOPL.
+- "Essentials of Programming Languages" (a.k.a. EOPL)
   - by Daniel P. Friedman and Mitchell Wand.
 - "Lambda Calculus with Types"
   - by Henk Barendregt, Wil Dekkers and Richard Statman.

@@ -1,5 +1,0 @@
-* set, type, cat
-- what is the difference between set, type and cat ?
-  - set: ==, member relation, subset relation
-  - type: ==, member relation, subtype relation
-  - cat: ==, compose arrow

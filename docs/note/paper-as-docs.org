@@ -1,2 +1,0 @@
-- we can use paper as docs
-  to abstract from details such as error handling in implementation

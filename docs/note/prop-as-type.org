@@ -1,9 +1,12 @@
+* robert lee constable's lecture
+
 - core logic types
 - history
 - beyond core types
 - two way street
   - bring new logic quantifiers from type system to logic
 - uniform validity, uniform forall
+
 * proof of "not not (P or (not P))"
 
   not not (P or (not P))

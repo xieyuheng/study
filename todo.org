@@ -7,6 +7,8 @@
 - [adventure.counted] infer arg_count and ret_count
 - [adventure.counted] eq by eval
 - [adventure.counted] encode permutation group
+* automath
+- jojo is real close to automath
 * DIY type theory
 - implement proof checker first
   and view type checker as generating proofs

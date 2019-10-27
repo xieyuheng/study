@@ -95,8 +95,9 @@ Study of language design and implementation.
 - "Lambda Calculus with Types"
   - by Henk Barendregt, Wil Dekkers and Richard Statman.
 - "Do-it-yourself Type Theory"
-  - by Roland Backhouse, Paul Chisholm, Erik Saaman and Grant Malcolm.
-  - 1988.
+  - by Roland Backhouse, Paul Chisholm, Erik Saaman and Grant Malcolm, 1988.
+- "Computation and Reasoning -- A Type Theory for Computer Science"
+  - by Zhaohui Luo, 1994.
 
 ## Usage
 

@@ -5,9 +5,13 @@ favicon_url: favicon.ico
 google_analytics: # UA-XXXXX-Y
 
 comments:
-  disqus:
+  utterances:
     enable: true
-    shortname: xieyuheng
+    user: xieyuheng
+    repo: study
+  disqus:
+    enable: false
+    shortname: #
   gitalk:
     enable: false
     githubID: # your github id

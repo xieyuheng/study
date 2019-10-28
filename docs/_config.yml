@@ -11,9 +11,11 @@ author: Xie Yuheng
 language: en
 timezone:
 
+
+
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://lang-study.surge.sh
+url: https://lang-study.surge.sh
 root: /
 permalink: :title/
 permalink_defaults:

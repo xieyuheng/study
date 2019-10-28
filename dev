@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+function docs {
+    pushd docs && \
+        rm -rf public && \
+        hexo generate && \
+        surge public lang-study.surge.sh && \
+        popd
+}
+
 function t {
     rm -f target/universal/stage/bin/*
 

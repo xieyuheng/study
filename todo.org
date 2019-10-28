@@ -1,4 +1,9 @@
 * jojo
+- the cut level is stable
+  only [x : A] and (- A)
+  exe level jo in eval is also simple
+  but exe level jo in cut can generate different pattern of cut level jo
+- how to handle inductive type in jojo ?
 - [adventure] syntax for explicit tail call
 - [adventure.simple] `type <name> = { ... }`
 - [adventure.simple] representing data types

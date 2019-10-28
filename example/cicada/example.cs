@@ -1,4 +1,4 @@
-list_t : (type) -> type
+hlist_t : (type) -> type
 list_t = (A) => datatype {
   null : datacons {}
   cons : (A, list_t(A)) -> datacons {}

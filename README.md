@@ -2,8 +2,6 @@
 
 Study of language design and implementation.
 
-- Discussion: http://lang-study.surge.sh
-
 > Remember, <br>
 > an engineer solve problem, <br>
 > an engineer does not want just a religion about how to solve a problem. <br>

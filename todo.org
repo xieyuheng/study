@@ -1,4 +1,8 @@
-modal-lo
+* review
+- [review] Inductive Families
+- [review] Do-it-yourself Type Theory
+- [review] Intuitionistic Type Theory
+- [review] Constructive Mathematics and Computer Programming
 * jojo
 - the cut level is stable
   only [x : A] and (- A)

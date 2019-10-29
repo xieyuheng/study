@@ -31,6 +31,16 @@ and thus not all ways of forming sets in Martin-Löf's type theory.
 
 # 2 The Theory of Logical Types
 
+The theory is formulated in the style of  Martin-Loef's type theory
+with four forms of judgements:
+
+``` js
+P type
+p : P
+p == q : P
+P == Q
+```
+
 Rules of type formation:
 
 ``` js
@@ -80,7 +90,13 @@ Moreover, equality is an equivalence relation
 and we may everywhere substitute equals for equals:
 
 ``` js
-TODO
+A type
+---------
+A == A
+
+p : A
+---------
+p == p : A
 ```
 
 # 3 A Scheme for Inductive Definitions

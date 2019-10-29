@@ -47,13 +47,13 @@ thus reduce the rules to remember when study the theory.
 
 - **[Xie]** Some preliminary remarks about the notation.
 
-  | Expression type         | Example expression     |
-  |-------------------------|------------------------|
-  | Abstraction             | `(x) => f(x)`          |
-  | Application             | `f(x)`                 |
-  | Product type            | `A * B`                |
-  | Sum type                | `A + B`                |
-  | Arrow type              | `(A) -> B`             |
+  | Expression type         | Example expression |
+  |-------------------------|--------------------|
+  | Abstraction             | `(x) => f(x)`      |
+  | Application             | `f(x)`             |
+  | Product type            | `A * B`            |
+  | Sum type                | `A + B`            |
+  | Arrow type              | `(A) -> B`         |
   | Dependent function type | `forall (P, Q[x])` |
   | Dependent product type  | `exists (P, Q[x])` |
 

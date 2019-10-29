@@ -14,8 +14,7 @@ and deriving *elimination rule* and *computation rule*
 from *formation rule* and *introduction rule*,
 thus reduce the rules to remember when study the theory.
 
-- **[Xie]**
-  When designing or studying a formal language,
+- **[Xie]** When designing or studying a formal language,
   one has to answer three questions,
   - What are the primitives?
   - How to do composition?
@@ -167,8 +166,7 @@ We have divided the discussion into three parts.
   - Equality type.
   - Subtype.
 
-- **[Xie]**
-  The classification of types is all about equational theory.
+- **[Xie]** The classification of types is all about equational theory.
 
 ## 3.1 Free Type Structures
 
@@ -281,8 +279,7 @@ the third judgement form in the theory -- that is, the form
 p == q : P
 ```
 
-- **[Xie]**
-  When analysing or implementing the computation rules,
+- **[Xie]** When analysing or implementing the computation rules,
   sometimes we need to add direction to the equality judgement,
   and to view it as reduction.
 
@@ -342,7 +339,8 @@ succ(n) : nat_t
 
 ### 3.1.3 Disjoint Sums
 
-- **[Xie]** We can just say "Sum" instead of "Disjoint Sum", and say "Sum" is "Disjoint Union".
+- **[Xie]** We can just say "Sum" instead of "Disjoint Sum",
+  and say "Sum" is "Disjoint Union".
 
 ``` js
 A type
@@ -420,8 +418,7 @@ The introduction rule of arrow type (`lambda-introduction`)
 is different from that of `list_t` or `nat_t`,
 for the premise `{ x : A |- f(x) : B }` has a hypothesis (`x : A`).
 
-- **[Xie]**
-  *F-algebra* and *F-coalgebra* generalize this.
+- **[Xie]** *F-algebra* and *F-coalgebra* generalize this.
   Would it be easier to describe them in jojo?
 
 ## 3.2 More on Equality and Type Judgements
@@ -437,6 +434,9 @@ b : A
 --------------------- // eqv-formation
 eqv_t(A, a, b) type
 ```
+
+- **[Xie]** Note that `a == b : A` is a judgement of the system,
+  while `eqv_t(A, a, b)` is a inductively defined type.
 
 ### 3.2.3 General Rules
 

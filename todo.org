@@ -1,8 +1,18 @@
 * review
-- [review] Inductive Families
-- [review] Do-it-yourself Type Theory
-- [review] Intuitionistic Type Theory
+- [review] [finish] Inductive Families
+- [review] [finish] Do-it-yourself Type Theory
+- [review] [finish] Intuitionistic Type Theory
+- [review] [first part] lambda-calculus-with-types
 - [review] Constructive Mathematics and Computer Programming
+* paper
+- [deduction] try to use the syntax for natural deduction we learned from DIYTT
+  to formalize deduction of JoJo Calculus
+- [paper] Simply Typed JoJo Calculus
+* deduction
+- [deduction] specify the syntax
+- [deduction] try the deduction syntax on other logic (modal logic)
+* sequent
+- [sequent] syntax for sequent calculus style deduction
 * jojo
 - the cut level is stable
   only [x : A] and (- A)
@@ -13,7 +23,6 @@
 - [adventure] syntax for explicit tail call
 - [adventure.simple] `type <name> = { ... }`
 - [adventure.simple] representing data types
-- [adventure.simple] paper
 - [adventure.counted] annotation for arg_count and ret_count
 - [adventure.counted] infer arg_count and ret_count
 - [adventure.counted] eq by eval

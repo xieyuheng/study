@@ -41,6 +41,9 @@ A : set
 --------
 A type
 
+// The rule above does not make the property `one object only has one type` invalid
+//   because the judgement `A type` is not `A : type`.
+
 A type
 { a : A |- T[a] type }
 -----------------------

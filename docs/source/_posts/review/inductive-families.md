@@ -31,6 +31,53 @@ and thus not all ways of forming sets in Martin-Löf's type theory.
 
 # 2 The Theory of Logical Types
 
+Rules of type formation:
+
+``` js
+--------
+set type
+
+A : set
+--------
+A type
+
+A type
+{ a : A |- T[a] type }
+-----------------------
+(a : A) -> T[a] type
+```
+The rules of object formation:
+
+``` js
+{ a : A |- p[a] : T[a] }
+-----------------------------
+(a) => p[a] : (a: A) -> T[a]
+
+p : (a : A) -> T[a]
+q : A
+--------------------
+p(q) : T[q]
+```
+
+The equality rules are typed beta- and eta-conversion:
+
+``` js
+
+q : A
+{ a : A |- p(q) : T[q] }
+----------------------------------------
+{ (a) => p(a) } (q) == p(q) : T[q]
+
+p : (a : A) -> T[a]
+------------------------------------
+p == (a) => p(a) : (a : A) -> T[a]
+```
+
+Moreover, equality is an equivalence relation
+and we may everywhere substitute equals for equals:
+
+``` js
 TODO
+```
 
 # 3 A Scheme for Inductive Definitions

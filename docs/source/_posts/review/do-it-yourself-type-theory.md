@@ -50,13 +50,13 @@ thus reduce the rules to remember when study the theory.
 
   | Expression type         | Example expression     |
   |-------------------------|------------------------|
-  | Abstraction             | `[x] f(x)`             |
+  | Abstraction             | `(x) => f(x)`          |
   | Application             | `f(x)`                 |
   | Product type            | `A * B`                |
   | Sum type                | `A + B`                |
   | Arrow type              | `(A) -> B`             |
-  | Dependent function type | `forall (P, [x] Q(x))` |
-  | Dependent product type  | `exists (P, [x] Q(x))` |
+  | Dependent function type | `forall (P, Q[x])` |
+  | Dependent product type  | `exists (P, Q[x])` |
 
 ## 2.1 The Membership Judgement Form
 
@@ -76,7 +76,7 @@ A type
 
 { x : A |- f(x) : B }
 ------------------------ // lambda-introduction
-[x] f(x) : (A) -> B
+(x) => f(x) : (A) -> B
 
 a : A
 f : (A) -> B
@@ -95,7 +95,7 @@ inr(b) : A + B
 Example proof:
 
 ``` js
-[f] f(inr([x] f(inl(x)))) : ((A + ((A) -> B)) -> B) -> B
+(f) => f(inr((x) => f(inl(x)))) : ((A + ((A) -> B)) -> B) -> B
 ```
 
 Example deduction steps:
@@ -108,11 +108,11 @@ Example deduction steps:
     inl(x) : A + ((A) -> B)
     f(inl(x)) : B
   }
-  [x] f(inl(x)) : (A) -> B
-  inr([x] f(inl(x))) : A + ((A) -> B)
-  f(inr([x] f(inl(x)))) : B
+  (x) => f(inl(x)) : (A) -> B
+  inr((x) => f(inl(x))) : A + ((A) -> B)
+  f(inr((x) => f(inl(x)))) : B
 }
-[f] f(inr([x] f(inl(x)))) : ((A + ((A) -> B)) -> B) -> B
+(f) => f(inr((x) => f(inl(x)))) : ((A + ((A) -> B)) -> B) -> B
 ```
 
 If we replace `B` by `absurd_t`,
@@ -241,10 +241,10 @@ list_elim(x, y, z) : C(x)
 ```
 
 ``` js
-list_append(l, m) = list_elim(l, m, [x, _, h] cons(x, h))
+list_append(l, m) = list_elim(l, m, (x, _, h) => cons(x, h))
 
 list_append : (list_t(A), list_t(A)) -> list_t(A)
-list_append = [l, m] list_elim(l, m, [x, _, h] cons(x, h))
+list_append = (l, m) => list_elim(l, m, (x, _, h) => cons(x, h))
 
 proof {
   { l : list_t(A)
@@ -256,8 +256,8 @@ proof {
       |----------------
       cons(x, h) : list_t(A)
     }
-    [x, _, h] cons(x, h) : list_t(A)
-    list_elim(l, m, [x, _, h] cons(x, h)) : list_t(A)
+    (x, _, h) => cons(x, h) : list_t(A)
+    list_elim(l, m, (x, _, h) => cons(x, h)) : list_t(A)
   }
   list_append : (list_t(A), list_t(A)) -> list_t(A)
 }
@@ -402,7 +402,7 @@ B type
 
 { x : A |- f(x) : B }
 ------------------------ // lambda-introduction
-[x] f(x) : (A) -> B
+(x) => f(x) : (A) -> B
 
 a : A
 f : (A) -> B
@@ -412,7 +412,7 @@ f(a) : B
 a : A
 { x : A |- f(x) : B }
 ---------------------------- // lambda-computation (beta-reduction)
-{ [x] f(x) } (a) == f(a) : B
+{ (x) => f(x) } (a) == f(a) : B
 ```
 
 We observe that we can not follow the pattern of "Free Type Structures" any more.
@@ -555,7 +555,7 @@ We are interested only in whether they are inhabited.
 Examples are
 - `eqv_t(A, x, y)` only has element `same`.
 - `absurd_t` has no element.
-- `A -> absurd_t` only has element `[x] x`.
+- `A -> absurd_t` only has element `(x) => x`.
 
 ### 3.4.2 Information Loss: The Subset Type
 
@@ -613,7 +613,7 @@ but the information about the index has been lost.
 ### 3.4.3 Information Loss: The Polymorphic Function Type
 
 We know arrow type -- `(A) -> B` can be viewed as special case of
-dependent function type -- `forall (P, [x] Q(x))`,
+dependent function type -- `forall (P, Q[x])`,
 where `Q` does not dependent on `x`.
 
 This can also be viewed as information loss.
@@ -639,7 +639,7 @@ whose objects are constant functions.
 ``` js
 { x : A |- b(x) : B(x) }
 --------------------------- // forall-introduction
-[x] b(x) : forall (A, B)
+(x) => b(x) : forall (A, B)
 
 { x : A |- b : B(x) }
 --------------------------- // intersection-introduction
@@ -669,7 +669,7 @@ b : B(a)
 The polymorphic identity function is an example.
 
 ``` js
-[x] x : intersection_t(univ(1), [A] A => A)
+(x) => x : intersection_t(univ(1), (A) => (A) -> A)
 ```
 
 TODO

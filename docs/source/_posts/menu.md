@@ -7,5 +7,5 @@
   * [Intuitionistic Type Theory](/review/intuitionistic-type-theory)
   * [Inductive Families](/review/inductive-families)
 * Note
-  * [Language implementation tricks](/note/language-implementation-tricks)
+  * [Language Implementation Tricks](/note/language-implementation-tricks)
   * [Four Simple Questions for Studying a Subject](/note/four-simple-questions-for-studying-a-subject)

@@ -43,35 +43,43 @@
 
   for example, the rule of function application:
 
+  ``` js
   ctx |- f: A -> B
   ctx |- x: A
   ------------
   ctx |- f(x): B
+  ```
 
   we need infer to check function application,
   and if we have infer, we can also infer the type of function application.
   thus for rule of function application we use infer.
 
+  ``` js
   [infer] ctx |- f: A -> B
   [check] ctx |- x: A
   ------------
   [infer] ctx |- f(x): B
+  ```
 
   we examine our rules recursively and do infer as far as possible.
   and for those left we do check.
 
   but the rule of (curry's) function abstraction:
 
+  ``` js
   ctx, x: A |- e: B
   ------------
   ctx |- (x) => e: A -> B
+  ```
 
   we can not possibly infer the type of a bound variable x.
   thus we do check for the rule of function abstraction.
 
+  ``` js
   [check] ctx, x: A |- e: B
   ------------
   [check] ctx |- (x) => e: A -> B
+  ```
 
   function abstraction is the constructor of function type,
   function application is the eliminator of function type,
@@ -86,29 +94,35 @@
 
   for elimination rules the pattern is
 
+  ``` js
   [infer] premise about target
   [check] premise
   [check] premise
   [check] ...
   ----------
   [infer] conclusion
+  ```
 
   for construction rules the pattern is
 
+  ``` js
   [check] premise
   [check] premise
   [check] ...
   ----------
   [check] conclusion
+  ```
 
 - can we just provide enough information in the syntax.
   for example, use church's typed lambda calculus instead of curry's typed lambda calculus ?
   in church's typed lambda calculus, can we infer all the way down ?
   is this true for all the rules about constructor ?
 
+  ``` js
   [infer] ctx, x: A |- e: B
   ------------
   [infer] ctx |- (x: A) => e: A -> B
+  ```
 
   we do not need to annotate the return type of function
 
@@ -119,6 +133,7 @@
 
   the dependent version of the rule of function application
 
+  ``` js
   ctx |- f: A -> B
   ctx |- x: A
   val_eq(val_apply(B, x), T)
@@ -136,19 +151,24 @@
   //   to maintain lexical scope
   ------------
   [infer] ctx |- f(x): T
+  ```
 
 - note about the duality (or variance) between
   premise and conclusion in inference rule
 
+  ``` js 
   premise
   ----------
   conclusion
+  ```
 
   is like function of type premise -> conclusion
 
+  ``` js 
   [check] premise
   ----------
   [infer] conclusion
+  ```
 
   can be read as,
   if we can implement check for premise,

@@ -1,11 +1,11 @@
 import * from "../basic/nat.cic"
 
-datatype vec_t(A: type_t, length: nat_t) {
+datatype vec_t(A: type, length: nat_t) {
   case vec_null_t(
-    A: type_t,
+    A: type,
     length: nat_t = zero_t)
   case vec_cons_t(
-    A: type_t,
+    A: type,
     prev: nat_t,
     length: nat_t = succ_t(prev),
     head: A,
@@ -13,7 +13,7 @@ datatype vec_t(A: type_t, length: nat_t) {
 }
 
 fn vec_append(
-  A: type_t,
+  A: type,
   m: nat_t,
   n: nat_t,
   x: vec_t(A, m),
@@ -28,8 +28,8 @@ fn vec_append(
 }
 
 fn vec_map(
-  A: type_t,
-  B: type_t,
+  A: type,
+  B: type,
   n: nat_t,
   f: (A) -> B,
   vec: vec_t(A, n),

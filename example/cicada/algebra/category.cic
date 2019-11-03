@@ -1,7 +1,7 @@
 class category_t {
-  let object_t: type_t
+  let object_t: type
 
-  fn morphism_t(object_t, object_t): type_t
+  fn morphism_t(object_t, object_t): type
 
   fn id(a: object_t): morphism_t(a, a)
 
@@ -41,11 +41,11 @@ class category_t {
     ): eqv_t(f, g)
   }
 
-  fn left_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type_t = {
+  fn left_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type = {
     eqv_t(compose(f, g), id(a))
   }
 
-  fn right_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type_t = {
+  fn right_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type = {
     eqv_t(compose(g, f), id(b))
   }
 

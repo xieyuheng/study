@@ -1,3 +1,11 @@
+* cicada
+- be sure about syntax for inductive type definition
+  mostly about constrains on return type
+- explicit implicit arguments
+- better function call syntax
+- keep `let` and `fn`
+- no `extends` (no subtype)
+- formalize category theory
 * deduction
 - [deduction] specify the syntax
 - [deduction] try the deduction syntax on other logic (modal logic)

@@ -1,3 +1,8 @@
+* inductive type
+- we need two languages,
+  with arbitrary inductive type definition
+  and arbitrary recursive function.
+  because we need such languages to do experiments.
 * cicada
 - be sure about syntax for inductive type definition
   mostly about constrains on return type

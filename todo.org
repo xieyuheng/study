@@ -1,7 +1,3 @@
-* paper
-- [deduction] try to use the syntax for natural deduction we learned from DIYTT
-  to formalize deduction of JoJo Calculus
-- [paper] Simply Typed JoJo Calculus
 * deduction
 - [deduction] specify the syntax
 - [deduction] try the deduction syntax on other logic (modal logic)

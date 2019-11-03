@@ -1,0 +1,41 @@
+// The set theory of Errett Bishop
+// the structure of set is all about the basic function space
+
+class set_t (
+  element_t : type
+  eqv_t : (element_t element_t) -> type
+)
+
+class set_morphism_t (
+  ante : type
+  succ : type
+  morphism : (ante) -> succ
+)
+
+class set_morphism_eqv_t (
+  lhs : set_morphism_t (a b)
+  rhs : set_morphism_t (a b)
+  morphism_eqv : (x : a) -> eqv_t (lhs.morphism (x) rhs.morphism (x))
+)
+
+set_category : category_t
+set_category = category_c {
+  object_t = type
+  arrow_t (a b) = set_morphism_t (a b)
+  arrow_eqv_t (lhs rhs) = set_morphism_eqv_t (lhs rhs)
+  identity = set_morphism_c {
+    morphism = nop
+  }
+  compose (f g) = set_morphism_c {
+    morphism = function_compose (f.morphism g.morphism)
+  }
+  identity_neutral_left (_) = set_morphism_eqv_c {
+    morphism_eqv (_) = eqv_c
+  }
+  identity_neutral_right (_) = set_morphism_eqv_c {
+    morphism_eqv (_) = eqv_c
+  }
+  compose_associative (_ _ _) = set_morphism_eqv_c {
+    morphism_eqv (_) = eqv_c
+  }
+}

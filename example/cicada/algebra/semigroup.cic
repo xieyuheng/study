@@ -1,0 +1,5 @@
+class semigroup_t {
+  let E: type_t
+  fn mul(x: E, y: E): E
+  fn associative(x: E, y: E, z: E): eqv_t(mul(x, mul(y, z)), mul(mul(x, y), z))
+}

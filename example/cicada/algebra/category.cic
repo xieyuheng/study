@@ -1,0 +1,58 @@
+class category_t {
+  let object_t: type_t
+
+  fn morphism_t(object_t, object_t): type_t
+
+  fn id(a: object_t): morphism_t(a, a)
+
+  // fn compose(f: morphism_t(a, b), g: morphism_t(b, c)): morphism_t(a, c)
+  fn compose(
+    a: object_t,
+    b: object_t,
+    c: object_t,
+    f: morphism_t(a, b),
+    g: morphism_t(b, c),
+  ): morphism_t(a, c)
+
+  fn left_id(f: morphism_t(a, b)): eqv_t(compose(id(a), f), f)
+  fn right_id(f: morphism_t(a, b)): eqv_t(compose(f, id(b)), f)
+
+  fn associative(
+    f: morphism_t(a, b),
+    g: morphism_t(b, c),
+    h: morphism_t(c, d),
+  ): eqv_t(compose(f, compose(g, h)), compose(compose(f, g), h))
+
+  class monomorphism_t {
+    let mono: morphism_t(a, b)
+    fn right_cancelable(
+      f: morphism_t(c, a),
+      g: morphism_t(c, a),
+      eqv_t(compose(f, mono), compose(g, mono)),
+    ): eqv_t(f, g)
+  }
+
+  class epimorphism_t {
+    let epi: morphism_t(a, b)
+    fn left_cancelable(
+      f: morphism_t(b, c),
+      g: morphism_t(b, c),
+      eqv_t(compose(epi, f), compose(epi, g)),
+    ): eqv_t(f, g)
+  }
+
+  fn left_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type_t = {
+    eqv_t(compose(f, g), id(a))
+  }
+
+  fn right_inverse_t(f: morphism_t(a, b), g: morphism_t(a, b)): type_t = {
+    eqv_t(compose(g, f), id(b))
+  }
+
+  class isomorphism_t {
+    let iso: morphism_t(a, b)
+    let inv: morphism_t(b, a)
+    let left_inverse: left_inverse_t(iso, inv)
+    let right_inverse: right_inverse_t(iso, inv)
+  }
+}

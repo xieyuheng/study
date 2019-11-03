@@ -1,0 +1,108 @@
+note {
+  preorder is a thin category
+  with at most one morphism from an object to another.
+}
+
+class preorder_t (
+  t : type
+
+  pre_t : (t t) -> type
+
+  reflexive : (a : t) -> pre_t (a a)
+
+  transitive : (
+    pre_t (:a :b)
+    pre_t (:b :c)
+  ) -> pre_t (:a :c)
+)
+
+class partial_order_t
+extends (super : preorder_t) (
+  eqv_t : (super.t super.t) -> type
+
+  anti_symmetric : (
+    super.pre_t (:a :b)
+    super.pre_t (:b :a)
+  ) -> eqv_t (:a :b)
+)
+
+class eqv_relation_t
+extends (super : preorder_t) (
+  symmetric : (super.pre_t (:a :b)) -> super.pre_t (:b :a)
+)
+
+class total_order_t
+extends (super : partial_order_t) (
+  connex : (
+    a : super.t
+    b : super.t
+  ) -> super.pre_t (a b) or super.pre_t (b a)
+)
+
+
+preorder_morphism_t : type
+preorder_morphism_t = conj {
+  ante : preorder_t
+  succ : preorder_t
+
+  morphism : (ante.element_t) -> succ.element_t
+
+  morphism_respect_pre_relation : (ante.pre_t (x y))
+    -> succ.pre_t (morphism (x) morphism (y))
+}
+
+preorder_morphism_eqv_t : type
+preorder_morphism_eqv_t = conj {
+  lhs : preorder_morphism_t (a b)
+  rhs : preorder_morphism_t (a b)
+
+  morphism_eqv : (x : a.element_t)
+    -> eqv_t (lhs.morphism (x) rhs.morphism (x))
+}
+
+preorder_category : category_t
+preorder_category = category_c {
+  object_t : type
+  object_t = preorder_t
+
+  arrow_t : (preorder_t preorder_t) -> type
+  arrow_t (a b) = preorder_morphism_t (a b)
+
+  arrow_eqv_t : (
+    preorder_morphism_t (a b)
+    preorder_morphism_t (a b)
+  ) -> type
+  arrow_eqv_t (lhs rhs) = preorder_morphism_eqv_t (lhs rhs)
+
+  identity : (a :: preorder_t)
+    -> preorder_morphism_t (a a)
+  identity = preorder_morphism_c {
+    morphism = nop
+    morphism_respect_pre_relation = nop
+  }
+
+  compose : (
+    preorder_morphism_t (a b)
+    preorder_morphism_t (b c)
+  ) -> preorder_morphism_t (a c)
+  compose (f g) = preorder_morphism_c {
+    morphism = function_compose (f.morphism g.morphism)
+    morphism_respect_pre_relation = {
+      function_compose (
+        f.morphism_respect_pre_relation
+        g.morphism_respect_pre_relation)
+    }
+  }
+
+  identity_neutral_left (f) = preorder_morphism_eqv_c {
+    morphism_eqv (_) = eqv_c
+  }
+
+  identity_neutral_right (f) = preorder_morphism_eqv_c {
+    morphism_eqv (_) = eqv_c
+  }
+
+  compose_associative (f g h) = preorder_morphism_eqv_c {
+    morphism_eqv (_) = eqv_c
+  }
+}

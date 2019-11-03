@@ -1,0 +1,63 @@
+class probability_space_t (
+  sample_t : type
+  event_t = set_t (sample_t)
+  prob : (event_t) -> unit_interval_t
+  nonnegative : (x : event_t) -> prob (x) >= 0
+  normalization : prob (sample_t) == 1
+  additivity : (
+    x : event_t
+    y : event_t
+    x ^ y == empty_set
+  ) -> prob (x + y) == prob (x) + prob (y)
+  countable_additivity : (
+    f : (nat_t -> event_t)
+    [todo]
+  ) -> [todo]
+)
+
+class random_variable_t (
+  space : probability_space_t
+  state_t : type
+  var : (space.sample_t) -> state_t
+) {
+  .mass : (state_t) -> unit_interval_t
+  .mass = (state) => space.prob (var.reverse (state))
+
+  .mean : () -> state_t
+  .mean = () => state_t.sum_up ((x) => x * mass (x))
+
+  // it assumed that state_t has `sum_up` API
+  //   and element in state_t
+  //   can be product with number in unit_interval_t
+
+  .variance : () -> state_t
+  .variance = sub (mean ()) .power (2) .mean
+
+  // it assumed that
+  //   one can product two elements in state_t
+
+  // .sub
+  // .power
+}
+
+class random_field_t (
+  space : probability_space_t
+  state_t : type
+  index_t : type
+  idx : (index_t) -> random_variable_t (space, state_t)
+) {
+  .as_random_variable_t () : random_variable_t
+  .as_random_variable_t () = random_variable_c (
+    space = space
+    state_t = (index_t) -> state_t
+    var : (space.sample_t) -> (index_t) -> state_t
+    var = (sample) => (index) => idx (index) .var (sample)
+  )
+
+  .law : (state_t) -> unit_interval_t
+  .law = as_random_variable_t .mass
+}
+
+// note the use of function type here
+//   we might need yoneda embedding
+//   to develop measure of function space

@@ -1,0 +1,16 @@
+class functor_t {
+  let C: category_t
+  let D: category_t
+
+  fn map(a: C.object_t): D.object_t
+  fn fmap(f: C.morphism_t(a, b)): D.morphism_t(map(a), map(b))
+
+  fn fmap_respect_then(
+    f: C.morphism_t(a, b),
+    g: C.morphism_t(b, c),
+  ): eqv_t(fmap(C.compose(f, g)), D.compose(fmap(f), fmap(g)))
+
+  fn fmap_respect_id(
+    a: C.object_t
+  ): eqv_t(fmap(C.id(a)), D.id(map(a)))
+}

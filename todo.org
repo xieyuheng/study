@@ -1,6 +1,4 @@
 * cicada
-- `new` for object creation
-- no `extends` (no subtype)
 - formalize category theory
 - put category semantics into action?
   action of implementing type system and programming language.

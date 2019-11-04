@@ -16,13 +16,13 @@ class group_hom_t {
     H.mul(hom(x), hom(y)))
 }
 
-id_group_hom(G: group_t): group_hom_t = group_hom_t(
+id_group_hom(G: group_t): group_hom_t = new group_hom_t(
   G, G,
   (x: G.E): G.E => x,
   (x: G.E, y: G.E): TODO => same(G.mul(x, y)),
 )
 
-group_category: category_t = category_t(
+group_category: category_t = new category_t(
   group_t,
   group_hom_t,
   id_group_hom,

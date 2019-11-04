@@ -5,19 +5,15 @@ class category_t {
 
   id(a: object_t): morphism_t(a, a)
 
-  // compose(f: morphism_t(a, b), g: morphism_t(b, c)): morphism_t(a, c)
-  compose(
-    a: object_t,
-    b: object_t,
-    c: object_t,
+  compose[a: object_t, b: object_t, c: object_t](
     f: morphism_t(a, b),
     g: morphism_t(b, c),
   ): morphism_t(a, c)
 
-  left_id(f: morphism_t(a, b)): eqv_t(compose(id(a), f), f)
-  right_id(f: morphism_t(a, b)): eqv_t(compose(f, id(b)), f)
+  left_id[a: object_t, b: object_t](f: morphism_t(a, b)): eqv_t(compose(id(a), f), f)
+  right_id[a: object_t, b: object_t](f: morphism_t(a, b)): eqv_t(compose(f, id(b)), f)
 
-  associative(
+  associative[a: object_t, b: object_t, c: object_t, d: object_t](
     f: morphism_t(a, b),
     g: morphism_t(b, c),
     h: morphism_t(c, d),

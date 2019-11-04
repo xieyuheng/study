@@ -1,10 +1,10 @@
 class pre_order_t {
-  let E: type
-  fn pre_t(E, E): type
-  fn reflexive(a: E): pre_t(a, a)
-  fn transitive(pre_t(a, b), pre_t(b, c)): pre_t(a, c)
+  E: type
+  pre_t(E, E): type
+  reflexive(a: E): pre_t(a, a)
+  transitive(pre_t(a, b), pre_t(b, c)): pre_t(a, c)
 
-  fn strict_pre_t(a: E, b: E): type =
+  strict_pre_t(a: E, b: E): type =
     cons(pre_t(a, b), not_eqv_t(a, b))
 }
 

@@ -1,6 +1,5 @@
 * cicada
 - `new` for object creation
-- keep `let` and `fn`
 - no `extends` (no subtype)
 - formalize category theory
 - put category semantics into action?

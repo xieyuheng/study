@@ -5,7 +5,7 @@ datatype vec_t(A: type, length: nat_t) {
   case vec_cons[n: nat_t](head: A, tail: vec_t(A, n)): vec_t(A, succ(n))
 }
 
-fn vec_append[A: type, m: nat_t, n: nat_t](
+vec_append[A: type, m: nat_t, n: nat_t](
   x: vec_t(A, m),
   y: vec_t(A, n),
 ): vec_t(A, nat_add(m, n)) = {
@@ -15,7 +15,7 @@ fn vec_append[A: type, m: nat_t, n: nat_t](
   }
 }
 
-fn vec_map[A: type, B: type, n: nat_t](
+vec_map[A: type, B: type, n: nat_t](
   f: (A) -> B,
   x: vec_t(A, n),
 ): vec_t(B, n) = {
@@ -25,10 +25,10 @@ fn vec_map[A: type, B: type, n: nat_t](
   }
 }
 
-let three_zeros: vec_t(nat_t, three) = {
+three_zeros: vec_t(nat_t, three) = {
   vec_cons(zero, vec_cons(zero, vec_cons(zero, vec_null)))
 }
 
-let three_ones: vec_t(nat_t, three) = {
+three_ones: vec_t(nat_t, three) = {
   vec_cons(one, vec_cons(one, vec_cons(one, vec_null)))
 }

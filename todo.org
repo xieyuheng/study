@@ -1,5 +1,5 @@
 * inductive type
-- we need two languages,
+- we need two implement languages (one for cicada, one for jojo),
   with arbitrary inductive type definition
   and arbitrary recursive function.
   because we need such languages to do experiments.
@@ -11,6 +11,12 @@
 - keep `let` and `fn`
 - no `extends` (no subtype)
 - formalize category theory
+- put category semantics into action?
+  action of implementing type system and programming language.
+- remember that, the design of cicada is to provide a language
+  to study category theory more formally,
+  maybe we can not implement cicada yet,
+  but it still worth using it.
 * deduction
 - [deduction] specify the syntax
 - [deduction] try the deduction syntax on other logic (modal logic)

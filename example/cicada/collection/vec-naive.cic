@@ -1,5 +1,3 @@
-import * from "../basic/nat.cic"
-
 datatype vec_t(A: type, length: nat_t) {
   case vec_null_t(
     A: type,

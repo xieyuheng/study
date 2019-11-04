@@ -2,8 +2,8 @@ import * from "../basic/bool.cic"
 import * from "../basic/nat.cic"
 
 datatype list_t(A: type) {
-  case null_t(A: type)
-  case cons_t(A: type, head: A, tail: list_t(A))
+  case null_t: list_t(A)
+  case cons_t(head: A, tail: list_t(A)): list_t(A)
 }
 
 fn list_length(list: list_t): nat_t = {
@@ -28,16 +28,16 @@ fn list_map(A: type, B: type, f: (A) -> B, list: list_t(A)): list_t(B) = {
 }
 
 let three_zeros: list_t(nat_t) =
-  cons_t(nat_t, zero,
     cons_t(nat_t, zero,
-      cons_t(nat_t, zero,
-        null_t(nat_t))))
+           cons_t(nat_t, zero,
+                  cons_t(nat_t, zero,
+                         null_t)))
 
 let three_ones: list_t(nat_t) =
-  cons_t(nat_t, one,
     cons_t(nat_t, one,
-      cons_t(nat_t, one,
-        null_t(nat_t))))
+           cons_t(nat_t, one,
+                  cons_t(nat_t, one,
+                         null_t)))
 
 @assert_eq list_length(null_t) zero
 @assert_eq list_length(three_zeros) three

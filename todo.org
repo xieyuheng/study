@@ -119,7 +119,7 @@
   - The language `jojo_untyped` plus annotation for number of arguments and number of return values.
   - An equivalent predicate for jojo, inspired by `nbe`.
 - [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
-  - Two level of composition -- `exe` and `cut`, where `cut` is as powerful as `exe`.
+  - Two level of compositions -- `exe` and `cut`, where `cut` is as powerful as `exe`.
 * formal concept analysis
 * method of analytic tableaux
 * formal specification

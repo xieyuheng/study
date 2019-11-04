@@ -83,7 +83,7 @@ Study of language design and implementation.
     implemented by stack machine and threaded code techniques, <br>
     which is commonly used for [Forth (programming language)](https://en.wikipedia.org/wiki/Forth_(programming_language)).
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
-  - Two levels of computations -- `exe` and `cut`, where `cut` is simple.
+  - Two level of composition -- `exe` and `cut`, where `cut` is simple.
 
 ### References
 

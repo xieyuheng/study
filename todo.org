@@ -1,11 +1,3 @@
-* cicada
-- formalize category theory
-- put category semantics into action?
-  action of implementing type system and programming language.
-- remember that, the design of cicada is to provide a language
-  to study category theory more formally,
-  maybe we can not implement cicada yet,
-  but it still worth using it.
 * inductive type
 - we need two implement languages (one for cicada, one for jojo),
   with arbitrary inductive type definition
@@ -127,7 +119,7 @@
   - The language `jojo_untyped` plus annotation for number of arguments and number of return values.
   - An equivalent predicate for jojo, inspired by `nbe`.
 - [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
-  - Two levels of computations -- `exe` and `cut`, where `cut` is as powerful as `exe`.
+  - Two level of composition -- `exe` and `cut`, where `cut` is as powerful as `exe`.
 * formal concept analysis
 * method of analytic tableaux
 * formal specification

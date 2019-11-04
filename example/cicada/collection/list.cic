@@ -2,44 +2,35 @@ import * from "../basic/bool.cic"
 import * from "../basic/nat.cic"
 
 datatype list_t(A: type) {
-  case null_t: list_t(A)
-  case cons_t(head: A, tail: list_t(A)): list_t(A)
+  case null: list_t(A)
+  case cons(head: A, tail: list_t(A)): list_t(A)
 }
 
-fn list_length(list: list_t): nat_t = {
-  list choice {
-    case null_t => zero_t
-    case cons_t => succ_t(list_length(list.tail))
-  }
-}
-
-fn list_append(A: type, x: list_t(A), y: list_t(A)): list_t(A) = {
+fn list_length(x: list_t): nat_t = {
   x choice {
-    case null_t => y
-    case cons_t => cons_t(A, x.head, list_append(A, x.tail, y))
+    case null => zero
+    case cons => succ(list_length(x.tail))
   }
 }
 
-fn list_map(A: type, B: type, f: (A) -> B, list: list_t(A)): list_t(B) = {
-  list choice {
-    case null_t => list
-    case cons_t => cons_t(A, f(list.head), list_map(A, B, f, list.tail))
+fn list_append[A: type](x: list_t(A), y: list_t(A)): list_t(A) = {
+  x choice {
+    case null => y
+    case cons => cons(x.head, list_append(x.tail, y))
   }
 }
 
-let three_zeros: list_t(nat_t) =
-    cons_t(nat_t, zero,
-           cons_t(nat_t, zero,
-                  cons_t(nat_t, zero,
-                         null_t)))
+fn list_map[A: type, B: type](f: (A) -> B, x: list_t(A)): list_t(B) = {
+  x choice {
+    case null => null
+    case cons => cons(f(x.head), list_map(f, x.tail))
+  }
+}
 
-let three_ones: list_t(nat_t) =
-    cons_t(nat_t, one,
-           cons_t(nat_t, one,
-                  cons_t(nat_t, one,
-                         null_t)))
+let three_zeros: list_t(nat_t) = {
+  cons(zero, cons(zero, cons(zero, null)))
+}
 
-@assert_eq list_length(null_t) zero
-@assert_eq list_length(three_zeros) three
-@assert_eq list_length(list_append(nat_t, three_zeros, three_ones)) six
-@assert_eq list_map(nat_t, nat_t, nat_add(one), three_zeros) three_ones
+let three_ones: list_t(nat_t) = {
+  cons(one, cons(one, cons(one, null)))
+}

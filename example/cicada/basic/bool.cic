@@ -1,34 +1,31 @@
 datatype bool_t {
-  case true_t
-  case false_t
+  case true
+  case false
 }
-
-let true: true_t = true_t
-let false: false_t = false_t
 
 fn bool_not(x: bool_t): bool_t = {
   x choice {
-    case true_t => false
-    case false_t => true
+    case true => false
+    case false => true
   }
 }
 
 fn bool_and(x: bool_t, y: bool_t): bool_t = {
   x choice {
-    case true_t => y choice {
-      case true_t => true
-      case false_t => false
+    case true => y choice {
+      case true => true
+      case false => false
     }
-    case false_t => false
+    case false => false
   }
 }
 
 fn bool_or(x: bool_t, y: bool_t): bool_t = {
   x choice {
-    case true_t => true
-    case false_t => y choice {
-      case true_t => true
-      case false_t => false
+    case true => true
+    case false => y choice {
+      case true => true
+      case false => false
     }
   }
 }

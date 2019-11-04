@@ -1,8 +1,5 @@
 * cicada
-- be sure about syntax for inductive type definition
-  mostly about constrains on return type
-- explicit implicit arguments
-- better function call syntax
+- `new` for object creation
 - keep `let` and `fn`
 - no `extends` (no subtype)
 - formalize category theory

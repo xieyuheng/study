@@ -1,5 +1,5 @@
 class unit_t {}
 
-let unit: unit_t = unit_t
+let unit: unit_t = new unit_t
 
 @assert_eq unit unit_t

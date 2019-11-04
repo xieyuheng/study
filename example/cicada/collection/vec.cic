@@ -1,57 +1,34 @@
 import * from "../basic/nat.cic"
 
 datatype vec_t(A: type, length: nat_t) {
-  case vec_null_t(
-    A: type,
-    length: nat_t = zero_t)
-  case vec_cons_t(
-    A: type,
-    head: A,
-    tail: vec_t(A),
-    length: nat_t = succ_t(tail.length))
+  case vec_null: vec_t(A, zero)
+  case vec_cons[n: nat_t](head: A, tail: vec_t(A, n)): vec_t(A, succ(n))
 }
 
-fn vec_append(
-  A: type,
-  x: vec_t(A),
-  y: vec_t(A),
-): vec_t(A, nat_add(x.length, y.length)) = {
+fn vec_append[A: type, m: nat_t, n: nat_t](
+  x: vec_t(A, m),
+  y: vec_t(A, n),
+): vec_t(A, nat_add(m, n)) = {
   x choice {
-    case vec_null_t => y
-    case vec_cons_t => vec_cons_t(A, x.head, vec_append(A, x.tail, y))
+    case vec_null => y
+    case vec_cons => vec_cons(x.head, vec_append(x.tail, y))
   }
 }
 
-fn vec_map(
-  A: type,
-  B: type,
+fn vec_map[A: type, B: type, n: nat_t](
   f: (A) -> B,
-  vec: vec_t(A),
-): vec_t(B, vec.length) = {
-  vec choice {
-    case vec_null_t => vec
-    case vec_cons_t => vec_cons_t(nat_t, f(vec.head), vec_map(A, B, f, vec.tail))
+  x: vec_t(A, n),
+): vec_t(B, n) = {
+  x choice {
+    case vec_null => x
+    case vec_cons => vec_cons(f(x.head), vec_map(f, x.tail))
   }
 }
 
-@assert_eq vec_null_t(nat_t).A nat_t
-@assert_eq vec_null_t(nat_t).length zero
+let three_zeros: vec_t(nat_t, three) = {
+  vec_cons(zero, vec_cons(zero, vec_cons(zero, vec_null)))
+}
 
-let three_zeros: vec_t(nat_t, three) =
-  vec_cons_t(nat_t, zero,
-    vec_cons_t(nat_t, zero,
-      vec_cons_t(nat_t, zero,
-        vec_null_t(nat_t))))
-
-let three_ones: vec_t(nat_t, three) =
-  vec_cons_t(nat_t, one,
-    vec_cons_t(nat_t, one,
-      vec_cons_t(nat_t, one,
-        vec_null_t(nat_t))))
-
-@assert_eq three_zeros.A nat_t
-@assert_eq three_zeros.length three
-
-@assert_eq vec_append(nat_t, three_zeros, three_ones).length six
-
-@assert_eq vec_map(nat_t, nat_t, nat_add(one), three_zeros) three_ones
+let three_ones: vec_t(nat_t, three) = {
+  vec_cons(one, vec_cons(one, vec_cons(one, vec_null)))
+}

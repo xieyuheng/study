@@ -1,3 +1,8 @@
+* eopl
+- [eopl.lang_module]
+  what is the different between first class module and record type?
+- [eopl.lang_class]
+- [eopl] note about further reading
 * inductive type
 - we need two implement languages (one for cicada, one for jojo),
   with arbitrary inductive type definition
@@ -27,10 +32,6 @@
 * DIY type theory
 - implement proof checker first
   and view type checker as generating proofs
-* eopl
-- [eopl.lang_module]
-- [eopl.lang_class]
-- [eopl] note about further reading
 * de_bruijn
 - [de_bruijn] `let type <name> = ...`
 - [de_bruijn] representing data types
@@ -121,5 +122,9 @@
 - [adventure/jojo_dependent](src/main/scala/xieyuheng/adventure/jojo_dependent) <br>
   - Two level of compositions -- `exe` and `cut`, where `cut` is as powerful as `exe`.
 * formal concept analysis
+- intention as understanding
+  two different group of intentions
+  over the same group of extentions
+  are two different understanding
 * method of analytic tableaux
 * formal specification

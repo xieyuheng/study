@@ -25,6 +25,10 @@ abstract class adventure_t {
     eqv(f, mul(f, id))
   }
 
+  def id_cut_idempotent() = {
+    assert(cut(id) == id)
+  }
+
   def error: jojo_t
 
   def error_left(f: jojo_t) = {
@@ -33,5 +37,9 @@ abstract class adventure_t {
 
   def error_right(f: jojo_t) = {
     eqv(error, mul(f, error))
+  }
+
+  def error_cut_idempotent() = {
+    assert(cut(error) == error)
   }
 }

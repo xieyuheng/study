@@ -1,8 +1,11 @@
-# eopl
+# record type
+- partech in js
+- test partech in js by a language
+- back to eopl module and class
+- telescope of automath
 - one of the most important techniques we need to learn
   is to handle scope of record-like structure
   such as module, object and class.
-  
 - [eopl.lang_module]
   what is the different between first class module and record type?
 - [eopl.lang_class]
@@ -12,6 +15,8 @@
   with arbitrary inductive type definition
   and arbitrary recursive function.
   because we need such languages to do experiments.
+- we do not care about consistency for now
+- we also allow type in type
 # jojo
 - the cut level is stable
   only [x : A] and (- A)

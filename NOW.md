@@ -1,4 +1,8 @@
 # eopl
+- one of the most important techniques we need to learn
+  is to handle scope of record-like structure
+  such as module, object and class.
+  
 - [eopl.lang_module]
   what is the different between first class module and record type?
 - [eopl.lang_class]

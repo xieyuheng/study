@@ -1,0 +1,15 @@
+module m1 {
+  interface {
+    a : int_t
+    b : int_t
+    c : int_t
+  }
+  body {
+    a = 33
+    x = diff(a, 1)
+    b = diff(a, x)
+    c = diff(x, b)
+  }
+}
+let a = 10
+diff(diff(alice.a, alice.b), a)

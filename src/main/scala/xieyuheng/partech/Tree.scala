@@ -2,8 +2,6 @@ package xieyuheng.partech
 
 import xieyuheng.partech.pretty._
 
-import scala.collection.mutable.ListBuffer
-
 sealed trait Tree
 final case class Leaf(str: String) extends Tree
 final case class Node(

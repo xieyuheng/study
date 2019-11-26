@@ -46,12 +46,12 @@ case class Lexer(table: LexTable) {
 
 object Lexer {
 
-  val space_chars = Set(' ', '\n', '\t')
+  val space_char_set = Set(' ', '\n', '\t')
 
   def ignore_space(text: String): Option[String] = {
     text.headOption match {
       case Some(char) =>
-        if (space_chars.contains(char)) {
+        if (space_char_set.contains(char)) {
           Some(text.tail)
         } else {
           None
@@ -88,7 +88,7 @@ object Lexer {
     remain
   }
 
-  val symbol_chars = Set(
+  val symbol_char_set = Set(
     '=', ':', '.',
     ',', ';',
 
@@ -103,12 +103,12 @@ object Lexer {
   def word_matcher(text: String): Option[(String, String)] = {
     text.headOption match {
       case Some(char) =>
-        if (symbol_chars.contains(char)) {
+        if (symbol_char_set.contains(char)) {
           Some((char.toString, text.tail))
         } else {
           text.find { case char =>
-            space_chars.contains(char) ||
-            symbol_chars.contains(char)
+            space_char_set.contains(char) ||
+            symbol_char_set.contains(char)
           } match {
             case Some(char) =>
               val i = text.indexOf(char)
@@ -124,7 +124,7 @@ object Lexer {
   def word_matcher_with_string(text: String): Option[(String, String)] = {
     text.headOption match {
       case Some(char) =>
-        if (symbol_chars.contains(char)) {
+        if (symbol_char_set.contains(char)) {
           Some((char.toString, text.tail))
         } else if (char == '"') {
           val i = text.indexOf('"', 1)
@@ -135,8 +135,8 @@ object Lexer {
           }
         } else {
           text.find { case char =>
-            space_chars.contains(char) ||
-            symbol_chars.contains(char)
+            space_char_set.contains(char) ||
+            symbol_char_set.contains(char)
           } match {
             case Some(char) =>
               val i = text.indexOf(char)

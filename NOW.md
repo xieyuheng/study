@@ -1,6 +1,4 @@
 # record type
-- partech in js
-- test partech in js by a language
 - back to eopl module and class
 - telescope of automath
 - one of the most important techniques we need to learn

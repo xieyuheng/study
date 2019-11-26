@@ -109,18 +109,18 @@ case class Earley(words: List[Word], rule: Rule) {
     item.parts(item.dot) match {
       case RulePartStr(str) =>
         if (str == words(index).str) {
-          bring_forward_item(item, index)
+          item_forward(item, index)
         }
       case RulePartPred(word_pred) =>
         if (word_pred.pred(words(index).str)) {
-          val newParts = item.parts.patch(item.dot, List(RulePartStr(words(index).str)), 1)
-          bring_forward_item(item.copy(parts = newParts), index)
+          val new_parts = item.parts.patch(item.dot, List(RulePartStr(words(index).str)), 1)
+          item_forward(item.copy(parts = new_parts), index)
         }
       case _ => {}
     }
   }
 
-  def bring_forward_item(item: Item, index: Int): Unit = {
+  def item_forward(item: Item, index: Int): Unit = {
     val itemset = if (item.dot + 1 == item.parts.length) {
       completed(index + 1)
     } else {
@@ -151,7 +151,7 @@ case class Earley(words: List[Word], rule: Rule) {
       item.parts(item.dot) match {
         case RulePartRule(rule_gen) =>
           if (rule == rule_gen()) {
-            bring_forward_item(item.copy(completed_by = Some(cause_of_completion)), index)
+            item_forward(item.copy(completed_by = Some(cause_of_completion)), index)
           }
         case _ => {}
       }

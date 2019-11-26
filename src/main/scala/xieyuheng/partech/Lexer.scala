@@ -48,7 +48,7 @@ object Lexer {
 
   val space_char_set = Set(' ', '\n', '\t')
 
-  def ignore_space(text: String): Option[String] = {
+  def ignore_one_space(text: String): Option[String] = {
     text.headOption match {
       case Some(char) =>
         if (space_char_set.contains(char)) {
@@ -60,12 +60,14 @@ object Lexer {
     }
   }
 
-  def ignore_line_comment(text: String): Option[String] = {
+  def ignore_one_line_comment(text: String): Option[String] = {
     if (text.startsWith("//")) {
       text.indexOf('\n') match {
-        case -1 => Some("")
-        case n =>
-          val (_, remain) = text.splitAt(n)
+        case -1 =>
+          // ignore all text
+          Some("")
+        case i =>
+          val (_, remain) = text.splitAt(i)
           Some(remain)
       }
     } else {
@@ -77,9 +79,9 @@ object Lexer {
     var remain: String = text
     var continue: Boolean = true
     while (continue) {
-      ignore_space(remain) match {
+      ignore_one_space(remain) match {
         case Some(str) => remain = str
-        case None => ignore_line_comment(remain) match {
+        case None => ignore_one_line_comment(remain) match {
           case Some(str) => remain = str
           case None => continue = false
         }

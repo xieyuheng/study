@@ -14,12 +14,12 @@ object Tree {
 
   def matcher[A](
     name: String,
-    map: Map[String, List[Tree] => A],
+    choices: Map[String, List[Tree] => A],
   ): Tree => A = { case tree =>
       tree match {
         case Node(rule, choice_name, children) =>
           if (rule.name == name) {
-            map.get(choice_name) match {
+            choices.get(choice_name) match {
               case Some(f) => f(children)
               case None =>
                 println(s"matcher on ${name}, does not have choice: ${choice_name}")

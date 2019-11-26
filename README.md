@@ -104,7 +104,7 @@ constitute the state are updated in a coordinated manner.
 
 Object-oriented programming is a useful technology for accomplishing this task.
 
-### References
+## References
 
 - "Parsing Techniques -- A Practical Guide"
   - by Dick Grune and Ceriel J.H. Jacobs.

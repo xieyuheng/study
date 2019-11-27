@@ -7,7 +7,7 @@ abstract class adventure_t {
 
   def mul(f: elem_t, g: elem_t): elem_t
 
-  def cut_respect_mul(f: elem_t, g: elem_t) = {
+  def mul_cut(f: elem_t, g: elem_t) = {
     eqv(cut(mul(f, g)), mul(cut(f), cut(g)))
   }
 
@@ -25,7 +25,7 @@ abstract class adventure_t {
     eqv(f, mul(f, id))
   }
 
-  def id_cut_idempotent() = {
+  def id_cut() = {
     assert(cut(id) == id)
   }
 
@@ -39,7 +39,7 @@ abstract class adventure_t {
     eqv(error, mul(f, error))
   }
 
-  def error_cut_idempotent() = {
+  def error_cut() = {
     assert(cut(error) == error)
   }
 }

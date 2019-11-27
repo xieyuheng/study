@@ -1,7 +1,7 @@
 package xieyuheng.structure.category
 
-import xieyuheng.structure.category_t
 import xieyuheng.structure.eqv
+import xieyuheng.structure.category_t
 
 abstract class functor_t {
   val dom: category_t

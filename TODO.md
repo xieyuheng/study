@@ -1,5 +1,14 @@
+# partech
+- partech clean up version -- for cicada
+- partech in ts
+- partech in c++
+- partech in c
+- [partech] ErrMsg and Span
+- [partech] better report with ErrMsg in context
+# english grammar
+- to design good programming language,
+  we need to study english grammar
 # record type
-- back to eopl module and class
 - telescope of automath
 - one of the most important techniques we need to learn
   is to handle scope of record-like structure
@@ -57,8 +66,6 @@
     congruence
     beta_reduction
     eta_reduction
-# miniml
-- [miniml] the CAM machine
 # the little mler
 - as test for some of the languages
 # lambda
@@ -101,10 +108,6 @@
   - Norm do not use Pattern
   - note about how letrec is handled at lookup-time
 # module system
-# partech
-- [partech] rewrite in c
-- [partech] ErrMsg and Span
-- [partech] better report with ErrMsg in context
 # compile with cps
 # sat
 - sat solver visualization (how ?)
@@ -116,7 +119,6 @@
 # dsl
 - generative art
 - formal concept analysis
-- cell complex
 - four dancing circles
 # for readme
 - [barendregt/curry](src/main/scala/xieyuheng/barendregt/curry) <br>
@@ -124,9 +126,6 @@
 - [pure](src/main/scala/xieyuheng/pure) <br>
   - A framework for the essence of dependent type system, <br>
     which can be viewed as an extension of Barendregt's lambda cube.
-- [miniml](src/main/scala/xieyuheng/miniml) <br>
-  - "A simple applicative language: Mini-ML", <br>
-    by Dominique Clement, Joelle Despeyroux, Thierry Despeyroux, Gilles Kahn.
 - [adventure/jojo_counted](src/main/scala/xieyuheng/adventure/jojo_counted) <br>
   - The language `jojo_untyped` plus annotation for number of arguments and number of return values.
   - An equivalent predicate for jojo, inspired by `nbe`.

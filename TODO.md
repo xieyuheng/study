@@ -1,13 +1,3 @@
-# partech
-- partech clean up version -- for cicada
-- partech in ts
-- partech in c++
-- partech in c
-- [partech] ErrMsg and Span
-- [partech] better report with ErrMsg in context
-# english grammar
-- to design good programming language,
-  we need to study english grammar
 # record type
 - telescope of automath
 - one of the most important techniques we need to learn
@@ -17,6 +7,13 @@
   what is the different between first class module and record type?
 - [eopl.lang_class]
 - [eopl] note about further reading
+# partech
+- partech clean up version -- for cicada
+- [partech] ErrMsg and Span
+- [partech] better report with ErrMsg in context
+# english grammar
+- to design good programming language,
+  we need to study english grammar
 # inductive type
 - we need two implement languages (one for cicada, one for jojo),
   with arbitrary inductive type definition

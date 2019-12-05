@@ -85,25 +85,6 @@ Study of language design and implementation.
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - Two level of compositions -- `exe` and `cut`, where `cut` is simple.
 
-### Study of module system
-
-A good way to separate the system into relatively self-contained parts, <br>
-and to document the dependencies between those parts.
-
-- [eopl/lang_simple_module](src/main/scala/xieyuheng/eopl/lang_simple_module) <br>
-
-### Study of object and class
-
-Many programming tasks require the program
-to manage some piece of state through an interface.
-Often, the piece of state spans several variables,
-and changes to those variables must be coordinated
-in order to maintain the consistency of the state.
-One therefore needs some technology to ensure that the various variables that
-constitute the state are updated in a coordinated manner.
-
-Object-oriented programming is a useful technology for accomplishing this task.
-
 ## References
 
 - "Parsing Techniques -- A Practical Guide"

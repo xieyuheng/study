@@ -131,7 +131,8 @@ object Lexer {
         } else if (char == '"') {
           val i = text.indexOf('"', 1)
           if (i == -1) {
-            Some((text, ""))
+            // doublequote mismatch
+            None
           } else {
             Some(text.splitAt(i + 1))
           }

@@ -1,3 +1,16 @@
+# cicada
+- simple eval
+- test this simple eval
+- support multi args (no currying)
+  - Pi -- `given` and `conclude`
+  - Fn -- `given` and `return`
+- support `let` and `define`
+- test eval
+- Exp use cofree
+- check
+- infer
+- readback
+- equivalent
 # record type
 - telescope of automath
 - one of the most important techniques we need to learn

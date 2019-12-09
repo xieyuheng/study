@@ -1,7 +1,7 @@
 # party
 - clean up partech -- for cicada
 # cicada
-- more test simple eval
+- class as function
 - support multi args (no currying)
   - Pi -- `given` and `conclude`
   - Fn -- `given` and `return`

@@ -1,11 +1,10 @@
 # party
 - clean up partech -- for cicada
 # cicada
-- check
 - infer
 - subtype
 - readback
-- equivalent
+- equivalent by subtype
 - [note] no auto currying
 - [less important] Exp use cofree
 - [less important] `claim`

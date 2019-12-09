@@ -1,6 +1,6 @@
 package xieyuheng.cicada
 
-// import pretty._
+import pretty._
 import eval._
 
 import xieyuheng.util.mini_interpreter
@@ -15,7 +15,7 @@ object cicada extends mini_interpreter (
         val env = Env()
         eval(env, exp) match {
           case Right(value) =>
-            println(s"${value}")
+            println(s"${pretty_val(value)}")
           case Left(err) =>
             println(s"${err.msg}")
             System.exit(1)

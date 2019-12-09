@@ -1,5 +1,4 @@
 # cicada
-- grammar
 - test this simple eval
 - support multi args (no currying)
   - Pi -- `given` and `conclude`

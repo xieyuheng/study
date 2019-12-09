@@ -16,7 +16,8 @@ function t {
         test_nbe && \
         test_barendregt && \
         test_eopl && \
-        test_adventure
+        test_adventure && \
+        test_cicada
 }
 
 function test_general {
@@ -137,6 +138,20 @@ function test_adventure_jojo {
     do
         echo ""
         echo "[${name}] $file"
+        if ! time $prog --eval $file
+        then
+            exit 1
+        fi
+    done
+}
+
+function test_cicada {
+    prog=./target/universal/stage/bin/cicada
+
+    for file in $(find . | grep "^\./example/cicada/" | grep "\.cic$")
+    do
+        echo ""
+        echo "[cicada] $file"
         if ! time $prog --eval $file
         then
             exit 1

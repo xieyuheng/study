@@ -1,5 +1,8 @@
 # cicada
-- test this simple eval
+- `object { ... }` for empty object
+- `class { ... }` for empty class
+- block `let let ... return`
+- more test simple eval
 - support multi args (no currying)
   - Pi -- `given` and `conclude`
   - Fn -- `given` and `return`

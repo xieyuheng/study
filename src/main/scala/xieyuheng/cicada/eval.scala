@@ -7,7 +7,10 @@ object eval {
   def eval(env: Env, exp: Exp): Either[Err, Val] = {
     exp match {
       case Var(name: String) =>
-        Right(NeuVar(name))
+        env.lookup_val(name) match {
+          case Some(value) => Right(value)
+          case None => Right(NeuVar(name))
+        }
 
       case Type() =>
         Right(ValType())
@@ -57,10 +60,7 @@ object eval {
     value match {
       case neu: Neu => Right(NeuAp(neu, arg))
       case ValFn(arg_name: String, arg_type: Exp, body: Exp, env: Env) =>
-        for {
-          arg_type <- eval(env, arg_type)
-          result <- eval(env.ext(arg_name, arg_type), body)
-        } yield result
+        eval(env.ext(arg_name, arg), body)
       case _ => Left(Err("val_ap fail"))
     }
   }

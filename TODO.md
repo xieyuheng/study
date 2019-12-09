@@ -2,16 +2,15 @@
 - clean up partech -- for cicada
 # cicada
 - class as function
-- support multi args (no currying)
-  - Pi -- `given` and `conclude`
-  - Fn -- `given` and `return`
-- support `let` and `define`
-- eval
+- `class <name> { ... }`
+- `claim`
+- `define`
 - Exp use cofree
 - check
 - infer
 - readback
 - equivalent
+- [note] no auto currying
 # record type
 - telescope of automath
 - one of the most important techniques we need to learn

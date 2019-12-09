@@ -15,35 +15,24 @@ object eval {
       case Type() =>
         Right(ValType())
 
-      case Pi(arg_name: String, arg_type: Exp, ret_type: Exp) =>
-        Right(ValPi(arg_name: String, arg_type: Exp, ret_type: Exp, env: Env))
+      case Pi(arg_map: ListMap[String, Exp], ret_type: Exp) =>
+        Right(ValPi(arg_map: ListMap[String, Exp], ret_type: Exp, env: Env))
 
-      case Fn(arg_name: String, arg_type: Exp, body: Exp) =>
-        Right(ValFn(arg_name: String, arg_type: Exp, body: Exp, env: Env))
+      case Fn(arg_map: ListMap[String, Exp], body: Exp) =>
+        Right(ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env))
 
-      case Ap(target: Exp, arg: Exp) =>
+      case Ap(target: Exp, arg_list: List[Exp]) =>
         for {
           value <- eval(env, target)
-          arg <- eval(env, arg)
-          result <- val_ap(value, arg)
+          arg_list <- list_eval(env, arg_list)
+          result <- val_ap(value, arg_list)
         } yield result
 
       case Cl(type_map: ListMap[String, Exp]) =>
         Right(ValCl(type_map: ListMap[String, Exp], env: Env))
 
       case Obj(val_map: ListMap[String, Exp]) =>
-        val init: Either[Err, ListMap[String, Val]] = Right(ListMap.empty)
-        val result = val_map.foldLeft(init) {
-          case (result, (name, exp)) =>
-            result match {
-              case Right(map) => eval(env, exp) match {
-                case Right(value) => Right(map ++ List((name, value)))
-                case Left(err) => Left(err)
-              }
-              case Left(err) => Left(err)
-            }
-        }
-        result match {
+        list_map_eval(env, val_map) match {
           case Right(map) => Right(ValObj(map))
           case Left(err) => Left(err)
         }
@@ -76,12 +65,46 @@ object eval {
     }
   }
 
-  def val_ap(value: Val, arg: Val): Either[Err, Val] = {
+  def list_map_eval(env: Env, list_map: ListMap[String, Exp]): Either[Err, ListMap[String, Val]] = {
+    val init: Either[Err, ListMap[String, Val]] = Right(ListMap.empty)
+    list_map.foldLeft(init) {
+      case (result, (name, exp)) =>
+        result match {
+          case Right(map) => eval(env, exp) match {
+            case Right(value) => Right(map ++ List((name, value)))
+            case Left(err) => Left(err)
+          }
+          case Left(err) => Left(err)
+        }
+    }
+  }
+
+  def list_eval(env: Env, list: List[Exp]): Either[Err, List[Val]] = {
+    val init: Either[Err, List[Val]] = Right(List.empty)
+    list.foldLeft(init) {
+      case (result, exp) =>
+        result match {
+          case Right(map) => eval(env, exp) match {
+            case Right(value) => Right(map :+ value)
+            case Left(err) => Left(err)
+          }
+          case Left(err) => Left(err)
+        }
+    }
+  }
+
+  def val_ap(value: Val, arg_list: List[Val]): Either[Err, Val] = {
     value match {
-      case neu: Neu => Right(NeuAp(neu, arg))
-      case ValFn(arg_name: String, arg_type: Exp, body: Exp, env: Env) =>
-        eval(env.ext(arg_name, arg), body)
-      case _ => Left(Err("val_ap fail"))
+      case neu: Neu => Right(NeuAp(neu, arg_list))
+      case ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env) =>
+        val name_list = arg_map.keys.toList
+        if (name_list.length != arg_map.size) {
+          Left(Err("val_ap fail, arity mismatch"))
+        } else {
+          val map = Map(name_list.zip(arg_list): _*)
+          eval(env.ext_map(map), body)
+        }
+      case _ => Left(Err("val_ap fail, expecting ValFn"))
     }
   }
 
@@ -93,7 +116,7 @@ object eval {
           case Some(value) => Right(value)
           case None => Left(Err(s"missing field: ${field}"))
         }
-      case _ => Left(Err("val_dot fail"))
+      case _ => Left(Err("val_dot fail, expecting ValObj"))
     }
   }
 

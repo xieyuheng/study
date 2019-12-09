@@ -10,4 +10,8 @@ case class Env(map: Map[String, Val] = Map()) {
     Env(map + (name -> value))
   }
 
+  def ext_map(map: Map[String, Val]): Env = {
+    Env(this.map ++ map)
+  }
+
 }

@@ -26,8 +26,12 @@ object grammar {
       "pi" -> List("{", "given", identifier, ":", exp, "conclude", exp, "}"),
       "fn" -> List("{", "given", identifier, ":", exp, "return", exp, "}"),
       "ap" -> List(exp, "(", exp, ")"),
-      "cl" -> List("{", non_empty_list(given_entry), "}"),
-      "obj" -> List("{", non_empty_list(let_entry), "}"),
+      "cl" -> List("class", "{", non_empty_list(given_entry), "}"),
+      "cl_empty" -> List("class", "{", "}"),
+      "cl_naked" -> List("{", non_empty_list(given_entry), "}"),
+      "obj" -> List("object", "{", non_empty_list(let_entry), "}"),
+      "obj_empty" -> List("object", "{", "}"),
+      "obj_naked" -> List("{", non_empty_list(let_entry), "}"),
       "dot" -> List(exp, ".", identifier),
     ))
 
@@ -41,9 +45,17 @@ object grammar {
         Fn(arg_name, exp_matcher(arg_type), exp_matcher(body)) },
       "ap" -> { case List(target, _, arg, _) =>
         Ap(exp_matcher(target), exp_matcher(arg)) },
-      "cl" -> { case List(_, given_entry_list, _) =>
+      "cl" -> { case List(_, _, given_entry_list, _) =>
         Cl(ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list) : _*)) },
-      "obj" -> { case List(_, let_entry_list, _) =>
+      "cl_empty" -> { case List(_, _, _) =>
+        Cl(ListMap()) },
+      "cl_naked" -> { case List(_, given_entry_list, _) =>
+        Cl(ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list) : _*)) },
+      "obj" -> { case List(_, _, let_entry_list, _) =>
+        Obj(ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list) : _*)) },
+      "obj_empty" -> { case List(_, _, _) =>
+        Obj(ListMap()) },
+      "obj_naked" -> { case List(_, let_entry_list, _) =>
         Obj(ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list) : _*)) },
       "dot" -> { case List(target, _, Leaf(field)) =>
         Dot(exp_matcher(target), field) }

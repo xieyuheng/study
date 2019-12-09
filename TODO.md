@@ -1,6 +1,6 @@
+# party
+- clean up partech -- for cicada
 # cicada
-- `object { ... }` for empty object
-- `class { ... }` for empty class
 - block `let let ... return`
 - more test simple eval
 - support multi args (no currying)
@@ -23,7 +23,6 @@
 - [eopl.lang_class]
 - [eopl] note about further reading
 # partech
-- partech clean up version -- for cicada
 - [partech] ErrMsg and Span
 - [partech] better report with ErrMsg in context
 # english grammar

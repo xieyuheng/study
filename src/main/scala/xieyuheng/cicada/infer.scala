@@ -4,7 +4,7 @@ import collection.immutable.ListMap
 
 object infer {
 
-  def infer(ctx: Ctx, exp: Exp): Either[Err, Val] = {
+  def infer(ctx: Ctx, exp: Exp): Either[Err, Exp] = {
     exp match {
       case Var(name: String) =>
         ctx.lookup_type(name) match {
@@ -13,24 +13,21 @@ object infer {
         }
 
       case Type() =>
-        Right(ValType())
+        Right(Type())
 
       case Pi(arg_map: ListMap[String, Exp], ret_type: Exp) =>
-        Right(ValType())
+        Right(Type())
 
       case Fn(arg_map: ListMap[String, Exp], body: Exp) =>
         for {
-          ctx <- infer_ctx_from_telescope(ctx, arg_map)
-          // TODO need to construct a Pi type here
-          //   which means 
-          result <- infer(ctx, body)
-        } yield result
+          ret_type <- infer(ctx.ext_map(arg_map), body)
+        } yield Pi(arg_map, ret_type)
 
       case Ap(target: Exp, arg_list: List[Exp]) =>
         ???
 
       case Cl(type_map: ListMap[String, Exp]) =>
-        Right(ValType())
+        Right(Type())
 
       case Obj(val_map: ListMap[String, Exp]) =>
         ???
@@ -41,12 +38,6 @@ object infer {
       case Block(let_map: ListMap[String, Exp], body: Exp) =>
         ???
     }
-  }
-
-  def infer_ctx_from_telescope(
-    ctx: Ctx, telescope: ListMap[String, Exp],
-  ): Either[Err, Ctx] = {
-    ???
   }
 
 }

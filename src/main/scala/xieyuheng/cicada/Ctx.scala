@@ -1,17 +1,17 @@
 package xieyuheng.cicada
 
-case class Ctx(map: Map[String, Val] = Map()) {
+case class Ctx(map: Map[String, Exp] = Map()) {
 
-  def lookup_type(name: String): Option[Val] = {
+  def lookup_type(name: String): Option[Exp] = {
     map.get(name)
   }
 
-  def ext(name: String, value: Val): Env = {
-    Env(this.map + (name -> value))
+  def ext(name: String, t: Exp): Ctx = {
+    Ctx(this.map + (name -> t))
   }
 
-  def ext_map(map: Map[String, Val]): Env = {
-    Env(this.map ++ map)
+  def ext_map(map: Map[String, Exp]): Ctx = {
+    Ctx(this.map ++ map)
   }
 
 }

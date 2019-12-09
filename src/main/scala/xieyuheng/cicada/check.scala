@@ -7,7 +7,7 @@ import subtype._
 
 object check {
 
-  def check(ctx: Ctx, exp: Exp, t: Val): Either[Err, Unit] = {
+  def check(ctx: Ctx, exp: Exp, t: Exp): Either[Err, Unit] = {
     for {
       s <- infer(ctx, exp)
       result <- subtype(ctx, s, t)

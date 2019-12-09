@@ -12,7 +12,8 @@ object grammar {
 
   def preserved: List[String] = List(
     "type",
-    "class", "define",
+    "class",
+    "claim", "define",
     "given", "conclude",
     "let", "return",
   )

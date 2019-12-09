@@ -99,12 +99,23 @@ object eval {
       case ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env) =>
         val name_list = arg_map.keys.toList
         if (name_list.length != arg_map.size) {
-          Left(Err("val_ap fail, arity mismatch"))
+          Left(Err("val_ap fail, ValFn arity mismatch"))
         } else {
           val map = Map(name_list.zip(arg_list): _*)
           eval(env.ext_map(map), body)
         }
-      case _ => Left(Err("val_ap fail, expecting ValFn"))
+      case ValCl(type_map: ListMap[String, Exp], env: Env) =>
+        val name_list = type_map.keys.toList
+        if (name_list.length != type_map.size) {
+          Left(Err("val_ap fail, ValCl arity mismatch"))
+        } else {
+          val val_map = ListMap(name_list.zip(arg_list): _*)
+          Right(ValObj(val_map))
+        }
+      case _ => Left(Err(
+        "val_ap fail, expecting ValFn or ValCl\n" +
+          s"value: ${value}\n"
+      ))
     }
   }
 

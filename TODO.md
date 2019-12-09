@@ -1,16 +1,18 @@
 # party
 - clean up partech -- for cicada
 # cicada
-- class as function
-- `class <name> { ... }`
-- `claim`
-- `define`
-- Exp use cofree
+- pretty
+- `class <name> { ... }` equivalent to `let <name> = class { ... }`
+- `object <name> { ... }` equivalent to `let <name> = object { ... }`
 - check
 - infer
+- subtype
 - readback
 - equivalent
 - [note] no auto currying
+- [less important] Exp use cofree
+- [less important] `claim`
+- [less important] `define`
 # record type
 - telescope of automath
 - one of the most important techniques we need to learn

@@ -1,11 +1,11 @@
 # cicada
-- simple eval
+- grammar
 - test this simple eval
 - support multi args (no currying)
   - Pi -- `given` and `conclude`
   - Fn -- `given` and `return`
 - support `let` and `define`
-- test eval
+- eval
 - Exp use cofree
 - check
 - infer

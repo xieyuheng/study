@@ -1,17 +1,13 @@
 package xieyuheng.cicada
 
-sealed trait EnvEntry
-final case class EnvEntryLet(value: Val) extends EnvEntry
-final case class EnvEntryDefine(value: Val) extends EnvEntry
+case class Env(map: Map[String, Val] = Map()) {
 
-case class Env(map: Map[String, EnvEntry] = Map()) {
-
-  def lookup(name: String): Option[EnvEntry] = {
+  def lookup(name: String): Option[Val] = {
     map.get(name)
   }
 
-  def ext(name: String, entry: EnvEntry): Env = {
-    Env(map + (name -> entry))
+  def ext(name: String, value: Val): Env = {
+    Env(map + (name -> value))
   }
 
 }

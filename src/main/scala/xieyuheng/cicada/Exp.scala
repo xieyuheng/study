@@ -11,3 +11,4 @@ final case class Ap(target: Exp, arg: Exp) extends Exp
 final case class Cl(type_map: ListMap[String, Exp]) extends Exp
 final case class Obj(val_map: ListMap[String, Exp]) extends Exp
 final case class Dot(target: Exp, field: String) extends Exp
+final case class Block(let_map: ListMap[String, Exp], body: Exp) extends Exp

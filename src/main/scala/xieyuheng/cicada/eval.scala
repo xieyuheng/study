@@ -53,6 +53,26 @@ object eval {
           value <- eval(env, target)
           result <- val_dot(value, field)
         } yield result
+
+      case Block(let_map: ListMap[String, Exp], body: Exp) =>
+        var local_env = env
+        val init: Either[Err, ListMap[String, Val]] = Right(ListMap.empty)
+        val result = let_map.foldLeft(init) {
+          case (result, (name, exp)) =>
+            result match {
+              case Right(map) => eval(local_env, exp) match {
+                case Right(value) =>
+                  local_env = local_env.ext(name, value)
+                  Right(map ++ List((name, value)))
+                case Left(err) => Left(err)
+              }
+              case Left(err) => Left(err)
+            }
+        }
+        result match {
+          case Right(map) => eval(local_env, body)
+          case Left(err) => Left(err)
+        }
     }
   }
 

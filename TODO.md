@@ -1,7 +1,6 @@
 # party
 - clean up partech -- for cicada
 # cicada
-- block `let let ... return`
 - more test simple eval
 - support multi args (no currying)
   - Pi -- `given` and `conclude`

@@ -27,12 +27,13 @@ object grammar {
       "fn" -> List("{", "given", identifier, ":", exp, "return", exp, "}"),
       "ap" -> List(exp, "(", exp, ")"),
       "cl" -> List("class", "{", non_empty_list(given_entry), "}"),
-      "cl_empty" -> List("class", "{", "}"),
       "cl_naked" -> List("{", non_empty_list(given_entry), "}"),
+      "cl_empty" -> List("class", "{", "}"),
       "obj" -> List("object", "{", non_empty_list(let_entry), "}"),
-      "obj_empty" -> List("object", "{", "}"),
       "obj_naked" -> List("{", non_empty_list(let_entry), "}"),
+      "obj_empty" -> List("object", "{", "}"),
       "dot" -> List(exp, ".", identifier),
+      "block" -> List("{", non_empty_list(let_entry), "return", exp, "}"),
     ))
 
   def exp_matcher: Tree => Exp = Tree.matcher[Exp](
@@ -46,19 +47,26 @@ object grammar {
       "ap" -> { case List(target, _, arg, _) =>
         Ap(exp_matcher(target), exp_matcher(arg)) },
       "cl" -> { case List(_, _, given_entry_list, _) =>
-        Cl(ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list) : _*)) },
+        val type_map = ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list) : _*)
+        Cl(type_map) },
+      "cl_naked" -> { case List(_, given_entry_list, _) =>
+        val type_map = ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list) : _*)
+        Cl(type_map) },
       "cl_empty" -> { case List(_, _, _) =>
         Cl(ListMap()) },
-      "cl_naked" -> { case List(_, given_entry_list, _) =>
-        Cl(ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list) : _*)) },
       "obj" -> { case List(_, _, let_entry_list, _) =>
-        Obj(ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list) : _*)) },
+        val val_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list) : _*)
+        Obj(val_map) },
+      "obj_naked" -> { case List(_, let_entry_list, _) =>
+        val val_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list) : _*)
+        Obj(val_map) },
       "obj_empty" -> { case List(_, _, _) =>
         Obj(ListMap()) },
-      "obj_naked" -> { case List(_, let_entry_list, _) =>
-        Obj(ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list) : _*)) },
       "dot" -> { case List(target, _, Leaf(field)) =>
-        Dot(exp_matcher(target), field) }
+        Dot(exp_matcher(target), field) },
+      "block" -> { case List(_, let_entry_list, _, body, _) =>
+        val let_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list) : _*)
+        Block(let_map, exp_matcher(body)) },
     ))
 
   def given_entry = Rule(

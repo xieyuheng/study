@@ -1,8 +1,6 @@
 # party
 - clean up partech -- for cicada
 # cicada
-- `class <name> { ... }` equivalent to `let <name> = class { ... }`
-- `object <name> { ... }` equivalent to `let <name> = object { ... }`
 - check
 - infer
 - subtype

@@ -41,9 +41,9 @@ object grammar {
     "exp", Map(
       "var" -> { case List(Leaf(name)) => Var(name) },
       "type" -> { case List(_) => Type() },
-      "pi" -> { case List(_, given_entry_list, _, ret_type, _) =>
+      "pi" -> { case List(_, given_entry_list, _, return_type, _) =>
         val arg_map = ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list): _*)
-        Pi(arg_map, exp_matcher(ret_type)) },
+        Pi(arg_map, exp_matcher(return_type)) },
       "fn" -> { case List(_, given_entry_list, _, body, _) =>
         val arg_map = ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list): _*)
         Fn(arg_map, exp_matcher(body)) },
@@ -59,11 +59,11 @@ object grammar {
       "cl_empty" -> { case List(_, _, _) =>
         Cl(ListMap()) },
       "obj" -> { case List(_, _, let_entry_list, _) =>
-        val val_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list): _*)
-        Obj(val_map) },
+        val value_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list): _*)
+        Obj(value_map) },
       "obj_naked" -> { case List(_, let_entry_list, _) =>
-        val val_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list): _*)
-        Obj(val_map) },
+        val value_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list): _*)
+        Obj(value_map) },
       "obj_empty" -> { case List(_, _, _) =>
         Obj(ListMap()) },
       "dot" -> { case List(target, _, Leaf(field)) =>
@@ -124,8 +124,8 @@ object grammar {
       "let_cl_empty" -> { case List(_, Leaf(name), _, _) =>
         (name, Cl(ListMap.empty)) },
       "let_obj" -> { case List(_, Leaf(name), _, let_entry_list, _) =>
-        val val_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list): _*)
-        (name, Obj(val_map)) },
+        val value_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list): _*)
+        (name, Obj(value_map)) },
       "let_obj_empty" -> { case List(_, Leaf(name), _, _) =>
         (name, Obj(ListMap.empty)) },
     ))

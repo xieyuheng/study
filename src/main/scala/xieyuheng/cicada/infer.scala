@@ -2,56 +2,41 @@ package xieyuheng.cicada
 
 import collection.immutable.ListMap
 
+import eval._
+import subtype._
+import readback._
+
 object infer {
 
-  def infer(env: Env, ctx: Ctx, exp: Exp): Either[Err, Exp] = {
-    exp match {
-      case Var(name: String) =>
-        ctx.lookup_type(name) match {
-          case Some(s) => Right(s)
-          case None => Left(Err(s"can not find var: ${name} in ctx"))
-        }
-
-      case Type() =>
-        Right(Type())
-
-      case Pi(arg_map: ListMap[String, Exp], ret_type: Exp) =>
-        Right(Type())
-
-      case Fn(arg_map: ListMap[String, Exp], body: Exp) =>
+  def infer(ctx: Ctx, value: Val): Either[Err, Val] = {
+    value match {
+      case ValType() =>
+        Right(ValType())
+      case ValPi(arg_map: ListMap[String, Exp], return_type: Exp, env: Env) =>
+        Right(ValType())
+      case ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env) =>
         for {
-          ret_type <- infer(env, ctx.ext_map(arg_map), body)
-        } yield Pi(arg_map, ret_type)
-
-      case Ap(target: Exp, arg_list: List[Exp]) =>
-        ???
-
-      case Cl(type_map: ListMap[String, Exp]) =>
-        Right(Type())
-
-      case Obj(val_map: ListMap[String, Exp]) =>
-        for {
-          type_map <- util.list_map_map_maybe_err(val_map) {
-            case (_name, exp) => infer(env, ctx, exp)
+          return_value <- eval(env, body)
+          arg_value_map <- util.list_map_map_maybe_err(arg_map) {
+            case (_name, exp) => eval(env, exp)
           }
-        } yield Cl(type_map)
-
-      case Dot(target: Exp, field: String) =>
+          return_type <- infer(ctx.ext_map(arg_value_map), return_value)
+          return_type_exp <- readback(ctx.ext_map(arg_value_map), return_type)
+        } yield ValPi(arg_map, return_type_exp, env)
+      case ValCl(type_map: ListMap[String, Exp], env: Env) =>
+        Right(ValType())
+      case ValObj(value_map: ListMap[String, Val]) =>
         ???
-
-      case Block(let_map: ListMap[String, Exp], body: Exp) =>
-        var local_ctx = ctx
-        for {
-          _ <- util.list_map_map_maybe_err(let_map) {
-            case (name, exp) =>
-              infer(env, ctx, exp).map {
-                case t =>
-                  local_ctx = local_ctx.ext(name, t)
-                  t
-              }
-          }
-          result <- infer(env, local_ctx, body)
-        } yield result
+      case NeuVar(name: String) =>
+        ???
+      case NeuAp(target: Neu, arg_list: List[Val]) =>
+        // TODO after we infer target to a ValPi
+        //   the main use of telescope will occur
+        ???
+      case NeuDot(target: Neu, field: String) =>
+        // TODO after we infer target to a ValCl
+        //   we need to readback the field in ctx extended by previous fields
+        ???
     }
   }
 

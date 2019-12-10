@@ -12,11 +12,11 @@ object pretty {
         s"${name}"
       case Type() =>
         s"type"
-      case Pi(arg_map: ListMap[String, Exp], ret_type: Exp) =>
+      case Pi(arg_map: ListMap[String, Exp], return_type: Exp) =>
         var s = arg_map.map {
           case (name, exp) => s"given ${name} : ${pretty_exp(exp)}\n"
         }.mkString("")
-        s = s + s"conclude ${pretty_exp(ret_type)}\n"
+        s = s + s"conclude ${pretty_exp(return_type)}\n"
         s"{${maybe_ln(s)}}"
       case Fn(arg_map: ListMap[String, Exp], body: Exp) =>
         var s = arg_map.map {
@@ -34,8 +34,8 @@ object pretty {
           case (name, exp) => s"given ${name} : ${pretty_exp(exp)}\n"
         }.mkString("")
         s"class {${maybe_ln(s)}}"
-      case Obj(val_map: ListMap[String, Exp]) =>
-        var s = val_map.map {
+      case Obj(value_map: ListMap[String, Exp]) =>
+        var s = value_map.map {
           case (name, exp) => s"let ${name} = ${pretty_exp(exp)}\n"
         }.mkString("")
         s"object {${maybe_ln(s)}}"
@@ -68,11 +68,11 @@ object pretty {
     value match {
       case ValType() =>
         s"type"
-      case ValPi(arg_map: ListMap[String, Exp], ret_type: Exp, env: Env) =>
+      case ValPi(arg_map: ListMap[String, Exp], return_type: Exp, env: Env) =>
         var s = arg_map.map {
           case (name, exp) => s"given ${name} : ${pretty_exp(exp)}\n"
         }.mkString("")
-        s = s + s"conclude ${pretty_exp(ret_type)}\n"
+        s = s + s"conclude ${pretty_exp(return_type)}\n"
         s"{${maybe_ln(s)}}"
       case ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env) =>
         var s = arg_map.map {
@@ -85,8 +85,8 @@ object pretty {
           case (name, exp) => s"let ${name} = ${pretty_exp(exp)}\n"
         }.mkString("")
         s"class {${maybe_ln(s)}}"
-      case ValObj(val_map: ListMap[String, Val]) =>
-        var s = val_map.map {
+      case ValObj(value_map: ListMap[String, Val]) =>
+        var s = value_map.map {
           case (name, value) => s"let ${name} = ${pretty_val(value)}\n"
         }.mkString("")
         s"object {${maybe_ln(s)}}"

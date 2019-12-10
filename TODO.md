@@ -2,9 +2,14 @@
 - clean up partech -- for cicada
 # cicada
 - infer
-- subtype.more_than
 - readback
+- subtype.more_than
 - equivalent by subtype
+- [note] implementation invariants
+  - eval does not use ctx
+  - infer does not use env
+  - check ???
+  - more_than ???
 - [note] no auto currying
 - [less important] Exp use cofree
 - [less important] `claim`

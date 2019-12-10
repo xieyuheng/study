@@ -24,7 +24,7 @@ object eval {
       case Ap(target: Exp, arg_list: List[Exp]) =>
         for {
           value <- eval(env, target)
-          arg_list <- list_eval(env, arg_list)
+          arg_list <- util.list_map_maybe_err(arg_list) { eval(env, _) }
           result <- val_ap(value, arg_list)
         } yield result
 
@@ -32,10 +32,11 @@ object eval {
         Right(ValCl(type_map: ListMap[String, Exp], env: Env))
 
       case Obj(val_map: ListMap[String, Exp]) =>
-        list_map_eval(env, val_map) match {
-          case Right(map) => Right(ValObj(map))
-          case Left(err) => Left(err)
-        }
+        for {
+          val_map <- util.list_map_map_maybe_err(val_map) {
+            case (_name, exp) => eval(env, exp)
+          }
+        } yield ValObj(val_map)
 
       case Dot(target: Exp, field: String) =>
         for {
@@ -45,51 +46,17 @@ object eval {
 
       case Block(let_map: ListMap[String, Exp], body: Exp) =>
         var local_env = env
-        val init: Either[Err, ListMap[String, Val]] = Right(ListMap.empty)
-        val result = let_map.foldLeft(init) {
-          case (result, (name, exp)) =>
-            result match {
-              case Right(map) => eval(local_env, exp) match {
-                case Right(value) =>
+        for {
+          _ <- util.list_map_map_maybe_err(let_map) {
+            case (name, exp) =>
+              eval(local_env, exp).map {
+                case value =>
                   local_env = local_env.ext(name, value)
-                  Right(map ++ List((name, value)))
-                case Left(err) => Left(err)
+                  value
               }
-              case Left(err) => Left(err)
-            }
-        }
-        result match {
-          case Right(map) => eval(local_env, body)
-          case Left(err) => Left(err)
-        }
-    }
-  }
-
-  def list_map_eval(env: Env, list_map: ListMap[String, Exp]): Either[Err, ListMap[String, Val]] = {
-    val init: Either[Err, ListMap[String, Val]] = Right(ListMap.empty)
-    list_map.foldLeft(init) {
-      case (result, (name, exp)) =>
-        result match {
-          case Right(map) => eval(env, exp) match {
-            case Right(value) => Right(map ++ List((name, value)))
-            case Left(err) => Left(err)
           }
-          case Left(err) => Left(err)
-        }
-    }
-  }
-
-  def list_eval(env: Env, list: List[Exp]): Either[Err, List[Val]] = {
-    val init: Either[Err, List[Val]] = Right(List.empty)
-    list.foldLeft(init) {
-      case (result, exp) =>
-        result match {
-          case Right(map) => eval(env, exp) match {
-            case Right(value) => Right(map :+ value)
-            case Left(err) => Left(err)
-          }
-          case Left(err) => Left(err)
-        }
+          result <- eval(local_env, body)
+        } yield result
     }
   }
 

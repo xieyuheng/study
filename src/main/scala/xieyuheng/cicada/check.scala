@@ -2,15 +2,18 @@ package xieyuheng.cicada
 
 import collection.immutable.ListMap
 
+import eval._
 import infer._
 import subtype._
 
 object check {
 
-  def check(ctx: Ctx, exp: Exp, t: Exp): Either[Err, Unit] = {
+  def check(env: Env, ctx: Ctx, exp: Exp, t: Exp): Either[Err, Unit] = {
     for {
-      s <- infer(ctx, exp)
-      result <- subtype(ctx, s, t)
+      s <- infer(env, ctx, exp)
+      s <- eval(env, s)
+      t <- eval(env, t)
+      result <- more_than(ctx, s, t)
     } yield result
   }
 

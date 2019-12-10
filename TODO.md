@@ -2,7 +2,7 @@
 - clean up partech -- for cicada
 # cicada
 - infer
-- subtype
+- subtype.more_than
 - readback
 - equivalent by subtype
 - [note] no auto currying

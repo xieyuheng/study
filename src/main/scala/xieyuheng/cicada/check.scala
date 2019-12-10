@@ -8,9 +8,9 @@ import subtype._
 
 object check {
 
-  def check(ctx: Ctx, exp: Exp, t: Val): Either[Err, Unit] = {
+  def check(env: Env, ctx: Ctx, exp: Exp, t: Val): Either[Err, Unit] = {
     for {
-      s <- infer(ctx, exp)
+      s <- infer(env, ctx, exp)
       result <- more_than(ctx, s, t)
     } yield result
   }

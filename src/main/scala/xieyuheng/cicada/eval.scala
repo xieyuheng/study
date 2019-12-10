@@ -52,7 +52,6 @@ object eval {
               eval(local_env, exp).map {
                 case value =>
                   local_env = local_env.ext(name, value)
-                  value
               }
           }
           result <- eval(local_env, body)

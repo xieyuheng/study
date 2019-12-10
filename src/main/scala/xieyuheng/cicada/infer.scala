@@ -8,34 +8,36 @@ import readback._
 
 object infer {
 
-  def infer(ctx: Ctx, value: Val): Either[Err, Val] = {
-    value match {
-      case ValType() =>
+  def infer(ctx: Ctx, exp: Exp): Either[Err, Val] = {
+    exp match {
+      case Var(name: String) =>
+        ???
+      case Type() =>
         Right(ValType())
-      case ValPi(arg_map: ListMap[String, Exp], return_type: Exp, env: Env) =>
+      case Pi(arg_map: ListMap[String, Exp], return_type: Exp) =>
         Right(ValType())
-      case ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env) =>
+      case Fn(arg_map: ListMap[String, Exp], body: Exp) =>
         for {
-          return_value <- eval(env, body)
           arg_value_map <- util.list_map_map_maybe_err(arg_map) {
-            case (_name, exp) => eval(env, exp)
+            case (_name, exp) => eval(Env(), exp)
           }
-          return_type <- infer(ctx.ext_map(arg_value_map), return_value)
-          return_type_exp <- readback(ctx.ext_map(arg_value_map), return_type)
-        } yield ValPi(arg_map, return_type_exp, env)
-      case ValCl(type_map: ListMap[String, Exp], env: Env) =>
+          ctx2 = ctx.ext_map(arg_value_map)
+          return_type_value <- infer(ctx2, body)
+          return_type <- readback(ctx2, return_type_value)
+        }  yield ValPi(arg_map, return_type, Env())
+      case Cl(type_map: ListMap[String, Exp]) =>
         Right(ValType())
-      case ValObj(value_map: ListMap[String, Val]) =>
+      case Obj(value_map: ListMap[String, Exp]) =>
         ???
-      case NeuVar(name: String) =>
-        ???
-      case NeuAp(target: Neu, arg_list: List[Val]) =>
+      case Ap(target: Exp, arg_list: List[Exp]) =>
         // TODO after we infer target to a ValPi
         //   the main use of telescope will occur
         ???
-      case NeuDot(target: Neu, field: String) =>
+      case Dot(target: Exp, field: String) =>
         // TODO after we infer target to a ValCl
         //   we need to readback the field in ctx extended by previous fields
+        ???
+      case Block(let_map: ListMap[String, Exp], body: Exp) =>
         ???
     }
   }

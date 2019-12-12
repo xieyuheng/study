@@ -47,7 +47,7 @@ object eval {
       case Block(let_map: ListMap[String, Exp], body: Exp) =>
         var local_env = env
         for {
-          _ <- util.list_map_map_maybe_err(let_map) {
+          _ <- util.list_map_foreach_maybe_err(let_map) {
             case (name, exp) =>
               eval(local_env, exp).map {
                 case value =>

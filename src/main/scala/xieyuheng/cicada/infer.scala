@@ -26,7 +26,7 @@ object infer {
       case Fn(arg_type_map: ListMap[String, Exp], body: Exp) =>
         var local_ctx = ctx
         for {
-          _ <- util.list_map_map_maybe_err(arg_type_map) {
+          _ <- util.list_map_foreach_maybe_err(arg_type_map) {
             case (name, exp) => eval(env, exp).map {
               case value =>
                 local_ctx = local_ctx.ext(name, value)
@@ -94,14 +94,14 @@ object infer {
       case Block(let_map: ListMap[String, Exp], body: Exp) =>
         var local_ctx = ctx
         for {
-          _ <- util.list_map_map_maybe_err(let_map) {
+          _ <- util.list_map_foreach_maybe_err(let_map) {
             case (name, exp) => eval(env, exp).map {
               case value =>
                 local_ctx = local_ctx.ext(name, value)
             }
           }
           result <- infer(env, local_ctx, body)
-        }  yield result
+        } yield result
     }
   }
 

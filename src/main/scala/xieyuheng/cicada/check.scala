@@ -23,8 +23,8 @@ object check {
       case _ =>
         for {
           s <- infer(env, ctx, exp)
-          result <- subtype(ctx, s, t)
-        } yield result
+          _ <- subtype(ctx, s, t)
+        } yield ()
     }
   }
 

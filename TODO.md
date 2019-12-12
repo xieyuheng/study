@@ -3,8 +3,10 @@
 # nymph
 - try a version of nbe with Tl of one field, learn from nbe
 # cicada
+- fix infer on pi and cl
+- `define` in block
+- type checking interface
 - readback
-- subtype
 - equivalent
 - [note] no auto currying
 - [less important] Exp use cofree

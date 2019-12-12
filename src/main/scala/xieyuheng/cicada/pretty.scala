@@ -12,14 +12,14 @@ object pretty {
         s"${name}"
       case Type() =>
         s"type"
-      case Pi(arg_map: ListMap[String, Exp], return_type: Exp) =>
-        var s = arg_map.map {
+      case Pi(arg_type_map: ListMap[String, Exp], return_type: Exp) =>
+        var s = arg_type_map.map {
           case (name, exp) => s"given ${name} : ${pretty_exp(exp)}\n"
         }.mkString("")
         s = s + s"conclude ${pretty_exp(return_type)}\n"
         s"{${maybe_ln(s)}}"
-      case Fn(arg_map: ListMap[String, Exp], body: Exp) =>
-        var s = arg_map.map {
+      case Fn(arg_type_map: ListMap[String, Exp], body: Exp) =>
+        var s = arg_type_map.map {
           case (name, exp) => s"given ${name} : ${pretty_exp(exp)}\n"
         }.mkString("")
         s = s + s"return ${pretty_exp(body)}\n"
@@ -68,14 +68,14 @@ object pretty {
     value match {
       case ValType() =>
         s"type"
-      case ValPi(arg_map: ListMap[String, Exp], return_type: Exp, env: Env) =>
-        var s = arg_map.map {
+      case ValPi(arg_type_map: ListMap[String, Exp], return_type: Exp, env: Env) =>
+        var s = arg_type_map.map {
           case (name, exp) => s"given ${name} : ${pretty_exp(exp)}\n"
         }.mkString("")
         s = s + s"conclude ${pretty_exp(return_type)}\n"
         s"{${maybe_ln(s)}}"
-      case ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env) =>
-        var s = arg_map.map {
+      case ValFn(arg_type_map: ListMap[String, Exp], body: Exp, env: Env) =>
+        var s = arg_type_map.map {
           case (name, exp) => s"given ${name} : ${pretty_exp(exp)}\n"
         }.mkString("")
         s = s + s"return ${pretty_exp(body)}\n"

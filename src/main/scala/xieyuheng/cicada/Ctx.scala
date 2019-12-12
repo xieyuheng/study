@@ -1,6 +1,8 @@
 package xieyuheng.cicada
 
-case class Ctx(map: Map[String, Val] = Map()) {
+import collection.immutable.ListMap
+
+case class Ctx(map: ListMap[String, Val] = ListMap()) {
 
   def lookup_type(name: String): Option[Val] = {
     map.get(name)
@@ -10,8 +12,10 @@ case class Ctx(map: Map[String, Val] = Map()) {
     Ctx(this.map + (name -> t))
   }
 
-  def ext_map(map: Map[String, Val]): Ctx = {
+  def ext_map(map: ListMap[String, Val]): Ctx = {
     Ctx(this.map ++ map)
   }
+
+  def type_map = map
 
 }

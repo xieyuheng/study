@@ -3,11 +3,9 @@
 # nbe
 - try a version of nbe with Tl of one field
 # cicada
-
-- infer
 - readback
-- subtype.more_than
-- equivalent by subtype
+- subtype
+- equivalent
 - [note] no auto currying
 - [less important] Exp use cofree
 - [less important] `claim`

@@ -15,11 +15,11 @@ object eval {
       case Type() =>
         Right(ValType())
 
-      case Pi(arg_map: ListMap[String, Exp], return_type: Exp) =>
-        Right(ValPi(arg_map: ListMap[String, Exp], return_type: Exp, env: Env))
+      case Pi(arg_type_map: ListMap[String, Exp], return_type: Exp) =>
+        Right(ValPi(arg_type_map: ListMap[String, Exp], return_type: Exp, env: Env))
 
-      case Fn(arg_map: ListMap[String, Exp], body: Exp) =>
-        Right(ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env))
+      case Fn(arg_type_map: ListMap[String, Exp], body: Exp) =>
+        Right(ValFn(arg_type_map: ListMap[String, Exp], body: Exp, env: Env))
 
       case Ap(target: Exp, arg_list: List[Exp]) =>
         for {
@@ -62,9 +62,9 @@ object eval {
   def value_ap(value: Val, arg_list: List[Val]): Either[Err, Val] = {
     value match {
       case neu: Neu => Right(NeuAp(neu, arg_list))
-      case ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env) =>
-        val name_list = arg_map.keys.toList
-        if (name_list.length != arg_map.size) {
+      case ValFn(arg_type_map: ListMap[String, Exp], body: Exp, env: Env) =>
+        val name_list = arg_type_map.keys.toList
+        if (name_list.length != arg_type_map.size) {
           Left(Err("value_ap fail, ValFn arity mismatch"))
         } else {
           val map = Map(name_list.zip(arg_list): _*)

@@ -42,11 +42,11 @@ object grammar {
       "var" -> { case List(Leaf(name)) => Var(name) },
       "type" -> { case List(_) => Type() },
       "pi" -> { case List(_, given_entry_list, _, return_type, _) =>
-        val arg_map = ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list): _*)
-        Pi(arg_map, exp_matcher(return_type)) },
+        val arg_type_map = ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list): _*)
+        Pi(arg_type_map, exp_matcher(return_type)) },
       "fn" -> { case List(_, given_entry_list, _, body, _) =>
-        val arg_map = ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list): _*)
-        Fn(arg_map, exp_matcher(body)) },
+        val arg_type_map = ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list): _*)
+        Fn(arg_type_map, exp_matcher(body)) },
       "ap" -> { case List(target, _, arg_entry_list, _) =>
         val arg_list = non_empty_list_matcher(arg_entry_matcher)(arg_entry_list)
         Ap(exp_matcher(target), arg_list) },

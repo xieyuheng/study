@@ -29,7 +29,7 @@ object eval {
         } yield result
 
       case Cl(type_map: ListMap[String, Exp]) =>
-        Right(ValCl(type_map: ListMap[String, Exp], env: Env))
+        Right(ValTl(type_map: ListMap[String, Exp], env: Env))
 
       case Obj(value_map: ListMap[String, Exp]) =>
         for {
@@ -70,16 +70,16 @@ object eval {
           val map = Map(name_list.zip(arg_list): _*)
           eval(env.ext_map(map), body)
         }
-      case ValCl(type_map: ListMap[String, Exp], env: Env) =>
+      case ValTl(type_map: ListMap[String, Exp], env: Env) =>
         val name_list = type_map.keys.toList
         if (name_list.length != type_map.size) {
-          Left(Err("value_ap fail, ValCl arity mismatch"))
+          Left(Err("value_ap fail, ValTl arity mismatch"))
         } else {
           val value_map = ListMap(name_list.zip(arg_list): _*)
           Right(ValObj(value_map))
         }
       case _ => Left(Err(
-        "value_ap fail, expecting ValFn or ValCl\n" +
+        "value_ap fail, expecting ValFn or ValTl\n" +
           s"value: ${value}\n"
       ))
     }

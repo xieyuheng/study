@@ -41,10 +41,9 @@ object infer {
       case Obj(value_map: ListMap[String, Exp]) =>
         for {
           type_map <- util.list_map_map_maybe_err(value_map) {
-            case (name, exp) =>
-              eval(env, exp).flatMap { readback(ctx, _) }
+            case (name, exp) => eval(env, exp)
           }
-        }  yield ValCl(type_map, env)
+        }  yield ValCl(type_map)
 
       case Ap(target: Exp, arg_list: List[Exp]) =>
         infer(env, ctx, target) match {
@@ -52,19 +51,19 @@ object infer {
             // NOTE the main use of telescope will occur
             ???
           case Right(t) =>
-            Left(Err(s"expecting pi type but found: ${t}"))
+            Left(Err(s"expecting ValPi type but found: ${t}"))
           case Left(err) =>
             Left(err)
         }
 
       case Dot(target: Exp, field: String) =>
         infer(env, ctx, target) match {
-          case Right(ValCl(type_map: ListMap[String, Exp], env: Env)) =>
+          case Right(ValCl(type_map: ListMap[String, Val])) =>
             // NOTE we need to readback the field value
             //   in ctx extended by previous fields
             ???
           case Right(t) =>
-            Left(Err(s"expecting class type but found: ${t}"))
+            Left(Err(s"expecting ValCl but found: ${t}"))
           case Left(err) =>
             Left(err)
         }

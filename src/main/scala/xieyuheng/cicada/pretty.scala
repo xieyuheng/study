@@ -56,7 +56,7 @@ object pretty {
         s"${name}"
       case NeuAp(target: Neu, arg_list: List[Val]) =>
         val args = arg_list.map {
-          case value => pretty_val(value)
+          case value => pretty_value(value)
         }.mkString(", ")
         s"${pretty_neu(target)}(${args})"
       case NeuDot(target: Neu, field: String) =>
@@ -64,7 +64,7 @@ object pretty {
     }
   }
 
-  def pretty_val(value: Val): String = {
+  def pretty_value(value: Val): String = {
     value match {
       case ValType() =>
         s"type"
@@ -80,14 +80,19 @@ object pretty {
         }.mkString("")
         s = s + s"return ${pretty_exp(body)}\n"
         s"{${maybe_ln(s)}}"
-      case ValCl(type_map: ListMap[String, Exp], env: Env) =>
+      case ValTl(type_map: ListMap[String, Exp], env: Env) =>
         var s = type_map.map {
           case (name, exp) => s"let ${name} = ${pretty_exp(exp)}\n"
         }.mkString("")
         s"class {${maybe_ln(s)}}"
+      case ValCl(type_map: ListMap[String, Val]) =>
+        var s = type_map.map {
+          case (name, value) => s"let ${name} = ${pretty_value(value)}\n"
+        }.mkString("")
+        s"class {${maybe_ln(s)}}"
       case ValObj(value_map: ListMap[String, Val]) =>
         var s = value_map.map {
-          case (name, value) => s"let ${name} = ${pretty_val(value)}\n"
+          case (name, value) => s"let ${name} = ${pretty_value(value)}\n"
         }.mkString("")
         s"object {${maybe_ln(s)}}"
       case neu: Neu => pretty_neu(neu)

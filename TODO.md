@@ -3,7 +3,7 @@
 # nbe
 - try a version of nbe with Tl of one field
 # cicada
-- ValTl vs ValCl
+
 - infer
 - readback
 - subtype.more_than

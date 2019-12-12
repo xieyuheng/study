@@ -15,7 +15,7 @@ object cicada extends mini_interpreter (
         val env = Env()
         eval(env, exp) match {
           case Right(value) =>
-            println(s"${pretty_val(value)}")
+            println(s"${pretty_value(value)}")
           case Left(err) =>
             println(s"${err.msg}")
             System.exit(1)

@@ -6,7 +6,8 @@ sealed trait Val
 final case class ValType() extends Val
 final case class ValPi(arg_map: ListMap[String, Exp], return_type: Exp, env: Env) extends Val
 final case class ValFn(arg_map: ListMap[String, Exp], body: Exp, env: Env) extends Val
-final case class ValCl(type_map: ListMap[String, Exp], env: Env) extends Val
+final case class ValTl(type_map: ListMap[String, Exp], env: Env) extends Val
+final case class ValCl(type_map: ListMap[String, Val]) extends Val
 final case class ValObj(value_map: ListMap[String, Val]) extends Val
 
 sealed trait Neu extends Val

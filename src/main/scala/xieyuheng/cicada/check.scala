@@ -12,10 +12,10 @@ object check {
     exp match {
       case Obj(value_map: ListMap[String, Exp]) =>
         t match {
-          case cl: ValCl =>
-            var local_env = cl.env
+          case tl: ValTl =>
+            var local_env = tl.env
             var local_ctx = ctx
-            util.list_map_foreach_maybe_err(cl.type_map) {
+            util.list_map_foreach_maybe_err(tl.type_map) {
               case (name, t_exp) =>
                 for {
                   t_value <- eval(local_env, t_exp)

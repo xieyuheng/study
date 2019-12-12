@@ -1,7 +1,7 @@
 # party
 - clean up partech -- for cicada
-# nbe
-- try a version of nbe with Tl of one field
+# nymph
+- try a version of nbe with Tl of one field, learn from nbe
 # cicada
 - readback
 - subtype

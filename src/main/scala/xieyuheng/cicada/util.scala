@@ -4,6 +4,24 @@ import collection.immutable.ListMap
 
 object util {
 
+  def list_map_foreach_maybe_err[K, A]
+    (list_map: ListMap[K, A])
+    (f: (K, A) => Either[Err, Unit])
+      : Either[Err, Unit] = {
+    val init_result: Either[Err, Unit] = Right(())
+    list_map.foldLeft(init_result) {
+      case (result, (k, a)) =>
+        result match {
+          case Right(_ok) =>
+            f(k, a) match {
+              case Right(ok) => Right(ok)
+              case Left(err) => Left(err)
+            }
+          case Left(err) => Left(err)
+        }
+    }
+  }
+
   def list_map_map_maybe_err[K, A, B]
     (list_map: ListMap[K, A])
     (f: (K, A) => Either[Err, B])

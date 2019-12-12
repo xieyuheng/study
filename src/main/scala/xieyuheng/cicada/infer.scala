@@ -21,7 +21,20 @@ object infer {
         Right(ValType())
 
       case Pi(arg_type_map: ListMap[String, Exp], return_type: Exp) =>
-        Right(ValType())
+        var local_ctx = ctx
+        for {
+          _ <- util.list_map_foreach_maybe_err(arg_type_map) {
+            case (name, exp) =>
+              for {
+                _ <- check(env, local_ctx, exp, ValType())
+                value <- eval(env, exp)
+                _ = {
+                  local_ctx = local_ctx.ext(name, value)
+                }
+              } yield ()
+          }
+          _ <- check(env, local_ctx, return_type, ValType())
+        } yield ValType()
 
       case Fn(arg_type_map: ListMap[String, Exp], body: Exp) =>
         var local_ctx = ctx
@@ -37,7 +50,19 @@ object infer {
         }  yield ValPi(arg_type_map, return_type, env)
 
       case Cl(type_map: ListMap[String, Exp]) =>
-        Right(ValType())
+        var local_ctx = ctx
+        for {
+          _ <- util.list_map_foreach_maybe_err(type_map) {
+            case (name, exp) =>
+              for {
+                _ <- check(env, local_ctx, exp, ValType())
+                value <- eval(env, exp)
+                _ = {
+                  local_ctx = local_ctx.ext(name, value)
+                }
+              } yield ()
+          }
+        } yield ValType()
 
       case Obj(value_map: ListMap[String, Exp]) =>
         for {

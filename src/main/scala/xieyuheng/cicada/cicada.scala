@@ -1,11 +1,11 @@
 package xieyuheng.cicada
 
-import pretty._
-import eval._
-
 import xieyuheng.util.mini_interpreter
 
 import xieyuheng.partech.Parser
+
+import eval._
+import pretty._
 
 object cicada extends mini_interpreter (
   "cicada", "0.0.1", { case code =>

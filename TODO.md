@@ -1,7 +1,6 @@
 # party
 - clean up partech -- for cicada
 # cicada
-- test `define` in block -- for eval
 - type checking interface
 - [note] no auto currying
 - [less important] Exp use cofree

@@ -112,6 +112,7 @@ object grammar {
       "let_cl_empty" -> List("class", identifier, "{", "}"),
       "let_obj" -> List("object", identifier, "{", non_empty_list(let_entry), "}"),
       "let_obj_empty" -> List("object", identifier, "{", "}"),
+      "define" -> List("define", identifier, ":", exp, "=", exp),
     ))
 
   def block_entry_matcher = Tree.matcher[(String, BlockEntry)](
@@ -128,5 +129,7 @@ object grammar {
         (name, BlockLet(Obj(value_map))) },
       "let_obj_empty" -> { case List(_, Leaf(name), _, _) =>
         (name, BlockLet(Obj(ListMap.empty))) },
+      "define" -> { case List(_, Leaf(name), _, t, _, exp) =>
+        (name, BlockDefine(exp_matcher(t), exp_matcher(exp))) },
     ))
 }

@@ -3,7 +3,6 @@
 # nymph
 - try a version of nbe with Tl of one field, learn from nbe
 # cicada
-- readback
 - `define` in block
 - type checking interface
 - [note] no auto currying

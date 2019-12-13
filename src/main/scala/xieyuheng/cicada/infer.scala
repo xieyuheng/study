@@ -46,7 +46,7 @@ object infer {
             }
           }
           return_type_value <- infer(env, local_ctx, body)
-          return_type <- readback(local_ctx, return_type_value)
+          return_type <- readback(return_type_value)
         }  yield ValPi(arg_type_map, return_type, env)
 
       case Cl(type_map: ListMap[String, Exp]) =>

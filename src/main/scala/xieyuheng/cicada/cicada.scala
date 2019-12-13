@@ -9,7 +9,7 @@ object cicada extends mini_interpreter (
     Parser(grammar.lexer, grammar.top_list).parse(code) match {
       case Right(tree) =>
         val top_list = grammar.top_list_matcher(tree)
-        api.top_list_eval(top_list) match {
+        api.run(top_list) match {
           case Right(_ok) =>
           // do nothing
           case Left(err) =>

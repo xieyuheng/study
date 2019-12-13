@@ -1,7 +1,7 @@
 # party
 - clean up partech -- for cicada
 # cicada
-- `api.top_list_check`
+- backtracking in error report
 - [note] no auto currying
 - [less important] Exp use cofree
 - [maybe] nymph

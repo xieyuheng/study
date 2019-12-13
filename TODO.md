@@ -1,6 +1,7 @@
 # party
 - clean up partech -- for cicada
 # cicada
+- built-in equality `constrain` to define `eqv_t` as class
 - [note] no auto currying
 - [less important] Exp use cofree
 - [maybe] nymph

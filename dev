@@ -16,8 +16,8 @@ function t {
         test_nbe && \
         test_barendregt && \
         test_eopl && \
-        test_adventure #  && \
-#         test_cicada
+        test_adventure && \
+        test_cicada
 }
 
 function test_general {

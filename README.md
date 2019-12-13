@@ -2,6 +2,11 @@
 
 Study of language design and implementation.
 
+The aim of this repository is to quickly make prototype for language design ideas.
+
+This repository contains a series of prototype language implementations, <br>
+and some general supporting libraries (such as parsing and command line interface).
+
 > Remember, <br>
 > an engineer solve problem, <br>
 > an engineer does not want just a religion about how to solve a problem. <br>
@@ -84,6 +89,14 @@ Study of language design and implementation.
     which is commonly used for [Forth (programming language)](https://en.wikipedia.org/wiki/Forth_(programming_language)).
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - Two level of compositions -- `exe` and `cut`, where `cut` is simple.
+
+### Study of Foundations of Mathematics
+
+- [cicada](src/main/scala/xieyuheng/cicada) <br>
+  - Dependent type + structural subtyping.
+  - Uses `type in type`.
+  - No totality checking.
+  - For doing experiments in Foundations of Mathematics.
 
 ## References
 

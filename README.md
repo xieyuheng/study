@@ -2,9 +2,9 @@
 
 Study of language design and implementation.
 
-The aim of this repository is to quickly make prototype for language design ideas.
+The aim of this repository is to quickly make prototypes for language design ideas.
 
-This repository contains a series of prototype language implementations, <br>
+This repository contains a series of language implementations, <br>
 and some general supporting libraries (such as parsing and command line interface).
 
 > Remember, <br>

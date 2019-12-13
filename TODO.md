@@ -1,12 +1,12 @@
 # party
 - clean up partech -- for cicada
-# nymph
-- try a version of nbe with Tl of one field, learn from nbe
 # cicada
-- test `define` in block
+- test `define` in block -- for eval
 - type checking interface
 - [note] no auto currying
 - [less important] Exp use cofree
+- [maybe] nymph
+  - try a version of nbe with Tl of one field, learn from nbe
 # record type
 - telescope of automath
 - one of the most important techniques we need to learn

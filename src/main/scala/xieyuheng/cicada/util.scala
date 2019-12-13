@@ -2,7 +2,11 @@ package xieyuheng.cicada
 
 import collection.immutable.ListMap
 
+import eval._
+
 object util {
+
+  // about error
 
   def list_map_foreach_maybe_err[K, A]
     (list_map: ListMap[K, A])
@@ -75,6 +79,97 @@ object util {
             }
           case Left(err) => Left(err)
         }
+    }
+  }
+
+  // about val
+
+  def force_telescope(
+    name_list: List[String],
+    exp_map: ListMap[String, Exp],
+    env: Env,
+  ): Either[Err, ListMap[String, Val]] = {
+    val full_var_map = ListMap(exp_map.keys.toList.zip(name_list): _*)
+    for {
+      value_map <- util.list_map_map_entry_with_index_maybe_err(exp_map) {
+        case (i, _name, exp) =>
+          eval(env, util.exp_subst_var_map(exp, full_var_map.take(i)))
+            .map { case value => (name_list(i), value) }
+      }
+    } yield value_map
+  }
+
+  def force_telescope_with_extra_exp(
+    name_list: List[String],
+    exp_map: ListMap[String, Exp],
+    exp: Exp,
+    env: Env,
+  ): Either[Err, (ListMap[String, Val], Val)] = {
+    val full_var_map = ListMap(exp_map.keys.toList.zip(name_list): _*)
+    for {
+      value_map <- util.list_map_map_entry_with_index_maybe_err(exp_map) {
+        case (i, _name, exp) =>
+          eval(env, util.exp_subst_var_map(exp, full_var_map.take(i)))
+            .map { case value => (name_list(i), value) }
+      }
+      value <- eval(env, util.exp_subst_var_map(exp, full_var_map))
+    } yield (value_map, value)
+  }
+
+  // about exp
+
+  def exp_subst_var_map(exp: Exp, var_map: ListMap[String, String]): Exp = {
+    exp match {
+      case Var(name: String) =>
+        var_map.get(name) match {
+          case Some(new_name) => Var(new_name)
+          case None => exp
+        }
+      case Type() =>
+        exp
+      case Pi(arg_type_map: ListMap[String, Exp], return_type: Exp) =>
+        val new_arg_type_map = ListMap(arg_type_map.map {
+          case (name, exp) =>
+            (name, exp_subst_var_map(exp, var_map))
+        }.toList: _*)
+        val new_return_type = exp_subst_var_map(return_type, var_map);
+        Pi(arg_type_map, new_return_type)
+      case Fn(arg_type_map: ListMap[String, Exp], body: Exp) =>
+        val new_arg_type_map = ListMap(arg_type_map.map {
+          case (name, exp) =>
+            (name, exp_subst_var_map(exp, var_map))
+        }.toList: _*)
+        val new_body = exp_subst_var_map(body, var_map);
+        Fn(arg_type_map, new_body)
+      case Ap(target: Exp, arg_list: List[Exp]) =>
+        val new_target = exp_subst_var_map(target, var_map)
+        val new_arg_list = arg_list.map {
+          case exp =>
+            exp_subst_var_map(exp, var_map)
+        }
+        Ap(new_target, new_arg_list)
+      case Cl(type_map: ListMap[String, Exp]) =>
+        val new_type_map = ListMap(type_map.map {
+          case (name, exp) =>
+            (name, exp_subst_var_map(exp, var_map))
+        }.toList: _*)
+        Cl(new_type_map)
+      case Obj(val_map: ListMap[String, Exp]) =>
+        val new_val_map = ListMap(val_map.map {
+          case (name, exp) =>
+            (name, exp_subst_var_map(exp, var_map))
+        }.toList: _*)
+        Obj(new_val_map)
+      case Dot(target: Exp, field: String) =>
+        val new_target = exp_subst_var_map(target, var_map)
+        Dot(new_target, field)
+      case Block(let_map: ListMap[String, Exp], body: Exp) =>
+        val new_let_map = ListMap(let_map.map {
+          case (name, exp) =>
+            (name, exp_subst_var_map(exp, var_map))
+        }.toList: _*)
+        val new_body = exp_subst_var_map(body, var_map)
+        Block(new_let_map, new_body)
     }
   }
 

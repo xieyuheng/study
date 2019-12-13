@@ -28,7 +28,7 @@ object cut {
         Left(Err(
           s"[cut_jojo fail]\n" ++
             s"jojo: ${pretty_jo(jojo)}\n"
-        ).append_cause(err))
+        ).cause(err))
     }
   }
 
@@ -190,7 +190,7 @@ object cut {
         Left(Err(
           s"[step_tyty fail]\n" ++
             s"tyty: ${pretty_ty(tyty)}\n"
-        ).append_cause(err))
+        ).cause(err))
     }
   }
 

@@ -6,11 +6,12 @@ import eval._
 import check._
 import subtype._
 import readback._
+import pretty._
 
 object infer {
 
   def infer(env: Env, ctx: Ctx, exp: Exp): Either[Err, Val] = {
-    exp match {
+    val result = exp match {
       case Var(name: String) =>
         ctx.lookup_type(name) match {
           case Some(t) => Right(t)
@@ -132,6 +133,13 @@ object infer {
           result <- infer(env, local_ctx, body)
         } yield result
     }
+
+    result.swap.map {
+      case err => Err(
+        s"infer fail\n" +
+          s"exp: ${pretty_exp(exp)}\n"
+      ).cause(err)
+    }.swap
   }
 
 }

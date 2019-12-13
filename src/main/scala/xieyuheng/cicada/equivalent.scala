@@ -9,7 +9,7 @@ import pretty._
 object equivalent {
 
   def equivalent(ctx: Ctx, s: Val, t: Val): Either[Err, Unit] = {
-    (s, t) match {
+    val result = (s, t) match {
       case (s: ValType, t: ValType) =>
         Right(())
 
@@ -75,6 +75,20 @@ object equivalent {
       case (s: ValCl, t: ValCl) =>
         equivalent_list_map(ctx, s.type_map, t.type_map)
 
+      case (s: ValTl, t: ValCl) =>
+        val name_list = s.type_map.keys.toList
+        for {
+          type_map <- util.force_telescope(name_list, s.type_map, s.env)
+          _ <- equivalent_list_map(ctx, type_map, t.type_map)
+        } yield ()
+
+      case (s: ValCl, t: ValTl) =>
+        val name_list = t.type_map.keys.toList
+        for {
+          type_map <- util.force_telescope(name_list, t.type_map, t.env)
+          _ <- equivalent_list_map(ctx, s.type_map, type_map)
+        } yield ()
+
       case (s: ValObj, t: ValObj) =>
         equivalent_list_map(ctx, s.value_map, t.value_map)
 
@@ -108,10 +122,17 @@ object equivalent {
       case _ =>
         Left(Err(
           s"equivalent fail\n" +
-            s"${pretty_value(s)}\n" +
-            s"${pretty_value(t)}\n"
+            s"meet unhandled case\n"
         ))
     }
+
+    result.swap.map {
+      case err => Err(
+        s"equivalent fail\n" +
+          s"s: ${pretty_value(s)}\n" +
+          s"t: ${pretty_value(t)}\n"
+      ).cause(err)
+    }.swap
   }
 
   def equivalent_list(

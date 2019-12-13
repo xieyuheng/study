@@ -6,11 +6,18 @@ import collection.immutable.ListMap
 
 import eval._
 import equivalent._
+import pretty._
 
 object subtype {
 
   def subtype(ctx: Ctx, s: Val, t: Val): Either[Err, Unit] = {
-    (s, t) match {
+    val result = (s, t) match {
+      case (s: ValPi, ValType()) =>
+        Right(())
+
+      case (s: ValCl, ValType()) =>
+        Right(())
+
       case (s: ValPi, t: ValPi) =>
         if (s.arg_type_map.size != t.arg_type_map.size) {
           Left(Err(s"subtype fail on ValPi, arity mis-match"))
@@ -38,6 +45,14 @@ object subtype {
       case (s, t) =>
         equivalent(ctx, s, t)
     }
+
+    result.swap.map {
+      case err => Err(
+        s"subtype fail\n" +
+          s"s: ${pretty_value(s)}\n" +
+          s"t: ${pretty_value(t)}\n"
+      ).cause(err)
+    }.swap
   }
 
   def subtype_list_map(

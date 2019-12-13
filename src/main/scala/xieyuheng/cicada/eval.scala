@@ -2,6 +2,8 @@ package xieyuheng.cicada
 
 import collection.immutable.ListMap
 
+import pretty._
+
 object eval {
 
   def eval(env: Env, exp: Exp): Either[Err, Val] = {
@@ -85,7 +87,7 @@ object eval {
         }
       case _ => Left(Err(
         "value_ap fail, expecting ValFn or ValTl\n" +
-          s"value: ${value}\n"
+          s"value: ${pretty_value(value)}\n"
       ))
     }
   }

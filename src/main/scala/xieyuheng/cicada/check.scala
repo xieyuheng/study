@@ -5,11 +5,12 @@ import collection.immutable.ListMap
 import eval._
 import infer._
 import subtype._
+import pretty._
 
 object check {
 
   def check(env: Env, ctx: Ctx, exp: Exp, t: Val): Either[Err, Unit] = {
-    exp match {
+    val result = exp match {
       case Obj(value_map: ListMap[String, Exp]) =>
         t match {
           case tl: ValTl =>
@@ -26,6 +27,14 @@ object check {
           _ <- subtype(ctx, s, t)
         } yield ()
     }
+
+    result.swap.map {
+      case err => Err(
+        s"check fail\n" +
+          s"exp: ${pretty_exp(exp)}\n" +
+          s"t: ${pretty_value(t)}\n"
+      ).cause(err)
+    }.swap
   }
 
   def check_telescope(

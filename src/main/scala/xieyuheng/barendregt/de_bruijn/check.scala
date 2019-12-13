@@ -49,7 +49,7 @@ object check {
               "[check fail]\n" ++
                 s"exp: ${pretty_exp(exp)}\n" ++
                 s"excepting type: ${pretty_type(t)}\n"
-            ).append_cause(err))
+            ).cause(err))
           case Right(TypeAtom(name)) =>
             Left(Err(
               "[check fail]\n" ++
@@ -67,7 +67,7 @@ object check {
                   "[check fail]\n" ++
                     s"exp: ${pretty_exp(exp)}\n" ++
                     s"excepting type: ${pretty_type(t)}\n"
-                ).append_cause(err))
+                ).cause(err))
             }
         }
 
@@ -90,7 +90,7 @@ object check {
                     "[check fail]\n" ++
                       s"exp: ${pretty_exp(exp)}\n" ++
                       s"excepting type: ${pretty_type(t)}\n"
-                  ).append_cause(err))
+                  ).cause(err))
               }
             } else {
               Left(Err(
@@ -145,7 +145,7 @@ object check {
             Left(Err(
               "[infer fail]\n" ++
                 s"exp: ${pretty_exp(exp)}\n"
-            ).append_cause(err))
+            ).cause(err))
           case Right(TypeAtom(name)) =>
             Left(Err(
               "[infer fail]\n" ++
@@ -160,7 +160,7 @@ object check {
                 Left(Err(
                   "[infer fail]\n" ++
                     s"exp: ${pretty_exp(exp)}\n"
-                ).append_cause(err))
+                ).cause(err))
               case Right(arg_t2) =>
                 if (arg_t == arg_t2) {
                   Right(ret_t)
@@ -182,7 +182,7 @@ object check {
             Left(Err(
               "[infer fail]\n" ++
                 s"exp: ${pretty_exp(exp)}\n"
-            ).append_cause(err))
+            ).cause(err))
         }
 
       case Atom(name: String, str: String) =>

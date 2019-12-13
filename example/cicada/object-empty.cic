@@ -1,1 +1,1 @@
-object {}
+let empty_object = object {}

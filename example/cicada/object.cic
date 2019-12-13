@@ -1,2 +1,4 @@
-{ let x = type
-  let y = type }
+let obj = {
+  let x = type
+  let y = type
+}

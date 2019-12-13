@@ -6,7 +6,7 @@ import eval._
 
 object util {
 
-  // about error
+  // about list_map and error
 
   def list_map_foreach_maybe_err[K, A]
     (list_map: ListMap[K, A])
@@ -64,6 +64,8 @@ object util {
     }
   }
 
+  // about list and error
+
   def list_map_maybe_err[A, B]
     (list: List[A])
     (f: A => Either[Err, B])
@@ -75,6 +77,24 @@ object util {
           case Right(list) =>
             f(a) match {
               case Right(b) => Right(list :+ b)
+              case Left(err) => Left(err)
+            }
+          case Left(err) => Left(err)
+        }
+    }
+  }
+
+  def list_foreach_maybe_err[A]
+    (list: List[A])
+    (f: A => Either[Err, Unit])
+      : Either[Err, Unit] = {
+    val init: Either[Err, Unit] = Right(())
+    list.foldLeft(init) {
+      case (result, a) =>
+        result match {
+          case Right(_ok) =>
+            f(a) match {
+              case Right(_ok) => Right(())
               case Left(err) => Left(err)
             }
           case Left(err) => Left(err)

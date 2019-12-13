@@ -20,6 +20,17 @@ object grammar {
 
   def identifier = identifier_with_preserved("identifier", preserved)
 
+  // NOTE reuse `block_entry` and `block_entry_matcher`
+
+  def top_list = non_empty_list(block_entry)
+
+  def top_list_matcher(tree: Tree): List[Top] = {
+    non_empty_list_matcher(block_entry_matcher)(tree).map {
+      case (name, BlockLet(exp)) => TopLet(name, exp)
+      case (name, BlockDefine(t, exp)) => TopDefine(name, t, exp)
+    }
+  }
+
   def exp: Rule = Rule(
     "exp", Map(
       "var" -> List(identifier),
@@ -132,4 +143,5 @@ object grammar {
       "define" -> { case List(_, Leaf(name), _, t, _, exp) =>
         (name, BlockDefine(exp_matcher(t), exp_matcher(exp))) },
     ))
+
 }

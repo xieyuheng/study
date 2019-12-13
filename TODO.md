@@ -1,7 +1,7 @@
 # party
 - clean up partech -- for cicada
 # cicada
-- type checking interface
+- `api.top_list_check`
 - [note] no auto currying
 - [less important] Exp use cofree
 - [maybe] nymph

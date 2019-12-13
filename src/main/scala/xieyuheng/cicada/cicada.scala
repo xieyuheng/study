@@ -4,18 +4,14 @@ import xieyuheng.util.mini_interpreter
 
 import xieyuheng.partech.Parser
 
-import eval._
-import pretty._
-
 object cicada extends mini_interpreter (
   "cicada", "0.0.1", { case code =>
-    Parser(grammar.lexer, grammar.exp).parse(code) match {
+    Parser(grammar.lexer, grammar.top_list).parse(code) match {
       case Right(tree) =>
-        val exp = grammar.exp_matcher(tree)
-        val env = Env()
-        eval(env, exp) match {
-          case Right(value) =>
-            println(s"${pretty_value(value)}")
+        val top_list = grammar.top_list_matcher(tree)
+        api.top_list_eval(top_list) match {
+          case Right(_ok) =>
+          // do nothing
           case Left(err) =>
             println(s"${err.msg}")
             System.exit(1)

@@ -1,1 +1,1 @@
-class {}
+let empty_class = class {}

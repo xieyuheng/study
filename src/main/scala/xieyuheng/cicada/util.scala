@@ -163,13 +163,15 @@ object util {
       case Dot(target: Exp, field: String) =>
         val new_target = exp_subst_var_map(target, var_map)
         Dot(new_target, field)
-      case Block(let_map: ListMap[String, Exp], body: Exp) =>
-        val new_let_map = ListMap(let_map.map {
-          case (name, exp) =>
-            (name, exp_subst_var_map(exp, var_map))
+      case Block(block_entry_map: ListMap[String, BlockEntry], body: Exp) =>
+        val new_block_entry_map = ListMap(block_entry_map.map {
+          case (name, BlockLet(exp)) =>
+            (name, BlockLet(exp_subst_var_map(exp, var_map)))
+          case (name, BlockDefine(t, exp)) =>
+            (name, BlockDefine(exp_subst_var_map(t, var_map), exp_subst_var_map(exp, var_map)))
         }.toList: _*)
         val new_body = exp_subst_var_map(body, var_map)
-        Block(new_let_map, new_body)
+        Block(new_block_entry_map, new_body)
     }
   }
 

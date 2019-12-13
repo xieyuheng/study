@@ -69,8 +69,8 @@ object grammar {
       "dot" -> { case List(target, _, Leaf(field)) =>
         Dot(exp_matcher(target), field) },
       "block" -> { case List(_, block_entry_list, _, body, _) =>
-        val let_map = ListMap(non_empty_list_matcher(block_entry_matcher)(block_entry_list): _*)
-        Block(let_map, exp_matcher(body)) },
+        val block_entry_map = ListMap(non_empty_list_matcher(block_entry_matcher)(block_entry_list): _*)
+        Block(block_entry_map, exp_matcher(body)) },
     ))
 
   def arg_entry = Rule(
@@ -114,19 +114,19 @@ object grammar {
       "let_obj_empty" -> List("object", identifier, "{", "}"),
     ))
 
-  def block_entry_matcher = Tree.matcher[(String, Exp)](
+  def block_entry_matcher = Tree.matcher[(String, BlockEntry)](
     "block_entry", Map(
       "let" -> { case List(_, Leaf(name), _, exp) =>
-        (name, exp_matcher(exp)) },
+        (name, BlockLet(exp_matcher(exp))) },
       "let_cl" -> { case List(_, Leaf(name), _, given_entry_list, _) =>
         val type_map = ListMap(non_empty_list_matcher(given_entry_matcher)(given_entry_list): _*)
-        (name, Cl(type_map)) },
+        (name, BlockLet(Cl(type_map))) },
       "let_cl_empty" -> { case List(_, Leaf(name), _, _) =>
-        (name, Cl(ListMap.empty)) },
+        (name, BlockLet(Cl(ListMap.empty))) },
       "let_obj" -> { case List(_, Leaf(name), _, let_entry_list, _) =>
         val value_map = ListMap(non_empty_list_matcher(let_entry_matcher)(let_entry_list): _*)
-        (name, Obj(value_map)) },
+        (name, BlockLet(Obj(value_map))) },
       "let_obj_empty" -> { case List(_, Leaf(name), _, _) =>
-        (name, Obj(ListMap.empty)) },
+        (name, BlockLet(Obj(ListMap.empty))) },
     ))
 }

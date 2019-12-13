@@ -3,12 +3,10 @@
 # nymph
 - try a version of nbe with Tl of one field, learn from nbe
 # cicada
-- `define` in block
+- test `define` in block
 - type checking interface
 - [note] no auto currying
 - [less important] Exp use cofree
-- [less important] `claim`
-- [less important] `define`
 # record type
 - telescope of automath
 - one of the most important techniques we need to learn

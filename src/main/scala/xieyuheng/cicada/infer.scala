@@ -116,11 +116,15 @@ object infer {
             Left(err)
         }
 
-      case Block(let_map: ListMap[String, Exp], body: Exp) =>
+      case Block(block_entry_map: ListMap[String, BlockEntry], body: Exp) =>
         var local_ctx = ctx
         for {
-          _ <- util.list_map_foreach_maybe_err(let_map) {
-            case (name, exp) => eval(env, exp).map {
+          _ <- util.list_map_foreach_maybe_err(block_entry_map) {
+            case (name, BlockLet(exp)) => eval(env, exp).map {
+              case value =>
+                local_ctx = local_ctx.ext(name, value)
+            }
+            case (name, BlockDefine(_t, exp)) => eval(env, exp).map {
               case value =>
                 local_ctx = local_ctx.ext(name, value)
             }

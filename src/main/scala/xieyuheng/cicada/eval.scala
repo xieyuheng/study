@@ -44,11 +44,16 @@ object eval {
           result <- value_dot(value, field)
         } yield result
 
-      case Block(let_map: ListMap[String, Exp], body: Exp) =>
+      case Block(block_entry_map: ListMap[String, BlockEntry], body: Exp) =>
         var local_env = env
         for {
-          _ <- util.list_map_foreach_maybe_err(let_map) {
-            case (name, exp) =>
+          _ <- util.list_map_foreach_maybe_err(block_entry_map) {
+            case (name, BlockLet(exp)) =>
+              eval(local_env, exp).map {
+                case value =>
+                  local_env = local_env.ext(name, value)
+              }
+            case (name, BlockDefine(_t, exp)) =>
               eval(local_env, exp).map {
                 case value =>
                   local_env = local_env.ext(name, value)

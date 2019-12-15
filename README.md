@@ -123,6 +123,7 @@ and some general supporting libraries (such as parsing and command line interfac
 > 你以为我为什么要把你从总局调来这里? <br>
 > 有闲心在这里消沉的话 <br>
 > 就不会想到用自己的特长做点贡献吗? <br>
+> -- 少佐
 
 Contributions are welcome, see [current TODO list](TODO.md) for tasks. <br>
 (Please add yourself to [the AUTHORS list](AUTHORS) if you made any contributions.)

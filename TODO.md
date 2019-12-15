@@ -1,21 +1,5 @@
-# party
-- clean up partech -- for cicada
-- good error report for earley
-  like: https://github.com/kach/nearley/issues/451
-# cicada
-- factor out `Telescope`
-- equality constrain `equal` in telescope
-  - to define `eqv_t` as class
-  - to specify partial algebraic structure
-- [note] no auto currying
-- [less important] Exp use cofree
-- [maybe] nymph
-  - try a version of nbe with Tl of one field, learn from nbe
 # record type
 - telescope of automath
-- one of the most important techniques we need to learn
-  is to handle scope of record-like structure
-  such as module, object and class.
 - [eopl.lang_module]
   what is the different between first class module and record type?
 - [eopl.lang_class]

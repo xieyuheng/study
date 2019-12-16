@@ -90,14 +90,6 @@ and some general supporting libraries (such as parsing and command line interfac
 - [adventure/jojo_simple](src/main/scala/xieyuheng/adventure/jojo_simple) <br>
   - Two level of compositions -- `exe` and `cut`, where `cut` is simple.
 
-### Study of Foundations of Mathematics
-
-- [cicada](src/main/scala/xieyuheng/cicada) <br>
-  - Dependent type + structural subtyping.
-  - Uses `type in type`.
-  - No totality checking.
-  - For doing experiments in Foundations of Mathematics.
-
 ## References
 
 - "Parsing Techniques -- A Practical Guide"

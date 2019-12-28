@@ -14,7 +14,7 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.lihaoyi" %% "os-lib" % "0.3.0",
+  "com.lihaoyi" %% "os-lib" % "0.6.2",
 )
 
 enablePlugins(JavaAppPackaging)

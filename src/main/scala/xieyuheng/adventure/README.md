@@ -3,7 +3,7 @@
 ## untyped
 
 - explicit `exe` will make
-  lookup of local definition (`let`) is different from
+  lookup of local definition (`let`) be different from
   lookup of global definition ( <name> = { ... } )
 
 - when using `let` in definition of type and function,
